@@ -65,6 +65,12 @@ cd silkcircuit
 ./install.sh
 ```
 
+```powershell
+git clone https://github.com/hyperb1iss/silkcircuit.git
+cd silkcircuit
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
 ### 🎯 Individual Platforms
 
 Pick what you need:
@@ -152,6 +158,12 @@ cp extras/warp.yaml ~/.warp/themes/silkcircuit.yaml
 # Windows Terminal: import extras/windows-terminal.json in settings
 ```
 
+```powershell
+# Windows Terminal: stage the scheme for import
+New-Item -ItemType Directory -Force "$env:APPDATA\silkcircuit"
+Copy-Item extras\windows-terminal.json "$env:APPDATA\silkcircuit\windows-terminal.json"
+```
+
 </details>
 
 <details>
@@ -172,6 +184,15 @@ source extras/fzf.sh  # or add to .zshrc/.bashrc
 
 # Starship prompt
 cp extras/starship/silkcircuit.toml ~/.config/starship.toml
+```
+
+```powershell
+# fzf
+. .\extras\fzf.ps1
+
+# Starship prompt
+New-Item -ItemType Directory -Force "$HOME\.config"
+Copy-Item extras\starship\starship.toml "$HOME\.config\starship.toml"
 ```
 
 </details>

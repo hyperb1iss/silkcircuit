@@ -72,6 +72,15 @@ cp extras/warp-dawn.yaml ~/.warp/themes/silkcircuit-dawn.yaml
 # Windows Terminal - import JSON manually in settings
 ```
 
+```powershell
+# Windows Terminal - stage JSON for import
+New-Item -ItemType Directory -Force "$env:APPDATA\silkcircuit"
+Copy-Item extras\windows-terminal.json "$env:APPDATA\silkcircuit\windows-terminal.json"
+
+# fzf for PowerShell
+. .\extras\fzf.ps1
+```
+
 ### 🌐 Chrome Theme (`chrome-theme/`)
 
 Full SilkCircuit browser theming:all 5 variants:

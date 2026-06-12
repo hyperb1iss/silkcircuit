@@ -102,6 +102,15 @@ Windows integrated terminal.
 
 ### Installation
 
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Yes
+```
+
+The installer stages the scheme at
+`%APPDATA%\silkcircuit\windows-terminal.json`.
+
+### Manual Import
+
 1. Open Windows Terminal Settings (`Ctrl+,`)
 2. Click "Open JSON file"
 3. Add the scheme from `extras/windows-terminal.json`
