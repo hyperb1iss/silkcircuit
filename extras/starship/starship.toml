@@ -115,7 +115,10 @@ style = "bold fg:#FF99FF bg:#a040a0"
 format = "[ $symbol$branch ]($style)"
 
 # Git status module with enhanced foreground color
+# ignore_submodules: scanning submodules made this module regularly blow
+# past command_timeout and drop out of the prompt entirely
 [git_status]
+ignore_submodules = true
 style = "bold fg:#FF99FF bg:#a040a0"
 format = "[$all_status]($style)"
 
