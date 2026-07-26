@@ -240,9 +240,8 @@ function Copy-SilkFile {
         return $false
     }
 
-    $externalGitTarget = Test-ExternalGitTarget -Source $Source -Destination $Destination
-    if ($externalGitTarget -and -not (Test-Path -LiteralPath $Destination)) {
-        Write-Dim "${Label}: skipped new file in git repo"
+    if (Test-ExternalGitTarget -Source $Source -Destination $Destination) {
+        Write-Dim "${Label}: skipped, destination is tracked by another git repo"
         [void]$script:Skipped.Add($Label)
         return $false
     }
@@ -260,7 +259,7 @@ function Copy-SilkFile {
 
     $destinationItem = Get-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
 
-    if ($destinationItem -and -not $externalGitTarget) {
+    if ($destinationItem) {
         try {
             Copy-Item -LiteralPath $Destination -Destination "$Destination.silkcircuit.bak" -Force -ErrorAction Stop
         } catch {
@@ -821,7 +820,11 @@ function Install-AstroNvim {
             $count++
         }
     }
-    Write-Success "Installed $count AstroNvim plugin configs"
+    if ($count -eq 0) {
+        Write-Dim "No AstroNvim plugin configs installed"
+    } else {
+        Write-Success "Installed $count AstroNvim plugin configs"
+    }
 }
 
 function Run-Installs {
