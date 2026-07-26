@@ -28,7 +28,6 @@ $kotlin\
 $gradle\
 $c\
 $lua\
-$docker_context\
 $kubernetes\
 [](bg:#ff69b4 fg:#d060d0)\
 [](bg:#1a1a2e fg:#ff69b4)\
@@ -189,13 +188,6 @@ disabled = false
 symbol = "󰢱 "
 style = "bold fg:#FFEEFF bg:#d060d0"
 format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Docker context
-[docker_context]
-symbol = "󰡨 "
-style = "bold fg:#FFEEFF bg:#d060d0"
-format = "[ $symbol$context ]($style)"
 disabled = false
 
 # Kubernetes context — shouts when on prod
