@@ -3,6 +3,7 @@
 
 return {
   "hyperb1iss/silkcircuit",
+  name = "silkcircuit",
   lazy = false,
   priority = 1000,
   config = function()

@@ -5,8 +5,6 @@ return {
   "nvim-neo-tree/neo-tree.nvim",
   dependencies = { "silkcircuit" },
   opts = function(_, opts)
-    local silkcircuit_colors = require("silkcircuit.palette").colors
-
     return require("astrocore").extend_tbl(opts, {
       close_if_last_window = true,
       popup_border_style = "rounded",
