@@ -258,8 +258,20 @@ function Copy-SilkFile {
         New-Item -ItemType Directory -Path $destinationDir -Force | Out-Null
     }
 
-    if ((Test-Path -LiteralPath $Destination) -and -not $externalGitTarget) {
-        Copy-Item -LiteralPath $Destination -Destination "$Destination.silkcircuit.bak" -Force
+    $destinationItem = Get-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
+
+    if ($destinationItem -and -not $externalGitTarget) {
+        try {
+            Copy-Item -LiteralPath $Destination -Destination "$Destination.silkcircuit.bak" -Force -ErrorAction Stop
+        } catch {
+            Write-Dim "${Label}: could not back up existing config, replacing it"
+        }
+    }
+
+    # Copy-Item follows a symlink and writes through to its target, which would
+    # edit whatever repo the link points into. Drop the link, write a real file.
+    if ($destinationItem -and $destinationItem.LinkType) {
+        Remove-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
     }
 
     try {
