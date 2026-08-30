@@ -3,6 +3,7 @@
 <div align="center">
 
 [![Theme](https://img.shields.io/badge/Design_System-SilkCircuit-e135ff?style=for-the-badge&logo=paintbrush&logoColor=white)](https://github.com/hyperb1iss/silkcircuit)
+[![Docs](https://img.shields.io/badge/Docs-silkcircuit-80ffea?style=for-the-badge&logo=readthedocs&logoColor=white)](https://hyperb1iss.github.io/silkcircuit/)
 [![WCAG](https://img.shields.io/badge/WCAG%20AA-Compliant-50fa7b?style=for-the-badge&logo=accessibility&logoColor=white)](https://www.w3.org/WAI/WCAG21/quickref/)
 [![License](https://img.shields.io/badge/License-MIT-ff79c6?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
@@ -12,7 +13,7 @@
 
 🌌 _A vibrant cyberpunk color system for your entire dev environment._ 🎆
 
-[⚡ Quick Start](#-quick-start) · [💜 Neovim](#-neovim) · [🎨 Variants](#-variants) · [🌃 Full Ecosystem](#-full-ecosystem)
+[⚡ Quick Start](#-quick-start) · [💜 Neovim](#-neovim) · [🎨 Variants](#-variants) · [🌃 Full Ecosystem](#-full-ecosystem) · [📖 Documentation](https://hyperb1iss.github.io/silkcircuit/)
 
 </div>
 
