@@ -182,7 +182,7 @@ function M.get(colors, opts)
   highlights["@lsp.type.operator"] = { link = "@operator" }
   highlights["@lsp.type.selfKeyword"] = { link = "@variable.builtin" }
   highlights["@lsp.type.typeAlias"] = { link = "@type.definition" }
-  highlights["@lsp.type.unresolvedReference"] = { link = "@error" }
+  highlights["@lsp.type.unresolvedReference"] = { link = "DiagnosticError" }
   highlights["@lsp.typemod.class.defaultLibrary"] = { link = "@type.builtin" }
   highlights["@lsp.typemod.enum.defaultLibrary"] = { link = "@type.builtin" }
   highlights["@lsp.typemod.enumMember.defaultLibrary"] = { link = "@constant.builtin" }
