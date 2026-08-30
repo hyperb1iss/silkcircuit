@@ -66,7 +66,7 @@ k9s:
       cursorColor: "#1a162a"
       # Header row styles
       header:
-        fgColor: "#80ffea"
+        fgColor: "#e135ff"
         bgColor: "#1a162a"
         sorterColor: "#f1fa8c"
 
