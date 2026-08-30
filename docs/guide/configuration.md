@@ -91,17 +91,17 @@ Enable or disable specific plugin integrations:
 ```lua
 require("silkcircuit").setup({
   integrations = {
-    telescope = true,    -- Telescope (auto-detected)
-    neotree = true,      -- Neo-tree (auto-detected)
-    notify = true,       -- nvim-notify (auto-detected)
-    cmp = true,          -- nvim-cmp (auto-detected)
-    mini = true,         -- mini.nvim (auto-detected)
+    telescope = true,    -- Telescope
+    neotree = true,      -- Neo-tree
+    notify = true,       -- nvim-notify
+    cmp = true,          -- nvim-cmp
+    mini = true,         -- mini.nvim
     -- See :h silkcircuit-integrations for full list
   },
 })
 ```
 
-Most integrations are auto-detected. You only need to configure them if you want to disable one.
+All 39 integrations ship enabled and their highlights load whether or not the plugin is installed, so the only reason to touch this table is to turn one off. The newer keys are `blink_cmp`, `fzf_lua`, `oil`, `trouble`, `lazy`, `grug_far`, `treesitter_context`, `fidget`, `neotest`, and `dropbar`; see `:h silkcircuit-integrations` for the full list.
 
 ## Custom Highlights
 

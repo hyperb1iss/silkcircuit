@@ -23,15 +23,15 @@ require("silkcircuit").setup({
 
 ### Configuration Options
 
-| Option            | Type     | Default  | Description                |
-| ----------------- | -------- | -------- | -------------------------- |
-| `variant`         | string   | `"neon"` | Theme variant              |
-| `transparent`     | boolean  | `false`  | Transparent background     |
-| `terminal_colors` | boolean  | `true`   | Configure terminal colors  |
-| `dim_inactive`    | boolean  | `false`  | Dim inactive windows       |
-| `styles`          | table    | `{}`     | Syntax styling options     |
-| `integrations`    | table    | `{}`     | Plugin integrations        |
-| `on_highlights`   | function | `nil`    | Custom highlights callback |
+| Option            | Type     | Default         | Description                |
+| ----------------- | -------- | --------------- | -------------------------- |
+| `variant`         | string   | `"neon"`        | Theme variant              |
+| `transparent`     | boolean  | `false`         | Transparent background     |
+| `terminal_colors` | boolean  | `true`          | Configure terminal colors  |
+| `dim_inactive`    | boolean  | `false`         | Dim inactive windows       |
+| `styles`          | table    | comments italic | Syntax styling options     |
+| `integrations`    | table    | all 39 enabled  | Plugin integrations        |
+| `on_highlights`   | function | `nil`           | Custom highlights callback |
 
 ### Styles Options
 
@@ -133,4 +133,3 @@ lua/silkcircuit/
 | File                                               | Purpose           |
 | -------------------------------------------------- | ----------------- |
 | `~/.local/share/nvim/silkcircuit_preferences.json` | Saved preferences |
-| `~/.cache/nvim/silkcircuit/`                       | Compiled cache    |

@@ -255,7 +255,7 @@ require("silkcircuit").setup({
   },
 
   integrations = {
-    telescope = true,     -- all auto-detected by default
+    telescope = true,     -- all 39 ship enabled; set one false to skip it
     neotree = true,
     notify = true,
     cmp = true,
@@ -266,7 +266,7 @@ require("silkcircuit").setup({
 
 ### 🔮 Plugin Support
 
-All integrations activate automatically when plugins are detected.
+All 39 integrations are defined up front, whether or not the plugin is installed, so nothing waits on detection. Turn one off with `integrations.<name> = false`.
 
 - 🎯 **Core**: Telescope, Neo-tree, LSP, Treesitter, nvim-cmp, Mason
 - 🏃 **Navigation**: Flash, Harpoon, Which-Key, Mini.jump
