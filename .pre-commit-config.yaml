@@ -42,7 +42,10 @@ repos:
         name: Prettier
         entry: mise x -- prettier --write --ignore-unknown
         language: system
-        types_or: [json, yaml, markdown]
+        # Matched by extension rather than by type so this covers the same set
+        # as the glob in `make fmt-check`. identify has no jsonc tag.
+        types: [text]
+        files: '\.(json|jsonc|ya?ml|md)$'
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
