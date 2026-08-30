@@ -501,10 +501,11 @@ function Get-BlockIndent {
     param(
         [string[]]$Lines,
         [int]$At,
-        [int]$Own
+        [int]$Own,
+        [int]$Stop
     )
 
-    for ($i = $At + 1; $i -lt $Lines.Count; $i++) {
+    for ($i = $At + 1; $i -le $Stop -and $i -lt $Lines.Count; $i++) {
         if ($Lines[$i] -match "^\s*$") {
             continue
         }
@@ -558,13 +559,40 @@ function Set-K9sSkin {
         $lines = $lines[0..($lines.Count - 2)]
     }
 
-    $skinAt = -1
-    $uiAt = -1
     $rootAt = -1
     for ($i = 0; $i -lt $lines.Count; $i++) {
-        if ($skinAt -lt 0 -and $lines[$i] -match "^\s*skin:") { $skinAt = $i }
-        if ($uiAt -lt 0 -and $lines[$i] -match "^\s*ui:\s*$") { $uiAt = $i }
-        if ($rootAt -lt 0 -and $lines[$i] -match "^k9s:\s*$") { $rootAt = $i }
+        if ($lines[$i] -match "^k9s:") { $rootAt = $i; break }
+    }
+
+    # Anything after the colon is a flow mapping, an anchor, or a value.
+    # Splicing block-style children under it would produce nonsense, so say so
+    # and leave the file exactly as it was.
+    if ($rootAt -ge 0 -and $lines[$rootAt] -notmatch "^k9s:\s*$") {
+        Write-Warn "k9s: $ConfigPath uses a shape this installer will not edit blind"
+        Write-Dim "Set k9s.ui.skin to $Skin yourself"
+        return
+    }
+
+    # The mapping ends at the next non-blank, non-comment line back at column
+    # zero, which also stops us at a --- document break.
+    $blockEnd = $lines.Count - 1
+    if ($rootAt -ge 0) {
+        for ($i = $rootAt + 1; $i -lt $lines.Count; $i++) {
+            if ($lines[$i] -match "^\s*$") { continue }
+            if ($lines[$i] -match "^\s*#") { continue }
+            if ($lines[$i] -match "^\S") { $blockEnd = $i - 1; break }
+        }
+    }
+
+    # Only look inside that block, so a skin: key belonging to some unrelated
+    # section is never rewritten.
+    $skinAt = -1
+    $uiAt = -1
+    if ($rootAt -ge 0) {
+        for ($i = $rootAt + 1; $i -le $blockEnd; $i++) {
+            if ($skinAt -lt 0 -and $lines[$i] -match "^\s*skin:") { $skinAt = $i }
+            if ($uiAt -lt 0 -and $lines[$i] -match "^\s*ui:\s*$") { $uiAt = $i }
+        }
     }
 
     $out = [System.Collections.Generic.List[string]]::new()
@@ -575,13 +603,13 @@ function Set-K9sSkin {
         }
     } elseif ($uiAt -ge 0) {
         $own = ($lines[$uiAt] -replace "^(\s*).*$", '$1').Length
-        $inner = " " * (Get-BlockIndent $lines $uiAt $own)
+        $inner = " " * (Get-BlockIndent $lines $uiAt $own $blockEnd)
         for ($i = 0; $i -lt $lines.Count; $i++) {
             $out.Add($lines[$i])
             if ($i -eq $uiAt) { $out.Add("${inner}skin: $Skin") }
         }
     } elseif ($rootAt -ge 0) {
-        $inner = " " * (Get-BlockIndent $lines $rootAt 0)
+        $inner = " " * (Get-BlockIndent $lines $rootAt 0 $blockEnd)
         $deeper = " " * (2 * $inner.Length)
         for ($i = 0; $i -lt $lines.Count; $i++) {
             $out.Add($lines[$i])
@@ -592,7 +620,7 @@ function Set-K9sSkin {
         }
     } else {
         foreach ($line in $lines) { $out.Add($line) }
-        $out.Add("")
+        if ($lines.Count -gt 0) { $out.Add("") }
         $out.Add("k9s:")
         $out.Add("  ui:")
         $out.Add("    skin: $Skin")
