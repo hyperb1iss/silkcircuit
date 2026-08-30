@@ -23,6 +23,8 @@ local registry = {
   { name = "blink_cmp", modules = { "blink.cmp" }, plugin = "blink.cmp" },
   { name = "bufferline", modules = { "bufferline" }, plugin = "bufferline.nvim" },
   { name = "cmp", modules = { "cmp" }, plugin = "nvim-cmp" },
+  { name = "dropbar", modules = { "dropbar" }, plugin = "dropbar.nvim" },
+  { name = "fidget", modules = { "fidget" }, plugin = "fidget.nvim" },
   { name = "flash", modules = { "flash" }, plugin = "flash.nvim" },
   { name = "fzf_lua", modules = { "fzf-lua" }, plugin = "fzf-lua" },
   { name = "gitsigns", modules = { "gitsigns" }, plugin = "gitsigns.nvim" },
@@ -33,6 +35,7 @@ local registry = {
     modules = { "ibl", "indent_blankline" },
     plugin = "indent-blankline.nvim",
   },
+  { name = "lazy", modules = { "lazy" }, plugin = "lazy.nvim" },
   { name = "lualine", modules = { "lualine" }, plugin = "lualine.nvim" },
   { name = "mason", modules = { "mason" }, plugin = "mason.nvim" },
   {
@@ -57,6 +60,11 @@ local registry = {
   { name = "render-markdown", modules = { "render-markdown" }, plugin = "render-markdown.nvim" },
   { name = "snacks", modules = { "snacks" }, plugin = "snacks.nvim" },
   { name = "telescope", modules = { "telescope" }, plugin = "telescope.nvim" },
+  {
+    name = "treesitter_context",
+    modules = { "treesitter-context" },
+    plugin = "nvim-treesitter-context",
+  },
   { name = "trouble", modules = { "trouble" }, plugin = "trouble.nvim" },
   { name = "ufo", modules = { "ufo" }, plugin = "nvim-ufo" },
   { name = "which_key", modules = { "which-key" }, plugin = "which-key.nvim" },
