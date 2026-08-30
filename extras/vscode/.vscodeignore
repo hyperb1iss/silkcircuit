@@ -17,6 +17,9 @@
 **/*.toml
 **/*.lock
 **/*.md
+# Screenshots are served from GitHub raw URLs in the README, so the vsix
+# does not need to carry 5 MB of PNGs
+assets/**
 !README.md
 !package.json
 !icon.png

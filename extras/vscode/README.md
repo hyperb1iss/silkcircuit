@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-MIT-ff79c6?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 [![Theme](https://img.shields.io/badge/Theme-SilkCircuit-e135ff?style=for-the-badge&logo=paintbrush&logoColor=white)](https://github.com/hyperb1iss/silkcircuit)
 [![WCAG](https://img.shields.io/badge/WCAG%20AA-Compliant-50fa7b?style=for-the-badge&logo=accessibility&logoColor=white)](https://www.w3.org/WAI/WCAG21/quickref/)
-[![Variants](https://img.shields.io/badge/4%20Variants-Neon%20|%20Vibrant%20|%20Soft%20|%20Glow-ffb86c?style=for-the-badge&logo=swatchbook&logoColor=white)](#-available-themes)
+[![Variants](https://img.shields.io/badge/5%20Variants-Neon%20|%20Vibrant%20|%20Soft%20|%20Glow%20|%20Dawn-ffb86c?style=for-the-badge&logo=swatchbook&logoColor=white)](#-available-themes)
 
 🌌 _Pure electric energy with vibrant purples, blazing pinks, and neon accents for Visual Studio Code_ 🎆
 
@@ -22,7 +22,7 @@ SilkCircuit pumps maximum visual voltage through your VSCode editor. Electric pu
 
 - ⚡ **Electric Color System**: Vibrant palette with semantic color mappings
 - 👁️ **WCAG AA Compliant**: Validated contrast ratios for extended coding sessions
-- 🎛️ **4 Theme Variants**: Neon (100%), Vibrant (85%), Soft (70%), and Glow (ultra-dark) modes
+- 🎛️ **5 Theme Variants**: Neon (100%), Vibrant (85%), Soft (70%), Glow (ultra-dark), and Dawn (light)
 - 💻 **Language Optimized**: Perfect for JS/TS, Python, Rust, Go, CSS, JSON, Markdown
 - 🎨 **Full Syntax Coverage**: Every token type beautifully highlighted
 - 📦 **Marketplace Ready**: One-click installation from VSCode Extensions
@@ -61,6 +61,14 @@ Enhanced version with special brightness effects
 - Enhanced function and string highlighting
 - Maximum visual impact (simulated glow via brightness)
 
+### 🌅 SilkCircuit Dawn
+
+The light theme, for daylight and bright rooms
+
+- Electric purple and teal accents on soft lavender backgrounds
+- The only variant registered as a light theme (`uiTheme: vs`)
+- Same semantic colors as the dark variants, deepened to hold contrast
+
 ## 📸 Screenshots
 
 <table>
@@ -90,12 +98,15 @@ Enhanced version with special brightness effects
   </tr>
 </table>
 
+Dawn is not pictured. Install it and switch with "Preferences: Color Theme" to see it.
+
 ## 📁 Files
 
 - `silkcircuit-neon.json` - Main theme file
 - `silkcircuit-vibrant.json` - 85% intensity variant
 - `silkcircuit-soft.json` - 70% intensity variant
 - `silkcircuit-glow.json` - Brightened variant
+- `silkcircuit-dawn.json` - Light variant
 - `package.json` - VSCode extension manifest
 - `README.md` - This file
 
