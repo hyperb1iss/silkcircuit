@@ -540,12 +540,13 @@ function Install-Ghostty {
 
     $themeDir = Join-PathParts $script:AppData "ghostty" "themes"
     $count = 0
-    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "ghostty") -File -Filter "silkcircuit-*" | ForEach-Object {
-        $target = Join-Path $themeDir $_.Name
-        if (Copy-SilkFile $_.FullName $target "ghostty:$($_.Name)") {
-            $count++
+    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "ghostty") -File -Filter "silkcircuit-*" |
+        Where-Object { $_.Extension -ne ".css" } | ForEach-Object {
+            $target = Join-Path $themeDir $_.Name
+            if (Copy-SilkFile $_.FullName $target "ghostty:$($_.Name)") {
+                $count++
+            }
         }
-    }
     Write-Success "Installed $count Ghostty themes"
     Write-Dim "Activate: theme = silkcircuit-neon"
 }

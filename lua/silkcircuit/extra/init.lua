@@ -36,6 +36,18 @@ M.targets = {
     ext = "toml",
     url = "https://alacritty.org/config-alacritty.html#colors",
   },
+  ghostty = {
+    label = "Ghostty",
+    ext = "",
+    url = "https://ghostty.org/docs/config/reference#theme",
+  },
+  ["ghostty-css"] = {
+    label = "Ghostty GTK chrome",
+    dir = "ghostty",
+    ext = "css",
+    comment = "css",
+    url = "https://ghostty.org/docs/config/reference#gtk-custom-css",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
