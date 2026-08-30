@@ -1,12 +1,16 @@
--- foot wants bare 6-digit hex with no '#', and since 1.26 it splits its colours
--- into [colors-dark] and [colors-light] so a single config can hold both and
--- switch at runtime. Each variant lands in the section its appearance calls
--- for, which is what foot's own bundled themes do.
+-- foot wants bare 6-digit hex with no '#', and since 1.26 it keeps two colour
+-- themes in one config: [colors-dark] and [colors-light], switched at runtime
+-- by a key binding or SIGUSR1/SIGUSR2.
+--
+-- foot picks [colors-dark] unless initial-color-theme=light is set, so a file
+-- carrying only [colors-light] would silently do nothing. Every file therefore
+-- fills both sections, the way foot's own bundled themes do: the variant in
+-- [colors-dark], and Dawn as its light counterpart in [colors-light]. The Dawn
+-- file uses Dawn on both sides, so it looks the same whichever theme is active.
 
 local M = {}
 
-local TEMPLATE = [[
-[colors-${meta.appearance}]
+local BODY = [[
 foreground=${hex_nohash.fg}
 background=${hex_nohash.bg}
 
@@ -46,8 +50,15 @@ search-box-no-match=${hex_nohash.bg} ${hex_nohash.red}
 flash=${hex_nohash.yellow}
 ]]
 
+local function section(appearance, colors)
+  local body = require("silkcircuit.extra").template(BODY, colors)
+  return "[colors-" .. appearance .. "]\n" .. body:gsub("^\n", "")
+end
+
 function M.generate(colors)
-  return require("silkcircuit.extra").template(TEMPLATE, colors)
+  local extra = require("silkcircuit.extra")
+  local light = colors.meta.variant == "dawn" and colors or extra.colors("dawn")
+  return section("dark", colors) .. "\n" .. section("light", light)
 end
 
 return M
