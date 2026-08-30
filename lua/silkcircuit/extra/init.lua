@@ -48,6 +48,25 @@ M.targets = {
     comment = "css",
     url = "https://ghostty.org/docs/config/reference#gtk-custom-css",
   },
+  warp = {
+    label = "Warp",
+    ext = "yaml",
+    url = "https://docs.warp.dev/terminal/appearance/custom-themes",
+  },
+  ["windows-terminal"] = {
+    label = "Windows Terminal",
+    ext = "json",
+    comment = "none",
+    url = "https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes",
+  },
+  ["windows-terminal-all"] = {
+    label = "Windows Terminal (every scheme)",
+    dir = "windows-terminal",
+    ext = "json",
+    comment = "none",
+    is_full = true,
+    url = "https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
