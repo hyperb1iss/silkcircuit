@@ -2,7 +2,7 @@ local M = {}
 
 -- Default configuration
 M.defaults = {
-  variant = "neon", -- Theme variant: "neon" | "vibrant" | "soft"
+  variant = "neon", -- "neon" | "vibrant" | "soft" | "glow" | "dawn"
   transparent = false, -- Enable transparent background
   terminal_colors = true, -- Configure terminal colors
   dim_inactive = false, -- Dim inactive windows
@@ -89,7 +89,7 @@ local user_options = {}
 -- Setup function
 function M.setup(options)
   user_options = options or {}
-  M.options = vim.tbl_deep_extend("force", M.defaults, user_options)
+  M.options = vim.tbl_deep_extend("force", vim.deepcopy(M.defaults), user_options)
 end
 
 -- Did the caller pass this option to setup() explicitly?
@@ -103,11 +103,11 @@ function M.set(key, value)
   M.options[key] = value
 end
 
--- Get the current configuration
+-- Get the current configuration. Materializes a copy of the defaults on
+-- first use, so nothing downstream can write through to M.defaults.
 function M.get()
-  -- If setup hasn't been called, use defaults
   if vim.tbl_isempty(M.options) then
-    M.options = M.defaults
+    M.options = vim.deepcopy(M.defaults)
   end
   return M.options
 end
@@ -143,7 +143,7 @@ end
 
 -- Get style for a syntax group
 function M.get_style(group)
-  return M.options.styles[group] or {}
+  return M.get().styles[group] or {}
 end
 
 return M
