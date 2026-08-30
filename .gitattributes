@@ -1,0 +1,12 @@
+# The repo is LF everywhere; keep it that way regardless of platform
+* text=auto eol=lf
+
+# Never diff or merge binary assets as text
+*.png binary
+*.jpg binary
+*.ico binary
+
+# Release tarballs carry what a user installs, not the brand sources or
+# the documentation site
+assets/*-source.png export-ignore
+docs/ export-ignore
