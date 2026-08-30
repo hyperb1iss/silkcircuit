@@ -132,6 +132,20 @@ M.targets = {
     ext = "yml",
     url = "https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes",
   },
+  zellij = {
+    label = "Zellij",
+    ext = "kdl",
+    comment = "slash",
+    url = "https://zellij.dev/documentation/themes",
+  },
+  ["zellij-all"] = {
+    label = "Zellij (every theme)",
+    dir = "zellij",
+    ext = "kdl",
+    comment = "slash",
+    is_full = true,
+    url = "https://zellij.dev/documentation/themes",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"

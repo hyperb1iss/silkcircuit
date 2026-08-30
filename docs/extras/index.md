@@ -37,6 +37,8 @@ Generated from the palette by `make build`, five variants each. See the
 | WezTerm                         | [reference](https://wezterm.org/config/appearance.html#defining-a-color-scheme-in-a-separate-file) | `extras/wezterm/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`          |
 | Windows Terminal                | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes)   | `extras/windows-terminal/silkcircuit-{neon,vibrant,soft,glow,dawn}.json` |
 | Windows Terminal (every scheme) | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes)   | `extras/windows-terminal/silkcircuit.json`                               |
+| Zellij                          | [reference](https://zellij.dev/documentation/themes)                                               | `extras/zellij/silkcircuit-{neon,vibrant,soft,glow,dawn}.kdl`            |
+| Zellij (every theme)            | [reference](https://zellij.dev/documentation/themes)                                               | `extras/zellij/silkcircuit.kdl`                                          |
 
 <!-- extras:end -->
 
