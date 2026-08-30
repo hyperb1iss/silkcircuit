@@ -53,6 +53,11 @@ M.targets = {
     ext = "yaml",
     url = "https://docs.warp.dev/terminal/appearance/custom-themes",
   },
+  wezterm = {
+    label = "WezTerm",
+    ext = "toml",
+    url = "https://wezterm.org/config/appearance.html#defining-a-color-scheme-in-a-separate-file",
+  },
   ["windows-terminal"] = {
     label = "Windows Terminal",
     ext = "json",

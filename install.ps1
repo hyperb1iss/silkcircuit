@@ -429,6 +429,11 @@ function Detect-All {
         (Test-AnyPath @((Join-PathParts $script:AppData "alacritty")))
     )
 
+    Add-Detection "wezterm" "WezTerm" (
+        (Test-Command "wezterm") -or
+        (Test-AnyPath @((Join-PathParts $script:AppData "wezterm")))
+    )
+
     Add-Detection "btop" "btop" (
         (Test-Command "btop") -or
         (Test-AnyPath @(
@@ -565,6 +570,21 @@ function Install-Alacritty {
     }
     Write-Success "Installed $count Alacritty themes"
     Write-Dim "Import in alacritty.toml: import = [`"$($themeDir -replace '\\', '/')/silkcircuit-neon.toml`"]"
+}
+
+function Install-WezTerm {
+    Write-Host "$script:Purple$script:Bold  >> WezTerm$script:Reset"
+
+    $themeDir = Join-PathParts $script:AppData "wezterm" "colors"
+    $count = 0
+    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "wezterm") -File -Filter "silkcircuit-*.toml" | ForEach-Object {
+        $target = Join-Path $themeDir $_.Name
+        if (Copy-SilkFile $_.FullName $target "wezterm:$($_.Name)") {
+            $count++
+        }
+    }
+    Write-Success "Installed $count WezTerm color schemes"
+    Write-Dim "Activate in wezterm.lua: config.color_scheme = `"SilkCircuit Neon`""
 }
 
 function Install-Btop {
@@ -844,6 +864,7 @@ function Run-Installs {
             "windows-terminal" { Install-WindowsTerminal }
             "ghostty" { Install-Ghostty }
             "alacritty" { Install-Alacritty }
+            "wezterm" { Install-WezTerm }
             "btop" { Install-Btop }
             "k9s" { Install-K9s }
             "fzf" { Install-Fzf }
