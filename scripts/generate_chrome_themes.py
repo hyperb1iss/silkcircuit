@@ -16,139 +16,62 @@ import math
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
-# Color palettes — canonical source, mirrored from lua/silkcircuit/variants.lua
+# Palette
 # ---------------------------------------------------------------------------
 
-VARIANTS = {
-    "neon": {
-        "name": "SilkCircuit Neon",
-        "description": "Electric meets elegant. Neon purple gradients, cyan accents, and circuit-trace patterns for Chrome.",
-        "is_dark": True,
-        # Backgrounds
-        "bg": "#12101a",
-        "bg_dark": "#0a0812",
-        "bg_highlight": "#1a162a",
-        "bg_visual": "#44475a",
-        # Foregrounds
-        "fg": "#f8f8f2",
-        "fg_dark": "#e9d5ff",
-        "fg_muted": "#9580ff",
-        "gray": "#637777",
-        # Accents
-        "purple": "#e135ff",
-        "purple_dark": "#9580ff",
-        "cyan": "#80ffea",
-        "cyan_bright": "#5fffff",
-        "pink": "#ff00ff",
-        "pink_soft": "#ff99ff",
-        "coral": "#ff6ac1",
-        "green": "#50fa7b",
-        "red": "#ff6363",
-        "yellow": "#f1fa8c",
-        "blue": "#82AAFF",
-        "orange": "#ff6ac1",
-    },
-    "vibrant": {
-        "name": "SilkCircuit Vibrant",
-        "description": "Electric meets elegant. Ultra-dark with maximum neon saturation — pure magenta and cyan on void-black.",
-        "is_dark": True,
-        "bg": "#0f0c1a",
-        "bg_dark": "#08060f",
-        "bg_highlight": "#0a0614",
-        "bg_visual": "#3a2e5a",
-        "fg": "#f8f8f2",
-        "fg_dark": "#e9d5ff",
-        "fg_muted": "#b366ff",
-        "gray": "#637777",
-        "purple": "#ff00ff",
-        "purple_dark": "#b366ff",
-        "cyan": "#00ffcc",
-        "cyan_bright": "#00ffff",
-        "pink": "#ff00cc",
-        "pink_soft": "#ff99ff",
-        "coral": "#F78C6C",
-        "green": "#00ff66",
-        "red": "#ff3366",
-        "yellow": "#ffcc00",
-        "blue": "#6699ff",
-        "orange": "#ff00aa",
-    },
-    "soft": {
-        "name": "SilkCircuit Soft",
-        "description": "Electric meets elegant. Softened neon colors for comfortable browsing — gentle purples and pastel cyan.",
-        "is_dark": True,
-        "bg": "#1a1626",
-        "bg_dark": "#141220",
-        "bg_highlight": "#3e3456",
-        "bg_visual": "#44475a",
-        "fg": "#f8f8f2",
-        "fg_dark": "#e9d5ff",
-        "fg_muted": "#b199ff",
-        "gray": "#637777",
-        "purple": "#e892ff",
-        "purple_dark": "#b199ff",
-        "cyan": "#99ffee",
-        "cyan_bright": "#88ffff",
-        "pink": "#ff99ff",
-        "pink_soft": "#ffc2ff",
-        "coral": "#ff99dd",
-        "green": "#66ff99",
-        "red": "#ff6677",
-        "yellow": "#ffe699",
-        "blue": "#92aaff",
-        "orange": "#ff99dd",
-    },
-    "glow": {
-        "name": "SilkCircuit Glow",
-        "description": "Electric meets elegant. Pure neon on void-black — maximum contrast for the ultimate dark experience.",
-        "is_dark": True,
-        "bg": "#0a0816",
-        "bg_dark": "#000000",
-        "bg_highlight": "#1a0033",
-        "bg_visual": "#ff00ff44",
-        "fg": "#ffffff",
-        "fg_dark": "#cc66ff",
-        "fg_muted": "#cc66ff",
-        "gray": "#666666",
-        "purple": "#ff00ff",
-        "purple_dark": "#cc66ff",
-        "cyan": "#00ffff",
-        "cyan_bright": "#00ffff",
-        "pink": "#ff00ff",
-        "pink_soft": "#ff99ff",
-        "coral": "#ff66ff",
-        "green": "#00ff00",
-        "red": "#ff0066",
-        "yellow": "#ffff00",
-        "blue": "#0099ff",
-        "orange": "#ff66ff",
-    },
-    "dawn": {
-        "name": "SilkCircuit Dawn",
-        "description": "Electric meets elegant. Light theme with electric purple accents on soft lavender backgrounds.",
-        "is_dark": False,
-        "bg": "#faf8ff",
-        "bg_dark": "#f1ecff",
-        "bg_highlight": "#e8e0ff",
-        "bg_visual": "#d4c8f0",
-        "fg": "#2b2540",
-        "fg_dark": "#5a4d6e",
-        "fg_muted": "#8e84a8",
-        "gray": "#8e84a8",
-        "purple": "#7e2bd5",
-        "purple_dark": "#9654e0",
-        "cyan": "#007f8e",
-        "cyan_bright": "#009fae",
-        "pink": "#b40077",
-        "pink_soft": "#9c4a88",
-        "coral": "#c74a8c",
-        "green": "#2d8659",
-        "red": "#c1272d",
-        "yellow": "#a88600",
-        "blue": "#2563eb",
-        "orange": "#c05621",
-    },
+PALETTE_DIR = Path(__file__).parent.parent / "palette"
+
+VARIANTS = ["neon", "vibrant", "soft", "glow", "dawn"]
+
+# Chrome Web Store copy. The palette ships its own one-line blurb for a reader
+# who already knows SilkCircuit; a store listing has to sell the theme, so this
+# text is the one thing here that is not a palette fact.
+DESCRIPTIONS = {
+    "neon": (
+        "Electric meets elegant. Neon purple gradients, cyan accents, and "
+        "circuit-trace patterns for Chrome."
+    ),
+    "vibrant": (
+        "Electric meets elegant. Ultra-dark with maximum neon saturation — pure "
+        "magenta and cyan on void-black."
+    ),
+    "soft": (
+        "Electric meets elegant. Softened neon colors for comfortable browsing — "
+        "gentle purples and pastel cyan."
+    ),
+    "glow": (
+        "Electric meets elegant. Pure neon on void-black — maximum contrast for the "
+        "ultimate dark experience."
+    ),
+    "dawn": (
+        "Electric meets elegant. Light theme with electric purple accents on soft "
+        "lavender backgrounds."
+    ),
 }
+
+# The generator inherited one role name the palette does not use.
+ROLE_ALIASES = {"fg_muted": "purple_muted"}
+
+
+def load_variant(variant):
+    """Read one variant's palette export.
+
+    Hex strings feed the CSS templates and the color maths; the rgb integers
+    go straight into the manifest, which is the format Chrome wants.
+    """
+    data = json.loads((PALETTE_DIR / f"silkcircuit-{variant}.json").read_text())
+
+    v = {name: entry["hex"] for name, entry in data["colors"].items()}
+    v["rgb"] = {name: list(entry["rgb"]) for name, entry in data["colors"].items()}
+    for alias, role in ROLE_ALIASES.items():
+        v[alias] = v[role]
+        v["rgb"][alias] = v["rgb"][role]
+
+    v["name"] = data["name"]
+    v["description"] = DESCRIPTIONS[variant]
+    v["is_dark"] = data["appearance"] == "dark"
+    return v
+
 
 # ---------------------------------------------------------------------------
 # Color utilities
@@ -202,7 +125,7 @@ def generate_manifest(variant_key, v):
     is_dark = v["is_dark"]
 
     # Frame: match toolbar exactly to prevent separator lines
-    frame = lighten(v["bg_highlight"], 0.06) if is_dark else hex_to_rgb(v["bg_dark"])
+    frame = lighten(v["bg_highlight"], 0.06) if is_dark else v["rgb"]["bg_dark"]
     frame_inactive = darken(v["bg_highlight"], 0.05) if is_dark else lighten(v["bg_dark"], 0.05)
 
     # Incognito: subtle purple tint on the frame
@@ -215,11 +138,11 @@ def generate_manifest(variant_key, v):
 
     # Toolbar = active tab bg (Chrome hardcoded). Slight lighten so Chrome's
     # derived tab stroke blends into the gradient instead of reading as black.
-    toolbar = lighten(v["bg_highlight"], 0.06) if is_dark else hex_to_rgb(v["bg"])
+    toolbar = lighten(v["bg_highlight"], 0.06) if is_dark else v["rgb"]["bg"]
 
     # Tab text colors — bright active vs muted-purple inactive.
-    tab_text = [255, 255, 255] if is_dark else hex_to_rgb(v["fg"])
-    tab_bg_text = hex_to_rgb(v["fg_muted"]) if is_dark else hex_to_rgb(v["fg_dark"])
+    tab_text = [255, 255, 255] if is_dark else v["rgb"]["fg"]
+    tab_bg_text = v["rgb"]["fg_muted"] if is_dark else v["rgb"]["fg_dark"]
     tab_bg_text_inactive = (
         blend(v["fg_muted"], v["bg"], 0.55) if is_dark else blend(v["fg_dark"], v["bg"], 0.5)
     )
@@ -233,9 +156,7 @@ def generate_manifest(variant_key, v):
     bg_tab_incognito_inactive = incognito_frame_inactive
 
     # Omnibox — slightly distinct from toolbar
-    omnibox_bg = (
-        blend(v["bg"], v["bg_highlight"], 0.5) if is_dark else hex_to_rgb(v["bg_highlight"])
-    )
+    omnibox_bg = blend(v["bg"], v["bg_highlight"], 0.5) if is_dark else v["rgb"]["bg_highlight"]
 
     # Button — subtle accent with transparency
     button_alpha = 0.15 if is_dark else 0.08
@@ -254,8 +175,8 @@ def generate_manifest(variant_key, v):
                 "frame_incognito_inactive": incognito_frame_inactive,
                 # Toolbar
                 "toolbar": toolbar,
-                "toolbar_text": hex_to_rgb(v["fg"]),
-                "toolbar_button_icon": hex_to_rgb(v["coral"]),
+                "toolbar_text": v["rgb"]["fg"],
+                "toolbar_button_icon": v["rgb"]["coral"],
                 # Active tab
                 "tab_text": tab_text,
                 # Inactive tabs
@@ -269,17 +190,17 @@ def generate_manifest(variant_key, v):
                 "background_tab_incognito": bg_tab_incognito,
                 "background_tab_incognito_inactive": bg_tab_incognito_inactive,
                 # Bookmark bar
-                "bookmark_text": hex_to_rgb(v["coral"]),
+                "bookmark_text": v["rgb"]["coral"],
                 # Buttons
                 "button_background": with_alpha(v["purple"], button_alpha),
                 # Omnibox / address bar
                 "omnibox_background": omnibox_bg,
-                "omnibox_text": hex_to_rgb(v["fg"]),
+                "omnibox_text": v["rgb"]["fg"],
                 # New Tab Page
-                "ntp_background": hex_to_rgb(v["bg"]),
-                "ntp_text": hex_to_rgb(v["fg"]),
-                "ntp_link": hex_to_rgb(v["cyan"]),
-                "ntp_header": hex_to_rgb(v["purple_dark"]),
+                "ntp_background": v["rgb"]["bg"],
+                "ntp_text": v["rgb"]["fg"],
+                "ntp_link": v["rgb"]["cyan"],
+                "ntp_header": v["rgb"]["purple_dark"],
             },
             "tints": {
                 # Buttons tint: shift toolbar/tab buttons toward pink/coral
@@ -303,15 +224,15 @@ def generate_manifest(variant_key, v):
             },
             # Tab group colors — SilkCircuit-branded
             "tab_group_color_palette": {
-                "grey_override": hex_to_rgb(v["gray"]),
-                "blue_override": hex_to_rgb(v["blue"]),
-                "red_override": hex_to_rgb(v["red"]),
-                "yellow_override": hex_to_rgb(v["yellow"]),
-                "green_override": hex_to_rgb(v["green"]),
-                "pink_override": hex_to_rgb(v["coral"]),
-                "purple_override": hex_to_rgb(v["purple"]),
-                "cyan_override": hex_to_rgb(v["cyan"]),
-                "orange_override": hex_to_rgb(v["orange"]),
+                "grey_override": v["rgb"]["gray"],
+                "blue_override": v["rgb"]["blue"],
+                "red_override": v["rgb"]["red"],
+                "yellow_override": v["rgb"]["yellow"],
+                "green_override": v["rgb"]["green"],
+                "pink_override": v["rgb"]["coral"],
+                "purple_override": v["rgb"]["purple"],
+                "cyan_override": v["rgb"]["cyan"],
+                "orange_override": v["rgb"]["orange"],
             },
         },
     }
@@ -391,7 +312,7 @@ body,
   --sys-color-tonal-outline: {v["purple_dark"]} !important;
   --sys-color-header-container: {v["bg_dark"]} !important;
   --sys-color-omnibox-container: {v["bg_highlight"]} !important;
-  --sys-color-neutral-container: {v["bg_visual"][:7] if len(v["bg_visual"]) > 7 else v["bg_visual"]} !important;
+  --sys-color-neutral-container: {v["bg_visual"]} !important;
   --sys-color-neutral-bright: {v["fg_dark"]} !important;
   --sys-color-neutral-outline: {v["gray"]} !important;
 
@@ -542,7 +463,7 @@ body,
 
 .cm-selectionBackground,
 .cm-selection {{
-  background-color: {v["bg_visual"][:7] if len(v["bg_visual"]) > 7 else v["bg_visual"]} !important;
+  background-color: {v["bg_visual"]} !important;
 }}
 
 .cm-selectionMatch {{
@@ -773,7 +694,7 @@ def generate_chrome_pages_css(variant_key, v):
     --cr-fallback-color-surface2: {v["bg_highlight"]} !important;
     --cr-fallback-color-surface3: {v["bg_highlight"]} !important;
     --cr-fallback-color-surface-variant: {v["bg_highlight"]} !important;
-    --cr-fallback-color-on-surface-rgb: {", ".join(str(c) for c in hex_to_rgb(v["fg"]))} !important;
+    --cr-fallback-color-on-surface-rgb: {", ".join(str(c) for c in v["rgb"]["fg"])} !important;
     --cr-fallback-color-on-surface-variant: {v["fg_muted"]} !important;
     --cr-fallback-color-on-surface-subtle: {v["gray"]} !important;
     --cr-fallback-color-primary: {v["purple"]} !important;
@@ -841,7 +762,7 @@ def generate_chrome_pages_css(variant_key, v):
     /* Slider */
     --cr-slider-active-color: {v["purple"]} !important;
     --cr-slider-container-color: {v["gray"]} !important;
-    --cr-slider-knob-color-rgb: {", ".join(str(c) for c in hex_to_rgb(v["purple"]))} !important;
+    --cr-slider-knob-color-rgb: {", ".join(str(c) for c in v["rgb"]["purple"])} !important;
 
     /* Progress */
     --cr-progress-active-color: {v["purple"]} !important;
@@ -1022,8 +943,8 @@ def generate_toolbar_image(v, width=200, height=160):
         return None
 
     is_dark = v["is_dark"]
-    bg = tuple(lighten(v["bg_highlight"], 0.06)) if is_dark else tuple(hex_to_rgb(v["bg"]))
-    accent = tuple(hex_to_rgb(v["purple"]))
+    bg = tuple(lighten(v["bg_highlight"], 0.06)) if is_dark else tuple(v["rgb"]["bg"])
+    accent = tuple(v["rgb"]["purple"])
 
     img = Image.new("RGB", (width, height), bg)
     draw = ImageDraw.Draw(img)
@@ -1049,7 +970,7 @@ def generate_frame_image(v):
         return None
 
     is_dark = v["is_dark"]
-    bg = tuple(lighten(v["bg_highlight"], 0.06)) if is_dark else tuple(hex_to_rgb(v["bg_dark"]))
+    bg = tuple(lighten(v["bg_highlight"], 0.06)) if is_dark else tuple(v["rgb"]["bg_dark"])
     return Image.new("RGB", (1, 1), bg)
 
 
@@ -1065,7 +986,7 @@ def generate_tab_background_image(v):
         return None
 
     is_dark = v["is_dark"]
-    bg = tuple(lighten(v["bg_highlight"], 0.06)) if is_dark else tuple(hex_to_rgb(v["bg_dark"]))
+    bg = tuple(lighten(v["bg_highlight"], 0.06)) if is_dark else tuple(v["rgb"]["bg_dark"])
     return Image.new("RGBA", (1, 1), (*bg, 230))
 
 
@@ -1083,9 +1004,9 @@ def generate_ntp_background(variant_key, v, width=1920, height=1080):
         return None
 
     is_dark = v["is_dark"]
-    bg_rgb = tuple(hex_to_rgb(v["bg"]))
-    accent_rgb = tuple(hex_to_rgb(v["purple"]))
-    secondary_rgb = tuple(hex_to_rgb(v["cyan"]))
+    bg_rgb = tuple(v["rgb"]["bg"])
+    accent_rgb = tuple(v["rgb"]["purple"])
+    secondary_rgb = tuple(v["rgb"]["cyan"])
 
     # Base opacity for traces
     trace_alpha = 35 if is_dark else 20
@@ -1202,6 +1123,31 @@ def generate_ntp_background(variant_key, v, width=1920, height=1080):
 OUTPUT_DIR = Path(__file__).parent.parent / "extras" / "chrome-theme"
 
 
+def dump_json(value, indent=0):
+    """Serialize a manifest the way Prettier would.
+
+    .prettierignore skips extras/chrome-theme, so `make chrome` cannot lean on
+    the formatter to tidy up afterwards; a short array of numbers has to come
+    out on one line here or every run rewrites the file.
+    """
+    pad = "  " * indent
+    if isinstance(value, dict):
+        if not value:
+            return "{}"
+        body = ",\n".join(
+            f"{pad}  {json.dumps(key)}: {dump_json(item, indent + 1)}"
+            for key, item in value.items()
+        )
+        return "{\n" + body + "\n" + pad + "}"
+    if isinstance(value, list):
+        flat = "[" + ", ".join(json.dumps(item) for item in value) + "]"
+        if all(isinstance(item, (int, float)) for item in value) and len(pad) + len(flat) <= 100:
+            return flat
+        body = ",\n".join(f"{pad}  {dump_json(item, indent + 1)}" for item in value)
+        return "[\n" + body + "\n" + pad + "]"
+    return json.dumps(value)
+
+
 def generate_variant(variant_key, v):
     """Generate all files for a single variant."""
     variant_dir = OUTPUT_DIR / f"silkcircuit-{variant_key}"
@@ -1211,9 +1157,7 @@ def generate_variant(variant_key, v):
     # Manifest
     manifest = generate_manifest(variant_key, v)
     manifest_path = variant_dir / "manifest.json"
-    with open(manifest_path, "w") as f:
-        json.dump(manifest, f, indent=2)
-        f.write("\n")
+    manifest_path.write_text(dump_json(manifest) + "\n")
     print(f"  {variant_key}: manifest.json")
 
     # DevTools CSS
@@ -1250,8 +1194,8 @@ def main():
     print()
 
     # Generate each variant
-    for variant_key, variant_data in VARIANTS.items():
-        generate_variant(variant_key, variant_data)
+    for variant_key in VARIANTS:
+        generate_variant(variant_key, load_variant(variant_key))
         print()
 
     # Clean up old single-variant files (but keep the directory)

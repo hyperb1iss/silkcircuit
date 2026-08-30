@@ -61,7 +61,7 @@ body,
   --sys-color-tonal-outline: #cc66ff !important;
   --sys-color-header-container: #000000 !important;
   --sys-color-omnibox-container: #1a0033 !important;
-  --sys-color-neutral-container: #ff00ff !important;
+  --sys-color-neutral-container: #4b0654 !important;
   --sys-color-neutral-bright: #cc66ff !important;
   --sys-color-neutral-outline: #666666 !important;
 
@@ -212,7 +212,7 @@ body,
 
 .cm-selectionBackground,
 .cm-selection {
-  background-color: #ff00ff !important;
+  background-color: #4b0654 !important;
 }
 
 .cm-selectionMatch {
