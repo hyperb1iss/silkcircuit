@@ -689,12 +689,16 @@ install_btop() {
 # block does not merely look untidy: it stops k9s reading its config at all.
 # More permissive parsers keep only the last mapping and silently drop whatever
 # else the user had configured.
+#
+# Returns 3 when the config uses a shape we will not edit blind, so the caller
+# can tell the user rather than corrupt the file.
 set_k9s_skin() {
     local config="$1"
     local skin="$2"
+    local rc=0
 
     awk -v skin="$skin" '
-        function indent_of(text,   n) {
+        function indent_of(text) {
             match(text, /^[[:space:]]*/)
             return RLENGTH
         }
@@ -702,8 +706,8 @@ set_k9s_skin() {
         # How far the children of the block opened at `at` are indented. Read it
         # off an existing child rather than assuming two spaces, so a config
         # written with four keeps its shape and stays parseable.
-        function child_indent(at, own,   i, width) {
-            for (i = at + 1; i <= NR; i++) {
+        function child_indent(at, own, stop,   i, width) {
+            for (i = at + 1; i <= stop; i++) {
                 if (line[i] ~ /^[[:space:]]*$/) continue
                 width = indent_of(line[i])
                 if (width > own) return width
@@ -718,42 +722,81 @@ set_k9s_skin() {
             return out
         }
 
+        function emit_all(   i) {
+            for (i = 1; i <= NR; i++) print line[i]
+        }
+
         { line[NR] = $0 }
 
         END {
-            skin_at = 0; ui_at = 0; root_at = 0
+            root_at = 0
             for (i = 1; i <= NR; i++) {
+                if (line[i] ~ /^k9s:/) { root_at = i; break }
+            }
+
+            # No k9s mapping yet, so a fresh one is not a duplicate.
+            if (root_at == 0) {
+                emit_all()
+                if (NR > 0) print ""
+                print "k9s:"
+                print "  ui:"
+                print "    skin: " skin
+                exit 0
+            }
+
+            # Anything after the colon is a flow mapping, an anchor, or a value.
+            # Splicing block-style children under it would produce nonsense.
+            if (line[root_at] !~ /^k9s:[[:space:]]*$/) {
+                emit_all()
+                exit 3
+            }
+
+            # The mapping ends at the next non-blank, non-comment line back at
+            # column zero, which also stops us at a --- document break.
+            block_end = NR
+            for (i = root_at + 1; i <= NR; i++) {
+                if (line[i] ~ /^[[:space:]]*$/) continue
+                if (line[i] ~ /^[[:space:]]*#/) continue
+                if (line[i] ~ /^[^[:space:]]/) { block_end = i - 1; break }
+            }
+
+            # Only look for skin: and ui: inside that block, so a skin: key
+            # belonging to some unrelated section is never rewritten.
+            skin_at = 0
+            ui_at = 0
+            for (i = root_at + 1; i <= block_end; i++) {
                 if (!skin_at && line[i] ~ /^[[:space:]]*skin:/) skin_at = i
                 if (!ui_at && line[i] ~ /^[[:space:]]*ui:[[:space:]]*$/) ui_at = i
-                if (!root_at && line[i] ~ /^k9s:[[:space:]]*$/) root_at = i
             }
 
             if (skin_at) {
                 line[skin_at] = pad(indent_of(line[skin_at])) "skin: " skin
-                for (i = 1; i <= NR; i++) print line[i]
+                emit_all()
             } else if (ui_at) {
                 own = indent_of(line[ui_at])
-                inner = pad(child_indent(ui_at, own))
+                inner = pad(child_indent(ui_at, own, block_end))
                 for (i = 1; i <= NR; i++) {
                     print line[i]
                     if (i == ui_at) print inner "skin: " skin
                 }
-            } else if (root_at) {
-                inner = pad(child_indent(root_at, 0))
+            } else {
+                inner = pad(child_indent(root_at, 0, block_end))
                 deeper = pad(2 * length(inner))
                 for (i = 1; i <= NR; i++) {
                     print line[i]
                     if (i == root_at) { print inner "ui:"; print deeper "skin: " skin }
                 }
-            } else {
-                for (i = 1; i <= NR; i++) print line[i]
-                print ""
-                print "k9s:"
-                print "  ui:"
-                print "    skin: " skin
             }
         }
-    ' "$config" > "${config}.silkcircuit.new" && mv "${config}.silkcircuit.new" "$config"
+    ' "$config" > "${config}.silkcircuit.new" || rc=$?
+
+    if [[ $rc -eq 0 ]]; then
+        mv "${config}.silkcircuit.new" "$config"
+        return 0
+    fi
+
+    rm -f "${config}.silkcircuit.new"
+    return "$rc"
 }
 
 install_k9s() {
@@ -783,7 +826,10 @@ install_k9s() {
         diminfo "dry-run: would set the skin to ${skin} in ${config}"
     elif [[ -f "$config" ]]; then
         cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
-        set_k9s_skin "$config" "$skin"
+        if ! set_k9s_skin "$config" "$skin"; then
+            warn "k9s: ${config} uses a shape this installer will not edit blind"
+            diminfo "Set k9s.ui.skin to ${skin} yourself"
+        fi
     else
         mkdir -p "$k9s_dir"
         printf 'k9s:\n  ui:\n    skin: %s\n' "$skin" > "$config"
