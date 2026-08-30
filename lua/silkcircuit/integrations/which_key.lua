@@ -19,7 +19,9 @@ function M.get(colors, opts)
   }
 
   local highlights = {
-    WhichKey = { link = "NormalFloat" },
+    -- Bare WhichKey is the keycap in v3, not the window background. The
+    -- window is WhichKeyNormal below.
+    WhichKey = { link = "Function" },
     WhichKeyNormal = {
       fg = colors.fg,
       bg = opts.transparent and colors.none or colors.bg_float,
