@@ -89,14 +89,11 @@ function M.get(colors, opts)
   highlights.LspKindOperator = { fg = colors.cyan }
   highlights.LspKindTypeParameter = { fg = colors.purple }
 
-  -- Inline Hints (Neovim 0.10+)
-  if vim.fn.has("nvim-0.10") == 1 then
-    highlights.LspInlayHint = {
-      fg = colors.purple_muted,
-      bg = opts.transparent and colors.none or colors.bg_dark,
-      italic = true,
-    }
-  end
+  highlights.LspInlayHint = {
+    fg = colors.purple_muted,
+    bg = opts.transparent and colors.none or colors.bg_dark,
+    italic = true,
+  }
 
   -- Document Highlight Groups (when cursor is on a symbol)
   highlights.IlluminatedWordText = { bg = colors.selection }

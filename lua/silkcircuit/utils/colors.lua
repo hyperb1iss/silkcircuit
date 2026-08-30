@@ -111,36 +111,72 @@ function M.neonify(hex)
   return M.lighten(hex, 0.3)
 end
 
--- Validate all theme colors for contrast
+-- Every palette key the theme renders as text on the editor background.
+-- These are the pairs WCAG AA actually applies to.
+local TEXT_ROLES = {
+  { key = "fg", role = "normal text" },
+  { key = "fg_dark", role = "punctuation, operators" },
+  { key = "gray", role = "line numbers, non-text" },
+  { key = "purple_muted", role = "comments" },
+  { key = "purple", role = "keywords" },
+  { key = "purple_dark", role = "muted accents" },
+  { key = "pink", role = "booleans, tags" },
+  { key = "pink_soft", role = "strings" },
+  { key = "pink_bright", role = "preprocessor" },
+  { key = "cyan", role = "functions" },
+  { key = "cyan_bright", role = "properties" },
+  { key = "green", role = "success" },
+  { key = "green_bright", role = "decorators" },
+  { key = "yellow", role = "types" },
+  { key = "coral", role = "numbers, constants" },
+  { key = "orange", role = "modified" },
+  { key = "blue", role = "directories" },
+  { key = "red", role = "errors" },
+  { key = "error", role = "diagnostic error" },
+  { key = "warning", role = "diagnostic warn" },
+  { key = "info", role = "diagnostic info" },
+  { key = "hint", role = "diagnostic hint" },
+}
+
+-- Measure every text color in a palette against that palette's own
+-- background. Returns the failures and how many pairs were checked, so a
+-- caller can report what it actually verified rather than claiming a pass it
+-- never measured.
 function M.validate_theme_contrast(colors)
   local issues = {}
-  local bg = colors.bg or "#1e1a2e"
+  local bg = colors.bg
+  local checked = 0
+  local seen = {}
 
-  -- Check critical text colors
-  local critical_colors = {
-    { name = "fg", color = colors.fg },
-    { name = "purple", color = colors.purple },
-    { name = "pink", color = colors.pink },
-    { name = "cyan", color = colors.cyan },
-    { name = "comment", color = colors.purple_muted },
-  }
+  for _, item in ipairs(TEXT_ROLES) do
+    local color = colors[item.key]
+    if color and color ~= "NONE" and not seen[color] then
+      seen[color] = true
+      checked = checked + 1
 
-  for _, item in ipairs(critical_colors) do
-    local passes_aa, ratio = M.meets_wcag_aa(item.color, bg)
-    if not passes_aa then
-      table.insert(issues, {
-        severity = ratio < 3.0 and "error" or "warning",
-        message = string.format(
-          "%s (%s) has contrast ratio %.2f:1 (needs 4.5:1)",
-          item.name,
-          item.color,
-          ratio
-        ),
-      })
+      local passes_aa, ratio = M.meets_wcag_aa(color, bg)
+      if not passes_aa then
+        table.insert(issues, {
+          severity = ratio < 3.0 and "error" or "warning",
+          ratio = ratio,
+          message = string.format(
+            "%s (%s, %s) on %s is %.2f:1, AA needs 4.5:1",
+            item.key,
+            color,
+            item.role,
+            bg,
+            ratio
+          ),
+        })
+      end
     end
   end
 
-  return issues
+  table.sort(issues, function(a, b)
+    return a.ratio < b.ratio
+  end)
+
+  return issues, checked
 end
 
 -- Suggest a better color if contrast is too low
