@@ -52,8 +52,10 @@ and `palette/` carries the same colors as JSON and base16/base24 schemes.
 
 <!-- extras:start -->
 
-| Target | Format | Generated files |
-| ------ | ------ | --------------- |
+| Target    | Format                                                          | Generated files                                                                                                                                                                                                       |
+| --------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Alacritty | [reference](https://alacritty.org/config-alacritty.html#colors) | [neon](alacritty/silkcircuit-neon.toml) · [vibrant](alacritty/silkcircuit-vibrant.toml) · [soft](alacritty/silkcircuit-soft.toml) · [glow](alacritty/silkcircuit-glow.toml) · [dawn](alacritty/silkcircuit-dawn.toml) |
+| Kitty     | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme) | [neon](kitty/silkcircuit-neon.conf) · [vibrant](kitty/silkcircuit-vibrant.conf) · [soft](kitty/silkcircuit-soft.conf) · [glow](kitty/silkcircuit-glow.conf) · [dawn](kitty/silkcircuit-dawn.conf)                     |
 
 <!-- extras:end -->
 

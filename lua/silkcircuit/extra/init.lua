@@ -25,7 +25,18 @@ M.variants = { "neon", "vibrant", "soft", "glow", "dawn" }
 ---            with dashes turned into underscores.
 ---   comment  Header comment style: "hash" (default), "css", or "none".
 ---   is_full  Render once from every variant instead of once per variant.
-M.targets = {}
+M.targets = {
+  kitty = {
+    label = "Kitty",
+    ext = "conf",
+    url = "https://sw.kovidgoyal.net/kitty/conf/#color-scheme",
+  },
+  alacritty = {
+    label = "Alacritty",
+    ext = "toml",
+    url = "https://alacritty.org/config-alacritty.html#colors",
+  },
+}
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
 
