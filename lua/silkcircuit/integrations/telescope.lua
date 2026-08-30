@@ -33,7 +33,7 @@ function M.highlights(colors, opts)
     TelescopePreviewTitle = { fg = colors.green, bold = true },
 
     TelescopeSelection = { fg = colors.fg_light, bg = colors.selection },
-    TelescopeSelectionCaret = { fg = colors.purple, bg = colors.selection },
+    TelescopeSelectionCaret = { fg = colors.cyan_bright, bg = colors.selection },
     TelescopeMultiSelection = { fg = colors.cyan, bg = colors.selection },
     TelescopeMultiIcon = { fg = colors.cyan },
 

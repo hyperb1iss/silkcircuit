@@ -24,7 +24,7 @@ function M.get(colors, _)
     OctoBubblePurple = { fg = colors.fg, bg = colors.purple },
     OctoBubbleYellow = { fg = colors.bg, bg = colors.yellow },
     OctoBubbleBlue = { fg = colors.bg, bg = colors.cyan },
-    OctoBubbleGrey = { fg = colors.fg, bg = colors.gray },
+    OctoBubbleGrey = { fg = colors.bg, bg = colors.gray },
 
     -- Bubble delimiter highlights
     OctoBubbleDelimiterGreen = { fg = colors.green },
