@@ -28,6 +28,12 @@ M.variants = { "neon", "vibrant", "soft", "glow", "dawn" }
 ---   filename Function(variant) returning the file name, for formats whose
 ---            tooling dictates a name the default pattern cannot express.
 M.targets = {
+  iterm2 = {
+    label = "iTerm2",
+    ext = "itermcolors",
+    comment = "none",
+    url = "https://iterm2.com/documentation-preferences-profiles-colors.html",
+  },
   kitty = {
     label = "Kitty",
     ext = "conf",
