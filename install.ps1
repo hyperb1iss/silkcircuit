@@ -1,6 +1,10 @@
 #requires -Version 5.1
 [CmdletBinding()]
 param(
+    [Alias("V")]
+    [ValidateSet("neon", "vibrant", "soft", "glow", "dawn", "all")]
+    [string]$Variant = "all",
+
     [Alias("n")]
     [switch]$DryRun,
 
@@ -33,6 +37,12 @@ $script:LocalAppData = if ($env:LOCALAPPDATA) {
 }
 $script:ConfigRoot = Join-Path $script:AppData "silkcircuit"
 $script:HomeConfig = Join-Path $script:HomeDir ".config"
+
+$script:AllVariants = @("neon", "vibrant", "soft", "glow", "dawn")
+# Variants this run installs, and the one every printed "turn it on" line
+# names. Tools that read a single file get the primary and nothing else.
+$script:Selected = @()
+$script:Primary = "neon"
 
 $script:Detected = [System.Collections.Generic.List[string]]::new()
 $script:Installed = [System.Collections.Generic.List[string]]::new()
@@ -88,6 +98,21 @@ function Join-PathParts {
     return $path
 }
 
+function Resolve-Variants {
+    if ($Variant -eq "all") {
+        $script:Selected = $script:AllVariants
+        $script:Primary = "neon"
+    } else {
+        $script:Selected = @($Variant)
+        $script:Primary = $Variant
+    }
+}
+
+function Get-VariantLabel {
+    param([string]$Name)
+    return $Name.Substring(0, 1).ToUpperInvariant() + $Name.Substring(1)
+}
+
 function Write-Success {
     param([string]$Message)
     Write-Host "$script:Green$script:Bold  $Message$script:Reset"
@@ -111,6 +136,15 @@ function Write-Info {
 function Write-Dim {
     param([string]$Message)
     Write-Host "$script:Gray    $Message$script:Reset"
+}
+
+# Tools that read exactly one file cannot hold five themes at once, so `all`
+# gives them neon and says as much rather than silently picking for you.
+function Write-SingleSlotNote {
+    param([string]$Tool)
+    if ($Variant -eq "all") {
+        Write-Dim "$Tool reads one file, so -Variant all installs neon here"
+    }
 }
 
 function Write-NeonLine {
@@ -234,9 +268,11 @@ function Copy-SilkFile {
         [string]$Label
     )
 
+    # A source that is not there is a skip, never a stop. One missing file must
+    # not strand every tool that comes after it.
     if (-not (Test-Path -LiteralPath $Source -PathType Leaf)) {
-        Write-Fail "${Label}: source not found"
-        [void]$script:Failed.Add($Label)
+        Write-Warn "${Label}: $(Split-Path -Leaf $Source) not found, skipping"
+        [void]$script:Skipped.Add($Label)
         return $false
     }
 
@@ -320,6 +356,32 @@ function Copy-SilkDirectory {
     }
 }
 
+# Copy one file per selected variant. `Pattern` is the file name with `@` where
+# the variant goes. Returns the number that landed.
+function Copy-SilkVariants {
+    param(
+        [string]$SourceDir,
+        [string]$DestinationDir,
+        [string]$Label,
+        [string]$Pattern
+    )
+
+    $count = 0
+    foreach ($variant in $script:Selected) {
+        $name = $Pattern.Replace("@", $variant)
+        $source = Join-Path $SourceDir $name
+        $destination = Join-Path $DestinationDir $name
+        if (Copy-SilkFile $source $destination "${Label}:${variant}") {
+            $count++
+        }
+    }
+    return $count
+}
+
+function Get-WindowsTerminalFragmentDir {
+    return Join-PathParts $script:LocalAppData "Microsoft" "Windows Terminal" "Fragments" "SilkCircuit"
+}
+
 function Get-WindowsTerminalStateDirs {
     $packageNames = @(
         "Microsoft.WindowsTerminal_8wekyb3d8bbwe",
@@ -376,10 +438,13 @@ function Get-K9sConfigDir {
 }
 
 function Set-K9sSkin {
-    param([string]$ConfigPath)
+    param(
+        [string]$ConfigPath,
+        [string]$Skin
+    )
 
     if ($DryRun) {
-        Write-Dim "dry-run: would set skin to silkcircuit in $ConfigPath"
+        Write-Dim "dry-run: would set the skin to $Skin in $ConfigPath"
         return
     }
 
@@ -389,20 +454,20 @@ function Set-K9sSkin {
     }
 
     if (-not (Test-Path -LiteralPath $ConfigPath)) {
-        Set-Content -LiteralPath $ConfigPath -Value "k9s:`r`n  ui:`r`n    skin: silkcircuit`r`n" -Encoding UTF8
+        Set-Content -LiteralPath $ConfigPath -Value "k9s:`r`n  ui:`r`n    skin: $Skin`r`n" -Encoding UTF8
         return
     }
 
     Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
     $content = Get-Content -LiteralPath $ConfigPath -Raw
     if ($content -match "(?m)^\s*skin:\s*") {
-        $content = [regex]::Replace($content, "(?m)^(\s*)skin:\s*.*$", '${1}skin: silkcircuit')
+        $content = [regex]::Replace($content, "(?m)^(\s*)skin:\s*.*$", "`${1}skin: $Skin")
     } elseif ($content -match "(?m)^(\s*)ui:\s*$") {
         $indent = $matches[1]
         $uiPattern = [regex]"(?m)^(\s*)ui:\s*$"
-        $content = $uiPattern.Replace($content, "${indent}ui:`r`n${indent}  skin: silkcircuit", 1)
+        $content = $uiPattern.Replace($content, "${indent}ui:`r`n${indent}  skin: $Skin", 1)
     } else {
-        $content = $content.TrimEnd() + "`r`n`r`nk9s:`r`n  ui:`r`n    skin: silkcircuit`r`n"
+        $content = $content.TrimEnd() + "`r`n`r`nk9s:`r`n  ui:`r`n    skin: $Skin`r`n"
     }
 
     Set-Content -LiteralPath $ConfigPath -Value $content -Encoding UTF8
@@ -451,7 +516,22 @@ function Detect-All {
         ))
     )
 
-    Add-Detection "fzf" "fzf" (Test-Command "fzf")
+    Add-Detection "helix" "Helix" (
+        (Test-Command "hx") -or
+        (Test-Command "helix") -or
+        (Test-AnyPath @(
+            (Join-PathParts $script:AppData "helix"),
+            (Join-PathParts $script:HomeConfig "helix")
+        ))
+    )
+
+    Add-Detection "fzf" "fzf" (
+        (Test-Command "fzf") -or
+        (Test-AnyPath @(
+            (Join-PathParts $script:AppData "fzf"),
+            (Join-PathParts $script:HomeConfig "fzf")
+        ))
+    )
 
     Add-Detection "fastfetch" "fastfetch" (
         (Test-Command "fastfetch") -or
@@ -469,10 +549,25 @@ function Detect-All {
         ))
     )
 
-    Add-Detection "tmux" "tmux" (Test-Command "tmux")
-    Add-Detection "bat" "bat" (Test-Command "bat")
-    Add-Detection "lsd" "lsd" (Test-Command "lsd")
-    Add-Detection "procs" "procs" (Test-Command "procs")
+    Add-Detection "tmux" "tmux" (
+        (Test-Command "tmux") -or
+        (Test-AnyPath @((Join-PathParts $script:HomeConfig "tmux")))
+    )
+
+    Add-Detection "bat" "bat" (
+        (Test-Command "bat") -or
+        (Test-AnyPath @((Join-PathParts $script:AppData "bat")))
+    )
+
+    Add-Detection "lsd" "lsd" (
+        (Test-Command "lsd") -or
+        (Test-AnyPath @((Join-PathParts $script:AppData "lsd")))
+    )
+
+    Add-Detection "procs" "procs" (
+        (Test-Command "procs") -or
+        (Test-AnyPath @((Join-PathParts $script:AppData "procs")))
+    )
 
     Add-Detection "atuin" "Atuin" (
         (Test-Command "atuin") -or
@@ -533,72 +628,82 @@ function Detect-All {
 function Install-WindowsTerminal {
     Write-Host "$script:Purple$script:Bold  >> Windows Terminal$script:Reset"
 
-    $target = Join-Path $script:ConfigRoot "windows-terminal.json"
-    $source = Join-PathParts $script:ExtrasDir "windows-terminal" "silkcircuit.json"
-    if (Copy-SilkFile $source $target "windows-terminal") {
-        Write-Success "Windows Terminal schemes installed"
-        Write-Dim "Paste the schemes array into settings.json from: $target"
+    $sourceDir = Join-Path $script:ExtrasDir "windows-terminal"
+    $combined = Join-Path $sourceDir "silkcircuit.json"
+
+    # silkcircuit.json is already shaped like a Windows Terminal fragment
+    # ({ "schemes": [...] }), so dropping it in the Fragments directory adds
+    # all five schemes without anyone editing settings.json.
+    $fragment = Join-Path (Get-WindowsTerminalFragmentDir) "silkcircuit.json"
+    $installed = Copy-SilkFile $combined $fragment "windows-terminal:fragment"
+
+    # Keep a copy where it can be pasted by hand, for Windows Terminal builds
+    # that predate fragment extensions.
+    $staged = Join-Path $script:ConfigRoot "windows-terminal"
+    $count = Copy-SilkVariants $sourceDir $staged "windows-terminal" "silkcircuit-@.json"
+    [void](Copy-SilkFile $combined (Join-Path $staged "silkcircuit.json") "windows-terminal:staged")
+
+    if ($installed) {
+        Write-Success "Installed the schemes as a Windows Terminal fragment, $count staged"
+        Write-Dim "Restart Windows Terminal, then set a profile colorScheme to SilkCircuit Neon"
+    } else {
+        Write-Success "Staged $count Windows Terminal schemes"
     }
+    Write-Dim "To paste by hand instead: $(Join-Path $staged 'silkcircuit.json')"
 }
 
 function Install-Ghostty {
     Write-Host "$script:Purple$script:Bold  >> Ghostty$script:Reset"
 
+    $sourceDir = Join-Path $script:ExtrasDir "ghostty"
     $themeDir = Join-PathParts $script:AppData "ghostty" "themes"
-    $count = 0
-    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "ghostty") -File -Filter "silkcircuit-*" |
-        Where-Object { $_.Extension -ne ".css" } | ForEach-Object {
-            $target = Join-Path $themeDir $_.Name
-            if (Copy-SilkFile $_.FullName $target "ghostty:$($_.Name)") {
-                $count++
-            }
-        }
+    $count = Copy-SilkVariants $sourceDir $themeDir "ghostty" "silkcircuit-@"
+
     Write-Success "Installed $count Ghostty themes"
-    Write-Dim "Activate: theme = silkcircuit-neon"
+    Write-Dim "In the Ghostty config: theme = silkcircuit-$script:Primary"
+    Write-Dim "Follow the system: theme = dark:silkcircuit-neon,light:silkcircuit-dawn"
 }
 
 function Install-Alacritty {
     Write-Host "$script:Purple$script:Bold  >> Alacritty$script:Reset"
 
     $themeDir = Join-PathParts $script:AppData "alacritty" "themes"
-    $count = 0
-    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "alacritty") -File -Filter "silkcircuit-*.toml" | ForEach-Object {
-        $target = Join-Path $themeDir $_.Name
-        if (Copy-SilkFile $_.FullName $target "alacritty:$($_.Name)") {
-            $count++
-        }
-    }
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "alacritty") $themeDir "alacritty" "silkcircuit-@.toml"
+
+    $import = "$($themeDir -replace '\\', '/')/silkcircuit-$script:Primary.toml"
     Write-Success "Installed $count Alacritty themes"
-    Write-Dim "Import in alacritty.toml: import = [`"$($themeDir -replace '\\', '/')/silkcircuit-neon.toml`"]"
+    Write-Dim "In alacritty.toml, under [general]: import = [`"$import`"]"
+    Write-Dim "Needs Alacritty 0.13 or newer for TOML config"
 }
 
 function Install-WezTerm {
     Write-Host "$script:Purple$script:Bold  >> WezTerm$script:Reset"
 
     $themeDir = Join-PathParts $script:AppData "wezterm" "colors"
-    $count = 0
-    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "wezterm") -File -Filter "silkcircuit-*.toml" | ForEach-Object {
-        $target = Join-Path $themeDir $_.Name
-        if (Copy-SilkFile $_.FullName $target "wezterm:$($_.Name)") {
-            $count++
-        }
-    }
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "wezterm") $themeDir "wezterm" "silkcircuit-@.toml"
+
     Write-Success "Installed $count WezTerm color schemes"
-    Write-Dim "Activate in wezterm.lua: config.color_scheme = `"SilkCircuit Neon`""
+    Write-Dim "In wezterm.lua: config.color_scheme = `"SilkCircuit $(Get-VariantLabel $script:Primary)`""
+}
+
+function Install-Helix {
+    Write-Host "$script:Purple$script:Bold  >> Helix$script:Reset"
+
+    $themeDir = Join-PathParts $script:AppData "helix" "themes"
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "helix") $themeDir "helix" "silkcircuit-@.toml"
+
+    Write-Success "Installed $count Helix themes"
+    Write-Dim "In the Helix config.toml: theme = `"silkcircuit-$script:Primary`""
 }
 
 function Install-Btop {
     Write-Host "$script:Purple$script:Bold  >> btop$script:Reset"
 
     $themeDir = Join-PathParts $script:AppData "btop" "themes"
-    $count = 0
-    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "btop") -File -Filter "silkcircuit_*.theme" | ForEach-Object {
-        if (Copy-SilkFile $_.FullName (Join-Path $themeDir $_.Name) "btop:$($_.Name)") {
-            $count++
-        }
-    }
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "btop") $themeDir "btop" "silkcircuit-@.theme"
+
     Write-Success "Installed $count btop themes"
-    Write-Dim "Select in btop: Esc -> Options -> Color theme"
+    Write-Dim "In btop: Esc -> Options -> Color theme -> silkcircuit-$script:Primary"
 }
 
 function Install-K9s {
@@ -606,54 +711,54 @@ function Install-K9s {
 
     $k9sDir = Get-K9sConfigDir
     $skinDir = Join-Path $k9sDir "skins"
-    $count = 0
-    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "k9s") -File -Filter "silkcircuit*.yaml" | ForEach-Object {
-        if (Copy-SilkFile $_.FullName (Join-Path $skinDir $_.Name) "k9s:$($_.Name)") {
-            $count++
-        }
-    }
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "k9s") $skinDir "k9s" "silkcircuit-@.yaml"
 
-    Set-K9sSkin (Join-Path $k9sDir "config.yaml")
+    $skin = "silkcircuit-$script:Primary"
+    Set-K9sSkin (Join-Path $k9sDir "config.yaml") $skin
     Write-Success "Installed $count k9s skins"
-    Write-Dim "Active skin: silkcircuit"
+    Write-Dim "Active skin: $skin"
 }
 
 function Install-Fzf {
     Write-Host "$script:Purple$script:Bold  >> fzf$script:Reset"
 
-    $target = Join-Path $script:ConfigRoot "fzf.ps1"
-    if (Copy-SilkFile (Join-Path $script:ExtrasDir "fzf.ps1") $target "fzf") {
-        Write-Success "Installed fzf PowerShell theme"
-        Write-Dim "Add to profile: . `"$target`""
-    }
+    $targetDir = Join-Path $script:ConfigRoot "fzf"
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "fzf") $targetDir "fzf" "silkcircuit-@.ps1"
+
+    $profileLine = Join-Path $targetDir "silkcircuit-$script:Primary.ps1"
+    Write-Success "Installed $count fzf color sets"
+    Write-Dim "Add to your profile: . `"$profileLine`""
+    Write-Dim "Needs fzf 0.52 or newer for the selected-* and border color names"
 }
 
 function Install-Git {
     Write-Host "$script:Purple$script:Bold  >> Git$script:Reset"
 
-    $target = Join-Path $script:ConfigRoot "gitconfig"
-    if (Copy-SilkFile (Join-Path $script:ExtrasDir "gitconfig") $target "git") {
-        $includes = & git config --global --get-all include.path 2>$null
-        $alreadyIncluded = $false
-        foreach ($include in $includes) {
-            if ((Normalize-Path $include) -eq (Normalize-Path $target)) {
-                $alreadyIncluded = $true
-                break
-            }
-        }
+    $targetDir = Join-Path $script:ConfigRoot "git"
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "git") $targetDir "git" "silkcircuit-@.gitconfig"
 
-        if ($alreadyIncluded) {
-            Write-Success "Git theme already configured"
-        } elseif ($DryRun) {
-            Write-Success "Git theme (dry-run: would add include to .gitconfig)"
-        } else {
-            & git config --global --add include.path $target
-            Write-Success "Installed Git theme"
+    $target = Join-Path $targetDir "silkcircuit-$script:Primary.gitconfig"
+    $includes = & git config --global --get-all include.path 2>$null
+    $alreadyIncluded = $false
+    foreach ($include in $includes) {
+        if ((Normalize-Path $include) -eq (Normalize-Path $target)) {
+            $alreadyIncluded = $true
+            break
         }
+    }
 
-        if (-not (Test-Command "delta")) {
-            Write-Dim "Tip: install delta for enhanced git diffs"
-        }
+    if ($alreadyIncluded) {
+        Write-Success "Installed $count Git color configs, include already in place"
+    } elseif ($DryRun) {
+        Write-Success "Installed $count Git color configs (dry-run: would add the include)"
+    } else {
+        & git config --global --add include.path $target
+        Write-Success "Installed $count Git color configs and added the include"
+    }
+
+    Write-Dim "Include: git config --global --add include.path `"$target`""
+    if (-not (Test-Command "delta")) {
+        Write-Dim "Tip: install delta for diffs that use the matching bat theme"
     }
 }
 
@@ -666,94 +771,109 @@ function Install-Starship {
         Join-Path $script:HomeConfig "starship.toml"
     }
 
-    if (Copy-SilkFile (Join-PathParts $script:ExtrasDir "starship" "starship.toml") $target "starship") {
-        Write-Success "Installed Starship config"
+    $source = Join-PathParts $script:ExtrasDir "starship" "silkcircuit-$script:Primary.toml"
+    if (Copy-SilkFile $source $target "starship") {
+        Write-Success "Installed the Starship prompt"
+        Write-Dim "Config: $target"
+        Write-SingleSlotNote "Starship"
     }
 }
 
 function Install-Tmux {
     Write-Host "$script:Purple$script:Bold  >> tmux$script:Reset"
 
-    $target = Join-Path $script:HomeDir ".tmux.conf"
-    if ((Test-Path -LiteralPath $target) -and ((Get-Content -LiteralPath $target -Raw) -match "silkcircuit")) {
-        Write-Success "tmux already has SilkCircuit theme"
-        [void]$script:Installed.Add("tmux")
-        return
-    }
+    $targetDir = Join-Path $script:HomeConfig "tmux"
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "tmux") $targetDir "tmux" "silkcircuit-@.conf"
 
-    if (Copy-SilkFile (Join-Path $script:ExtrasDir "tmux.conf") $target "tmux") {
-        Write-Success "Installed tmux config"
-    }
+    Write-Success "Installed $count tmux themes"
+    Write-Dim "In tmux.conf: source-file ~/.config/tmux/silkcircuit-$script:Primary.conf"
+    Write-Dim "Needs tmux 3.4 or newer. These are colors only, no key bindings."
 }
 
 function Install-Bat {
     Write-Host "$script:Purple$script:Bold  >> bat$script:Reset"
 
-    $configDir = (& bat --config-dir 2>$null | Select-Object -First 1)
+    # Detection also fires on the config directory alone, so bat itself may not
+    # be on PATH. Ask it only when it is there.
+    $configDir = $null
+    if (Test-Command "bat") {
+        $configDir = (& bat --config-dir 2>$null | Select-Object -First 1)
+    }
     if (-not $configDir) {
         $configDir = Join-Path $script:AppData "bat"
     }
 
     $themeDir = Join-Path $configDir "themes"
-    if (Copy-SilkFile (Join-PathParts $script:ExtrasDir "bat" "SilkCircuit.tmTheme") (Join-Path $themeDir "SilkCircuit.tmTheme") "bat:theme") {
-        Copy-SilkFile (Join-PathParts $script:ExtrasDir "bat" "config") (Join-Path $configDir "config") "bat:config" | Out-Null
-        if (-not $DryRun) {
-            & bat cache --build *> $null
-        }
-        Write-Success "Installed bat theme"
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "bat") $themeDir "bat" "silkcircuit-@.tmTheme"
+
+    if (-not $DryRun -and (Test-Command "bat")) {
+        & bat cache --build *> $null
     }
+
+    Write-Success "Installed $count bat themes"
+    Write-Dim "Use it: bat --theme=silkcircuit-$script:Primary file.lua"
+    Write-Dim "Or add --theme=silkcircuit-$script:Primary to $(Join-Path $configDir 'config')"
+    Write-Dim "Add --italic-text=always too, the theme leans on italics"
 }
 
 function Install-Lsd {
     Write-Host "$script:Purple$script:Bold  >> lsd$script:Reset"
 
     $configDir = Join-Path $script:AppData "lsd"
-    Copy-SilkFile (Join-PathParts $script:ExtrasDir "lsd" "colors.yaml") (Join-Path $configDir "colors.yaml") "lsd:colors" | Out-Null
-    Copy-SilkFile (Join-PathParts $script:ExtrasDir "lsd" "config.yaml") (Join-Path $configDir "config.yaml") "lsd:config" | Out-Null
-    Write-Success "Installed lsd theme"
+    # lsd reads exactly one file, and it has to be called colors.yaml.
+    $source = Join-PathParts $script:ExtrasDir "lsd" "silkcircuit-$script:Primary.yaml"
+    if (-not (Copy-SilkFile $source (Join-Path $configDir "colors.yaml") "lsd")) {
+        return
+    }
+
+    $config = Join-Path $configDir "config.yaml"
+    if ($DryRun) {
+        Write-Dim "dry-run: would set color.theme to custom in $config"
+    } elseif (Test-Path -LiteralPath $config) {
+        if ((Get-Content -LiteralPath $config -Raw) -notmatch "theme:\s*custom") {
+            Write-Dim "Add to ${config}:"
+            Write-Dim "color:"
+            Write-Dim "  theme: custom"
+        }
+    } else {
+        Set-Content -LiteralPath $config -Value "color:`r`n  theme: custom`r`n" -Encoding UTF8
+    }
+
+    Write-Success "Installed the lsd color file"
+    Write-SingleSlotNote "lsd"
 }
 
 function Install-Procs {
     Write-Host "$script:Purple$script:Bold  >> procs$script:Reset"
 
     $target = Join-PathParts $script:AppData "procs" "config.toml"
-    if (Copy-SilkFile (Join-PathParts $script:ExtrasDir "procs" "config.toml") $target "procs") {
-        Write-Success "Installed procs config"
+    $source = Join-PathParts $script:ExtrasDir "procs" "silkcircuit-$script:Primary.toml"
+    if (Copy-SilkFile $source $target "procs") {
+        Write-Success "Installed the procs config"
+        Write-SingleSlotNote "procs"
     }
 }
 
 function Install-Atuin {
     Write-Host "$script:Purple$script:Bold  >> Atuin$script:Reset"
 
-    $target = Join-PathParts $script:HomeConfig "atuin" "themes" "silkcircuit.toml"
-    if (Copy-SilkFile (Join-PathParts $script:ExtrasDir "atuin" "silkcircuit.toml") $target "atuin") {
-        Write-Success "Installed Atuin theme"
-        Write-Dim "Add to atuin config.toml: theme = `"silkcircuit`""
-    }
+    $themeDir = Join-PathParts $script:HomeConfig "atuin" "themes"
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "atuin") $themeDir "atuin" "silkcircuit-@.toml"
+
+    Write-Success "Installed $count Atuin themes"
+    Write-Dim "In the atuin config.toml, under [theme]: name = `"silkcircuit-$script:Primary`""
 }
 
 function Install-Lazygit {
     Write-Host "$script:Purple$script:Bold  >> lazygit$script:Reset"
 
     $configDir = Join-Path $script:AppData "lazygit"
-    $target = Join-Path $configDir "config.yml"
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "lazygit") $configDir "lazygit" "silkcircuit-@.yml"
 
-    if ((Test-Path -LiteralPath $target) -and ((Get-Content -LiteralPath $target -Raw) -match "silkcircuit|neonPurple|#e135ff")) {
-        Write-Success "lazygit already has SilkCircuit theme"
-        [void]$script:Installed.Add("lazygit")
-        return
-    }
-
-    if ((Test-Path -LiteralPath $target) -and ((Get-Content -LiteralPath $target -Raw) -match "(?m)^gui:")) {
-        Write-Warn "Existing lazygit config found - theme file saved separately"
-        Copy-SilkFile (Join-PathParts $script:ExtrasDir "lazygit" "config.yml") (Join-Path $configDir "silkcircuit-theme.yml") "lazygit:theme-ref" | Out-Null
-        Write-Dim "Merge theme settings from: $(Join-Path $configDir "silkcircuit-theme.yml")"
-        return
-    }
-
-    if (Copy-SilkFile (Join-PathParts $script:ExtrasDir "lazygit" "config.yml") $target "lazygit") {
-        Write-Success "Installed lazygit theme"
-    }
+    $theme = Join-Path $configDir "silkcircuit-$script:Primary.yml"
+    Write-Success "Installed $count lazygit themes"
+    Write-Dim "Merge the gui.theme block into your lazygit config.yml, or load both:"
+    Write-Dim "lazygit --use-config-file `"$(Join-Path $configDir 'config.yml'),$theme`""
 }
 
 function Install-Fastfetch {
@@ -765,8 +885,10 @@ function Install-Fastfetch {
         Join-Path $script:HomeConfig "fastfetch"
     }
 
-    if (Copy-SilkFile (Join-PathParts $script:ExtrasDir "fastfetch" "config.jsonc") (Join-Path $configDir "config.jsonc") "fastfetch") {
-        Write-Success "Installed fastfetch config"
+    $source = Join-PathParts $script:ExtrasDir "fastfetch" "silkcircuit-$script:Primary.jsonc"
+    if (Copy-SilkFile $source (Join-Path $configDir "config.jsonc") "fastfetch") {
+        Write-Success "Installed the fastfetch config"
+        Write-SingleSlotNote "fastfetch"
     }
 }
 
@@ -795,18 +917,29 @@ function Install-VSCode {
 
     $destination = Join-Path $extensionDir "silkcircuit-theme"
     if (Copy-SilkDirectory (Join-Path $script:ExtrasDir "vscode") $destination "vscode") {
-        Write-Success "Installed VS Code theme"
-        Write-Dim "Restart VS Code and select: SilkCircuit Neon"
+        Write-Success "Installed the VS Code extension with all five themes"
+        Write-Dim "Restart VS Code, then Ctrl+K Ctrl+T -> SilkCircuit Neon"
     }
 }
 
 function Install-Slack {
     Write-Host "$script:Purple$script:Bold  >> Slack$script:Reset"
 
-    $target = Join-Path $script:ConfigRoot "slack-theme.txt"
-    if (Copy-SilkFile (Join-Path $script:ExtrasDir "slack-theme.txt") $target "slack") {
-        Write-Success "Slack theme reference installed"
-        Write-Dim "Open: Preferences -> Themes -> paste colors from $target"
+    $sourceDir = Join-Path $script:ExtrasDir "slack"
+    $targetDir = Join-Path $script:ConfigRoot "slack"
+    $count = Copy-SilkVariants $sourceDir $targetDir "slack" "silkcircuit-@.txt"
+
+    Write-Success "Staged $count Slack themes"
+    Write-Dim "Preferences -> Themes -> Create a custom theme, then paste this line:"
+
+    $source = Join-Path $sourceDir "silkcircuit-$script:Primary.txt"
+    if (Test-Path -LiteralPath $source) {
+        $line = Get-Content -LiteralPath $source |
+            Where-Object { $_ -and -not $_.StartsWith("#") } |
+            Select-Object -Last 1
+        if ($line) {
+            Write-Dim $line
+        }
     }
 }
 
@@ -855,7 +988,8 @@ function Install-AstroNvim {
 }
 
 function Run-Installs {
-    Write-Host "$script:Purple$script:Bold  INSTALLING$script:Reset$script:Cyan >> all variants$script:Reset"
+    $scope = if ($Variant -eq "all") { "all five variants" } else { "the $Variant variant" }
+    Write-Host "$script:Purple$script:Bold  INSTALLING$script:Reset$script:Cyan >> $scope$script:Reset"
     Write-NeonLine 40
     Write-Host ""
 
@@ -865,6 +999,7 @@ function Run-Installs {
             "ghostty" { Install-Ghostty }
             "alacritty" { Install-Alacritty }
             "wezterm" { Install-WezTerm }
+            "helix" { Install-Helix }
             "btop" { Install-Btop }
             "k9s" { Install-K9s }
             "fzf" { Install-Fzf }
@@ -932,9 +1067,13 @@ function Show-Usage {
     Write-Host "$script:White Usage:$script:Reset .\$scriptName [options]"
     Write-Host ""
     Write-Host "$script:White Options:$script:Reset"
-    Write-Host "$script:Cyan   -DryRun, -n$script:Reset  Show what would be installed"
-    Write-Host "$script:Cyan   -Yes, -y$script:Reset     Skip confirmation prompts"
-    Write-Host "$script:Cyan   -Help, -h$script:Reset    Show this help"
+    Write-Host "$script:Cyan   -Variant, -V$script:Reset  neon, vibrant, soft, glow, dawn, or all (default: all)"
+    Write-Host "$script:Cyan   -DryRun, -n$script:Reset   Show what would be installed"
+    Write-Host "$script:Cyan   -Yes, -y$script:Reset      Skip confirmation prompts"
+    Write-Host "$script:Cyan   -Help, -h$script:Reset     Show this help"
+    Write-Host ""
+    Write-Host "$script:Gray  Tools that hold a directory of themes get every selected variant."
+    Write-Host "  Tools that read a single file get neon unless -Variant says otherwise.$script:Reset"
     Write-Host ""
 }
 
@@ -964,6 +1103,8 @@ function Main {
         Write-Warn "install.ps1 targets Windows. Use ./install.sh on Unix-like systems."
         exit 1
     }
+
+    Resolve-Variants
 
     Show-Banner
     Detect-All
