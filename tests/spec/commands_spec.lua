@@ -12,12 +12,24 @@ local function load_theme()
   end)
 end
 
+-- Running without throwing is not the same as succeeding: the commands report
+-- most problems through vim.notify at ERROR level and return normally, so a
+-- bad variant or a contrast violation would otherwise pass silently.
 local function run(command)
   local ok, err
-  H.quiet(function()
+  local messages = H.quiet(function()
     ok, err = pcall(vim.cmd, command)
   end)
   H.ok(ok, ":" .. command .. " failed: " .. tostring(err))
+
+  local reported = {}
+  for _, entry in ipairs(messages) do
+    if entry.level and entry.level >= vim.log.levels.ERROR then
+      reported[#reported + 1] = entry.message
+    end
+  end
+  H.empty(reported, ":" .. command .. " reported errors")
+  return messages
 end
 
 describe("commands", function()

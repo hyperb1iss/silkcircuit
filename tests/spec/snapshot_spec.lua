@@ -32,10 +32,10 @@ describe("snapshot", function()
       end
 
       local expected = H.read_lines(path)
-      if not expected then
+      if not expected or #expected == 0 then
         H.fail(
           string.format(
-            "no snapshot at %s. Create it with SILKCIRCUIT_UPDATE_SNAPSHOTS=1 scripts/test --filter snapshot",
+            "%s is missing or empty, so it guards nothing. Write it with SILKCIRCUIT_UPDATE_SNAPSHOTS=1 scripts/test --filter snapshot",
             path
           )
         )
