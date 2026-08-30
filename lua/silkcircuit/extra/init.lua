@@ -151,6 +151,15 @@ M.targets = {
     is_full = true,
     url = "https://zellij.dev/documentation/themes",
   },
+  vscode = {
+    label = "VS Code",
+    -- The extension manifest, icon, and README live in extras/vscode, so the
+    -- generated themes get their own directory inside it.
+    dir = "vscode/themes",
+    ext = "json",
+    comment = "none",
+    url = "https://code.visualstudio.com/api/extension-guides/color-theme",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"

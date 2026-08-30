@@ -27,5 +27,6 @@ NVIM="${NVIM:-nvim}"
 run prettier --write --log-level warn --no-error-on-unmatched-pattern \
     "extras/warp/*.yaml" \
     "extras/windows-terminal/*.json" \
+    "extras/vscode/themes/*.json" \
     "palette/*.json" \
     "palette/*.yaml"
