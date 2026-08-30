@@ -1,16 +1,16 @@
 # SilkCircuit Chrome Theme
 
-Electric meets elegant:the full SilkCircuit experience for Chrome and Chromium-based browsers.
+Electric meets elegant. The full SilkCircuit experience for Chrome and Chromium-based browsers.
 
 ## Variants
 
 | Variant     | Description                                                          |
 | ----------- | -------------------------------------------------------------------- |
-| **Neon**    | The original:neon purples and glowing cyan on deep dark canvas       |
-| **Vibrant** | Pure electric intensity:maximum saturation on ultra-dark backgrounds |
-| **Soft**    | Gentle glow:softer colors for extended sessions                      |
-| **Glow**    | Maximum contrast:pure neon on void-black                             |
-| **Dawn**    | Light theme:electric accents on soft lavender backgrounds            |
+| **Neon**    | The original, neon purples and glowing cyan on deep dark canvas       |
+| **Vibrant** | Pure electric intensity, maximum saturation on ultra-dark backgrounds |
+| **Soft**    | Gentle glow, softer colors for extended sessions                      |
+| **Glow**    | Maximum contrast, pure neon on void-black                             |
+| **Dawn**    | Light theme, electric accents on soft lavender backgrounds            |
 
 Each variant is a standalone Chrome extension in its own directory.
 
@@ -98,4 +98,4 @@ python3 scripts/generate_chrome_themes.py
 
 ## License
 
-MIT:Same as SilkCircuit Neovim theme
+MIT, the same license as the SilkCircuit Neovim theme.

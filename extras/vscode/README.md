@@ -20,12 +20,12 @@ SilkCircuit pumps maximum visual voltage through your VSCode editor. Electric pu
 
 ## 💎 Features
 
-- ⚡ **Electric Color System**:Vibrant palette with semantic color mappings
-- 👁️ **WCAG AA Compliant**:Validated contrast ratios for extended coding sessions
-- 🎛️ **4 Theme Variants**:Neon (100%), Vibrant (85%), Soft (70%), and Glow (ultra-dark) modes
-- 💻 **Language Optimized**:Perfect for JS/TS, Python, Rust, Go, CSS, JSON, Markdown
-- 🎨 **Full Syntax Coverage**:Every token type beautifully highlighted
-- 📦 **Marketplace Ready**:One-click installation from VSCode Extensions
+- ⚡ **Electric Color System**: Vibrant palette with semantic color mappings
+- 👁️ **WCAG AA Compliant**: Validated contrast ratios for extended coding sessions
+- 🎛️ **4 Theme Variants**: Neon (100%), Vibrant (85%), Soft (70%), and Glow (ultra-dark) modes
+- 💻 **Language Optimized**: Perfect for JS/TS, Python, Rust, Go, CSS, JSON, Markdown
+- 🎨 **Full Syntax Coverage**: Every token type beautifully highlighted
+- 📦 **Marketplace Ready**: One-click installation from VSCode Extensions
 
 ## 🎨 Available Themes
 
@@ -68,24 +68,24 @@ Enhanced version with special brightness effects
     <td align="center" width="50%">
       <img src="https://github.com/hyperb1iss/silkcircuit/raw/HEAD/extras/vscode/assets/silkcircuit-vscode-neon.png" alt="SilkCircuit Neon in VSCode" width="100%" />
       <br/>
-      <sub><b>Neon</b>:maximum intensity</sub>
+      <sub><b>Neon</b>, maximum intensity</sub>
     </td>
     <td align="center" width="50%">
       <img src="https://github.com/hyperb1iss/silkcircuit/raw/HEAD/extras/vscode/assets/silkcircuit-vscode-vibrant.png" alt="SilkCircuit Vibrant in VSCode" width="100%" />
       <br/>
-      <sub><b>Vibrant</b>:85% intensity</sub>
+      <sub><b>Vibrant</b>, 85% intensity</sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
       <img src="https://github.com/hyperb1iss/silkcircuit/raw/HEAD/extras/vscode/assets/silkcircuit-vscode-soft.png" alt="SilkCircuit Soft in VSCode" width="100%" />
       <br/>
-      <sub><b>Soft</b>:gentle 70%</sub>
+      <sub><b>Soft</b>, gentle 70%</sub>
     </td>
     <td align="center" width="50%">
       <img src="https://github.com/hyperb1iss/silkcircuit/raw/HEAD/extras/vscode/assets/silkcircuit-vscode-glow.png" alt="SilkCircuit Glow in VSCode" width="100%" />
       <br/>
-      <sub><b>Glow</b>:ultra‑dark with enhanced brightness</sub>
+      <sub><b>Glow</b>, ultra-dark with enhanced brightness</sub>
     </td>
   </tr>
 </table>
@@ -245,11 +245,11 @@ SilkCircuit is a full ecosystem: editor, terminal, system tools, and even your b
   - **Chrome DevTools + Chrome pages**: `extras/chrome-theme/` (see `extras/chrome-theme/README.md`)
   - **Slack**: `extras/slack-theme.txt`
 - **Astronvim**
-  - Turn‑key setup in `extras/astronvim/` with `community.lua` and tailored plugins
+  - Turn-key setup in `extras/astronvim/` with `community.lua` and tailored plugins
 - **Avante.nvim**
   - Prompt/theme config: `extras/avante-config.lua`
 
-All cross‑platform extras live in `extras/`. See `extras/README.md` for install notes and screenshots.
+All cross-platform extras live in `extras/`. See `extras/README.md` for install notes and screenshots.
 
 ### 🚀 Quick start
 
