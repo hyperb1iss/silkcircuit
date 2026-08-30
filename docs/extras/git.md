@@ -66,14 +66,16 @@ If you use [delta](https://github.com/dandavison/delta) for git diffs, the confi
 ```gitconfig
 [delta]
     navigate = true
+    dark = true
     line-numbers = true
     syntax-theme = Dracula
-
-[delta "silkcircuit"]
-    minus-style = syntax "#3f1e1e"
-    plus-style = syntax "#1e3f1e"
-    minus-emph-style = syntax "#802020"
-    plus-emph-style = syntax "#208020"
+    file-style = "#f1fa8c bold"
+    hunk-header-style = "#80ffea bold"
+    line-numbers-minus-style = "#ff6363 bold"
+    line-numbers-plus-style = "#50fa7b bold"
+    minus-style = syntax "#4a2a2a"
+    plus-style = syntax "#2a4a2a"
+    commit-style = "#e135ff bold"
 ```
 
 ## Configuration Details

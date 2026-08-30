@@ -35,7 +35,7 @@ One palette, one semantic system, five intensity variants, every tool in your wo
 
 | Category         | Targets                                                            |
 | ---------------- | ------------------------------------------------------------------ |
-| 💻 **Editors**   | Neovim (40+ plugin integrations), VS Code (Marketplace), AstroNvim |
+| 💻 **Editors**   | Neovim (25+ plugin integrations), VS Code (Marketplace), AstroNvim |
 | 🖥️ **Terminals** | Ghostty, Kitty, Alacritty, Warp, Windows Terminal                  |
 | 🌐 **Browsers**  | Chrome (Web Store, 5 variants + DevTools CSS)                      |
 | 🔧 **CLI Tools** | btop, K9s, lazygit, bat, fzf, lsd, procs, atuin, Starship          |
@@ -175,7 +175,7 @@ Copy-Item extras\windows-terminal.json "$env:APPDATA\silkcircuit\windows-termina
 cp extras/btop/silkcircuit_*.theme ~/.config/btop/themes/
 
 # K9s (5 variants)
-cp extras/k9s/silkcircuit_*.yaml ~/.config/k9s/skins/
+cp extras/k9s/silkcircuit*.yaml ~/.config/k9s/skins/
 
 # Git colors with delta integration
 cat extras/gitconfig >> ~/.gitconfig
@@ -184,7 +184,7 @@ cat extras/gitconfig >> ~/.gitconfig
 source extras/fzf.sh  # or add to .zshrc/.bashrc
 
 # Starship prompt
-cp extras/starship/silkcircuit.toml ~/.config/starship.toml
+cp extras/starship/starship.toml ~/.config/starship.toml
 ```
 
 ```powershell
@@ -200,7 +200,7 @@ Copy-Item extras\starship\starship.toml "$HOME\.config\starship.toml"
 
 ## 💜 Neovim
 
-The Neovim theme is the most feature-rich target: bytecode-compiled for <5ms load times, 40+ auto-detected plugin integrations, and persistent preferences.
+The Neovim theme is the most feature-rich target: bytecode-compiled for <5ms load times, 25+ auto-detected plugin integrations, and persistent preferences.
 
 <div align="center">
   <img src="assets/screenshots/nvim-telescope.png" alt="Telescope integration" width="85%">

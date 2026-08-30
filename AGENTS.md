@@ -1,17 +1,18 @@
-# Claude Coding Guidelines for SilkCircuit
+# Coding Guidelines for SilkCircuit
 
-> Instructions for AI assistants working on the SilkCircuit theme
+> Instructions for AI assistants working on the SilkCircuit theme.
+> `CLAUDE.md` is a symlink to this file.
 
 ## Project Overview
 
-SilkCircuit is a unified design system featuring neon purples, electric pinks, and glowing cyan accents. It themes your entire dev environment — Neovim (flagship, with 40+ plugin integrations), VS Code, Chrome, terminals, and 20+ CLI/system tools. The project prioritizes performance, WCAG AA accessibility, and consistent visual identity across all targets.
+SilkCircuit is a unified design system featuring neon purples, electric pinks, and glowing cyan accents. It themes your entire dev environment: Neovim (the flagship, with 25+ plugin integrations), VS Code, Chrome, terminals, and 20+ CLI and system tools. The project prioritizes performance, WCAG AA accessibility, and a consistent visual identity across all targets.
 
 ## Core Principles
 
 1. **Performance First** - Theme loads in <5ms with bytecode compilation
 2. **Accessibility** - All colors meet WCAG AA contrast standards
 3. **Plugin Auto-Detection** - Automatically detect and theme installed plugins
-4. **User Choice** - Three variants (neon/vibrant/soft) with persistent preferences
+4. **User Choice** - Five variants (neon/vibrant/soft/glow/dawn) with persistent preferences
 
 ## Code Style Guidelines
 
@@ -53,6 +54,8 @@ return M
 - `theme.lua` - Core highlight group definitions
 - `config.lua` - Configuration management
 - `util.lua` - Utility functions and compilation
+- `utils/colors.lua` - Color math: blending, contrast ratios, variant scaling
+- `health.lua` - `:checkhealth silkcircuit` provider
 
 ### Integration System
 
@@ -64,7 +67,12 @@ return M
 - `commands.lua` - User commands (`:SilkCircuit`, etc.)
 - `preferences.lua` - Persistent settings
 - `glow.lua` - Glow mode implementation
-- `variants.lua` - Theme variant system
+- `variants.lua` - Theme variant system, including the terminal\_\* ANSI contract
+
+### Distribution Support
+
+- `contrib/astronvim.lua` - AstroNvim integration helpers
+- `lua/lualine/themes/silkcircuit.lua` - Lualine theme, loaded by lualine itself
 
 ## Adding New Features
 
@@ -97,12 +105,26 @@ return M
 3. Add to `:checkhealth` documentation
 4. Update help docs
 
+## Development Commands
+
+| Command                  | What it does                                     |
+| ------------------------ | ------------------------------------------------ |
+| `make setup`             | Install dev dependencies via mise                |
+| `make check`             | Lint, format check, and tests. The pre-push gate |
+| `make test`              | Unit tests only                                  |
+| `make build`             | Regenerate every extras theme from the palette   |
+| `make docs`              | Regenerate the generated tables in the READMEs   |
+| `make preview VARIANT=x` | Launch nvim with the theme from the working tree |
+
+Run `make check` before every commit. It is the same gate CI runs, so a
+green local run means a green pipeline.
+
 ## Testing Guidelines
 
 ### Before Committing
 
-1. Run `make lint` - Must pass
-2. Test all variants - `:SilkCircuit neon/vibrant/soft`
+1. Run `make check` - Must pass
+2. Test all variants - `:SilkCircuit neon|vibrant|soft|glow|dawn`
 3. Check compilation - `:SilkCircuitCompile`
 4. Verify contrast - `:SilkCircuitContrast`
 5. Run checkhealth - `:checkhealth silkcircuit`
@@ -203,9 +225,13 @@ Examples:
 
 ### Pull Requests
 
-- Update CHANGELOG.md
-- Run all tests
+- Run `make check`
 - Include before/after screenshots for visual changes
+- Read `CONTRIBUTING.md` before your first PR
+
+There is no CHANGELOG.md to update. The release workflow builds release
+notes from the commit log between tags, so the commit subject you write is
+the changelog entry users read.
 
 ## Debugging
 
@@ -245,10 +271,12 @@ vim.g.silkcircuit_debug = true
 ### File Locations
 
 - Colors: `lua/silkcircuit/palette.lua`
+- Variants and ANSI: `lua/silkcircuit/variants.lua`
 - Highlights: `lua/silkcircuit/theme.lua`
 - Plugin themes: `lua/silkcircuit/integrations/`
+- Other targets: `extras/` (generated, run `make build` instead of editing)
 - User config: `~/.config/nvim/lua/plugins/silkcircuit.lua`
 
 ---
 
-*When in doubt, prioritize user experience and maintain the vibrant aesthetic.*
+_When in doubt, prioritize user experience and maintain the vibrant aesthetic._

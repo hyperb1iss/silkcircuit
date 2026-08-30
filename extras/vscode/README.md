@@ -227,7 +227,7 @@ SilkCircuit is a full ecosystem: editor, terminal, system tools, and even your b
 ### 💻 Ecosystem at a glance
 
 - **Editor themes**
-  - **Neovim**: Full theme with 40+ plugin integrations · repo: <https://github.com/hyperb1iss/silkcircuit>
+  - **Neovim**: Full theme with 25+ plugin integrations · repo: <https://github.com/hyperb1iss/silkcircuit>
     - Integrations live in `lua/silkcircuit/integrations/`
   - **Lualine**: `lua/lualine/themes/silkcircuit.lua` + sample config `extras/lualine-config.lua`
 - **Terminals**

@@ -4,8 +4,8 @@ Electric meets elegant. The full SilkCircuit experience for Chrome and Chromium-
 
 ## Variants
 
-| Variant     | Description                                                          |
-| ----------- | -------------------------------------------------------------------- |
+| Variant     | Description                                                           |
+| ----------- | --------------------------------------------------------------------- |
 | **Neon**    | The original, neon purples and glowing cyan on deep dark canvas       |
 | **Vibrant** | Pure electric intensity, maximum saturation on ultra-dark backgrounds |
 | **Soft**    | Gentle glow, softer colors for extended sessions                      |

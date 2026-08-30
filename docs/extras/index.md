@@ -13,16 +13,17 @@ SilkCircuit is a complete visual identity system for your workflow. These extras
 | Extra                             | Variants | Description                         |
 | --------------------------------- | -------- | ----------------------------------- |
 | [VS Code](/extras/vscode)         | 5        | Full VSCode theme with all variants |
-| [Neovim Plugins](/extras/plugins) | All      | 40+ plugin integrations             |
+| [Neovim Plugins](/extras/plugins) | All      | 25+ plugin integrations             |
 
 ### Terminals
 
-| Extra                                                  | Variants | Description                 |
-| ------------------------------------------------------ | -------- | --------------------------- |
-| [Alacritty](/extras/terminals#alacritty)               | 2        | GPU-accelerated terminal    |
-| [Kitty](/extras/terminals#kitty)                       | 2        | Feature-rich terminal       |
-| [Warp](/extras/terminals#warp)                         | 2        | Modern AI-powered terminal  |
-| [Windows Terminal](/extras/terminals#windows-terminal) | 1        | Windows integrated terminal |
+| Extra                                                  | Variants | Description                  |
+| ------------------------------------------------------ | -------- | ---------------------------- |
+| [Alacritty](/extras/terminals#alacritty)               | 2        | GPU-accelerated terminal     |
+| [Kitty](/extras/terminals#kitty)                       | 2        | Feature-rich terminal        |
+| [Warp](/extras/terminals#warp)                         | 2        | Modern AI-powered terminal   |
+| [Windows Terminal](/extras/terminals#windows-terminal) | 1        | Windows integrated terminal  |
+| [Ghostty](/extras/terminals#ghostty)                   | 5        | GPU terminal with shader CSS |
 
 ### System Tools
 
@@ -33,11 +34,29 @@ SilkCircuit is a complete visual identity system for your workflow. These extras
 | [Git](/extras/git)   | 1        | Git config with SilkCircuit colors |
 | [FZF](/extras/fzf)   | 1        | Fuzzy finder integration           |
 
+### CLI and Desktop
+
+Each of these ships a single config in `extras/` that the universal installer
+picks up automatically.
+
+| Extra     | Variants | Description                     |
+| --------- | -------- | ------------------------------- |
+| Starship  | 1        | Prompt segments and symbols     |
+| tmux      | 1        | Status line, panes, and windows |
+| lazygit   | 1        | Git TUI colors                  |
+| bat       | 1        | `bat` syntax highlighting theme |
+| lsd       | 1        | Directory listing colors        |
+| atuin     | 1        | Shell history search            |
+| procs     | 1        | Process viewer columns          |
+| fastfetch | 1        | System info readout             |
+| dmesg     | 5        | Kernel log colors               |
+| COSMIC    | 5        | COSMIC Desktop theme            |
+
 ### Applications
 
 | Extra                    | Variants | Description              |
 | ------------------------ | -------- | ------------------------ |
-| [Chrome](/extras/chrome) | 1        | Browser theme + DevTools |
+| [Chrome](/extras/chrome) | 5        | Browser theme + DevTools |
 | [Slack](/extras/slack)   | 1        | Workspace theme          |
 
 ### Neovim Distributions
@@ -64,7 +83,7 @@ cp extras/kitty.conf ~/.config/kitty/themes/silkcircuit.conf
 cp extras/alacritty.yml ~/.config/alacritty/themes/silkcircuit.yml
 
 # For AstroNvim users
-cp -r extras/astronvim/* ~/.config/nvim/lua/
+cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/
 ```
 
 ## Color Consistency
