@@ -9,14 +9,17 @@
 
 local M = {}
 
--- A drop shadow has to darken whatever sits under it, so it is the one thing
--- no single palette role can serve in both a dark and a light theme.
-local SHADOW = {
+-- The two roles no single palette key can serve in both a dark and a light
+-- theme. A drop shadow has to darken whatever sits under it. A hover has to
+-- move away from the purple beneath it, which means brighter on a dark theme
+-- and deeper on a light one, where pink_bright drops under 4.5:1 against the
+-- background it carries as text.
+local DERIVED = {
   dark = function(colors)
-    return colors.bg_darker
+    return { shadow = colors.bg_darker, accent_hover = colors.pink_bright }
   end,
   light = function(colors)
-    return colors.gray_light .. "50"
+    return { shadow = colors.gray_light .. "50", accent_hover = colors.pink }
   end,
 }
 
@@ -41,7 +44,7 @@ local TEMPLATE = [==[
     "breadcrumbPicker.background": "${bg_float}",
     "button.background": "${purple}",
     "button.foreground": "${bg}",
-    "button.hoverBackground": "${pink_bright}",
+    "button.hoverBackground": "${accent_hover}",
     "checkbox.background": "${bg_float}",
     "checkbox.border": "${purple}",
     "checkbox.foreground": "${fg}",
@@ -101,7 +104,7 @@ local TEMPLATE = [==[
     "errorForeground": "${red}",
     "extensionButton.prominentBackground": "${purple}",
     "extensionButton.prominentForeground": "${bg}",
-    "extensionButton.prominentHoverBackground": "${pink_bright}",
+    "extensionButton.prominentHoverBackground": "${accent_hover}",
     "focusBorder": "${purple}",
     "foreground": "${fg}",
     "gitDecoration.addedResourceForeground": "${green}",
@@ -218,7 +221,7 @@ local TEMPLATE = [==[
     "sideBarSectionHeader.background": "${bg}",
     "sideBarSectionHeader.border": "${bg_float}",
     "sideBarSectionHeader.foreground": "${purple}",
-    "sideBarTitle.foreground": "${pink_bright}",
+    "sideBarTitle.foreground": "${pink_soft}",
     "statusBar.background": "${bg_dark}",
     "statusBar.debuggingBackground": "${pink}",
     "statusBar.debuggingForeground": "${bg}",
@@ -229,7 +232,7 @@ local TEMPLATE = [==[
     "statusBarItem.hoverBackground": "${purple}33",
     "statusBarItem.prominentBackground": "${purple}",
     "statusBarItem.prominentForeground": "${bg}",
-    "statusBarItem.prominentHoverBackground": "${pink_bright}",
+    "statusBarItem.prominentHoverBackground": "${accent_hover}",
     "statusBarItem.remoteBackground": "${cyan}",
     "statusBarItem.remoteForeground": "${bg}",
     "tab.activeBackground": "${bg}",
@@ -291,7 +294,7 @@ local TEMPLATE = [==[
     "walkThrough.embeddedEditorBackground": "${bg}",
     "welcomePage.background": "${bg}",
     "welcomePage.buttonBackground": "${purple}",
-    "welcomePage.buttonHoverBackground": "${pink_bright}",
+    "welcomePage.buttonHoverBackground": "${accent_hover}",
     "widget.shadow": "${shadow}"
   },
   "tokenColors": [
@@ -732,9 +735,7 @@ local TEMPLATE = [==[
 
 function M.generate(colors)
   local extra = require("silkcircuit.extra")
-  local derived = vim.tbl_extend("force", colors, {
-    shadow = SHADOW[colors.meta.appearance](colors),
-  })
+  local derived = vim.tbl_extend("force", colors, DERIVED[colors.meta.appearance](colors))
   return extra.template(TEMPLATE, derived)
 end
 
