@@ -25,6 +25,7 @@ Generated from the palette by `make build`, five variants each. See the
 | Target                          | Format                                                                                             | Generated files                                                          |
 | ------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | Alacritty                       | [reference](https://alacritty.org/config-alacritty.html#colors)                                    | `extras/alacritty/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`        |
+| fastfetch                       | [reference](https://github.com/fastfetch-cli/fastfetch/wiki/Configuration)                         | `extras/fastfetch/silkcircuit-{neon,vibrant,soft,glow,dawn}.jsonc`       |
 | Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                       | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`               |
 | Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
 | Git                             | [reference](https://git-scm.com/docs/git-config#Documentation/git-config.txt-color)                | `extras/git/silkcircuit-{neon,vibrant,soft,glow,dawn}.gitconfig`         |
