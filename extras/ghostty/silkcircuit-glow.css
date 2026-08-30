@@ -11,11 +11,11 @@
 @define-color sc_bg_elevated #1a0033;
 @define-color sc_fg #ffffff;
 @define-color sc_fg_muted #cc66ff;
-@define-color sc_accent #ff00ff;
+@define-color sc_accent #d633ff;
 @define-color sc_accent_hover #ff66ff;
 @define-color sc_cyan #00ffff;
 @define-color sc_green #00ff00;
-@define-color sc_red #ff0066;
+@define-color sc_red #ff2244;
 @define-color sc_yellow #ffff00;
 
 /* Headerbar */

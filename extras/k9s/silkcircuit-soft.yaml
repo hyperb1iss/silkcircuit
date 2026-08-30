@@ -47,7 +47,7 @@ k9s:
       errorColor: "#ff6677"
       highlightcolor: "#ff99ff"
       killColor: "#6272a4"
-      completedColor: "#637777"
+      completedColor: "#7e9494"
 
     # Border title styles
     title:
@@ -63,17 +63,17 @@ k9s:
     table:
       fgColor: "#f8f8f2"
       bgColor: "#1a1626"
-      cursorColor: "#3e3456"
+      cursorColor: "#201b30"
       # Header row styles
       header:
         fgColor: "#e892ff"
-        bgColor: "#3e3456"
+        bgColor: "#201b30"
         sorterColor: "#ffe699"
 
     # YAML info styles
     yaml:
       keyColor: "#e892ff"
-      colonColor: "#637777"
+      colonColor: "#7e9494"
       valueColor: "#99ffee"
 
     # Logs styles

@@ -24,7 +24,7 @@ themes {
         }
         ribbon_unselected {
             base "#e9d5ff"
-            background "#3e3456"
+            background "#201b30"
             emphasis_0 "#e892ff"
             emphasis_1 "#ff99ff"
             emphasis_2 "#ffffff"
@@ -35,7 +35,7 @@ themes {
             background "#e892ff"
             emphasis_0 "#141220"
             emphasis_1 "#0e0d16"
-            emphasis_2 "#3e3456"
+            emphasis_2 "#201b30"
             emphasis_3 "#1a1626"
         }
         table_title {

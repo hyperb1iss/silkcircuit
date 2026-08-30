@@ -14,17 +14,17 @@ split-divider-color = #00ffff
 
 # Normal colors
 palette = 0=#0f0c1a
-palette = 1=#ff66ff
+palette = 1=#ff3366
 palette = 2=#00ff66
 palette = 3=#ffcc00
-palette = 4=#ff00ff
+palette = 4=#6699ff
 palette = 5=#ff00cc
 palette = 6=#00ffcc
 palette = 7=#f8f8f2
 
 # Bright colors
-palette = 8=#637777
-palette = 9=#ff3366
+palette = 8=#728989
+palette = 9=#ff6677
 palette = 10=#66ff99
 palette = 11=#ffff66
 palette = 12=#88aaff

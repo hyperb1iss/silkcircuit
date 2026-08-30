@@ -23,17 +23,17 @@ split = "#00ffff"
 
 ansi = [
   "#0f0c1a",
-  "#ff66ff",
+  "#ff3366",
   "#00ff66",
   "#ffcc00",
-  "#ff00ff",
+  "#6699ff",
   "#ff00cc",
   "#00ffcc",
   "#f8f8f2",
 ]
 brights = [
-  "#637777",
-  "#ff3366",
+  "#728989",
+  "#ff6677",
   "#66ff99",
   "#ffff66",
   "#88aaff",
@@ -44,14 +44,14 @@ brights = [
 
 [colors.indexed]
 16 = "#ff00aa"
-17 = "#f78c6c"
+17 = "#ff5fa8"
 
 [colors.tab_bar]
 background = "#08060f"
 inactive_tab_edge = "#00ffff"
 
 [colors.tab_bar.active_tab]
-bg_color = "#0a0614"
+bg_color = "#151026"
 fg_color = "#f8f8f2"
 intensity = "Bold"
 underline = "None"
@@ -63,7 +63,7 @@ bg_color = "#08060f"
 fg_color = "#e9d5ff"
 
 [colors.tab_bar.inactive_tab_hover]
-bg_color = "#0a0614"
+bg_color = "#151026"
 fg_color = "#f8f8f2"
 italic = true
 
@@ -72,6 +72,6 @@ bg_color = "#08060f"
 fg_color = "#e9d5ff"
 
 [colors.tab_bar.new_tab_hover]
-bg_color = "#0a0614"
+bg_color = "#151026"
 fg_color = "#00ffcc"
 italic = true

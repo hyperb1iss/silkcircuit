@@ -15,19 +15,19 @@ body,
 .-theme-with-dark-background {
   /* Base surfaces */
   --sys-color-base: #faf8ff !important;
-  --sys-color-base-container: #f1ecff !important;
-  --sys-color-base-container-elevated: #e8e0ff !important;
+  --sys-color-base-container: #f4f0ff !important;
+  --sys-color-base-container-elevated: #f7f4ff !important;
   --sys-color-cdt-base: #faf8ff !important;
-  --sys-color-cdt-base-container: #f1ecff !important;
+  --sys-color-cdt-base-container: #f4f0ff !important;
 
   /* Elevation surfaces */
   --sys-color-surface: #faf8ff !important;
   --sys-color-surface1: #faf8ff !important;
-  --sys-color-surface2: #e8e0ff !important;
-  --sys-color-surface3: #e8e0ff !important;
-  --sys-color-surface4: #e8e0ff !important;
-  --sys-color-surface5: #e8e0ff !important;
-  --sys-color-surface-variant: #e8e0ff !important;
+  --sys-color-surface2: #f7f4ff !important;
+  --sys-color-surface3: #f7f4ff !important;
+  --sys-color-surface4: #f7f4ff !important;
+  --sys-color-surface5: #f7f4ff !important;
+  --sys-color-surface-variant: #f7f4ff !important;
 
   /* Status surfaces */
   --sys-color-surface-error: rgba(193, 39, 45, 0.08) !important;
@@ -39,8 +39,8 @@ body,
 
   --sys-color-on-base: #2b2540 !important;
   --sys-color-on-surface: #2b2540 !important;
-  --sys-color-on-surface-subtle: #8e84a8 !important;
-  --sys-color-on-surface-secondary: #8e84a8 !important;
+  --sys-color-on-surface-subtle: #7353a9 !important;
+  --sys-color-on-surface-secondary: #686177 !important;
   --sys-color-on-surface-primary: #2b2540 !important;
 
   /* ── Primary / accent ───────────────────────────────────────────── */
@@ -48,41 +48,41 @@ body,
   --sys-color-primary: #7e2bd5 !important;
   --sys-color-primary-bright: #7e2bd5 !important;
   --sys-color-on-primary: #faf8ff !important;
-  --sys-color-secondary: #007f8e !important;
+  --sys-color-secondary: #006e72 !important;
   --sys-color-on-secondary: #faf8ff !important;
   --sys-color-tertiary: #b40077 !important;
   --sys-color-on-tertiary: #faf8ff !important;
-  --sys-color-tertiary-container: #e8e0ff !important;
-  --sys-color-on-tertiary-container: #9c4a88 !important;
+  --sys-color-tertiary-container: #f7f4ff !important;
+  --sys-color-on-tertiary-container: #9e4087 !important;
 
   /* Containers */
-  --sys-color-tonal-container: #e8e0ff !important;
+  --sys-color-tonal-container: #f7f4ff !important;
   --sys-color-on-tonal-container: #2b2540 !important;
-  --sys-color-tonal-outline: #9654e0 !important;
-  --sys-color-header-container: #f1ecff !important;
-  --sys-color-omnibox-container: #e8e0ff !important;
+  --sys-color-tonal-outline: #823ecf !important;
+  --sys-color-header-container: #f4f0ff !important;
+  --sys-color-omnibox-container: #f7f4ff !important;
   --sys-color-neutral-container: #d4c8f0 !important;
   --sys-color-neutral-bright: #5a4d6e !important;
-  --sys-color-neutral-outline: #8e84a8 !important;
+  --sys-color-neutral-outline: #686177 !important;
 
   /* ── Named semantic colors ──────────────────────────────────────── */
 
-  --sys-color-blue: #2563eb !important;
-  --sys-color-blue-bright: #2563eb !important;
-  --sys-color-cyan: #007f8e !important;
-  --sys-color-cyan-bright: #009fae !important;
-  --sys-color-green: #2d8659 !important;
-  --sys-color-green-bright: #2d8659 !important;
-  --sys-color-orange: #c05621 !important;
-  --sys-color-orange-bright: #c74a8c !important;
+  --sys-color-blue: #1454dc !important;
+  --sys-color-blue-bright: #1454dc !important;
+  --sys-color-cyan: #006e72 !important;
+  --sys-color-cyan-bright: #006388 !important;
+  --sys-color-green: #1d6e46 !important;
+  --sys-color-green-bright: #1d6e46 !important;
+  --sys-color-orange: #a64718 !important;
+  --sys-color-orange-bright: #b42a74 !important;
   --sys-color-pink: #b40077 !important;
-  --sys-color-pink-bright: #9c4a88 !important;
+  --sys-color-pink-bright: #9e4087 !important;
   --sys-color-purple: #7e2bd5 !important;
   --sys-color-purple-bright: #7e2bd5 !important;
-  --sys-color-yellow: #a88600 !important;
-  --sys-color-yellow-bright: #a88600 !important;
+  --sys-color-yellow: #796100 !important;
+  --sys-color-yellow-bright: #796100 !important;
   --sys-color-yellow-container: rgba(168, 134, 0, 0.12) !important;
-  --sys-color-yellow-outline: #a88600 !important;
+  --sys-color-yellow-outline: #796100 !important;
 
   /* Error / status */
   --sys-color-error: #c1272d !important;
@@ -92,26 +92,26 @@ body,
   --sys-color-on-error: #faf8ff !important;
   --sys-color-on-error-container: #c1272d !important;
   --sys-color-on-surface-error: #c1272d !important;
-  --sys-color-on-surface-green: #2d8659 !important;
-  --sys-color-on-surface-yellow: #a88600 !important;
+  --sys-color-on-surface-green: #1d6e46 !important;
+  --sys-color-on-surface-yellow: #796100 !important;
 
   /* ── Dividers & outlines ────────────────────────────────────────── */
 
   --sys-color-divider: rgba(126, 43, 213, 0.12) !important;
   --sys-color-divider-prominent: rgba(126, 43, 213, 0.25) !important;
-  --sys-color-outline: #8e84a8 !important;
+  --sys-color-outline: #686177 !important;
 
   /* ── Gradients ──────────────────────────────────────────────────── */
 
   --sys-color-gradient-primary: #7e2bd5 !important;
-  --sys-color-gradient-tertiary: #007f8e !important;
+  --sys-color-gradient-tertiary: #006e72 !important;
 
   /* ── Interactive states ─────────────────────────────────────────── */
 
   --sys-color-state-hover-on-subtle: rgba(126, 43, 213, 0.06) !important;
   --sys-color-state-hover-on-prominent: rgba(126, 43, 213, 0.10) !important;
   --sys-color-state-focus-highlight: #7e2bd5 !important;
-  --sys-color-state-focus-ring: #007f8e !important;
+  --sys-color-state-focus-ring: #006e72 !important;
   --sys-color-state-ripple-primary: rgba(126, 43, 213, 0.15) !important;
   --sys-color-state-ripple-neutral-on-subtle: rgba(43, 37, 64, 0.06) !important;
   --sys-color-state-text-highlight: rgba(126, 43, 213, 0.18) !important;
@@ -120,79 +120,79 @@ body,
 
   --sys-color-token-keyword: #7e2bd5 !important;
   --sys-color-token-variable: #2b2540 !important;
-  --sys-color-token-definition: #007f8e !important;
-  --sys-color-token-property: #009fae !important;
-  --sys-color-token-property-special: #c74a8c !important;
-  --sys-color-token-type: #a88600 !important;
-  --sys-color-token-variable-special: #c74a8c !important;
-  --sys-color-token-builtin: #009fae !important;
-  --sys-color-token-number: #c74a8c !important;
-  --sys-color-token-string: #9c4a88 !important;
-  --sys-color-token-string-special: #009fae !important;
+  --sys-color-token-definition: #006e72 !important;
+  --sys-color-token-property: #006388 !important;
+  --sys-color-token-property-special: #b42a74 !important;
+  --sys-color-token-type: #796100 !important;
+  --sys-color-token-variable-special: #b42a74 !important;
+  --sys-color-token-builtin: #006388 !important;
+  --sys-color-token-number: #b42a74 !important;
+  --sys-color-token-string: #9e4087 !important;
+  --sys-color-token-string-special: #006388 !important;
   --sys-color-token-atom: #7e2bd5 !important;
-  --sys-color-token-comment: #9654e0 !important;
-  --sys-color-token-meta: #8e84a8 !important;
+  --sys-color-token-comment: #823ecf !important;
+  --sys-color-token-meta: #686177 !important;
   --sys-color-token-tag: #b40077 !important;
   --sys-color-token-attribute: #7e2bd5 !important;
-  --sys-color-token-attribute-value: #9c4a88 !important;
-  --sys-color-token-inserted: #2d8659 !important;
+  --sys-color-token-attribute-value: #9e4087 !important;
+  --sys-color-token-inserted: #1d6e46 !important;
   --sys-color-token-deleted: #c1272d !important;
-  --sys-color-token-subtle: #8e84a8 !important;
-  --sys-color-token-pseudo-element: #9654e0 !important;
+  --sys-color-token-subtle: #686177 !important;
+  --sys-color-token-pseudo-element: #823ecf !important;
 
   /* ── UI chrome overrides ────────────────────────────────────────── */
 
-  --override-toolbar-background-color: #f1ecff !important;
+  --override-toolbar-background-color: #f4f0ff !important;
   --override-current-search-result-background-color: rgba(168, 134, 0, 0.2) !important;
-  --app-color-toolbar-background: #f1ecff !important;
+  --app-color-toolbar-background: #f4f0ff !important;
 
   /* Links */
-  --text-link: #007f8e !important;
+  --text-link: #006e72 !important;
 
   /* Console ANSI colors */
   --console-color-red: #c1272d !important;
-  --console-color-green: #2d8659 !important;
-  --console-color-yellow: #a88600 !important;
-  --console-color-blue: #2563eb !important;
+  --console-color-green: #1d6e46 !important;
+  --console-color-yellow: #796100 !important;
+  --console-color-blue: #1454dc !important;
   --console-color-magenta: #b40077 !important;
-  --console-color-cyan: #007f8e !important;
+  --console-color-cyan: #006e72 !important;
   --console-color-bright-red: #c1272d !important;
-  --console-color-bright-green: #2d8659 !important;
-  --console-color-bright-yellow: #a88600 !important;
-  --console-color-bright-blue: #2563eb !important;
-  --console-color-bright-magenta: #9c4a88 !important;
-  --console-color-bright-cyan: #009fae !important;
+  --console-color-bright-green: #1d6e46 !important;
+  --console-color-bright-yellow: #796100 !important;
+  --console-color-bright-blue: #1454dc !important;
+  --console-color-bright-magenta: #9e4087 !important;
+  --console-color-bright-cyan: #006388 !important;
 }
 
 /* ── CM6 token classes (direct styling fallback) ────────────────────── */
 
 .token-keyword { color: #7e2bd5 !important; }
 .token-variable { color: #2b2540 !important; }
-.token-definition { color: #007f8e !important; }
-.token-property { color: #009fae !important; }
-.token-type { color: #a88600 !important; }
-.token-variable-special { color: #c74a8c !important; }
-.token-builtin { color: #009fae !important; }
-.token-number { color: #c74a8c !important; }
-.token-string { color: #9c4a88 !important; }
-.token-string-special { color: #009fae !important; }
+.token-definition { color: #006e72 !important; }
+.token-property { color: #006388 !important; }
+.token-type { color: #796100 !important; }
+.token-variable-special { color: #b42a74 !important; }
+.token-builtin { color: #006388 !important; }
+.token-number { color: #b42a74 !important; }
+.token-string { color: #9e4087 !important; }
+.token-string-special { color: #006388 !important; }
 .token-atom { color: #7e2bd5 !important; }
-.token-comment { color: #9654e0 !important; font-style: italic; }
-.token-meta { color: #8e84a8 !important; }
+.token-comment { color: #823ecf !important; font-style: italic; }
+.token-meta { color: #686177 !important; }
 .token-tag { color: #b40077 !important; }
 .token-attribute { color: #7e2bd5 !important; }
-.token-attribute-value { color: #9c4a88 !important; }
-.token-inserted { color: #2d8659 !important; }
+.token-attribute-value { color: #9e4087 !important; }
+.token-inserted { color: #1d6e46 !important; }
 .token-deleted { color: #c1272d !important; text-decoration: line-through; }
 
 /* ── CM5 fallback (older Chrome versions) ───────────────────────────── */
 
 .cm-keyword { color: #7e2bd5 !important; }
-.cm-string { color: #9c4a88 !important; }
-.cm-number { color: #c74a8c !important; }
-.cm-property { color: #009fae !important; }
+.cm-string { color: #9e4087 !important; }
+.cm-number { color: #b42a74 !important; }
+.cm-property { color: #006388 !important; }
 .cm-variable { color: #2b2540 !important; }
-.cm-comment { color: #9654e0 !important; font-style: italic; }
+.cm-comment { color: #823ecf !important; font-style: italic; }
 .cm-tag { color: #b40077 !important; }
 .cm-attribute { color: #7e2bd5 !important; }
 
@@ -203,11 +203,11 @@ body,
 }
 
 .cm-content {
-  caret-color: #007f8e !important;
+  caret-color: #006e72 !important;
 }
 
 .cm-cursor {
-  border-left-color: #007f8e !important;
+  border-left-color: #006e72 !important;
 }
 
 .cm-selectionBackground,
@@ -221,20 +221,20 @@ body,
 
 .cm-matchingBracket {
   background-color: rgba(0, 127, 142, 0.15) !important;
-  outline: 1px solid #007f8e !important;
+  outline: 1px solid #006e72 !important;
 }
 
 .cm-gutters {
-  background-color: #f1ecff !important;
+  background-color: #f4f0ff !important;
   border-right: 1px solid rgba(126, 43, 213, 0.1) !important;
 }
 
 .cm-lineNumbers {
-  color: #8e84a8 !important;
+  color: #686177 !important;
 }
 
 .cm-foldPlaceholder {
-  color: #9654e0 !important;
+  color: #823ecf !important;
 }
 
 .cm-highlightedLine {
@@ -250,21 +250,21 @@ body,
 
 .console-message-wrapper.console-warning-level {
   background-color: rgba(168, 134, 0, 0.06) !important;
-  border-left-color: #a88600 !important;
+  border-left-color: #796100 !important;
 }
 
 #console-prompt .console-prompt-icon {
-  color: #007f8e !important;
+  color: #006e72 !important;
 }
 
 .console-eager-inner-preview {
-  color: #8e84a8 !important;
+  color: #686177 !important;
 }
 
 /* ── Network panel ──────────────────────────────────────────────────── */
 
 .network-log-grid.data-grid thead {
-  background-color: #e8e0ff !important;
+  background-color: #f7f4ff !important;
 }
 
 .network-error-row {
@@ -272,11 +272,11 @@ body,
 }
 
 .network-warning-row {
-  color: #a88600 !important;
+  color: #796100 !important;
 }
 
 .network-summary-bar {
-  background-color: #f1ecff !important;
+  background-color: #f4f0ff !important;
   border-top: 1px solid rgba(126, 43, 213, 0.1) !important;
 }
 
@@ -287,7 +287,7 @@ body,
 }
 
 .webkit-css-property {
-  color: #007f8e !important;
+  color: #006e72 !important;
 }
 
 /* ── Sources panel ──────────────────────────────────────────────────── */
@@ -298,7 +298,7 @@ body,
 
 .paused-message {
   background-color: rgba(168, 134, 0, 0.08) !important;
-  color: #a88600 !important;
+  color: #796100 !important;
 }
 
 /* ── Shared data grid ───────────────────────────────────────────────── */
@@ -308,18 +308,18 @@ body,
 }
 
 .data-grid th {
-  background-color: #e8e0ff !important;
+  background-color: #f7f4ff !important;
   border-bottom: 1px solid rgba(126, 43, 213, 0.15) !important;
 }
 
 .striped-data-grid .data-grid-data-grid-node:nth-child(even) {
-  background-color: #f1ecff !important;
+  background-color: #f4f0ff !important;
 }
 
 /* ── Tabs ───────────────────────────────────────────────────────────── */
 
 .tabbed-pane-header {
-  background-color: #f1ecff !important;
+  background-color: #f4f0ff !important;
   border-bottom: 1px solid rgba(126, 43, 213, 0.1) !important;
 }
 
@@ -334,22 +334,22 @@ body,
 /* ── Toolbar ────────────────────────────────────────────────────────── */
 
 .toolbar {
-  background-color: #f1ecff !important;
+  background-color: #f4f0ff !important;
   border-bottom: 1px solid rgba(126, 43, 213, 0.1) !important;
 }
 
 .toolbar-button {
-  color: #007f8e !important;
+  color: #006e72 !important;
 }
 
 .toolbar-button:hover {
-  background-color: #e8e0ff !important;
+  background-color: #f7f4ff !important;
 }
 
 /* ── Status bar ─────────────────────────────────────────────────────── */
 
 .status-bar {
-  background-color: #f1ecff !important;
+  background-color: #f4f0ff !important;
   border-top: 1px solid rgba(126, 43, 213, 0.1) !important;
 }
 
@@ -361,11 +361,11 @@ body,
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1ecff !important;
+  background: #f4f0ff !important;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #9654e0 !important;
+  background: #823ecf !important;
   border-radius: 5px;
 }
 
@@ -383,16 +383,16 @@ body,
 /* ── Links ──────────────────────────────────────────────────────────── */
 
 a {
-  color: #007f8e !important;
+  color: #006e72 !important;
 }
 
 a:hover {
-  color: #009fae !important;
+  color: #006388 !important;
 }
 
 /* ── Search highlights ──────────────────────────────────────────────── */
 
 .highlighted-search-result {
-  background-color: #a88600 !important;
+  background-color: #796100 !important;
   color: #faf8ff !important;
 }

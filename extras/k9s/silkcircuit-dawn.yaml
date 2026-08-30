@@ -12,18 +12,18 @@ k9s:
   body:
     fgColor: "#2b2540"
     bgColor: "#faf8ff"
-    logoColor: "#007f8e"
+    logoColor: "#006e72"
 
   # ClusterInfoView styles
   info:
-    fgColor: "#007f8e"
+    fgColor: "#006e72"
     sectionColor: "#7e2bd5"
 
   # Frame styles
   frame:
     # Borders styles
     border:
-      fgColor: "#007f8e"
+      fgColor: "#006e72"
       focusColor: "#b40077"
 
     # MenuView attributes and styles
@@ -31,31 +31,31 @@ k9s:
       fgColor: "#2b2540"
       keyColor: "#b40077"
       # Used for favorite namespaces
-      numKeyColor: "#c74a8c"
+      numKeyColor: "#b42a74"
 
     # CrumbView attributes for history navigation
     crumbs:
       fgColor: "#faf8ff"
       bgColor: "#7e2bd5"
-      activeColor: "#007f8e"
+      activeColor: "#006e72"
 
     # Resource status and update styles
     status:
-      newColor: "#007f8e"
-      modifyColor: "#a88600"
-      addColor: "#007f8e"
+      newColor: "#006e72"
+      modifyColor: "#796100"
+      addColor: "#006e72"
       errorColor: "#c1272d"
       highlightcolor: "#b40077"
-      killColor: "#8e84a8"
-      completedColor: "#8e84a8"
+      killColor: "#546189"
+      completedColor: "#686177"
 
     # Border title styles
     title:
       fgColor: "#2b2540"
       bgColor: "#faf8ff"
-      highlightColor: "#007f8e"
-      counterColor: "#c74a8c"
-      filterColor: "#a88600"
+      highlightColor: "#006e72"
+      counterColor: "#b42a74"
+      filterColor: "#796100"
 
   # Specific views styles
   views:
@@ -63,30 +63,30 @@ k9s:
     table:
       fgColor: "#2b2540"
       bgColor: "#faf8ff"
-      cursorColor: "#e8e0ff"
+      cursorColor: "#f7f4ff"
       # Header row styles
       header:
         fgColor: "#7e2bd5"
-        bgColor: "#e8e0ff"
-        sorterColor: "#a88600"
+        bgColor: "#f7f4ff"
+        sorterColor: "#796100"
 
     # YAML info styles
     yaml:
       keyColor: "#7e2bd5"
-      colonColor: "#8e84a8"
-      valueColor: "#007f8e"
+      colonColor: "#686177"
+      valueColor: "#006e72"
 
     # Logs styles
     logs:
       fgColor: "#2b2540"
-      bgColor: "#f1ecff"
+      bgColor: "#f4f0ff"
 
     # Charts styles
     charts:
       bgColor: default
       defaultDialColors:
         - "#b40077"
-        - "#007f8e"
+        - "#006e72"
       defaultChartColors:
         - "#b40077"
-        - "#007f8e"
+        - "#006e72"

@@ -14,35 +14,35 @@
   :root {
     /* Page backgrounds */
     --md-background-color: #faf8ff !important;
-    --cr-card-background-color: #e8e0ff !important;
+    --cr-card-background-color: #f7f4ff !important;
     --cr-card-border-radius: 12px !important;
-    --cr-dialog-background-color: #e8e0ff !important;
-    --cr-menu-background-color: #f1ecff !important;
-    --cr-menu-background-focus-color: #e8e0ff !important;
+    --cr-dialog-background-color: #f7f4ff !important;
+    --cr-menu-background-color: #f4f0ff !important;
+    --cr-menu-background-focus-color: #f7f4ff !important;
 
     /* Text */
     --cr-primary-text-color: #2b2540 !important;
-    --cr-secondary-text-color: #8e84a8 !important;
+    --cr-secondary-text-color: #7353a9 !important;
     --cr-title-text-color: #7e2bd5 !important;
-    --cr-form-field-label-color: #007f8e !important;
-    --cr-link-color: #007f8e !important;
+    --cr-form-field-label-color: #006e72 !important;
+    --cr-link-color: #006e72 !important;
 
     /* Fallback surface colors */
     --cr-fallback-color-surface: #faf8ff !important;
     --cr-fallback-color-surface1: #faf8ff !important;
-    --cr-fallback-color-surface2: #e8e0ff !important;
-    --cr-fallback-color-surface3: #e8e0ff !important;
-    --cr-fallback-color-surface-variant: #e8e0ff !important;
+    --cr-fallback-color-surface2: #f7f4ff !important;
+    --cr-fallback-color-surface3: #f7f4ff !important;
+    --cr-fallback-color-surface-variant: #f7f4ff !important;
     --cr-fallback-color-on-surface-rgb: 43, 37, 64 !important;
-    --cr-fallback-color-on-surface-variant: #8e84a8 !important;
-    --cr-fallback-color-on-surface-subtle: #8e84a8 !important;
+    --cr-fallback-color-on-surface-variant: #7353a9 !important;
+    --cr-fallback-color-on-surface-subtle: #686177 !important;
     --cr-fallback-color-primary: #7e2bd5 !important;
     --cr-fallback-color-inverse-surface: #2b2540 !important;
     --cr-fallback-color-inverse-on-surface: #faf8ff !important;
-    --cr-fallback-color-inverse-primary: #007f8e !important;
+    --cr-fallback-color-inverse-primary: #006e72 !important;
 
     /* Buttons */
-    --cr-button-background-color: #e8e0ff !important;
+    --cr-button-background-color: #f7f4ff !important;
     --cr-button-border-color: #7e2bd5 !important;
     --cr-button-text-color: #2b2540 !important;
     --cr-button-hover-background-color: rgba(126, 43, 213, 0.08) !important;
@@ -50,18 +50,18 @@
     --cr-button-ripple-opacity: 0.15 !important;
 
     /* Toggle / switch */
-    --cr-toggle-color: #9654e0 !important;
+    --cr-toggle-color: #823ecf !important;
     --cr-toggle-checked-bar-color: #7e2bd5 !important;
     --cr-toggle-checked-button-color: #7e2bd5 !important;
     --cr-toggle-checked-ripple-color: rgba(126, 43, 213, 0.2) !important;
-    --cr-toggle-unchecked-bar-color: #8e84a8 !important;
-    --cr-toggle-unchecked-button-color: #8e84a8 !important;
+    --cr-toggle-unchecked-bar-color: #686177 !important;
+    --cr-toggle-unchecked-button-color: #7353a9 !important;
     --cr-toggle-unchecked-ripple-color: rgba(43, 37, 64, 0.08) !important;
 
     /* Input fields */
-    --cr-input-border: 1px solid #8e84a8 !important;
+    --cr-input-border: 1px solid #686177 !important;
     --cr-input-error-color: #c1272d !important;
-    --cr-input-placeholder-color: #8e84a8 !important;
+    --cr-input-placeholder-color: #686177 !important;
 
     /* Separators & borders */
     --cr-separator-color: rgba(126, 43, 213, 0.1) !important;
@@ -78,7 +78,7 @@
     /* Interaction states */
     --cr-hover-background-color: rgba(126, 43, 213, 0.06) !important;
     --cr-active-background-color: rgba(126, 43, 213, 0.1) !important;
-    --cr-focus-outline-color: #007f8e !important;
+    --cr-focus-outline-color: #006e72 !important;
     --cr-focused-item-color: rgba(126, 43, 213, 0.08) !important;
     --cr-selected-background-color: rgba(126, 43, 213, 0.1) !important;
     --cr-checked-color: #7e2bd5 !important;
@@ -87,36 +87,36 @@
     --cr-checkbox-checked-box-color: #7e2bd5 !important;
     --cr-checkbox-mark-color: #faf8ff !important;
     --cr-checkbox-ripple-checked-color: #7e2bd5 !important;
-    --cr-checkbox-unchecked-box-color: #8e84a8 !important;
+    --cr-checkbox-unchecked-box-color: #686177 !important;
 
     /* Tabs */
     --cr-tabs-selected-color: #7e2bd5 !important;
-    --cr-tabs-unselected-color: #8e84a8 !important;
+    --cr-tabs-unselected-color: #7353a9 !important;
 
     /* Toast notifications */
-    --cr-toast-background: #e8e0ff !important;
+    --cr-toast-background: #f7f4ff !important;
     --cr-toast-text-color: #2b2540 !important;
-    --cr-toast-button-color: #007f8e !important;
+    --cr-toast-button-color: #006e72 !important;
 
     /* Slider */
     --cr-slider-active-color: #7e2bd5 !important;
-    --cr-slider-container-color: #8e84a8 !important;
+    --cr-slider-container-color: #686177 !important;
     --cr-slider-knob-color-rgb: 126, 43, 213 !important;
 
     /* Progress */
     --cr-progress-active-color: #7e2bd5 !important;
-    --cr-progress-container-color: #8e84a8 !important;
+    --cr-progress-container-color: #686177 !important;
 
     /* Search field */
-    --cr-search-field-search-icon-fill: #007f8e !important;
-    --cr-search-field-clear-icon-fill: #8e84a8 !important;
-    --cr-search-field-placeholder-color: #8e84a8 !important;
+    --cr-search-field-search-icon-fill: #006e72 !important;
+    --cr-search-field-clear-icon-fill: #7353a9 !important;
+    --cr-search-field-placeholder-color: #686177 !important;
 
     /* Icon colors */
-    --iron-icon-fill-color: #8e84a8 !important;
+    --iron-icon-fill-color: #7353a9 !important;
 
     /* Toolbar */
-    --cr-toolbar-background-color: #f1ecff !important;
+    --cr-toolbar-background-color: #f4f0ff !important;
   }
 
   /* ── Base styles ────────────────────────────────────────────────── */
@@ -130,7 +130,7 @@
 
   .cr-card,
   extensions-item {
-    background-color: #e8e0ff !important;
+    background-color: #f7f4ff !important;
     border: 1px solid rgba(126, 43, 213, 0.1) !important;
     border-radius: 12px !important;
   }
@@ -154,7 +154,7 @@
   }
 
   downloads-item {
-    background-color: #e8e0ff !important;
+    background-color: #f7f4ff !important;
     border-bottom: 1px solid rgba(126, 43, 213, 0.08) !important;
   }
 
@@ -168,14 +168,14 @@
 
   bookmarks-folder-node,
   bookmarks-item {
-    background-color: #e8e0ff !important;
+    background-color: #f7f4ff !important;
   }
 
   /* ── Search boxes ───────────────────────────────────────────────── */
 
   cr-toolbar-search-field {
-    background-color: #e8e0ff !important;
-    border: 1px solid #8e84a8 !important;
+    background-color: #f7f4ff !important;
+    border: 1px solid #686177 !important;
     border-radius: 8px !important;
   }
 
@@ -200,11 +200,11 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #f1ecff !important;
+    background: #f4f0ff !important;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #9654e0 !important;
+    background: #823ecf !important;
     border-radius: 5px;
   }
 
@@ -222,18 +222,18 @@
   /* ── Links ──────────────────────────────────────────────────────── */
 
   a {
-    color: #007f8e !important;
+    color: #006e72 !important;
   }
 
   a:hover {
-    color: #009fae !important;
+    color: #006388 !important;
   }
 
   /* ── Code blocks ────────────────────────────────────────────────── */
 
   code, pre {
-    background-color: #f1ecff !important;
-    color: #9c4a88 !important;
+    background-color: #f4f0ff !important;
+    color: #9e4087 !important;
     border: 1px solid rgba(126, 43, 213, 0.15) !important;
     border-radius: 6px !important;
   }
@@ -241,19 +241,19 @@
   /* ── Flags page ─────────────────────────────────────────────────── */
 
   .experiment {
-    background-color: #e8e0ff !important;
+    background-color: #f7f4ff !important;
     border: 1px solid rgba(126, 43, 213, 0.06) !important;
     border-radius: 8px !important;
   }
 
   .experiment-name {
-    color: #007f8e !important;
+    color: #006e72 !important;
   }
 
   .experiment select {
-    background-color: #f1ecff !important;
+    background-color: #f4f0ff !important;
     color: #2b2540 !important;
-    border: 1px solid #8e84a8 !important;
+    border: 1px solid #686177 !important;
     border-radius: 6px !important;
   }
 

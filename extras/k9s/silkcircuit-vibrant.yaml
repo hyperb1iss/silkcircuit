@@ -31,7 +31,7 @@ k9s:
       fgColor: "#f8f8f2"
       keyColor: "#ff00cc"
       # Used for favorite namespaces
-      numKeyColor: "#f78c6c"
+      numKeyColor: "#ff5fa8"
 
     # CrumbView attributes for history navigation
     crumbs:
@@ -47,14 +47,14 @@ k9s:
       errorColor: "#ff3366"
       highlightcolor: "#ff00cc"
       killColor: "#6272a4"
-      completedColor: "#637777"
+      completedColor: "#728989"
 
     # Border title styles
     title:
       fgColor: "#f8f8f2"
       bgColor: "#0f0c1a"
       highlightColor: "#00ffcc"
-      counterColor: "#f78c6c"
+      counterColor: "#ff5fa8"
       filterColor: "#ffcc00"
 
   # Specific views styles
@@ -63,17 +63,17 @@ k9s:
     table:
       fgColor: "#f8f8f2"
       bgColor: "#0f0c1a"
-      cursorColor: "#0a0614"
+      cursorColor: "#151026"
       # Header row styles
       header:
         fgColor: "#ff00ff"
-        bgColor: "#0a0614"
+        bgColor: "#151026"
         sorterColor: "#ffcc00"
 
     # YAML info styles
     yaml:
       keyColor: "#ff00ff"
-      colonColor: "#637777"
+      colonColor: "#728989"
       valueColor: "#00ffcc"
 
     # Logs styles

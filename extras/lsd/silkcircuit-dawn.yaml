@@ -5,54 +5,54 @@
 # Do not edit by hand.
 
 ---
-user: [0, 127, 142]
-group: [142, 132, 168]
+user: [0, 110, 114]
+group: [115, 83, 169]
 
 permission:
   read: [126, 43, 213]
   write: [180, 0, 119]
-  exec: [0, 127, 142]
-  exec-sticky: [0, 159, 174]
+  exec: [0, 110, 114]
+  exec-sticky: [0, 99, 136]
   no-access: [193, 39, 45]
-  octal: [142, 132, 168]
-  acl: [45, 134, 89]
-  context: [37, 99, 235]
+  octal: [115, 83, 169]
+  acl: [29, 110, 70]
+  context: [20, 84, 220]
 
 attributes:
-  archive: [168, 134, 0]
-  read: [0, 127, 142]
-  hidden: [142, 132, 168]
+  archive: [121, 97, 0]
+  read: [0, 110, 114]
+  hidden: [115, 83, 169]
   system: [193, 39, 45]
 
 date:
-  hour-old: [45, 134, 89]
-  day-old: [168, 134, 0]
-  older: [142, 132, 168]
+  hour-old: [29, 110, 70]
+  day-old: [121, 97, 0]
+  older: [115, 83, 169]
 
 size:
-  none: [142, 132, 168]
-  small: [45, 134, 89]
-  medium: [168, 134, 0]
-  large: [199, 74, 140]
+  none: [104, 97, 119]
+  small: [29, 110, 70]
+  medium: [121, 97, 0]
+  large: [180, 42, 116]
 
 inode:
   valid: [90, 77, 110]
   invalid: [193, 39, 45]
 
 links:
-  valid: [0, 127, 142]
+  valid: [0, 110, 114]
   invalid: [193, 39, 45]
 
 tree-edge: [126, 43, 213]
 
 git-status:
-  default: [142, 132, 168]
-  unmodified: [142, 132, 168]
-  ignored: [187, 181, 203]
-  new-in-index: [45, 134, 89]
-  new-in-workdir: [45, 134, 89]
-  typechange: [168, 134, 0]
+  default: [104, 97, 119]
+  unmodified: [104, 97, 119]
+  ignored: [164, 160, 173]
+  new-in-index: [29, 110, 70]
+  new-in-workdir: [29, 110, 70]
+  typechange: [121, 97, 0]
   deleted: [193, 39, 45]
-  renamed: [37, 99, 235]
-  modified: [168, 134, 0]
+  renamed: [20, 84, 220]
+  modified: [121, 97, 0]
   conflicted: [193, 39, 45]

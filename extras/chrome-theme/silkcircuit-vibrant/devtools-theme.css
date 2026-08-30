@@ -16,18 +16,18 @@ body,
   /* Base surfaces */
   --sys-color-base: #0f0c1a !important;
   --sys-color-base-container: #08060f !important;
-  --sys-color-base-container-elevated: #0a0614 !important;
+  --sys-color-base-container-elevated: #151026 !important;
   --sys-color-cdt-base: #0f0c1a !important;
   --sys-color-cdt-base-container: #08060f !important;
 
   /* Elevation surfaces */
   --sys-color-surface: #0f0c1a !important;
   --sys-color-surface1: #0f0c1a !important;
-  --sys-color-surface2: #0a0614 !important;
-  --sys-color-surface3: #0a0614 !important;
-  --sys-color-surface4: #0a0614 !important;
-  --sys-color-surface5: #0a0614 !important;
-  --sys-color-surface-variant: #0a0614 !important;
+  --sys-color-surface2: #151026 !important;
+  --sys-color-surface3: #151026 !important;
+  --sys-color-surface4: #151026 !important;
+  --sys-color-surface5: #151026 !important;
+  --sys-color-surface-variant: #151026 !important;
 
   /* Status surfaces */
   --sys-color-surface-error: rgba(255, 99, 99, 0.08) !important;
@@ -40,7 +40,7 @@ body,
   --sys-color-on-base: #f8f8f2 !important;
   --sys-color-on-surface: #f8f8f2 !important;
   --sys-color-on-surface-subtle: #b366ff !important;
-  --sys-color-on-surface-secondary: #637777 !important;
+  --sys-color-on-surface-secondary: #728989 !important;
   --sys-color-on-surface-primary: #f8f8f2 !important;
 
   /* ── Primary / accent ───────────────────────────────────────────── */
@@ -52,18 +52,18 @@ body,
   --sys-color-on-secondary: #0f0c1a !important;
   --sys-color-tertiary: #ff00cc !important;
   --sys-color-on-tertiary: #0f0c1a !important;
-  --sys-color-tertiary-container: #0a0614 !important;
+  --sys-color-tertiary-container: #151026 !important;
   --sys-color-on-tertiary-container: #ff99ff !important;
 
   /* Containers */
-  --sys-color-tonal-container: #0a0614 !important;
+  --sys-color-tonal-container: #151026 !important;
   --sys-color-on-tonal-container: #f8f8f2 !important;
   --sys-color-tonal-outline: #b366ff !important;
   --sys-color-header-container: #08060f !important;
-  --sys-color-omnibox-container: #0a0614 !important;
+  --sys-color-omnibox-container: #151026 !important;
   --sys-color-neutral-container: #3a2e5a !important;
   --sys-color-neutral-bright: #e9d5ff !important;
-  --sys-color-neutral-outline: #637777 !important;
+  --sys-color-neutral-outline: #728989 !important;
 
   /* ── Named semantic colors ──────────────────────────────────────── */
 
@@ -74,7 +74,7 @@ body,
   --sys-color-green: #00ff66 !important;
   --sys-color-green-bright: #00ff66 !important;
   --sys-color-orange: #ff00aa !important;
-  --sys-color-orange-bright: #f78c6c !important;
+  --sys-color-orange-bright: #ff5fa8 !important;
   --sys-color-pink: #ff00cc !important;
   --sys-color-pink-bright: #ff99ff !important;
   --sys-color-purple: #ff00ff !important;
@@ -99,7 +99,7 @@ body,
 
   --sys-color-divider: rgba(149, 128, 255, 0.15) !important;
   --sys-color-divider-prominent: rgba(225, 53, 255, 0.3) !important;
-  --sys-color-outline: #637777 !important;
+  --sys-color-outline: #728989 !important;
 
   /* ── Gradients ──────────────────────────────────────────────────── */
 
@@ -122,22 +122,22 @@ body,
   --sys-color-token-variable: #f8f8f2 !important;
   --sys-color-token-definition: #00ffcc !important;
   --sys-color-token-property: #00ffff !important;
-  --sys-color-token-property-special: #f78c6c !important;
+  --sys-color-token-property-special: #ff5fa8 !important;
   --sys-color-token-type: #ffcc00 !important;
-  --sys-color-token-variable-special: #f78c6c !important;
+  --sys-color-token-variable-special: #ff5fa8 !important;
   --sys-color-token-builtin: #00ffff !important;
-  --sys-color-token-number: #f78c6c !important;
+  --sys-color-token-number: #ff5fa8 !important;
   --sys-color-token-string: #ff99ff !important;
   --sys-color-token-string-special: #00ffff !important;
   --sys-color-token-atom: #ff00ff !important;
   --sys-color-token-comment: #b366ff !important;
-  --sys-color-token-meta: #637777 !important;
+  --sys-color-token-meta: #728989 !important;
   --sys-color-token-tag: #ff00cc !important;
   --sys-color-token-attribute: #ff00ff !important;
   --sys-color-token-attribute-value: #ff99ff !important;
   --sys-color-token-inserted: #00ff66 !important;
   --sys-color-token-deleted: #ff3366 !important;
-  --sys-color-token-subtle: #637777 !important;
+  --sys-color-token-subtle: #728989 !important;
   --sys-color-token-pseudo-element: #b366ff !important;
 
   /* ── UI chrome overrides ────────────────────────────────────────── */
@@ -171,14 +171,14 @@ body,
 .token-definition { color: #00ffcc !important; }
 .token-property { color: #00ffff !important; }
 .token-type { color: #ffcc00 !important; }
-.token-variable-special { color: #f78c6c !important; }
+.token-variable-special { color: #ff5fa8 !important; }
 .token-builtin { color: #00ffff !important; }
-.token-number { color: #f78c6c !important; }
+.token-number { color: #ff5fa8 !important; }
 .token-string { color: #ff99ff !important; }
 .token-string-special { color: #00ffff !important; }
 .token-atom { color: #ff00ff !important; }
 .token-comment { color: #b366ff !important; font-style: italic; }
-.token-meta { color: #637777 !important; }
+.token-meta { color: #728989 !important; }
 .token-tag { color: #ff00cc !important; }
 .token-attribute { color: #ff00ff !important; }
 .token-attribute-value { color: #ff99ff !important; }
@@ -189,7 +189,7 @@ body,
 
 .cm-keyword { color: #ff00ff !important; }
 .cm-string { color: #ff99ff !important; }
-.cm-number { color: #f78c6c !important; }
+.cm-number { color: #ff5fa8 !important; }
 .cm-property { color: #00ffff !important; }
 .cm-variable { color: #f8f8f2 !important; }
 .cm-comment { color: #b366ff !important; font-style: italic; }
@@ -230,7 +230,7 @@ body,
 }
 
 .cm-lineNumbers {
-  color: #637777 !important;
+  color: #728989 !important;
 }
 
 .cm-foldPlaceholder {
@@ -258,13 +258,13 @@ body,
 }
 
 .console-eager-inner-preview {
-  color: #637777 !important;
+  color: #728989 !important;
 }
 
 /* ── Network panel ──────────────────────────────────────────────────── */
 
 .network-log-grid.data-grid thead {
-  background-color: #0a0614 !important;
+  background-color: #151026 !important;
 }
 
 .network-error-row {
@@ -308,7 +308,7 @@ body,
 }
 
 .data-grid th {
-  background-color: #0a0614 !important;
+  background-color: #151026 !important;
   border-bottom: 1px solid rgba(149, 128, 255, 0.2) !important;
 }
 
@@ -343,7 +343,7 @@ body,
 }
 
 .toolbar-button:hover {
-  background-color: #0a0614 !important;
+  background-color: #151026 !important;
 }
 
 /* ── Status bar ─────────────────────────────────────────────────────── */

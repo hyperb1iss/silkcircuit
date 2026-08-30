@@ -19,11 +19,11 @@ compose_cursor = "#ffff00"
 selection_fg = "#ffffff"
 selection_bg = "#4b0654"
 scrollbar_thumb = "#4b0654"
-split = "#00ffff"
+split = "#00d9ff"
 
 ansi = [
   "#000000",
-  "#ff0066",
+  "#ff2244",
   "#00ff00",
   "#ffff00",
   "#0099ff",
@@ -32,7 +32,7 @@ ansi = [
   "#ffffff",
 ]
 brights = [
-  "#666666",
+  "#818181",
   "#ff6666",
   "#66ff66",
   "#ffff66",
@@ -48,7 +48,7 @@ brights = [
 
 [colors.tab_bar]
 background = "#000000"
-inactive_tab_edge = "#00ffff"
+inactive_tab_edge = "#00d9ff"
 
 [colors.tab_bar.active_tab]
 bg_color = "#1a0033"

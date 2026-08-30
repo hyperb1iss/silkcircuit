@@ -6,28 +6,28 @@
 
 background = #faf8ff
 foreground = #2b2540
-cursor-color = #007f8e
+cursor-color = #006e72
 cursor-text = #faf8ff
 selection-background = #d4c8f0
 selection-foreground = #2b2540
-split-divider-color = #009fae
+split-divider-color = #006388
 
 # Normal colors
 palette = 0=#2b2540
 palette = 1=#c1272d
-palette = 2=#2d8659
-palette = 3=#a88600
-palette = 4=#2563eb
+palette = 2=#1d6e46
+palette = 3=#796100
+palette = 4=#1454dc
 palette = 5=#b40077
-palette = 6=#007f8e
+palette = 6=#006e72
 palette = 7=#faf8ff
 
 # Bright colors
 palette = 8=#5a4d6e
 palette = 9=#dc2626
-palette = 10=#38a169
-palette = 11=#d69e00
-palette = 12=#3b82f6
-palette = 13=#c04a8f
-palette = 14=#009fae
+palette = 10=#288855
+palette = 11=#7f5f00
+palette = 12=#2572ef
+palette = 13=#d92a99
+palette = 14=#048397
 palette = 15=#ffffff

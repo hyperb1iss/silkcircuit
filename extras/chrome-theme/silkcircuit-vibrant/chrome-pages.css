@@ -14,11 +14,11 @@
   :root {
     /* Page backgrounds */
     --md-background-color: #0f0c1a !important;
-    --cr-card-background-color: #0a0614 !important;
+    --cr-card-background-color: #151026 !important;
     --cr-card-border-radius: 12px !important;
-    --cr-dialog-background-color: #0a0614 !important;
+    --cr-dialog-background-color: #151026 !important;
     --cr-menu-background-color: #08060f !important;
-    --cr-menu-background-focus-color: #0a0614 !important;
+    --cr-menu-background-focus-color: #151026 !important;
 
     /* Text */
     --cr-primary-text-color: #f8f8f2 !important;
@@ -30,19 +30,19 @@
     /* Fallback surface colors */
     --cr-fallback-color-surface: #0f0c1a !important;
     --cr-fallback-color-surface1: #0f0c1a !important;
-    --cr-fallback-color-surface2: #0a0614 !important;
-    --cr-fallback-color-surface3: #0a0614 !important;
-    --cr-fallback-color-surface-variant: #0a0614 !important;
+    --cr-fallback-color-surface2: #151026 !important;
+    --cr-fallback-color-surface3: #151026 !important;
+    --cr-fallback-color-surface-variant: #151026 !important;
     --cr-fallback-color-on-surface-rgb: 248, 248, 242 !important;
     --cr-fallback-color-on-surface-variant: #b366ff !important;
-    --cr-fallback-color-on-surface-subtle: #637777 !important;
+    --cr-fallback-color-on-surface-subtle: #728989 !important;
     --cr-fallback-color-primary: #ff00ff !important;
     --cr-fallback-color-inverse-surface: #f8f8f2 !important;
     --cr-fallback-color-inverse-on-surface: #0f0c1a !important;
     --cr-fallback-color-inverse-primary: #00ffcc !important;
 
     /* Buttons */
-    --cr-button-background-color: #0a0614 !important;
+    --cr-button-background-color: #151026 !important;
     --cr-button-border-color: #ff00ff !important;
     --cr-button-text-color: #f8f8f2 !important;
     --cr-button-hover-background-color: rgba(225, 53, 255, 0.12) !important;
@@ -54,14 +54,14 @@
     --cr-toggle-checked-bar-color: #ff00ff !important;
     --cr-toggle-checked-button-color: #f8f8f2 !important;
     --cr-toggle-checked-ripple-color: rgba(225, 53, 255, 0.25) !important;
-    --cr-toggle-unchecked-bar-color: #637777 !important;
+    --cr-toggle-unchecked-bar-color: #728989 !important;
     --cr-toggle-unchecked-button-color: #b366ff !important;
     --cr-toggle-unchecked-ripple-color: rgba(248, 248, 242, 0.1) !important;
 
     /* Input fields */
-    --cr-input-border: 1px solid #637777 !important;
+    --cr-input-border: 1px solid #728989 !important;
     --cr-input-error-color: #ff3366 !important;
-    --cr-input-placeholder-color: #637777 !important;
+    --cr-input-placeholder-color: #728989 !important;
 
     /* Separators & borders */
     --cr-separator-color: rgba(149, 128, 255, 0.15) !important;
@@ -87,30 +87,30 @@
     --cr-checkbox-checked-box-color: #ff00ff !important;
     --cr-checkbox-mark-color: #0f0c1a !important;
     --cr-checkbox-ripple-checked-color: #ff00ff !important;
-    --cr-checkbox-unchecked-box-color: #637777 !important;
+    --cr-checkbox-unchecked-box-color: #728989 !important;
 
     /* Tabs */
     --cr-tabs-selected-color: #ff00ff !important;
     --cr-tabs-unselected-color: #b366ff !important;
 
     /* Toast notifications */
-    --cr-toast-background: #0a0614 !important;
+    --cr-toast-background: #151026 !important;
     --cr-toast-text-color: #f8f8f2 !important;
     --cr-toast-button-color: #00ffcc !important;
 
     /* Slider */
     --cr-slider-active-color: #ff00ff !important;
-    --cr-slider-container-color: #637777 !important;
+    --cr-slider-container-color: #728989 !important;
     --cr-slider-knob-color-rgb: 255, 0, 255 !important;
 
     /* Progress */
     --cr-progress-active-color: #ff00ff !important;
-    --cr-progress-container-color: #637777 !important;
+    --cr-progress-container-color: #728989 !important;
 
     /* Search field */
     --cr-search-field-search-icon-fill: #00ffcc !important;
     --cr-search-field-clear-icon-fill: #b366ff !important;
-    --cr-search-field-placeholder-color: #637777 !important;
+    --cr-search-field-placeholder-color: #728989 !important;
 
     /* Icon colors */
     --iron-icon-fill-color: #b366ff !important;
@@ -130,7 +130,7 @@
 
   .cr-card,
   extensions-item {
-    background-color: #0a0614 !important;
+    background-color: #151026 !important;
     border: 1px solid rgba(225, 53, 255, 0.15) !important;
     border-radius: 12px !important;
   }
@@ -154,7 +154,7 @@
   }
 
   downloads-item {
-    background-color: #0a0614 !important;
+    background-color: #151026 !important;
     border-bottom: 1px solid rgba(225, 53, 255, 0.12) !important;
   }
 
@@ -168,14 +168,14 @@
 
   bookmarks-folder-node,
   bookmarks-item {
-    background-color: #0a0614 !important;
+    background-color: #151026 !important;
   }
 
   /* ── Search boxes ───────────────────────────────────────────────── */
 
   cr-toolbar-search-field {
-    background-color: #0a0614 !important;
-    border: 1px solid #637777 !important;
+    background-color: #151026 !important;
+    border: 1px solid #728989 !important;
     border-radius: 8px !important;
   }
 
@@ -241,7 +241,7 @@
   /* ── Flags page ─────────────────────────────────────────────────── */
 
   .experiment {
-    background-color: #0a0614 !important;
+    background-color: #151026 !important;
     border: 1px solid rgba(225, 53, 255, 0.1) !important;
     border-radius: 8px !important;
   }
@@ -253,7 +253,7 @@
   .experiment select {
     background-color: #08060f !important;
     color: #f8f8f2 !important;
-    border: 1px solid #637777 !important;
+    border: 1px solid #728989 !important;
     border-radius: 6px !important;
   }
 

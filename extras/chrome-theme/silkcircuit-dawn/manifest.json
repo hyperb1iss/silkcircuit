@@ -5,30 +5,30 @@
   "description": "Electric meets elegant. Light theme with electric purple accents on soft lavender backgrounds.",
   "theme": {
     "colors": {
-      "frame": [241, 236, 255],
-      "frame_inactive": [241, 236, 255],
-      "frame_incognito": [231, 220, 251],
-      "frame_incognito_inactive": [235, 226, 252],
+      "frame": [244, 240, 255],
+      "frame_inactive": [244, 240, 255],
+      "frame_incognito": [234, 224, 251],
+      "frame_incognito_inactive": [238, 230, 252],
       "toolbar": [250, 248, 255],
       "toolbar_text": [43, 37, 64],
-      "toolbar_button_icon": [199, 74, 140],
+      "toolbar_button_icon": [180, 42, 116],
       "tab_text": [43, 37, 64],
       "tab_background_text": [90, 77, 110],
       "tab_background_text_inactive": [170, 162, 182],
       "tab_background_text_incognito": [90, 77, 110],
       "tab_background_text_incognito_inactive": [170, 162, 182],
-      "background_tab": [241, 236, 255],
-      "background_tab_inactive": [241, 236, 255],
-      "background_tab_incognito": [231, 220, 251],
-      "background_tab_incognito_inactive": [235, 226, 252],
-      "bookmark_text": [199, 74, 140],
+      "background_tab": [244, 240, 255],
+      "background_tab_inactive": [244, 240, 255],
+      "background_tab_incognito": [234, 224, 251],
+      "background_tab_incognito_inactive": [238, 230, 252],
+      "bookmark_text": [180, 42, 116],
       "button_background": [126, 43, 213, 0.08],
-      "omnibox_background": [232, 224, 255],
+      "omnibox_background": [247, 244, 255],
       "omnibox_text": [43, 37, 64],
       "ntp_background": [250, 248, 255],
       "ntp_text": [43, 37, 64],
-      "ntp_link": [0, 127, 142],
-      "ntp_header": [150, 84, 224]
+      "ntp_link": [0, 110, 114],
+      "ntp_header": [130, 62, 207]
     },
     "tints": {
       "buttons": [0.83, 0.6, 0.4],
@@ -48,15 +48,15 @@
       "theme_toolbar": "images/toolbar.png"
     },
     "tab_group_color_palette": {
-      "grey_override": [142, 132, 168],
-      "blue_override": [37, 99, 235],
+      "grey_override": [104, 97, 119],
+      "blue_override": [20, 84, 220],
       "red_override": [193, 39, 45],
-      "yellow_override": [168, 134, 0],
-      "green_override": [45, 134, 89],
-      "pink_override": [199, 74, 140],
+      "yellow_override": [121, 97, 0],
+      "green_override": [29, 110, 70],
+      "pink_override": [180, 42, 116],
       "purple_override": [126, 43, 213],
-      "cyan_override": [0, 127, 142],
-      "orange_override": [192, 86, 33]
+      "cyan_override": [0, 110, 114],
+      "orange_override": [166, 71, 24]
     }
   }
 }

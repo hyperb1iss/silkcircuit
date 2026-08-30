@@ -8,15 +8,15 @@
 # last line of this file into the color box. Setting the ten slots by
 # hand works too:
 #
-#   Column BG         #f1ecff
-#   Menu BG Hover     #e8e0ff
+#   Column BG         #f4f0ff
+#   Menu BG Hover     #f7f4ff
 #   Active Item       #7e2bd5
 #   Active Item Text  #faf8ff
 #   Hover Item        #d4c8f0
 #   Text Color        #2b2540
-#   Active Presence   #2d8659
+#   Active Presence   #1d6e46
 #   Mention Badge     #b40077
 #   Top Nav BG        #faf8ff
 #   Top Nav Text      #2b2540
 
-#f1ecff,#e8e0ff,#7e2bd5,#faf8ff,#d4c8f0,#2b2540,#2d8659,#b40077,#faf8ff,#2b2540
+#f4f0ff,#f7f4ff,#7e2bd5,#faf8ff,#d4c8f0,#2b2540,#1d6e46,#b40077,#faf8ff,#2b2540

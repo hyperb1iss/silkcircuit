@@ -9,11 +9,11 @@ user: [0, 255, 255]
 group: [204, 102, 255]
 
 permission:
-  read: [255, 0, 255]
+  read: [214, 51, 255]
   write: [255, 0, 255]
   exec: [0, 255, 255]
-  exec-sticky: [0, 255, 255]
-  no-access: [255, 0, 102]
+  exec-sticky: [0, 217, 255]
+  no-access: [255, 34, 68]
   octal: [204, 102, 255]
   acl: [0, 255, 0]
   context: [0, 153, 255]
@@ -22,7 +22,7 @@ attributes:
   archive: [255, 255, 0]
   read: [0, 255, 255]
   hidden: [204, 102, 255]
-  system: [255, 0, 102]
+  system: [255, 34, 68]
 
 date:
   hour-old: [0, 255, 0]
@@ -30,29 +30,29 @@ date:
   older: [204, 102, 255]
 
 size:
-  none: [102, 102, 102]
+  none: [129, 129, 129]
   small: [0, 255, 0]
   medium: [255, 255, 0]
   large: [255, 102, 255]
 
 inode:
   valid: [204, 102, 255]
-  invalid: [255, 0, 102]
+  invalid: [255, 34, 68]
 
 links:
   valid: [0, 255, 255]
-  invalid: [255, 0, 102]
+  invalid: [255, 34, 68]
 
-tree-edge: [255, 0, 255]
+tree-edge: [214, 51, 255]
 
 git-status:
-  default: [102, 102, 102]
-  unmodified: [102, 102, 102]
-  ignored: [71, 71, 71]
+  default: [129, 129, 129]
+  unmodified: [129, 129, 129]
+  ignored: [90, 90, 90]
   new-in-index: [0, 255, 0]
   new-in-workdir: [0, 255, 0]
   typechange: [255, 255, 0]
-  deleted: [255, 0, 102]
+  deleted: [255, 34, 68]
   renamed: [0, 255, 255]
   modified: [255, 255, 0]
-  conflicted: [255, 0, 102]
+  conflicted: [255, 34, 68]

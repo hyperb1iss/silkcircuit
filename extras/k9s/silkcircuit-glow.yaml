@@ -17,7 +17,7 @@ k9s:
   # ClusterInfoView styles
   info:
     fgColor: "#00ffff"
-    sectionColor: "#ff00ff"
+    sectionColor: "#d633ff"
 
   # Frame styles
   frame:
@@ -36,7 +36,7 @@ k9s:
     # CrumbView attributes for history navigation
     crumbs:
       fgColor: "#0a0816"
-      bgColor: "#ff00ff"
+      bgColor: "#d633ff"
       activeColor: "#00ffff"
 
     # Resource status and update styles
@@ -44,10 +44,10 @@ k9s:
       newColor: "#66ffff"
       modifyColor: "#ffff00"
       addColor: "#66ffff"
-      errorColor: "#ff0066"
+      errorColor: "#ff2244"
       highlightcolor: "#ff00ff"
       killColor: "#666666"
-      completedColor: "#666666"
+      completedColor: "#818181"
 
     # Border title styles
     title:
@@ -66,14 +66,14 @@ k9s:
       cursorColor: "#1a0033"
       # Header row styles
       header:
-        fgColor: "#ff00ff"
+        fgColor: "#d633ff"
         bgColor: "#1a0033"
         sorterColor: "#ffff00"
 
     # YAML info styles
     yaml:
-      keyColor: "#ff00ff"
-      colonColor: "#666666"
+      keyColor: "#d633ff"
+      colonColor: "#818181"
       valueColor: "#00ffff"
 
     # Logs styles

@@ -6,7 +6,7 @@
 
 $env:FZF_DEFAULT_OPTS = @(
     "--color=fg:#f8f8f2,bg:#0f0c1a,hl:#ff00ff"
-    "--color=fg+:#ffffff,bg+:#0a0614,hl+:#ff00cc"
+    "--color=fg+:#ffffff,bg+:#151026,hl+:#ff00cc"
     "--color=selected-fg:#ffffff,selected-bg:#3a2e5a,selected-hl:#ff00cc"
     "--color=gutter:#0f0c1a,query:#ffffff,disabled:#b366ff"
     "--color=info:#ffcc00,separator:#3a2e5a,scrollbar:#ff00ff"

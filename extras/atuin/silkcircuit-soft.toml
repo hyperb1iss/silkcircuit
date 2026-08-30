@@ -14,7 +14,7 @@ name = "silkcircuit-soft"
 # General text
 Base = "#f8f8f2"
 # De-emphasised text
-Muted = "#637777"
+Muted = "#7e9494"
 # Emphasised entries
 Important = "#e892ff"
 # Section headings

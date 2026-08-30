@@ -24,7 +24,7 @@ themes {
         }
         ribbon_unselected {
             base "#e9d5ff"
-            background "#0a0614"
+            background "#151026"
             emphasis_0 "#ff00ff"
             emphasis_1 "#ff00cc"
             emphasis_2 "#ffffff"
@@ -35,7 +35,7 @@ themes {
             background "#ff00ff"
             emphasis_0 "#08060f"
             emphasis_1 "#06040b"
-            emphasis_2 "#0a0614"
+            emphasis_2 "#151026"
             emphasis_3 "#0f0c1a"
         }
         table_title {
@@ -125,7 +125,7 @@ themes {
             player_4 "#00ff66"
             player_5 "#ffcc00"
             player_6 "#6699ff"
-            player_7 "#f78c6c"
+            player_7 "#ff5fa8"
             player_8 "#ff3366"
             player_9 "#e9d5ff"
             player_10 "#b366ff"

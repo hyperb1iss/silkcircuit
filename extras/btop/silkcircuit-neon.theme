@@ -41,7 +41,7 @@ theme[net_box]="#ff00ff"
 theme[proc_box]="#50fa7b"
 
 # Box divider line and small boxes line color
-theme[div_line]="#637777"
+theme[div_line]="#768d8d"
 
 # Temperature graph color (green -> yellow -> red)
 theme[temp_start]="#50fa7b"

@@ -44,18 +44,18 @@ background = "#80ffea"
 
 [colors.normal]
 black = "#12101a"
-red = "#ff69ff"
+red = "#ff6363"
 green = "#50fa7b"
 yellow = "#f1fa8c"
-blue = "#e135ff"
+blue = "#82aaff"
 magenta = "#ff00ff"
 cyan = "#80ffea"
 white = "#f8f8f2"
 
 [colors.bright]
-black = "#637777"
-red = "#ff6363"
-green = "#50fa7b"
+black = "#768d8d"
+red = "#ff8787"
+green = "#86fba8"
 yellow = "#ffffa5"
 blue = "#82b1ff"
 magenta = "#ff69ff"

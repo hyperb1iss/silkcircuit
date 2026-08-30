@@ -32,7 +32,7 @@ background = "#99ffee"
 
 [colors.footer_bar]
 foreground = "#f8f8f2"
-background = "#3e3456"
+background = "#201b30"
 
 [colors.hints.start]
 foreground = "#1a1626"

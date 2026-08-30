@@ -88,7 +88,7 @@
 	plus-emph-style = "syntax auto bold"
 	zero-style = "syntax"
 	whitespace-error-style = "#ff6677 reverse"
-	blame-palette = "#1a1626 #3e3456 #2b2a3b #44475a"
+	blame-palette = "#1a1626 #201b30 #2b2a3b #44475a"
 
 # The delta feature above only takes effect once you ask for it. Uncomment
 # whichever of these you want, in this file or in your own config:

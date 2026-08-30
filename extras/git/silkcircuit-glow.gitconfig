@@ -8,51 +8,51 @@
 	ui = auto
 
 [color "branch"]
-	current = "#ff00ff bold"
+	current = "#d633ff bold"
 	local = "#00ffff"
 	remote = "#ff66ff"
 	upstream = "#0099ff"
 	plain = "#ffffff"
 
 [color "decorate"]
-	branch = "#ff00ff bold"
+	branch = "#d633ff bold"
 	remoteBranch = "#ff66ff"
 	tag = "#ffff00 bold"
 	stash = "#00ffff"
 	HEAD = "#ff00ff bold"
-	grafted = "#ff0066"
+	grafted = "#ff2244"
 
 [color "diff"]
-	meta = "#ff00ff bold"
+	meta = "#d633ff bold"
 	frag = "#ff66ff bold"
 	func = "#00ffff"
 	context = "#cc66ff"
-	old = "#ff0066"
+	old = "#ff2244"
 	new = "#00ff00"
 	commit = "#ffff00"
-	whitespace = "#ff0066 reverse"
+	whitespace = "#ff2244 reverse"
 
 [color "status"]
 	header = "#cc66ff"
 	added = "#00ff00 bold"
 	changed = "#00ffff bold"
 	untracked = "#00ffff bold"
-	deleted = "#ff0066 bold"
+	deleted = "#ff2244 bold"
 	branch = "#ffff00 bold"
-	nobranch = "#ff0066 bold"
-	unmerged = "#ff0066 bold"
-	localBranch = "#ff00ff"
+	nobranch = "#ff2244 bold"
+	unmerged = "#ff2244 bold"
+	localBranch = "#d633ff"
 	remoteBranch = "#ff66ff"
 
 [color "interactive"]
-	prompt = "#ff00ff bold"
+	prompt = "#d633ff bold"
 	header = "#ff66ff"
 	help = "#00ffff"
-	error = "#ff0066"
+	error = "#ff2244"
 
 [color "grep"]
 	context = "#cc66ff"
-	filename = "#ff00ff bold"
+	filename = "#d633ff bold"
 	function = "#00ffff"
 	linenumber = "#ff66ff"
 	column = "#cc66ff"
@@ -61,7 +61,7 @@
 	separator = "#00ffff"
 
 [pretty]
-	silkcircuit = "%C(#ff00ff bold)commit %H%Creset%C(#ffff00)%d%Creset%n%C(#ffffff)Author: %C(#ff66ff)%an <%ae>%Creset%n%C(#ffffff)Date:   %C(#00ffff)%ad%Creset%n%n%C(#ffffff)    %s%Creset%n%n%w(0,4,4)%C(#ffffff)%b%Creset"
+	silkcircuit = "%C(#d633ff bold)commit %H%Creset%C(#ffff00)%d%Creset%n%C(#ffffff)Author: %C(#ff66ff)%an <%ae>%Creset%n%C(#ffffff)Date:   %C(#00ffff)%ad%Creset%n%n%C(#ffffff)    %s%Creset%n%n%w(0,4,4)%C(#ffffff)%b%Creset"
 
 [delta "silkcircuit-glow"]
 	dark = true
@@ -75,19 +75,19 @@
 	hunk-header-decoration-style = "#00ffff box"
 	hunk-header-file-style = "#00ffff bold"
 	hunk-header-line-number-style = "#ff66ff"
-	commit-style = "#ff00ff bold"
-	commit-decoration-style = "#ff00ff box ul"
+	commit-style = "#d633ff bold"
+	commit-decoration-style = "#d633ff box ul"
 	line-numbers-left-style = "#cc66ff"
 	line-numbers-right-style = "#cc66ff"
 	line-numbers-zero-style = "#cc66ff"
-	line-numbers-minus-style = "#ff0066 bold"
+	line-numbers-minus-style = "#ff2244 bold"
 	line-numbers-plus-style = "#00ff00 bold"
 	minus-style = "syntax auto"
 	minus-emph-style = "syntax auto bold"
 	plus-style = "syntax auto"
 	plus-emph-style = "syntax auto bold"
 	zero-style = "syntax"
-	whitespace-error-style = "#ff0066 reverse"
+	whitespace-error-style = "#ff2244 reverse"
 	blame-palette = "#0a0816 #1a0033 #2b0735 #4b0654"
 
 # The delta feature above only takes effect once you ask for it. Uncomment

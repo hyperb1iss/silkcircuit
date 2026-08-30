@@ -6,7 +6,7 @@
 
 [[columns]]
 kind = "Pid"
-style = "201"
+style = "171"
 numeric_search = true
 nonnumeric_search = false
 align = "Left"
@@ -91,8 +91,8 @@ color_d = "197"
 color_r = "46"
 color_s = "33"
 color_t = "51"
-color_z = "201"
-color_x = "201"
+color_z = "171"
+color_x = "171"
 color_k = "226"
 color_w = "226"
 color_p = "226"

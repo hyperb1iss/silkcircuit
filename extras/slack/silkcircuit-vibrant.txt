@@ -9,7 +9,7 @@
 # hand works too:
 #
 #   Column BG         #08060f
-#   Menu BG Hover     #0a0614
+#   Menu BG Hover     #151026
 #   Active Item       #ff00ff
 #   Active Item Text  #0f0c1a
 #   Hover Item        #3a2e5a
@@ -19,4 +19,4 @@
 #   Top Nav BG        #0f0c1a
 #   Top Nav Text      #f8f8f2
 
-#08060f,#0a0614,#ff00ff,#0f0c1a,#3a2e5a,#f8f8f2,#00ff66,#ff00cc,#0f0c1a,#f8f8f2
+#08060f,#151026,#ff00ff,#0f0c1a,#3a2e5a,#f8f8f2,#00ff66,#ff00cc,#0f0c1a,#f8f8f2

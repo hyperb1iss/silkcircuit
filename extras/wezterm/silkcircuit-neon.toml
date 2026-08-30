@@ -23,18 +23,18 @@ split = "#5fffff"
 
 ansi = [
   "#12101a",
-  "#ff69ff",
+  "#ff6363",
   "#50fa7b",
   "#f1fa8c",
-  "#e135ff",
+  "#82aaff",
   "#ff00ff",
   "#80ffea",
   "#f8f8f2",
 ]
 brights = [
-  "#637777",
-  "#ff6363",
-  "#50fa7b",
+  "#768d8d",
+  "#ff8787",
+  "#86fba8",
   "#ffffa5",
   "#82b1ff",
   "#ff69ff",

@@ -40,13 +40,13 @@ body,
   --sys-color-on-base: #ffffff !important;
   --sys-color-on-surface: #ffffff !important;
   --sys-color-on-surface-subtle: #cc66ff !important;
-  --sys-color-on-surface-secondary: #666666 !important;
+  --sys-color-on-surface-secondary: #818181 !important;
   --sys-color-on-surface-primary: #ffffff !important;
 
   /* ── Primary / accent ───────────────────────────────────────────── */
 
-  --sys-color-primary: #ff00ff !important;
-  --sys-color-primary-bright: #ff00ff !important;
+  --sys-color-primary: #d633ff !important;
+  --sys-color-primary-bright: #d633ff !important;
   --sys-color-on-primary: #0a0816 !important;
   --sys-color-secondary: #00ffff !important;
   --sys-color-on-secondary: #0a0816 !important;
@@ -63,35 +63,35 @@ body,
   --sys-color-omnibox-container: #1a0033 !important;
   --sys-color-neutral-container: #4b0654 !important;
   --sys-color-neutral-bright: #cc66ff !important;
-  --sys-color-neutral-outline: #666666 !important;
+  --sys-color-neutral-outline: #818181 !important;
 
   /* ── Named semantic colors ──────────────────────────────────────── */
 
   --sys-color-blue: #0099ff !important;
   --sys-color-blue-bright: #0099ff !important;
   --sys-color-cyan: #00ffff !important;
-  --sys-color-cyan-bright: #00ffff !important;
+  --sys-color-cyan-bright: #00d9ff !important;
   --sys-color-green: #00ff00 !important;
   --sys-color-green-bright: #00ff00 !important;
   --sys-color-orange: #ff66ff !important;
   --sys-color-orange-bright: #ff66ff !important;
   --sys-color-pink: #ff00ff !important;
   --sys-color-pink-bright: #ff99ff !important;
-  --sys-color-purple: #ff00ff !important;
-  --sys-color-purple-bright: #ff00ff !important;
+  --sys-color-purple: #d633ff !important;
+  --sys-color-purple-bright: #d633ff !important;
   --sys-color-yellow: #ffff00 !important;
   --sys-color-yellow-bright: #ffff00 !important;
   --sys-color-yellow-container: rgba(241, 250, 140, 0.15) !important;
   --sys-color-yellow-outline: #ffff00 !important;
 
   /* Error / status */
-  --sys-color-error: #ff0066 !important;
-  --sys-color-error-bright: #ff0066 !important;
+  --sys-color-error: #ff2244 !important;
+  --sys-color-error-bright: #ff2244 !important;
   --sys-color-error-container: rgba(255, 99, 99, 0.12) !important;
-  --sys-color-error-outline: #ff0066 !important;
+  --sys-color-error-outline: #ff2244 !important;
   --sys-color-on-error: #0a0816 !important;
-  --sys-color-on-error-container: #ff0066 !important;
-  --sys-color-on-surface-error: #ff0066 !important;
+  --sys-color-on-error-container: #ff2244 !important;
+  --sys-color-on-surface-error: #ff2244 !important;
   --sys-color-on-surface-green: #00ff00 !important;
   --sys-color-on-surface-yellow: #ffff00 !important;
 
@@ -99,18 +99,18 @@ body,
 
   --sys-color-divider: rgba(149, 128, 255, 0.15) !important;
   --sys-color-divider-prominent: rgba(225, 53, 255, 0.3) !important;
-  --sys-color-outline: #666666 !important;
+  --sys-color-outline: #818181 !important;
 
   /* ── Gradients ──────────────────────────────────────────────────── */
 
-  --sys-color-gradient-primary: #ff00ff !important;
+  --sys-color-gradient-primary: #d633ff !important;
   --sys-color-gradient-tertiary: #00ffff !important;
 
   /* ── Interactive states ─────────────────────────────────────────── */
 
   --sys-color-state-hover-on-subtle: rgba(225, 53, 255, 0.08) !important;
   --sys-color-state-hover-on-prominent: rgba(225, 53, 255, 0.12) !important;
-  --sys-color-state-focus-highlight: #ff00ff !important;
+  --sys-color-state-focus-highlight: #d633ff !important;
   --sys-color-state-focus-ring: #00ffff !important;
   --sys-color-state-ripple-primary: rgba(225, 53, 255, 0.2) !important;
   --sys-color-state-ripple-neutral-on-subtle: rgba(248, 248, 242, 0.08) !important;
@@ -118,26 +118,26 @@ body,
 
   /* ── Syntax token colors (CodeMirror 6) ─────────────────────────── */
 
-  --sys-color-token-keyword: #ff00ff !important;
+  --sys-color-token-keyword: #d633ff !important;
   --sys-color-token-variable: #ffffff !important;
   --sys-color-token-definition: #00ffff !important;
-  --sys-color-token-property: #00ffff !important;
+  --sys-color-token-property: #00d9ff !important;
   --sys-color-token-property-special: #ff66ff !important;
   --sys-color-token-type: #ffff00 !important;
   --sys-color-token-variable-special: #ff66ff !important;
-  --sys-color-token-builtin: #00ffff !important;
+  --sys-color-token-builtin: #00d9ff !important;
   --sys-color-token-number: #ff66ff !important;
   --sys-color-token-string: #ff99ff !important;
-  --sys-color-token-string-special: #00ffff !important;
-  --sys-color-token-atom: #ff00ff !important;
+  --sys-color-token-string-special: #00d9ff !important;
+  --sys-color-token-atom: #d633ff !important;
   --sys-color-token-comment: #cc66ff !important;
-  --sys-color-token-meta: #666666 !important;
+  --sys-color-token-meta: #818181 !important;
   --sys-color-token-tag: #ff00ff !important;
-  --sys-color-token-attribute: #ff00ff !important;
+  --sys-color-token-attribute: #d633ff !important;
   --sys-color-token-attribute-value: #ff99ff !important;
   --sys-color-token-inserted: #00ff00 !important;
-  --sys-color-token-deleted: #ff0066 !important;
-  --sys-color-token-subtle: #666666 !important;
+  --sys-color-token-deleted: #ff2244 !important;
+  --sys-color-token-subtle: #818181 !important;
   --sys-color-token-pseudo-element: #cc66ff !important;
 
   /* ── UI chrome overrides ────────────────────────────────────────── */
@@ -150,51 +150,51 @@ body,
   --text-link: #00ffff !important;
 
   /* Console ANSI colors */
-  --console-color-red: #ff0066 !important;
+  --console-color-red: #ff2244 !important;
   --console-color-green: #00ff00 !important;
   --console-color-yellow: #ffff00 !important;
   --console-color-blue: #0099ff !important;
   --console-color-magenta: #ff00ff !important;
   --console-color-cyan: #00ffff !important;
-  --console-color-bright-red: #ff0066 !important;
+  --console-color-bright-red: #ff2244 !important;
   --console-color-bright-green: #00ff00 !important;
   --console-color-bright-yellow: #ffff00 !important;
   --console-color-bright-blue: #0099ff !important;
   --console-color-bright-magenta: #ff99ff !important;
-  --console-color-bright-cyan: #00ffff !important;
+  --console-color-bright-cyan: #00d9ff !important;
 }
 
 /* ── CM6 token classes (direct styling fallback) ────────────────────── */
 
-.token-keyword { color: #ff00ff !important; }
+.token-keyword { color: #d633ff !important; }
 .token-variable { color: #ffffff !important; }
 .token-definition { color: #00ffff !important; }
-.token-property { color: #00ffff !important; }
+.token-property { color: #00d9ff !important; }
 .token-type { color: #ffff00 !important; }
 .token-variable-special { color: #ff66ff !important; }
-.token-builtin { color: #00ffff !important; }
+.token-builtin { color: #00d9ff !important; }
 .token-number { color: #ff66ff !important; }
 .token-string { color: #ff99ff !important; }
-.token-string-special { color: #00ffff !important; }
-.token-atom { color: #ff00ff !important; }
+.token-string-special { color: #00d9ff !important; }
+.token-atom { color: #d633ff !important; }
 .token-comment { color: #cc66ff !important; font-style: italic; }
-.token-meta { color: #666666 !important; }
+.token-meta { color: #818181 !important; }
 .token-tag { color: #ff00ff !important; }
-.token-attribute { color: #ff00ff !important; }
+.token-attribute { color: #d633ff !important; }
 .token-attribute-value { color: #ff99ff !important; }
 .token-inserted { color: #00ff00 !important; }
-.token-deleted { color: #ff0066 !important; text-decoration: line-through; }
+.token-deleted { color: #ff2244 !important; text-decoration: line-through; }
 
 /* ── CM5 fallback (older Chrome versions) ───────────────────────────── */
 
-.cm-keyword { color: #ff00ff !important; }
+.cm-keyword { color: #d633ff !important; }
 .cm-string { color: #ff99ff !important; }
 .cm-number { color: #ff66ff !important; }
-.cm-property { color: #00ffff !important; }
+.cm-property { color: #00d9ff !important; }
 .cm-variable { color: #ffffff !important; }
 .cm-comment { color: #cc66ff !important; font-style: italic; }
 .cm-tag { color: #ff00ff !important; }
-.cm-attribute { color: #ff00ff !important; }
+.cm-attribute { color: #d633ff !important; }
 
 /* ── Editor chrome ──────────────────────────────────────────────────── */
 
@@ -230,7 +230,7 @@ body,
 }
 
 .cm-lineNumbers {
-  color: #666666 !important;
+  color: #818181 !important;
 }
 
 .cm-foldPlaceholder {
@@ -245,7 +245,7 @@ body,
 
 .console-message-wrapper.console-error-level {
   background-color: rgba(255, 99, 99, 0.08) !important;
-  border-left-color: #ff0066 !important;
+  border-left-color: #ff2244 !important;
 }
 
 .console-message-wrapper.console-warning-level {
@@ -258,7 +258,7 @@ body,
 }
 
 .console-eager-inner-preview {
-  color: #666666 !important;
+  color: #818181 !important;
 }
 
 /* ── Network panel ──────────────────────────────────────────────────── */
@@ -268,7 +268,7 @@ body,
 }
 
 .network-error-row {
-  color: #ff0066 !important;
+  color: #ff2244 !important;
 }
 
 .network-warning-row {
@@ -328,7 +328,7 @@ body,
 }
 
 .tab-slider {
-  background-color: #ff00ff !important;
+  background-color: #d633ff !important;
 }
 
 /* ── Toolbar ────────────────────────────────────────────────────────── */
@@ -370,13 +370,13 @@ body,
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff00ff !important;
+  background: #d633ff !important;
 }
 
 /* ── Selection ──────────────────────────────────────────────────────── */
 
 ::selection {
-  background-color: #ff00ff !important;
+  background-color: #d633ff !important;
   color: #0a0816 !important;
 }
 
@@ -387,7 +387,7 @@ a {
 }
 
 a:hover {
-  color: #00ffff !important;
+  color: #00d9ff !important;
 }
 
 /* ── Search highlights ──────────────────────────────────────────────── */

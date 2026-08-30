@@ -7,16 +7,16 @@
  */
 
 @define-color sc_bg #faf8ff;
-@define-color sc_bg_dark #f1ecff;
-@define-color sc_bg_elevated #e8e0ff;
+@define-color sc_bg_dark #f4f0ff;
+@define-color sc_bg_elevated #f7f4ff;
 @define-color sc_fg #2b2540;
 @define-color sc_fg_muted #5a4d6e;
 @define-color sc_accent #7e2bd5;
-@define-color sc_accent_hover #c04a8f;
-@define-color sc_cyan #007f8e;
-@define-color sc_green #2d8659;
+@define-color sc_accent_hover #b02f7a;
+@define-color sc_cyan #006e72;
+@define-color sc_green #1d6e46;
 @define-color sc_red #c1272d;
-@define-color sc_yellow #a88600;
+@define-color sc_yellow #796100;
 
 /* Headerbar */
 
