@@ -497,7 +497,21 @@ function Get-K9sConfigDir {
 
 # Indentation of the first child under the block opened at $At, read off the
 # file rather than assumed, so a config written with four spaces keeps its shape.
-function Get-BlockIndent {
+# A key, bare or quoted either way, followed by its colon.
+function Get-KeyPattern {
+    param([string]$Name)
+    return "^\s*(`"$Name`"|'$Name'|$Name)\s*:"
+}
+
+function Get-LineIndent {
+    param([string]$Text)
+    return ($Text -replace "^(\s*).*$", '$1').Length
+}
+
+# Indentation of the first real child of the block opened at $At. Read it off
+# the file rather than assuming two spaces, so a config written with four keeps
+# its shape and stays parseable.
+function Get-ChildIndent {
     param(
         [string[]]$Lines,
         [int]$At,
@@ -506,23 +520,61 @@ function Get-BlockIndent {
     )
 
     for ($i = $At + 1; $i -le $Stop -and $i -lt $Lines.Count; $i++) {
-        if ($Lines[$i] -match "^\s*$") {
-            continue
-        }
-        $width = ($Lines[$i] -replace "^(\s*).*$", '$1').Length
-        if ($width -gt $Own) {
-            return $width
-        }
+        if ($Lines[$i] -match "^\s*$") { continue }
+        if ($Lines[$i] -match "^\s*#") { continue }
+        $width = Get-LineIndent $Lines[$i]
+        if ($width -gt $Own) { return $width }
         break
     }
     return $Own + 2
 }
 
-# Point an existing k9s config at a skin without ever writing a second
+# Last line belonging to the block opened at $At, whose children sit at $Inner.
+# Blank and comment lines never close a block.
+function Get-BlockExtent {
+    param(
+        [string[]]$Lines,
+        [int]$At,
+        [int]$Inner,
+        [int]$Stop
+    )
+
+    for ($i = $At + 1; $i -le $Stop -and $i -lt $Lines.Count; $i++) {
+        if ($Lines[$i] -match "^\s*$") { continue }
+        if ($Lines[$i] -match "^\s*#") { continue }
+        if ((Get-LineIndent $Lines[$i]) -lt $Inner) { return $i - 1 }
+    }
+    return $Stop
+}
+
+# First direct child of $At matching $Pattern, ignoring anything nested deeper.
+function Find-DirectChild {
+    param(
+        [string[]]$Lines,
+        [int]$At,
+        [int]$Stop,
+        [int]$Inner,
+        [string]$Pattern
+    )
+
+    for ($i = $At + 1; $i -le $Stop -and $i -lt $Lines.Count; $i++) {
+        if ((Get-LineIndent $Lines[$i]) -ne $Inner) { continue }
+        if ($Lines[$i] -match $Pattern) { return $i }
+    }
+    return -1
+}
+
+# Point an existing k9s config at a skin, without ever writing a second
 # top-level "k9s:" mapping. k9s parses with gopkg.in/yaml.v3, which rejects a
 # duplicate key outright, so appending a sibling block does not merely look
 # untidy: it stops k9s reading its config at all. More permissive parsers keep
 # only the last mapping and silently drop the rest of the user's settings.
+#
+# Every lookup anchors on direct children: the "ui:" we want is the one exactly
+# one level under "k9s:", and the "skin:" we want is one level under that. A
+# "ui:" nested deeper (k9s has a real "views:" key) belongs to something else.
+#
+# Returns $false when the config uses a shape we will not edit blind.
 function Set-K9sSkin {
     param(
         [string]$ConfigPath,
@@ -531,7 +583,7 @@ function Set-K9sSkin {
 
     if ($DryRun) {
         Write-Dim "dry-run: would set the skin to $Skin in $ConfigPath"
-        return
+        return $true
     }
 
     $configDir = Split-Path -Parent $ConfigPath
@@ -541,15 +593,11 @@ function Set-K9sSkin {
 
     if (-not (Test-Path -LiteralPath $ConfigPath)) {
         Write-PlainText $ConfigPath "k9s:`r`n  ui:`r`n    skin: $Skin`r`n"
-        return
+        return $true
     }
-
-    Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
 
     $raw = Get-Content -LiteralPath $ConfigPath -Raw
-    if (-not $raw) {
-        $raw = ""
-    }
+    if (-not $raw) { $raw = "" }
 
     # Keep whatever line ending the file already uses; splicing CRLF into an LF
     # config leaves a mixed file and a noisy diff.
@@ -559,74 +607,70 @@ function Set-K9sSkin {
         $lines = $lines[0..($lines.Count - 2)]
     }
 
+    $rootPattern = Get-KeyPattern "k9s"
     $rootAt = -1
     for ($i = 0; $i -lt $lines.Count; $i++) {
-        if ($lines[$i] -match "^k9s:") { $rootAt = $i; break }
-    }
-
-    # Anything after the colon is a flow mapping, an anchor, or a value.
-    # Splicing block-style children under it would produce nonsense, so say so
-    # and leave the file exactly as it was.
-    if ($rootAt -ge 0 -and $lines[$rootAt] -notmatch "^k9s:\s*$") {
-        Write-Warn "k9s: $ConfigPath uses a shape this installer will not edit blind"
-        Write-Dim "Set k9s.ui.skin to $Skin yourself"
-        return
-    }
-
-    # The mapping ends at the next non-blank, non-comment line back at column
-    # zero, which also stops us at a --- document break.
-    $blockEnd = $lines.Count - 1
-    if ($rootAt -ge 0) {
-        for ($i = $rootAt + 1; $i -lt $lines.Count; $i++) {
-            if ($lines[$i] -match "^\s*$") { continue }
-            if ($lines[$i] -match "^\s*#") { continue }
-            if ($lines[$i] -match "^\S") { $blockEnd = $i - 1; break }
-        }
-    }
-
-    # Only look inside that block, so a skin: key belonging to some unrelated
-    # section is never rewritten.
-    $skinAt = -1
-    $uiAt = -1
-    if ($rootAt -ge 0) {
-        for ($i = $rootAt + 1; $i -le $blockEnd; $i++) {
-            if ($skinAt -lt 0 -and $lines[$i] -match "^\s*skin:") { $skinAt = $i }
-            if ($uiAt -lt 0 -and $lines[$i] -match "^\s*ui:\s*$") { $uiAt = $i }
-        }
+        if ((Get-LineIndent $lines[$i]) -eq 0 -and $lines[$i] -match $rootPattern) { $rootAt = $i; break }
     }
 
     $out = [System.Collections.Generic.List[string]]::new()
-    if ($skinAt -ge 0) {
-        $indent = ($lines[$skinAt] -replace "^(\s*).*$", '$1')
-        for ($i = 0; $i -lt $lines.Count; $i++) {
-            if ($i -eq $skinAt) { $out.Add("${indent}skin: $Skin") } else { $out.Add($lines[$i]) }
-        }
-    } elseif ($uiAt -ge 0) {
-        $own = ($lines[$uiAt] -replace "^(\s*).*$", '$1').Length
-        $inner = " " * (Get-BlockIndent $lines $uiAt $own $blockEnd)
-        for ($i = 0; $i -lt $lines.Count; $i++) {
-            $out.Add($lines[$i])
-            if ($i -eq $uiAt) { $out.Add("${inner}skin: $Skin") }
-        }
-    } elseif ($rootAt -ge 0) {
-        $inner = " " * (Get-BlockIndent $lines $rootAt 0 $blockEnd)
-        $deeper = " " * (2 * $inner.Length)
-        for ($i = 0; $i -lt $lines.Count; $i++) {
-            $out.Add($lines[$i])
-            if ($i -eq $rootAt) {
-                $out.Add("${inner}ui:")
-                $out.Add("${deeper}skin: $Skin")
-            }
-        }
-    } else {
+
+    if ($rootAt -lt 0) {
+        # No k9s mapping yet, so a fresh one cannot be a duplicate.
+        Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
         foreach ($line in $lines) { $out.Add($line) }
         if ($lines.Count -gt 0) { $out.Add("") }
         $out.Add("k9s:")
         $out.Add("  ui:")
         $out.Add("    skin: $Skin")
+        Write-PlainText $ConfigPath (($out -join $newline) + $newline)
+        return $true
+    }
+
+    # Anything but a comment after the colon means a flow mapping, an anchor, or
+    # a scalar. Splicing block-style children under any of those produces
+    # nonsense, so decline and leave the file exactly as it was.
+    $rest = $lines[$rootAt] -replace $rootPattern, ""
+    if ($rest -notmatch "^\s*(#.*)?$") {
+        Write-Warn "k9s: $ConfigPath uses a shape this installer will not edit blind"
+        Write-Dim "Set k9s.ui.skin to $Skin yourself"
+        return $false
+    }
+
+    Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
+
+    $lastLine = $lines.Count - 1
+    $rootInner = Get-ChildIndent $lines $rootAt 0 $lastLine
+    $blockEnd = Get-BlockExtent $lines $rootAt $rootInner $lastLine
+    $uiAt = Find-DirectChild $lines $rootAt $blockEnd $rootInner ((Get-KeyPattern "ui") + "\s*(#.*)?$")
+
+    if ($uiAt -ge 0) {
+        $uiInner = Get-ChildIndent $lines $uiAt $rootInner $blockEnd
+        $uiEnd = Get-BlockExtent $lines $uiAt $uiInner $blockEnd
+        $skinAt = Find-DirectChild $lines $uiAt $uiEnd $uiInner (Get-KeyPattern "skin")
+
+        if ($skinAt -ge 0) {
+            for ($i = 0; $i -lt $lines.Count; $i++) {
+                if ($i -eq $skinAt) { $out.Add((" " * $uiInner) + "skin: $Skin") } else { $out.Add($lines[$i]) }
+            }
+        } else {
+            for ($i = 0; $i -lt $lines.Count; $i++) {
+                $out.Add($lines[$i])
+                if ($i -eq $uiAt) { $out.Add((" " * $uiInner) + "skin: $Skin") }
+            }
+        }
+    } else {
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            $out.Add($lines[$i])
+            if ($i -eq $rootAt) {
+                $out.Add((" " * $rootInner) + "ui:")
+                $out.Add((" " * (2 * $rootInner)) + "skin: $Skin")
+            }
+        }
     }
 
     Write-PlainText $ConfigPath (($out -join $newline) + $newline)
+    return $true
 }
 
 function Detect-All {
@@ -908,9 +952,12 @@ function Install-K9s {
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "k9s") $skinDir "k9s" "silkcircuit-@.yaml"
 
     $skin = "silkcircuit-$script:Primary"
-    Set-K9sSkin (Join-Path $k9sDir "config.yaml") $skin
+    $skinSet = Set-K9sSkin (Join-Path $k9sDir "config.yaml") $skin
     Write-Success "Installed $count k9s skins"
-    Write-Dim "Active skin: $skin"
+    # Only claim the skin is live if we actually managed to set it.
+    if ($skinSet) {
+        Write-Dim "Active skin: $skin"
+    }
 }
 
 function Install-Fzf {
