@@ -20,9 +20,11 @@ local registry = {
   { name = "aerial", modules = { "aerial" }, plugin = "aerial.nvim" },
   { name = "alpha", modules = { "alpha" }, plugin = "alpha-nvim" },
   { name = "avante", modules = { "avante" }, plugin = "avante.nvim" },
+  { name = "blink_cmp", modules = { "blink.cmp" }, plugin = "blink.cmp" },
   { name = "bufferline", modules = { "bufferline" }, plugin = "bufferline.nvim" },
   { name = "cmp", modules = { "cmp" }, plugin = "nvim-cmp" },
   { name = "flash", modules = { "flash" }, plugin = "flash.nvim" },
+  { name = "fzf_lua", modules = { "fzf-lua" }, plugin = "fzf-lua" },
   { name = "gitsigns", modules = { "gitsigns" }, plugin = "gitsigns.nvim" },
   { name = "harpoon", modules = { "harpoon" }, plugin = "harpoon" },
   {
