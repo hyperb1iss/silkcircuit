@@ -38,6 +38,7 @@ M.defaults = {
     -- File explorers
     neotree = true,
     nvimtree = true,
+    oil = true,
 
     -- Git
     gitsigns = true,
@@ -63,12 +64,15 @@ M.defaults = {
     -- Navigation and motion
     flash = true,
     harpoon = true,
+    trouble = true,
+    grug_far = true,
 
     -- Development tools
     mason = true,
     mini = true,
     dap = true, -- Alias for nvim_dap
     nvim_dap = true,
+    neotest = true,
     aerial = true,
     avante = true,
 
