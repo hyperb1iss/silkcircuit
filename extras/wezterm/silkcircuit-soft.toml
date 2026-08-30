@@ -51,7 +51,7 @@ background = "#141220"
 inactive_tab_edge = "#88ffff"
 
 [colors.tab_bar.active_tab]
-bg_color = "#3e3456"
+bg_color = "#201b30"
 fg_color = "#f8f8f2"
 intensity = "Bold"
 underline = "None"
@@ -63,7 +63,7 @@ bg_color = "#141220"
 fg_color = "#e9d5ff"
 
 [colors.tab_bar.inactive_tab_hover]
-bg_color = "#3e3456"
+bg_color = "#201b30"
 fg_color = "#f8f8f2"
 italic = true
 
@@ -72,6 +72,6 @@ bg_color = "#141220"
 fg_color = "#e9d5ff"
 
 [colors.tab_bar.new_tab_hover]
-bg_color = "#3e3456"
+bg_color = "#201b30"
 fg_color = "#99ffee"
 italic = true

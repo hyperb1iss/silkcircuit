@@ -27,7 +27,7 @@
         bright_green: (red: 0.313725, green: 0.980392, blue: 0.482353, alpha: 1.0),
         bright_red: (red: 1.000000, green: 0.388235, blue: 0.388235, alpha: 1.0),
         bright_orange: (red: 1.000000, green: 0.415686, blue: 0.756863, alpha: 1.0),
-        ext_warm_grey: (red: 0.388235, green: 0.466667, blue: 0.466667, alpha: 1.0),
+        ext_warm_grey: (red: 0.462745, green: 0.552941, blue: 0.552941, alpha: 1.0),
         ext_orange: (red: 1.000000, green: 0.415686, blue: 0.756863, alpha: 1.0),
         ext_yellow: (red: 0.945098, green: 0.980392, blue: 0.549020, alpha: 1.0),
         ext_blue: (red: 0.509804, green: 0.666667, blue: 1.000000, alpha: 1.0),
@@ -42,7 +42,7 @@
         accent_orange: (red: 1.000000, green: 0.415686, blue: 0.756863, alpha: 1.0),
         accent_yellow: (red: 0.945098, green: 0.980392, blue: 0.549020, alpha: 1.0),
         accent_green: (red: 0.313725, green: 0.980392, blue: 0.482353, alpha: 1.0),
-        accent_warm_grey: (red: 0.388235, green: 0.466667, blue: 0.466667, alpha: 1.0),
+        accent_warm_grey: (red: 0.462745, green: 0.552941, blue: 0.552941, alpha: 1.0),
     )),
     spacing: (
         space_none: 0,

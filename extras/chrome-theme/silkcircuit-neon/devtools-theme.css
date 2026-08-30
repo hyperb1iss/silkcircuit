@@ -40,7 +40,7 @@ body,
   --sys-color-on-base: #f8f8f2 !important;
   --sys-color-on-surface: #f8f8f2 !important;
   --sys-color-on-surface-subtle: #9580ff !important;
-  --sys-color-on-surface-secondary: #637777 !important;
+  --sys-color-on-surface-secondary: #768d8d !important;
   --sys-color-on-surface-primary: #f8f8f2 !important;
 
   /* ── Primary / accent ───────────────────────────────────────────── */
@@ -63,7 +63,7 @@ body,
   --sys-color-omnibox-container: #1a162a !important;
   --sys-color-neutral-container: #44475a !important;
   --sys-color-neutral-bright: #e9d5ff !important;
-  --sys-color-neutral-outline: #637777 !important;
+  --sys-color-neutral-outline: #768d8d !important;
 
   /* ── Named semantic colors ──────────────────────────────────────── */
 
@@ -99,7 +99,7 @@ body,
 
   --sys-color-divider: rgba(149, 128, 255, 0.15) !important;
   --sys-color-divider-prominent: rgba(225, 53, 255, 0.3) !important;
-  --sys-color-outline: #637777 !important;
+  --sys-color-outline: #768d8d !important;
 
   /* ── Gradients ──────────────────────────────────────────────────── */
 
@@ -131,13 +131,13 @@ body,
   --sys-color-token-string-special: #5fffff !important;
   --sys-color-token-atom: #e135ff !important;
   --sys-color-token-comment: #9580ff !important;
-  --sys-color-token-meta: #637777 !important;
+  --sys-color-token-meta: #768d8d !important;
   --sys-color-token-tag: #ff00ff !important;
   --sys-color-token-attribute: #e135ff !important;
   --sys-color-token-attribute-value: #ff99ff !important;
   --sys-color-token-inserted: #50fa7b !important;
   --sys-color-token-deleted: #ff6363 !important;
-  --sys-color-token-subtle: #637777 !important;
+  --sys-color-token-subtle: #768d8d !important;
   --sys-color-token-pseudo-element: #9580ff !important;
 
   /* ── UI chrome overrides ────────────────────────────────────────── */
@@ -178,7 +178,7 @@ body,
 .token-string-special { color: #5fffff !important; }
 .token-atom { color: #e135ff !important; }
 .token-comment { color: #9580ff !important; font-style: italic; }
-.token-meta { color: #637777 !important; }
+.token-meta { color: #768d8d !important; }
 .token-tag { color: #ff00ff !important; }
 .token-attribute { color: #e135ff !important; }
 .token-attribute-value { color: #ff99ff !important; }
@@ -230,7 +230,7 @@ body,
 }
 
 .cm-lineNumbers {
-  color: #637777 !important;
+  color: #768d8d !important;
 }
 
 .cm-foldPlaceholder {
@@ -258,7 +258,7 @@ body,
 }
 
 .console-eager-inner-preview {
-  color: #637777 !important;
+  color: #768d8d !important;
 }
 
 /* ── Network panel ──────────────────────────────────────────────────── */

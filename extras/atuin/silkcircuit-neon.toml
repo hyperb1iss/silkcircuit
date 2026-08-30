@@ -14,7 +14,7 @@ name = "silkcircuit-neon"
 # General text
 Base = "#f8f8f2"
 # De-emphasised text
-Muted = "#637777"
+Muted = "#768d8d"
 # Emphasised entries
 Important = "#e135ff"
 # Section headings

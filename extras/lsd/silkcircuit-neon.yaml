@@ -30,7 +30,7 @@ date:
   older: [149, 128, 255]
 
 size:
-  none: [99, 119, 119]
+  none: [118, 141, 141]
   small: [80, 250, 123]
   medium: [241, 250, 140]
   large: [255, 106, 193]
@@ -46,9 +46,9 @@ links:
 tree-edge: [225, 53, 255]
 
 git-status:
-  default: [99, 119, 119]
-  unmodified: [99, 119, 119]
-  ignored: [69, 83, 83]
+  default: [118, 141, 141]
+  unmodified: [118, 141, 141]
+  ignored: [83, 99, 99]
   new-in-index: [173, 219, 103]
   new-in-workdir: [80, 250, 123]
   typechange: [241, 250, 140]

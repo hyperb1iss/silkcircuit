@@ -32,7 +32,7 @@ background = "#00ffcc"
 
 [colors.footer_bar]
 foreground = "#f8f8f2"
-background = "#0a0614"
+background = "#151026"
 
 [colors.hints.start]
 foreground = "#0f0c1a"
@@ -44,17 +44,17 @@ background = "#00ffcc"
 
 [colors.normal]
 black = "#0f0c1a"
-red = "#ff66ff"
+red = "#ff3366"
 green = "#00ff66"
 yellow = "#ffcc00"
-blue = "#ff00ff"
+blue = "#6699ff"
 magenta = "#ff00cc"
 cyan = "#00ffcc"
 white = "#f8f8f2"
 
 [colors.bright]
-black = "#637777"
-red = "#ff3366"
+black = "#728989"
+red = "#ff6677"
 green = "#66ff99"
 yellow = "#ffff66"
 blue = "#88aaff"
@@ -68,4 +68,4 @@ color = "#ff00aa"
 
 [[colors.indexed_colors]]
 index = 17
-color = "#f78c6c"
+color = "#ff5fa8"

@@ -16,18 +16,18 @@ body,
   /* Base surfaces */
   --sys-color-base: #1a1626 !important;
   --sys-color-base-container: #141220 !important;
-  --sys-color-base-container-elevated: #3e3456 !important;
+  --sys-color-base-container-elevated: #201b30 !important;
   --sys-color-cdt-base: #1a1626 !important;
   --sys-color-cdt-base-container: #141220 !important;
 
   /* Elevation surfaces */
   --sys-color-surface: #1a1626 !important;
   --sys-color-surface1: #1a1626 !important;
-  --sys-color-surface2: #3e3456 !important;
-  --sys-color-surface3: #3e3456 !important;
-  --sys-color-surface4: #3e3456 !important;
-  --sys-color-surface5: #3e3456 !important;
-  --sys-color-surface-variant: #3e3456 !important;
+  --sys-color-surface2: #201b30 !important;
+  --sys-color-surface3: #201b30 !important;
+  --sys-color-surface4: #201b30 !important;
+  --sys-color-surface5: #201b30 !important;
+  --sys-color-surface-variant: #201b30 !important;
 
   /* Status surfaces */
   --sys-color-surface-error: rgba(255, 99, 99, 0.08) !important;
@@ -40,7 +40,7 @@ body,
   --sys-color-on-base: #f8f8f2 !important;
   --sys-color-on-surface: #f8f8f2 !important;
   --sys-color-on-surface-subtle: #b199ff !important;
-  --sys-color-on-surface-secondary: #637777 !important;
+  --sys-color-on-surface-secondary: #7e9494 !important;
   --sys-color-on-surface-primary: #f8f8f2 !important;
 
   /* ── Primary / accent ───────────────────────────────────────────── */
@@ -52,18 +52,18 @@ body,
   --sys-color-on-secondary: #1a1626 !important;
   --sys-color-tertiary: #ff99ff !important;
   --sys-color-on-tertiary: #1a1626 !important;
-  --sys-color-tertiary-container: #3e3456 !important;
+  --sys-color-tertiary-container: #201b30 !important;
   --sys-color-on-tertiary-container: #ffc2ff !important;
 
   /* Containers */
-  --sys-color-tonal-container: #3e3456 !important;
+  --sys-color-tonal-container: #201b30 !important;
   --sys-color-on-tonal-container: #f8f8f2 !important;
   --sys-color-tonal-outline: #b199ff !important;
   --sys-color-header-container: #141220 !important;
-  --sys-color-omnibox-container: #3e3456 !important;
+  --sys-color-omnibox-container: #201b30 !important;
   --sys-color-neutral-container: #44475a !important;
   --sys-color-neutral-bright: #e9d5ff !important;
-  --sys-color-neutral-outline: #637777 !important;
+  --sys-color-neutral-outline: #7e9494 !important;
 
   /* ── Named semantic colors ──────────────────────────────────────── */
 
@@ -99,7 +99,7 @@ body,
 
   --sys-color-divider: rgba(149, 128, 255, 0.15) !important;
   --sys-color-divider-prominent: rgba(225, 53, 255, 0.3) !important;
-  --sys-color-outline: #637777 !important;
+  --sys-color-outline: #7e9494 !important;
 
   /* ── Gradients ──────────────────────────────────────────────────── */
 
@@ -131,13 +131,13 @@ body,
   --sys-color-token-string-special: #88ffff !important;
   --sys-color-token-atom: #e892ff !important;
   --sys-color-token-comment: #b199ff !important;
-  --sys-color-token-meta: #637777 !important;
+  --sys-color-token-meta: #7e9494 !important;
   --sys-color-token-tag: #ff99ff !important;
   --sys-color-token-attribute: #e892ff !important;
   --sys-color-token-attribute-value: #ffc2ff !important;
   --sys-color-token-inserted: #66ff99 !important;
   --sys-color-token-deleted: #ff6677 !important;
-  --sys-color-token-subtle: #637777 !important;
+  --sys-color-token-subtle: #7e9494 !important;
   --sys-color-token-pseudo-element: #b199ff !important;
 
   /* ── UI chrome overrides ────────────────────────────────────────── */
@@ -178,7 +178,7 @@ body,
 .token-string-special { color: #88ffff !important; }
 .token-atom { color: #e892ff !important; }
 .token-comment { color: #b199ff !important; font-style: italic; }
-.token-meta { color: #637777 !important; }
+.token-meta { color: #7e9494 !important; }
 .token-tag { color: #ff99ff !important; }
 .token-attribute { color: #e892ff !important; }
 .token-attribute-value { color: #ffc2ff !important; }
@@ -230,7 +230,7 @@ body,
 }
 
 .cm-lineNumbers {
-  color: #637777 !important;
+  color: #7e9494 !important;
 }
 
 .cm-foldPlaceholder {
@@ -258,13 +258,13 @@ body,
 }
 
 .console-eager-inner-preview {
-  color: #637777 !important;
+  color: #7e9494 !important;
 }
 
 /* ── Network panel ──────────────────────────────────────────────────── */
 
 .network-log-grid.data-grid thead {
-  background-color: #3e3456 !important;
+  background-color: #201b30 !important;
 }
 
 .network-error-row {
@@ -308,7 +308,7 @@ body,
 }
 
 .data-grid th {
-  background-color: #3e3456 !important;
+  background-color: #201b30 !important;
   border-bottom: 1px solid rgba(149, 128, 255, 0.2) !important;
 }
 
@@ -343,7 +343,7 @@ body,
 }
 
 .toolbar-button:hover {
-  background-color: #3e3456 !important;
+  background-color: #201b30 !important;
 }
 
 /* ── Status bar ─────────────────────────────────────────────────────── */

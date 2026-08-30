@@ -23,7 +23,7 @@
     /* Text */
     --cr-primary-text-color: #ffffff !important;
     --cr-secondary-text-color: #cc66ff !important;
-    --cr-title-text-color: #ff00ff !important;
+    --cr-title-text-color: #d633ff !important;
     --cr-form-field-label-color: #00ffff !important;
     --cr-link-color: #00ffff !important;
 
@@ -35,33 +35,33 @@
     --cr-fallback-color-surface-variant: #1a0033 !important;
     --cr-fallback-color-on-surface-rgb: 255, 255, 255 !important;
     --cr-fallback-color-on-surface-variant: #cc66ff !important;
-    --cr-fallback-color-on-surface-subtle: #666666 !important;
-    --cr-fallback-color-primary: #ff00ff !important;
+    --cr-fallback-color-on-surface-subtle: #818181 !important;
+    --cr-fallback-color-primary: #d633ff !important;
     --cr-fallback-color-inverse-surface: #ffffff !important;
     --cr-fallback-color-inverse-on-surface: #0a0816 !important;
     --cr-fallback-color-inverse-primary: #00ffff !important;
 
     /* Buttons */
     --cr-button-background-color: #1a0033 !important;
-    --cr-button-border-color: #ff00ff !important;
+    --cr-button-border-color: #d633ff !important;
     --cr-button-text-color: #ffffff !important;
     --cr-button-hover-background-color: rgba(225, 53, 255, 0.12) !important;
-    --cr-button-ripple-color: #ff00ff !important;
+    --cr-button-ripple-color: #d633ff !important;
     --cr-button-ripple-opacity: 0.15 !important;
 
     /* Toggle / switch */
     --cr-toggle-color: #cc66ff !important;
-    --cr-toggle-checked-bar-color: #ff00ff !important;
+    --cr-toggle-checked-bar-color: #d633ff !important;
     --cr-toggle-checked-button-color: #ffffff !important;
     --cr-toggle-checked-ripple-color: rgba(225, 53, 255, 0.25) !important;
-    --cr-toggle-unchecked-bar-color: #666666 !important;
+    --cr-toggle-unchecked-bar-color: #818181 !important;
     --cr-toggle-unchecked-button-color: #cc66ff !important;
     --cr-toggle-unchecked-ripple-color: rgba(248, 248, 242, 0.1) !important;
 
     /* Input fields */
-    --cr-input-border: 1px solid #666666 !important;
-    --cr-input-error-color: #ff0066 !important;
-    --cr-input-placeholder-color: #666666 !important;
+    --cr-input-border: 1px solid #818181 !important;
+    --cr-input-error-color: #ff2244 !important;
+    --cr-input-placeholder-color: #818181 !important;
 
     /* Separators & borders */
     --cr-separator-color: rgba(149, 128, 255, 0.15) !important;
@@ -81,16 +81,16 @@
     --cr-focus-outline-color: #00ffff !important;
     --cr-focused-item-color: rgba(225, 53, 255, 0.12) !important;
     --cr-selected-background-color: rgba(225, 53, 255, 0.15) !important;
-    --cr-checked-color: #ff00ff !important;
+    --cr-checked-color: #d633ff !important;
 
     /* Checkbox */
-    --cr-checkbox-checked-box-color: #ff00ff !important;
+    --cr-checkbox-checked-box-color: #d633ff !important;
     --cr-checkbox-mark-color: #0a0816 !important;
-    --cr-checkbox-ripple-checked-color: #ff00ff !important;
-    --cr-checkbox-unchecked-box-color: #666666 !important;
+    --cr-checkbox-ripple-checked-color: #d633ff !important;
+    --cr-checkbox-unchecked-box-color: #818181 !important;
 
     /* Tabs */
-    --cr-tabs-selected-color: #ff00ff !important;
+    --cr-tabs-selected-color: #d633ff !important;
     --cr-tabs-unselected-color: #cc66ff !important;
 
     /* Toast notifications */
@@ -99,18 +99,18 @@
     --cr-toast-button-color: #00ffff !important;
 
     /* Slider */
-    --cr-slider-active-color: #ff00ff !important;
-    --cr-slider-container-color: #666666 !important;
-    --cr-slider-knob-color-rgb: 255, 0, 255 !important;
+    --cr-slider-active-color: #d633ff !important;
+    --cr-slider-container-color: #818181 !important;
+    --cr-slider-knob-color-rgb: 214, 51, 255 !important;
 
     /* Progress */
-    --cr-progress-active-color: #ff00ff !important;
-    --cr-progress-container-color: #666666 !important;
+    --cr-progress-active-color: #d633ff !important;
+    --cr-progress-container-color: #818181 !important;
 
     /* Search field */
     --cr-search-field-search-icon-fill: #00ffff !important;
     --cr-search-field-clear-icon-fill: #cc66ff !important;
-    --cr-search-field-placeholder-color: #666666 !important;
+    --cr-search-field-placeholder-color: #818181 !important;
 
     /* Icon colors */
     --iron-icon-fill-color: #cc66ff !important;
@@ -175,13 +175,13 @@
 
   cr-toolbar-search-field {
     background-color: #1a0033 !important;
-    border: 1px solid #666666 !important;
+    border: 1px solid #818181 !important;
     border-radius: 8px !important;
   }
 
   cr-toolbar-search-field:focus-within {
-    border-color: #ff00ff !important;
-    box-shadow: 0 0 0 1px #ff00ff40 !important;
+    border-color: #d633ff !important;
+    box-shadow: 0 0 0 1px #d633ff40 !important;
   }
 
   /* ── Hover effects ──────────────────────────────────────────────── */
@@ -209,13 +209,13 @@
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #ff00ff !important;
+    background: #d633ff !important;
   }
 
   /* ── Selection ──────────────────────────────────────────────────── */
 
   ::selection {
-    background-color: #ff00ff !important;
+    background-color: #d633ff !important;
     color: #0a0816 !important;
   }
 
@@ -226,7 +226,7 @@
   }
 
   a:hover {
-    color: #00ffff !important;
+    color: #00d9ff !important;
   }
 
   /* ── Code blocks ────────────────────────────────────────────────── */
@@ -253,11 +253,11 @@
   .experiment select {
     background-color: #000000 !important;
     color: #ffffff !important;
-    border: 1px solid #666666 !important;
+    border: 1px solid #818181 !important;
     border-radius: 6px !important;
   }
 
   .experiment select:focus {
-    border-color: #ff00ff !important;
+    border-color: #d633ff !important;
   }
 }

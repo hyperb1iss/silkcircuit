@@ -16,7 +16,7 @@ cursor = "#00ffff"
 
 [colors.vi_mode_cursor]
 text = "#0a0816"
-cursor = "#ff00ff"
+cursor = "#d633ff"
 
 [colors.selection]
 text = "#ffffff"
@@ -44,7 +44,7 @@ background = "#00ffff"
 
 [colors.normal]
 black = "#000000"
-red = "#ff0066"
+red = "#ff2244"
 green = "#00ff00"
 yellow = "#ffff00"
 blue = "#0099ff"
@@ -53,7 +53,7 @@ cyan = "#00ffff"
 white = "#ffffff"
 
 [colors.bright]
-black = "#666666"
+black = "#818181"
 red = "#ff6666"
 green = "#66ff66"
 yellow = "#ffff66"

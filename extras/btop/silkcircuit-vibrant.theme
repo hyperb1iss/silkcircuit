@@ -29,7 +29,7 @@ theme[inactive_fg]="#b366ff"
 theme[graph_text]="#ff99ff"
 
 # Background color of the percentage meters
-theme[meter_bg]="#0a0614"
+theme[meter_bg]="#151026"
 
 # Misc colors for processes box including mini cpu graphs, details memory graph and details status text
 theme[proc_misc]="#ff00cc"
@@ -41,7 +41,7 @@ theme[net_box]="#ff00cc"
 theme[proc_box]="#00ff66"
 
 # Box divider line and small boxes line color
-theme[div_line]="#637777"
+theme[div_line]="#728989"
 
 # Temperature graph color (green -> yellow -> red)
 theme[temp_start]="#00ff66"

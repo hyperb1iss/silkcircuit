@@ -14,7 +14,7 @@ name = "silkcircuit-vibrant"
 # General text
 Base = "#f8f8f2"
 # De-emphasised text
-Muted = "#637777"
+Muted = "#728989"
 # Emphasised entries
 Important = "#ff00ff"
 # Section headings
@@ -22,7 +22,7 @@ Title = "#00ffcc"
 # Help text and hints
 Guidance = "#6272a4"
 # Metadata shown beside a result
-Annotation = "#f78c6c"
+Annotation = "#ff5fa8"
 
 # Log levels
 AlertInfo = "#00ff66"

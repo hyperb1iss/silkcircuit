@@ -9,59 +9,59 @@
 
 [color "branch"]
 	current = "#7e2bd5 bold"
-	local = "#007f8e"
-	remote = "#c04a8f"
-	upstream = "#2563eb"
+	local = "#006e72"
+	remote = "#b02f7a"
+	upstream = "#1454dc"
 	plain = "#2b2540"
 
 [color "decorate"]
 	branch = "#7e2bd5 bold"
-	remoteBranch = "#c04a8f"
-	tag = "#a88600 bold"
-	stash = "#007f8e"
+	remoteBranch = "#b02f7a"
+	tag = "#796100 bold"
+	stash = "#006e72"
 	HEAD = "#b40077 bold"
 	grafted = "#c1272d"
 
 [color "diff"]
 	meta = "#7e2bd5 bold"
-	frag = "#c04a8f bold"
-	func = "#007f8e"
+	frag = "#b02f7a bold"
+	func = "#006e72"
 	context = "#5a4d6e"
 	old = "#c1272d"
-	new = "#2d8659"
-	commit = "#a88600"
+	new = "#1d6e46"
+	commit = "#796100"
 	whitespace = "#c1272d reverse"
 
 [color "status"]
 	header = "#5a4d6e"
-	added = "#2d8659 bold"
-	changed = "#2563eb bold"
-	untracked = "#007f8e bold"
+	added = "#1d6e46 bold"
+	changed = "#1454dc bold"
+	untracked = "#006e72 bold"
 	deleted = "#c1272d bold"
-	branch = "#a88600 bold"
+	branch = "#796100 bold"
 	nobranch = "#c1272d bold"
 	unmerged = "#c1272d bold"
 	localBranch = "#7e2bd5"
-	remoteBranch = "#c04a8f"
+	remoteBranch = "#b02f7a"
 
 [color "interactive"]
 	prompt = "#7e2bd5 bold"
-	header = "#c04a8f"
-	help = "#007f8e"
+	header = "#b02f7a"
+	help = "#006e72"
 	error = "#c1272d"
 
 [color "grep"]
 	context = "#5a4d6e"
 	filename = "#7e2bd5 bold"
-	function = "#007f8e"
-	linenumber = "#c04a8f"
-	column = "#8e84a8"
-	match = "#a88600 bold"
+	function = "#006e72"
+	linenumber = "#b02f7a"
+	column = "#7353a9"
+	match = "#796100 bold"
 	selected = "#5a4d6e"
-	separator = "#007f8e"
+	separator = "#006e72"
 
 [pretty]
-	silkcircuit = "%C(#7e2bd5 bold)commit %H%Creset%C(#a88600)%d%Creset%n%C(#2b2540)Author: %C(#c04a8f)%an <%ae>%Creset%n%C(#2b2540)Date:   %C(#007f8e)%ad%Creset%n%n%C(#2b2540)    %s%Creset%n%n%w(0,4,4)%C(#2b2540)%b%Creset"
+	silkcircuit = "%C(#7e2bd5 bold)commit %H%Creset%C(#796100)%d%Creset%n%C(#2b2540)Author: %C(#b02f7a)%an <%ae>%Creset%n%C(#2b2540)Date:   %C(#006e72)%ad%Creset%n%n%C(#2b2540)    %s%Creset%n%n%w(0,4,4)%C(#2b2540)%b%Creset"
 
 [delta "silkcircuit-dawn"]
 	light = true
@@ -69,26 +69,26 @@
 	line-numbers = true
 	side-by-side = false
 	syntax-theme = "silkcircuit-dawn"
-	file-style = "#a88600 bold"
-	file-decoration-style = "#a88600 ul"
+	file-style = "#796100 bold"
+	file-decoration-style = "#796100 ul"
 	hunk-header-style = "file line-number syntax"
-	hunk-header-decoration-style = "#007f8e box"
-	hunk-header-file-style = "#007f8e bold"
-	hunk-header-line-number-style = "#c04a8f"
+	hunk-header-decoration-style = "#006e72 box"
+	hunk-header-file-style = "#006e72 bold"
+	hunk-header-line-number-style = "#b02f7a"
 	commit-style = "#7e2bd5 bold"
 	commit-decoration-style = "#7e2bd5 box ul"
-	line-numbers-left-style = "#8e84a8"
-	line-numbers-right-style = "#8e84a8"
-	line-numbers-zero-style = "#8e84a8"
+	line-numbers-left-style = "#7353a9"
+	line-numbers-right-style = "#7353a9"
+	line-numbers-zero-style = "#877aa6"
 	line-numbers-minus-style = "#c1272d bold"
-	line-numbers-plus-style = "#2d8659 bold"
+	line-numbers-plus-style = "#1d6e46 bold"
 	minus-style = "syntax auto"
 	minus-emph-style = "syntax auto bold"
 	plus-style = "syntax auto"
 	plus-emph-style = "syntax auto bold"
 	zero-style = "syntax"
 	whitespace-error-style = "#c1272d reverse"
-	blame-palette = "#faf8ff #e8e0ff #e6def7 #d4c8f0"
+	blame-palette = "#faf8ff #f7f4ff #e6def7 #d4c8f0"
 
 # The delta feature above only takes effect once you ask for it. Uncomment
 # whichever of these you want, in this file or in your own config:

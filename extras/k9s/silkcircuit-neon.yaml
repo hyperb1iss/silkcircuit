@@ -47,7 +47,7 @@ k9s:
       errorColor: "#ff6363"
       highlightcolor: "#ff00ff"
       killColor: "#6272a4"
-      completedColor: "#637777"
+      completedColor: "#768d8d"
 
     # Border title styles
     title:
@@ -73,7 +73,7 @@ k9s:
     # YAML info styles
     yaml:
       keyColor: "#e135ff"
-      colonColor: "#637777"
+      colonColor: "#768d8d"
       valueColor: "#80ffea"
 
     # Logs styles

@@ -5,12 +5,12 @@
 # Do not edit by hand.
 
 export FZF_DEFAULT_OPTS=" \
---color=fg:#ffffff,bg:#0a0816,hl:#ff00ff \
+--color=fg:#ffffff,bg:#0a0816,hl:#d633ff \
 --color=fg+:#ffffff,bg+:#1a0033,hl+:#ff00ff \
 --color=selected-fg:#ffffff,selected-bg:#4b0654,selected-hl:#ff00ff \
 --color=gutter:#0a0816,query:#ffffff,disabled:#cc66ff \
---color=info:#ffff00,separator:#4b0654,scrollbar:#ff00ff \
---color=prompt:#ff00ff,pointer:#ff00ff,marker:#00ff00 \
---color=spinner:#00ffff,header:#00ffff,border:#00ffff \
+--color=info:#ffff00,separator:#4b0654,scrollbar:#d633ff \
+--color=prompt:#d633ff,pointer:#ff00ff,marker:#00ff00 \
+--color=spinner:#00ffff,header:#00ffff,border:#00d9ff \
 --color=label:#cc66ff,preview-fg:#ffffff,preview-bg:#000000 \
---color=preview-border:#00ffff,preview-label:#00ffff"
+--color=preview-border:#00d9ff,preview-label:#00ffff"

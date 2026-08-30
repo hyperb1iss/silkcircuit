@@ -14,25 +14,25 @@ name = "silkcircuit-dawn"
 # General text
 Base = "#2b2540"
 # De-emphasised text
-Muted = "#8e84a8"
+Muted = "#686177"
 # Emphasised entries
 Important = "#7e2bd5"
 # Section headings
-Title = "#007f8e"
+Title = "#006e72"
 # Help text and hints
-Guidance = "#8e84a8"
+Guidance = "#546189"
 # Metadata shown beside a result
-Annotation = "#c74a8c"
+Annotation = "#b42a74"
 
 # Log levels
-AlertInfo = "#2d8659"
-AlertWarn = "#a88600"
+AlertInfo = "#1d6e46"
+AlertWarn = "#796100"
 AlertError = "#c1272d"
 
 # Command syntax highlighting, matching the editor theme's roles
-SyntaxCommand = "#2d8659"
-SyntaxFlag = "#007f8e"
-SyntaxString = "#9c4a88"
+SyntaxCommand = "#1d6e46"
+SyntaxFlag = "#006e72"
+SyntaxString = "#9e4087"
 SyntaxVariable = "#7e2bd5"
 SyntaxOperator = "#5a4d6e"
-SyntaxComment = "#8e84a8"
+SyntaxComment = "#7353a9"

@@ -10,11 +10,11 @@ cursor-color = #00ffff
 cursor-text = #0a0816
 selection-background = #4b0654
 selection-foreground = #ffffff
-split-divider-color = #00ffff
+split-divider-color = #00d9ff
 
 # Normal colors
 palette = 0=#000000
-palette = 1=#ff0066
+palette = 1=#ff2244
 palette = 2=#00ff00
 palette = 3=#ffff00
 palette = 4=#0099ff
@@ -23,7 +23,7 @@ palette = 6=#00ffff
 palette = 7=#ffffff
 
 # Bright colors
-palette = 8=#666666
+palette = 8=#818181
 palette = 9=#ff6666
 palette = 10=#66ff66
 palette = 11=#ffff66

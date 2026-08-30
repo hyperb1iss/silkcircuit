@@ -23,9 +23,9 @@
 				<key>foreground</key>
 				<string>#f8f8f2</string>
 				<key>invisibles</key>
-				<string>#455353</string>
+				<string>#586868</string>
 				<key>lineHighlight</key>
-				<string>#3e3456</string>
+				<string>#201b30</string>
 				<key>selection</key>
 				<string>#44475a</string>
 				<key>findHighlight</key>
@@ -436,7 +436,7 @@
 				<key>foreground</key>
 				<string>#ff99ff</string>
 				<key>background</key>
-				<string>#3e3456</string>
+				<string>#201b30</string>
 			</dict>
 		</dict>
 		<dict>

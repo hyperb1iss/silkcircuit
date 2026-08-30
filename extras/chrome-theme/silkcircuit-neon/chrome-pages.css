@@ -35,7 +35,7 @@
     --cr-fallback-color-surface-variant: #1a162a !important;
     --cr-fallback-color-on-surface-rgb: 248, 248, 242 !important;
     --cr-fallback-color-on-surface-variant: #9580ff !important;
-    --cr-fallback-color-on-surface-subtle: #637777 !important;
+    --cr-fallback-color-on-surface-subtle: #768d8d !important;
     --cr-fallback-color-primary: #e135ff !important;
     --cr-fallback-color-inverse-surface: #f8f8f2 !important;
     --cr-fallback-color-inverse-on-surface: #12101a !important;
@@ -54,14 +54,14 @@
     --cr-toggle-checked-bar-color: #e135ff !important;
     --cr-toggle-checked-button-color: #f8f8f2 !important;
     --cr-toggle-checked-ripple-color: rgba(225, 53, 255, 0.25) !important;
-    --cr-toggle-unchecked-bar-color: #637777 !important;
+    --cr-toggle-unchecked-bar-color: #768d8d !important;
     --cr-toggle-unchecked-button-color: #9580ff !important;
     --cr-toggle-unchecked-ripple-color: rgba(248, 248, 242, 0.1) !important;
 
     /* Input fields */
-    --cr-input-border: 1px solid #637777 !important;
+    --cr-input-border: 1px solid #768d8d !important;
     --cr-input-error-color: #ff6363 !important;
-    --cr-input-placeholder-color: #637777 !important;
+    --cr-input-placeholder-color: #768d8d !important;
 
     /* Separators & borders */
     --cr-separator-color: rgba(149, 128, 255, 0.15) !important;
@@ -87,7 +87,7 @@
     --cr-checkbox-checked-box-color: #e135ff !important;
     --cr-checkbox-mark-color: #12101a !important;
     --cr-checkbox-ripple-checked-color: #e135ff !important;
-    --cr-checkbox-unchecked-box-color: #637777 !important;
+    --cr-checkbox-unchecked-box-color: #768d8d !important;
 
     /* Tabs */
     --cr-tabs-selected-color: #e135ff !important;
@@ -100,17 +100,17 @@
 
     /* Slider */
     --cr-slider-active-color: #e135ff !important;
-    --cr-slider-container-color: #637777 !important;
+    --cr-slider-container-color: #768d8d !important;
     --cr-slider-knob-color-rgb: 225, 53, 255 !important;
 
     /* Progress */
     --cr-progress-active-color: #e135ff !important;
-    --cr-progress-container-color: #637777 !important;
+    --cr-progress-container-color: #768d8d !important;
 
     /* Search field */
     --cr-search-field-search-icon-fill: #80ffea !important;
     --cr-search-field-clear-icon-fill: #9580ff !important;
-    --cr-search-field-placeholder-color: #637777 !important;
+    --cr-search-field-placeholder-color: #768d8d !important;
 
     /* Icon colors */
     --iron-icon-fill-color: #9580ff !important;
@@ -175,7 +175,7 @@
 
   cr-toolbar-search-field {
     background-color: #1a162a !important;
-    border: 1px solid #637777 !important;
+    border: 1px solid #768d8d !important;
     border-radius: 8px !important;
   }
 
@@ -253,7 +253,7 @@
   .experiment select {
     background-color: #0a0812 !important;
     color: #f8f8f2 !important;
-    border: 1px solid #637777 !important;
+    border: 1px solid #768d8d !important;
     border-radius: 6px !important;
   }
 

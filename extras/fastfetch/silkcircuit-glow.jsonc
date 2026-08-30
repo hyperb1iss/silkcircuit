@@ -10,7 +10,7 @@
     "separator": " ╎ ",
     "disableLinewrap": true,
     "color": {
-      "keys": "#ff00ff",
+      "keys": "#d633ff",
       "separator": "#00ffff",
       "output": "#cc66ff"
     },
@@ -22,7 +22,7 @@
       "color": {
         "green": "#00ff00",
         "yellow": "#ffff00",
-        "red": "#ff0066"
+        "red": "#ff2244"
       }
     }
   },
@@ -33,12 +33,12 @@
       "1": "#00ffff",
       "2": "#0099ff",
       "3": "#cc66ff",
-      "4": "#ff00ff",
+      "4": "#d633ff",
       "5": "#ff66ff",
       "6": "#ff00ff",
       "7": "#ff99ff",
       "8": "#ff66ff",
-      "9": "#ff0066"
+      "9": "#ff2244"
     }
   },
   "modules": [

@@ -13,14 +13,14 @@ align = "Left"
 
 [[columns]]
 kind = "User"
-style = "30"
+style = "23"
 numeric_search = false
 nonnumeric_search = true
 align = "Left"
 
 [[columns]]
 kind = "Separator"
-style = "103"
+style = "60"
 numeric_search = false
 nonnumeric_search = false
 align = "Left"
@@ -62,7 +62,7 @@ align = "Right"
 
 [[columns]]
 kind = "Separator"
-style = "103"
+style = "60"
 numeric_search = false
 nonnumeric_search = false
 align = "Left"
@@ -75,32 +75,32 @@ nonnumeric_search = true
 align = "Left"
 
 [style]
-header = "29"
+header = "23"
 unit = "236"
 tree = "236"
 
 [style.by_percentage]
 color_000 = "26"
-color_025 = "29"
-color_050 = "136"
+color_025 = "23"
+color_050 = "94"
 color_075 = "124"
 color_100 = "124"
 
 [style.by_state]
 color_d = "124"
-color_r = "29"
+color_r = "23"
 color_s = "26"
-color_t = "30"
+color_t = "23"
 color_z = "92"
 color_x = "92"
-color_k = "136"
-color_w = "136"
-color_p = "136"
+color_k = "94"
+color_w = "94"
+color_p = "94"
 
 [style.by_unit]
 color_k = "26"
-color_m = "29"
-color_g = "136"
+color_m = "23"
+color_g = "94"
 color_t = "124"
 color_p = "124"
 color_x = "26"

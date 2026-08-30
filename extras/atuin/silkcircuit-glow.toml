@@ -14,9 +14,9 @@ name = "silkcircuit-glow"
 # General text
 Base = "#ffffff"
 # De-emphasised text
-Muted = "#666666"
+Muted = "#818181"
 # Emphasised entries
-Important = "#ff00ff"
+Important = "#d633ff"
 # Section headings
 Title = "#00ffff"
 # Help text and hints
@@ -27,12 +27,12 @@ Annotation = "#ff66ff"
 # Log levels
 AlertInfo = "#00ff00"
 AlertWarn = "#ffff00"
-AlertError = "#ff0066"
+AlertError = "#ff2244"
 
 # Command syntax highlighting, matching the editor theme's roles
 SyntaxCommand = "#00ff00"
 SyntaxFlag = "#00ffff"
 SyntaxString = "#ff99ff"
-SyntaxVariable = "#ff00ff"
+SyntaxVariable = "#d633ff"
 SyntaxOperator = "#cc66ff"
 SyntaxComment = "#cc66ff"

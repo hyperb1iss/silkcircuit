@@ -192,8 +192,8 @@
 [palette]
 bg = "#1a1626"
 bg_dark = "#141220"
-bg_float = "#3e3456"
-bg_highlight = "#3e3456"
+bg_float = "#2b253d"
+bg_highlight = "#201b30"
 bg_visual = "#44475a"
 border = "#88ffff"
 coral = "#ff99dd"

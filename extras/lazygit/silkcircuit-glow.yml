@@ -15,10 +15,10 @@
 gui:
   theme:
     activeBorderColor:
-      - "#ff00ff"
+      - "#d633ff"
       - bold
     inactiveBorderColor:
-      - "#666666"
+      - "#818181"
     searchingActiveBorderColor:
       - "#00ffff"
       - bold
@@ -29,12 +29,12 @@ gui:
     cherryPickedCommitBgColor:
       - "#4b0654"
     cherryPickedCommitFgColor:
-      - "#ff00ff"
+      - "#d633ff"
     markedBaseCommitBgColor:
       - "#ffff00"
     markedBaseCommitFgColor:
       - "#0a0816"
     unstagedChangesColor:
-      - "#ff0066"
+      - "#ff2244"
     defaultFgColor:
       - "#ffffff"

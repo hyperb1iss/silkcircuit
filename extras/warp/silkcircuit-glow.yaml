@@ -5,7 +5,7 @@
 # Do not edit by hand.
 
 name: "SilkCircuit Glow"
-accent: "#ff00ff"
+accent: "#d633ff"
 background: "#0a0816"
 foreground: "#ffffff"
 cursor: "#00ffff"
@@ -13,7 +13,7 @@ details: darker
 terminal_colors:
   normal:
     black: "#000000"
-    red: "#ff0066"
+    red: "#ff2244"
     green: "#00ff00"
     yellow: "#ffff00"
     blue: "#0099ff"
@@ -21,7 +21,7 @@ terminal_colors:
     cyan: "#00ffff"
     white: "#ffffff"
   bright:
-    black: "#666666"
+    black: "#818181"
     red: "#ff6666"
     green: "#66ff66"
     yellow: "#ffff66"

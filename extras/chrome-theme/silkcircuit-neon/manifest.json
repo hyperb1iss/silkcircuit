@@ -48,7 +48,7 @@
       "theme_toolbar": "images/toolbar.png"
     },
     "tab_group_color_palette": {
-      "grey_override": [99, 119, 119],
+      "grey_override": [118, 141, 141],
       "blue_override": [130, 170, 255],
       "red_override": [255, 99, 99],
       "yellow_override": [241, 250, 140],

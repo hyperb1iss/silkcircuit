@@ -7,8 +7,8 @@
     "colors": {
       "frame": [39, 15, 63],
       "frame_inactive": [24, 0, 48],
-      "frame_incognito": [30, 0, 30],
-      "frame_incognito_inactive": [25, 0, 25],
+      "frame_incognito": [25, 6, 30],
+      "frame_incognito_inactive": [21, 5, 25],
       "toolbar": [39, 15, 63],
       "toolbar_text": [255, 255, 255],
       "toolbar_button_icon": [255, 102, 255],
@@ -19,10 +19,10 @@
       "tab_background_text_incognito_inactive": [116, 59, 150],
       "background_tab": [39, 15, 63],
       "background_tab_inactive": [24, 0, 48],
-      "background_tab_incognito": [30, 0, 30],
-      "background_tab_incognito_inactive": [25, 0, 25],
+      "background_tab_incognito": [25, 6, 30],
+      "background_tab_incognito_inactive": [21, 5, 25],
       "bookmark_text": [255, 102, 255],
-      "button_background": [255, 0, 255, 0.15],
+      "button_background": [214, 51, 255, 0.15],
       "omnibox_background": [18, 4, 36],
       "omnibox_text": [255, 255, 255],
       "ntp_background": [10, 8, 22],
@@ -48,13 +48,13 @@
       "theme_toolbar": "images/toolbar.png"
     },
     "tab_group_color_palette": {
-      "grey_override": [102, 102, 102],
+      "grey_override": [129, 129, 129],
       "blue_override": [0, 153, 255],
-      "red_override": [255, 0, 102],
+      "red_override": [255, 34, 68],
       "yellow_override": [255, 255, 0],
       "green_override": [0, 255, 0],
       "pink_override": [255, 102, 255],
-      "purple_override": [255, 0, 255],
+      "purple_override": [214, 51, 255],
       "cyan_override": [0, 255, 255],
       "orange_override": [255, 102, 255]
     }

@@ -12,46 +12,46 @@ origin_url = "https://github.com/hyperb1iss/silkcircuit"
 [colors]
 foreground = "#2b2540"
 background = "#faf8ff"
-cursor_bg = "#007f8e"
+cursor_bg = "#006e72"
 cursor_fg = "#faf8ff"
-cursor_border = "#007f8e"
-compose_cursor = "#a88600"
+cursor_border = "#006e72"
+compose_cursor = "#796100"
 selection_fg = "#2b2540"
 selection_bg = "#d4c8f0"
 scrollbar_thumb = "#d4c8f0"
-split = "#009fae"
+split = "#006388"
 
 ansi = [
   "#2b2540",
   "#c1272d",
-  "#2d8659",
-  "#a88600",
-  "#2563eb",
+  "#1d6e46",
+  "#796100",
+  "#1454dc",
   "#b40077",
-  "#007f8e",
+  "#006e72",
   "#faf8ff",
 ]
 brights = [
   "#5a4d6e",
   "#dc2626",
-  "#38a169",
-  "#d69e00",
-  "#3b82f6",
-  "#c04a8f",
-  "#009fae",
+  "#288855",
+  "#7f5f00",
+  "#2572ef",
+  "#d92a99",
+  "#048397",
   "#ffffff",
 ]
 
 [colors.indexed]
-16 = "#c05621"
-17 = "#c74a8c"
+16 = "#a64718"
+17 = "#b42a74"
 
 [colors.tab_bar]
-background = "#f1ecff"
-inactive_tab_edge = "#009fae"
+background = "#f4f0ff"
+inactive_tab_edge = "#006388"
 
 [colors.tab_bar.active_tab]
-bg_color = "#e8e0ff"
+bg_color = "#f7f4ff"
 fg_color = "#2b2540"
 intensity = "Bold"
 underline = "None"
@@ -59,19 +59,19 @@ italic = false
 strikethrough = false
 
 [colors.tab_bar.inactive_tab]
-bg_color = "#f1ecff"
+bg_color = "#f4f0ff"
 fg_color = "#5a4d6e"
 
 [colors.tab_bar.inactive_tab_hover]
-bg_color = "#e8e0ff"
+bg_color = "#f7f4ff"
 fg_color = "#2b2540"
 italic = true
 
 [colors.tab_bar.new_tab]
-bg_color = "#f1ecff"
+bg_color = "#f4f0ff"
 fg_color = "#5a4d6e"
 
 [colors.tab_bar.new_tab_hover]
-bg_color = "#e8e0ff"
-fg_color = "#007f8e"
+bg_color = "#f7f4ff"
+fg_color = "#006e72"
 italic = true

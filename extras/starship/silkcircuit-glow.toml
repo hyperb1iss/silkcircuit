@@ -42,14 +42,14 @@ palette = "silkcircuit"
 bg = "#0a0816"
 fg = "#ffffff"
 purple_dark = "#cc66ff"
-purple = "#ff00ff"
+purple = "#d633ff"
 pink_bright = "#ff66ff"
 pink = "#ff00ff"
 cyan = "#00ffff"
 green = "#00ff00"
 yellow = "#ffff00"
 orange = "#ff66ff"
-red = "#ff0066"
+red = "#ff2244"
 
 # OS module
 [os]
