@@ -79,6 +79,12 @@ M.targets = {
     ext = "theme",
     url = "https://github.com/aristocratos/btop#themes",
   },
+  cosmic = {
+    label = "COSMIC Desktop",
+    ext = "ron",
+    comment = "slash",
+    url = "https://github.com/pop-os/cosmic-theme",
+  },
   k9s = {
     label = "k9s",
     ext = "yaml",
