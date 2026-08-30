@@ -110,7 +110,9 @@ if #selected == 0 then
 end
 
 local load_failures = {}
+local empty_files = {}
 for _, path in ipairs(selected) do
+  local before = #cases
   local chunk, err = loadfile(path)
   if chunk then
     local ok, run_err = pcall(chunk)
@@ -120,6 +122,18 @@ for _, path in ipairs(selected) do
   else
     load_failures[#load_failures + 1] = { path = path, message = tostring(err) }
   end
+  if #cases == before and #load_failures == 0 then
+    empty_files[#empty_files + 1] = vim.fn.fnamemodify(path, ":t")
+  end
+end
+
+-- A spec that registers nothing is a spec that guards nothing, and reporting
+-- `1..0` as a pass is the quietest way to ship a suite that tests nothing.
+if #empty_files > 0 then
+  vim.api.nvim_err_writeln(
+    "these spec files registered no cases: " .. table.concat(empty_files, ", ")
+  )
+  vim.cmd("cquit 2")
 end
 
 -- ---------------------------------------------------------------------------
