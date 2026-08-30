@@ -72,5 +72,5 @@ All variants maintain:
 
 - **Semantic consistency**: Keywords are always purple, functions are always cyan
 - **WCAG AA compliance**: 4.5:1 minimum contrast ratios
-- **Plugin compatibility**: Full support for 35+ integrations
+- **Plugin compatibility**: Full support for all 39 integrations
 - **Terminal integration**: Matching ANSI colors

@@ -32,7 +32,7 @@ The original SilkCircuit experience. Maximum vibrancy and electric energy.
 | ----- | --------- | ---------------------- |
 | Green | `#50fa7b` | Success, git additions |
 | Red   | `#ff6363` | Errors, git deletions  |
-| Blue  | `#82AAFF` | Links, info            |
+| Blue  | `#82aaff` | Links, info            |
 | Gray  | `#768d8d` | Comments, muted text   |
 
 ## Terminal Colors
