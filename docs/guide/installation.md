@@ -108,5 +108,5 @@ This will verify:
 
 ## Next Steps
 
-- [Configuration](/guide/configuration):Customize the theme
-- [Theme Variants](/guide/variants):Switch between variants
+- [Configuration](/guide/configuration): Customize the theme
+- [Theme Variants](/guide/variants): Switch between variants

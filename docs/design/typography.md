@@ -150,7 +150,7 @@ require("silkcircuit").setup({
 | ---------- | ----------- |
 | Code       | 1.5         |
 | Body text  | 1.6         |
-| Headlines  | 1.1–1.2     |
+| Headlines  | 1.1 to 1.2  |
 | Compact UI | 1.25        |
 
 ## Letter Spacing

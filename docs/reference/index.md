@@ -47,10 +47,10 @@ styles = {
 
 Available style attributes:
 
-- `italic`:Render in italic
-- `bold`:Render in bold
-- `underline`:Add underline
-- `strikethrough`:Add strikethrough
+- `italic`: Render in italic
+- `bold`: Render in bold
+- `underline`: Add underline
+- `strikethrough`: Add strikethrough
 
 ### Custom Highlights
 

@@ -38,10 +38,10 @@ Your preference is automatically saved and persisted across sessions.
 
 All dark variants share the same semantic color mappings. Only the intensity and backgrounds differ:
 
-- **[Neon](/variants/neon)**:Pure, saturated colors at maximum intensity
-- **[Vibrant](/variants/vibrant)**:Slightly reduced saturation, easier on the eyes
-- **[Soft](/variants/soft)**:Gentler colors for marathon coding sessions
-- **[Glow](/variants/glow)**:Ultra-dark backgrounds with pure neon for maximum contrast
+- **[Neon](/variants/neon)**: Pure, saturated colors at maximum intensity
+- **[Vibrant](/variants/vibrant)**: Slightly reduced saturation, easier on the eyes
+- **[Soft](/variants/soft)**: Gentler colors for marathon coding sessions
+- **[Glow](/variants/glow)**: Ultra-dark backgrounds with pure neon for maximum contrast
 
 ## Light Variant
 
@@ -55,22 +55,22 @@ All dark variants share the same semantic color mappings. Only the intensity and
 
 ::: tip When to Use Each
 
-**Neon**:Maximum visual impact in dark rooms
+**Neon**: Maximum visual impact in dark rooms
 
-**Vibrant**:Everyday use with balanced energy and comfort
+**Vibrant**: Everyday use with balanced energy and comfort
 
-**Soft**:Long coding sessions, especially late at night
+**Soft**: Long coding sessions, especially late at night
 
-**Glow**:Very dark environments or high-contrast monitors
+**Glow**: Very dark environments or high-contrast monitors
 
-**Dawn**:Daytime, well-lit rooms, or outdoor coding
+**Dawn**: Daytime, well-lit rooms, or outdoor coding
 :::
 
 ## Consistency Across Variants
 
 All variants maintain:
 
-- **Semantic consistency**:Keywords are always purple, functions are always cyan
-- **WCAG AA compliance**:4.5:1 minimum contrast ratios
-- **Plugin compatibility**:Full support for 40+ integrations
-- **Terminal integration**:Matching ANSI colors
+- **Semantic consistency**: Keywords are always purple, functions are always cyan
+- **WCAG AA compliance**: 4.5:1 minimum contrast ratios
+- **Plugin compatibility**: Full support for 40+ integrations
+- **Terminal integration**: Matching ANSI colors

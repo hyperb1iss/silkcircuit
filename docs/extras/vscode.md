@@ -47,11 +47,11 @@ code --install-extension silkcircuit-*.vsix
 
 Each variant provides a unique visual experience:
 
-- **Neon**:The original electric experience
-- **Vibrant**:Slightly toned for everyday use
-- **Soft**:Comfortable for long sessions
-- **Glow**:Maximum contrast on ultra-dark backgrounds
-- **Dawn**:Clean light theme for bright environments
+- **Neon**: The original electric experience
+- **Vibrant**: Slightly toned for everyday use
+- **Soft**: Comfortable for long sessions
+- **Glow**: Maximum contrast on ultra-dark backgrounds
+- **Dawn**: Clean light theme for bright environments
 
 ## Color Tokens
 

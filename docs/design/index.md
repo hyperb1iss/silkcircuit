@@ -42,11 +42,11 @@ Reduces cognitive load, enhances productivity, maintains flow state.
 
 ## Quick Links
 
-- [Color System](/design/colors):Complete color specifications
-- [Typography](/design/typography):Font stacks and styling
-- [Semantic Colors](/design/semantic):Color meanings across syntax
-- [Accessibility](/design/accessibility):WCAG compliance and testing
-- [Best Practices](/design/best-practices):Implementation guidelines
+- [Color System](/design/colors): Complete color specifications
+- [Typography](/design/typography): Font stacks and styling
+- [Semantic Colors](/design/semantic): Color meanings across syntax
+- [Accessibility](/design/accessibility): WCAG compliance and testing
+- [Best Practices](/design/best-practices): Implementation guidelines
 
 ## Brand Personality
 

@@ -13,7 +13,7 @@ SilkCircuit is a complete visual identity system for your workflow. These extras
 | Extra                             | Variants | Description                         |
 | --------------------------------- | -------- | ----------------------------------- |
 | [VS Code](/extras/vscode)         | 5        | Full VSCode theme with all variants |
-| [Neovim Plugins](/extras/plugins) | —        | 40+ plugin integrations             |
+| [Neovim Plugins](/extras/plugins) | All      | 40+ plugin integrations             |
 
 ### Terminals
 
@@ -30,8 +30,8 @@ SilkCircuit is a complete visual identity system for your workflow. These extras
 | -------------------- | -------- | ---------------------------------- |
 | [btop](/extras/btop) | 5        | System monitor theme               |
 | [K9s](/extras/k9s)   | 5        | Kubernetes dashboard               |
-| [Git](/extras/git)   | —        | Git config with SilkCircuit colors |
-| [FZF](/extras/fzf)   | —        | Fuzzy finder integration           |
+| [Git](/extras/git)   | 1        | Git config with SilkCircuit colors |
+| [FZF](/extras/fzf)   | 1        | Fuzzy finder integration           |
 
 ### Applications
 

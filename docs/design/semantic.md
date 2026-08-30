@@ -121,13 +121,13 @@ end
 
 ## Consistency Rules
 
-1. **Never change semantic meaning**:Keywords are always purple, functions always cyan.
+1. **Never change semantic meaning**: Keywords are always purple, functions always cyan.
 
-2. **Maintain across variants**:The meaning stays constant; only intensity changes.
+2. **Maintain across variants**: The meaning stays constant; only intensity changes.
 
-3. **Apply to plugins**:All 40+ integrations follow the same color semantics.
+3. **Apply to plugins**: All 40+ integrations follow the same color semantics.
 
-4. **Extend thoughtfully**:New elements should map to existing semantic colors.
+4. **Extend thoughtfully**: New elements should map to existing semantic colors.
 
 ## Neovim Highlight Groups
 
