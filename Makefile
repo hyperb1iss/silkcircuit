@@ -133,11 +133,13 @@ preview:
 
 build:
 	$(call banner,Building Extras)
-	@printf "  $(GRAY)The extras generator lands in wave 2. For now: make chrome$(RESET)\n\n"
+	@scripts/build
+	@printf "  $(GREEN)$(CHECK)$(RESET) Rendered from $(GRAY)lua/silkcircuit/variants.lua$(RESET)\n\n"
 
 docs:
 	$(call banner,Building Docs Tables)
-	@printf "  $(GRAY)The README table generator lands in wave 2.$(RESET)\n\n"
+	@scripts/docs
+	@printf "  $(GREEN)$(CHECK)$(RESET) Extras tables refreshed\n\n"
 
 chrome:
 	$(call banner,Generating Chrome Themes)

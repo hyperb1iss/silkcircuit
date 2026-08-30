@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Refresh the generated extras tables inside the `extras:start` marker blocks.
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+if command -v mise >/dev/null 2>&1; then
+    run() { mise x -- "$@"; }
+else
+    run() { "$@"; }
+fi
+
+NVIM="${NVIM:-nvim}"
+
+"$NVIM" --headless --clean \
+    --cmd "lua vim.opt.runtimepath:prepend([[$ROOT]])" \
+    -c "lua local ok, err = pcall(function() require('silkcircuit.extra').docs({ root = [[$ROOT]] }) end); if not ok then io.stderr:write('docs failed: ' .. tostring(err) .. '\n'); vim.cmd('cq') end" \
+    -c "qa!"
+
+run prettier --write --log-level warn \
+    README.md \
+    extras/README.md \
+    docs/extras/index.md

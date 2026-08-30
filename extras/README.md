@@ -44,39 +44,20 @@ cat extras/gitconfig >> ~/.gitconfig
 
 ### 🖥️ Terminal Themes
 
-Native theme files for popular terminal emulators (dark + dawn light variants):
+Every terminal theme is rendered from `lua/silkcircuit/variants.lua` by
+`make build`, so the colors in your terminal are the colors in your editor.
+All five variants ship for every target. The
+[terminal guide](../docs/extras/terminals.md) has the install line for each one,
+and `palette/` carries the same colors as JSON and base16/base24 schemes.
 
-- **Alacritty** (`alacritty.yml`, `alacritty-dawn.yml`) - Fast GPU-accelerated terminal
-- **Kitty** (`kitty.conf`, `kitty-dawn.conf`) - Feature-rich terminal emulator
-- **Warp** (`warp.yaml`, `warp-dawn.yaml`) - Modern terminal with AI features
-- **Windows Terminal** (`windows-terminal.json`) - Windows integrated terminal
+<!-- extras:start -->
 
-**Setup:**
+| Target | Format | Generated files |
+| ------ | ------ | --------------- |
 
-```bash
-# Alacritty (dark)
-cp extras/alacritty.yml ~/.config/alacritty/themes/silkcircuit.yml
-# Alacritty (dawn/light)
-cp extras/alacritty-dawn.yml ~/.config/alacritty/themes/silkcircuit-dawn.yml
-
-# Kitty (dark)
-cp extras/kitty.conf ~/.config/kitty/themes/silkcircuit.conf
-# Kitty (dawn/light)
-cp extras/kitty-dawn.conf ~/.config/kitty/themes/silkcircuit-dawn.conf
-
-# Warp (dark)
-cp extras/warp.yaml ~/.warp/themes/silkcircuit.yaml
-# Warp (dawn/light)
-cp extras/warp-dawn.yaml ~/.warp/themes/silkcircuit-dawn.yaml
-
-# Windows Terminal - import JSON manually in settings
-```
+<!-- extras:end -->
 
 ```powershell
-# Windows Terminal - stage JSON for import
-New-Item -ItemType Directory -Force "$env:APPDATA\silkcircuit"
-Copy-Item extras\windows-terminal.json "$env:APPDATA\silkcircuit\windows-terminal.json"
-
 # fzf for PowerShell
 . .\extras\fzf.ps1
 ```
