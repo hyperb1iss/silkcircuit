@@ -83,12 +83,12 @@ Copy-Item extras\windows-terminal.json "$env:APPDATA\silkcircuit\windows-termina
 
 ### 🌐 Chrome Theme (`chrome-theme/`)
 
-Full SilkCircuit browser theming:all 5 variants:
+Full SilkCircuit browser theming across all five variants.
 
-- **5 variants**:Neon, Vibrant, Soft, Glow, Dawn
-- **24 theme color keys**:frame, toolbar, omnibox, tabs, NTP, tab groups
-- **Circuit-trace NTP backgrounds**:unique per variant
-- **DevTools CSS**:modern CM6 + `--sys-color-*` tokens
+- **5 variants**: Neon, Vibrant, Soft, Glow, Dawn
+- **24 theme color keys**: frame, toolbar, omnibox, tabs, NTP, tab groups
+- **Circuit-trace NTP backgrounds**: unique per variant
+- **DevTools CSS**: modern CM6 + `--sys-color-*` tokens
 - **Chrome pages CSS**:`--cr-*` overrides for internal pages
 
 **Setup:**
