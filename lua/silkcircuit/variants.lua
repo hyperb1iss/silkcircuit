@@ -177,7 +177,7 @@ local function create_variant(variant_name)
       pink_soft = "#ff99ff",
 
       -- Others (from VSCode vibrant)
-      coral = "#f78c6c",
+      coral = "#ff5fa8", -- Numbers/constants (hot coral-pink)
       red = "#ff3366",
       red_dark = "#ff3366",
       red_bright = "#ff6677", -- terminal.ansiBrightRed
