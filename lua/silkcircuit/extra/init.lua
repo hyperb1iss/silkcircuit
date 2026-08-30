@@ -340,7 +340,7 @@ end
 function M.colors(variant)
   local colors = variants.get_colors(variant)
 
-  local rgb, rgbf, nohash = {}, {}, {}
+  local rgb, rgbf, nohash, x256 = {}, {}, {}, {}
   for key, value in pairs(colors) do
     if type(value) == "string" then
       local r, g, b = value:match(HEX6)
