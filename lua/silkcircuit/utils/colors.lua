@@ -31,7 +31,7 @@ function M.blend(fg, bg, alpha)
   end
 
   return string.format(
-    "#%02X%02X%02X",
+    "#%02x%02x%02x",
     blend_channel(fg_r, bg_r),
     blend_channel(fg_g, bg_g),
     blend_channel(fg_b, bg_b)

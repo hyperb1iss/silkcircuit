@@ -1,6 +1,9 @@
 local M = {}
+local color_utils = require("silkcircuit.utils.colors")
 
 function M.highlights(colors, opts)
+  local conflict_bg = color_utils.blend(colors.red, colors.bg, 0.125)
+
   return {
     -- Main Neo-tree window with subtle background
     NeoTreeNormal = { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg_dark },
@@ -21,7 +24,7 @@ function M.highlights(colors, opts)
     NeoTreeGitRenamed = { fg = colors.cyan },
     NeoTreeGitUntracked = { fg = colors.purple_muted, italic = true },
     NeoTreeGitIgnored = { fg = colors.gray, italic = true },
-    NeoTreeGitConflict = { fg = colors.red, bold = true, bg = colors.red .. "20" },
+    NeoTreeGitConflict = { fg = colors.red, bold = true, bg = conflict_bg },
     NeoTreeGitStaged = { fg = colors.green, bold = true },
     NeoTreeGitUnstaged = { fg = colors.orange, bold = true },
 
