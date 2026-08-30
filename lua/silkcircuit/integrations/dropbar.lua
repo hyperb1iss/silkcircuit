@@ -5,6 +5,12 @@ local M = {}
 -- defines, so a breadcrumb reads with the same colours as the symbols it
 -- names. Upstream links DropBarIconKindEnumMember to itself, which resolves to
 -- nothing; it points at the semantic token here instead.
+--
+-- Each kind drives two families. DropBarIconKind<Kind> colours the glyph and
+-- DropBarKind<Kind> colours the symbol name beside it, which upstream leaves
+-- undefined and invites a colorscheme to fill. Both take the same colour, so a
+-- crumb reads as one unit the way integrations/aerial.lua pairs its symbol and
+-- icon groups.
 local ICON_KIND_LINKS = {
   Array = "@punctuation.bracket",
   BlockMappingPair = "DropBarIconKindDefault",
@@ -74,6 +80,9 @@ local ICON_KIND_LINKS = {
   WhileStatement = "@keyword.repeat",
 }
 
+-- The only two kinds dropbar ships without a non-current-window variant.
+local NO_NC_TWIN = { Rule = true, Terminal = true }
+
 function M.get(colors, opts)
   local float_bg = opts.transparent and colors.none or colors.bg_float
 
@@ -92,6 +101,7 @@ function M.get(colors, opts)
     -- Winbar separators and pick-mode pivots
     DropBarIconUISeparator = { fg = colors.purple_muted },
     DropBarIconUISeparatorMenu = { link = "DropBarIconUISeparator" },
+    DropBarIconUISeparatorNC = { link = "DropBarIconKindDefaultNC" },
     DropBarIconUIIndicator = { fg = colors.cyan },
     DropBarIconUIPickPivot = { fg = colors.bg, bg = colors.pink, bold = true },
 
@@ -109,12 +119,23 @@ function M.get(colors, opts)
     -- is the one every non-current-window variant inherits from.
     DropBarIconKindDefault = { fg = colors.pink_bright },
     DropBarIconKindDefaultNC = { fg = colors.purple_muted },
+
+    -- A directory crumb from the path source. Every other symbol name comes
+    -- from the kind loop below; this one has no icon kind to pair with.
+    DropBarKindDir = { link = "Directory" },
   }
 
   for kind, link in pairs(ICON_KIND_LINKS) do
     highlights["DropBarIconKind" .. kind] = { link = link }
-    highlights["DropBarIconKind" .. kind .. "NC"] = { link = "DropBarIconKindDefaultNC" }
+    highlights["DropBarKind" .. kind] = { link = link }
+    if not NO_NC_TWIN[kind] then
+      highlights["DropBarIconKind" .. kind .. "NC"] = { link = "DropBarIconKindDefaultNC" }
+    end
   end
+
+  -- DropBarKind<Kind>NC is deliberately left undefined. Upstream declares
+  -- those empty so a background window's symbol names fall through to
+  -- WinBarNC, and dropbar recomputes them itself when it dims a window.
 
   return highlights
 end
