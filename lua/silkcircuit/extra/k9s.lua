@@ -67,7 +67,7 @@ k9s:
       cursorColor: "${bg_highlight}"
       # Header row styles
       header:
-        fgColor: "${cyan}"
+        fgColor: "${purple}"
         bgColor: "${bg_highlight}"
         sorterColor: "${yellow}"
 
