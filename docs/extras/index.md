@@ -5,7 +5,8 @@ SilkCircuit is one palette wearing thirty different formats. The themes under
 all five variants, so the hex your terminal draws is the hex your editor draws
 and CI fails if the two drift apart. The Chrome themes come from `make chrome`,
 which reads the same palette as JSON, and each target's `README.md` is written
-by hand.
+by hand. The full pipeline, and why it works this way, is on
+[How It's Built](/guide/architecture).
 
 Dawn is the light variant. Neon, vibrant, soft, and glow are dark.
 
