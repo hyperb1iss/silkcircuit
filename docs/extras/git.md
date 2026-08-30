@@ -1,169 +1,63 @@
-# Git Configuration
+# Git
 
-Transform your git experience with SilkCircuit colors.
+Color slots for every command git colorizes, plus a named log format and a
+[delta](https://dandavison.github.io/delta/) feature block.
 
-## Installation
+## Install
 
-```bash
-# Option 1: Include in existing .gitconfig
-echo "[include]" >> ~/.gitconfig
-echo "    path = /path/to/silkcircuit/extras/gitconfig" >> ~/.gitconfig
-
-# Option 2: Append directly
-cat extras/gitconfig >> ~/.gitconfig
-```
-
-## Features
-
-### Colored Output
-
-| Element       | Color         |
-| ------------- | ------------- |
-| Commit hashes | Neon Magenta  |
-| Dates         | Electric Cyan |
-| Author names  | Bright Yellow |
-| Branch names  | Green         |
-| Additions     | Green         |
-| Deletions     | Red           |
-
-### Git Log Format
-
-The config includes custom log formats:
+Copy a variant and include it, so your own `.gitconfig` stays yours:
 
 ```bash
-# One-line format with colors
-git lg
-
-# Graph view
-git lg --graph
-
-# All branches
-git lg --all
+mkdir -p ~/.config/git
+cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
+git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
 ```
 
-### Git Status Colors
+The installer does the same thing, include and all:
+`./install.sh --variant neon`.
 
-| Status    | Color  |
-| --------- | ------ |
-| Untracked | Red    |
-| Modified  | Yellow |
-| Staged    | Green  |
-| Branch    | Cyan   |
+## What it sets
 
-### Git Diff Colors
+Colors only, in the `[color]`, `[color "branch"]`, `[color "decorate"]`,
+`[color "diff"]`, `[color "status"]`, `[color "interactive"]`, and
+`[color "grep"]` sections. Git takes 24-bit hex values in every one of them, so
+these are the same hex codes the editor uses rather than the nearest ANSI slot.
 
-| Element       | Color   |
-| ------------- | ------- |
-| Old (deleted) | Red     |
-| New (added)   | Green   |
-| Meta info     | Cyan    |
-| Frag info     | Magenta |
+## The opt-ins at the bottom
 
-## Delta Integration
+Three things in the file do nothing until you ask for them, because switching
+someone's pager or log format is not a color scheme's business:
 
-If you use [delta](https://github.com/dandavison/delta) for git diffs, the config includes matching colors:
-
-```gitconfig
+```ini
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
 [delta]
-    navigate = true
-    dark = true
-    line-numbers = true
-    syntax-theme = Dracula
-    file-style = "#f1fa8c bold"
-    hunk-header-style = "#80ffea bold"
-    line-numbers-minus-style = "#ff6363 bold"
-    line-numbers-plus-style = "#50fa7b bold"
-    minus-style = syntax "#4a2a2a"
-    plus-style = syntax "#2a4a2a"
-    commit-style = "#e135ff bold"
+	features = silkcircuit-neon
 ```
 
-## Configuration Details
+The delta feature expects the matching [bat theme](/extras/bat), since delta
+takes its syntax highlighting from bat's theme cache.
 
-```gitconfig
-[color]
-    ui = auto
+The log format is named rather than default, so reach for it with
+`git log --pretty=silkcircuit`, or make it the default:
 
-[color "branch"]
-    current = cyan bold
-    local = green
-    remote = magenta
-
-[color "status"]
-    added = green bold
-    changed = yellow bold
-    untracked = red bold
-    branch = cyan bold
-
-[color "diff"]
-    meta = cyan
-    frag = magenta bold
-    old = red bold
-    new = green bold
-    whitespace = red reverse
-
-[alias]
-    lg = log --color --graph --pretty=format:'%C(201)%h%Creset -%C(220)%d%Creset %s %C(51)(%cr) %C(bold 213)<%an>%Creset' --abbrev-commit
+```ini
+[format]
+	pretty = silkcircuit
 ```
 
-## Color Reference
+## Files
 
-| ANSI Code | Color          | Usage         |
-| --------- | -------------- | ------------- |
-| `201`     | Neon Magenta   | Commit hashes |
-| `213`     | Bright Magenta | Author names  |
-| `51`      | Electric Cyan  | Dates         |
-| `220`     | Bright Yellow  | Branch refs   |
-| `149`     | Green          | Additions     |
-| `197`     | Red            | Deletions     |
+<!-- extras:start target=git -->
 
-## Git Aliases
+| Variant | File                                       |
+| ------- | ------------------------------------------ |
+| neon    | `extras/git/silkcircuit-neon.gitconfig`    |
+| vibrant | `extras/git/silkcircuit-vibrant.gitconfig` |
+| soft    | `extras/git/silkcircuit-soft.gitconfig`    |
+| glow    | `extras/git/silkcircuit-glow.gitconfig`    |
+| dawn    | `extras/git/silkcircuit-dawn.gitconfig`    |
 
-The config includes helpful aliases:
-
-```bash
-# Beautiful log
-git lg
-
-# Log with stats
-git lg --stat
-
-# Last commit
-git lg -1
-
-# Graph of all branches
-git lg --all --graph
-```
-
-## Customization
-
-Override colors in your `.gitconfig`:
-
-```gitconfig
-[color "status"]
-    # Use different color for staged files
-    added = "#50fa7b" bold
-```
-
-## Integration with Other Tools
-
-### tig
-
-The git colors work with tig as well. Add to `~/.tigrc`:
-
-```
-set main-view-date = custom
-set main-view-date-format = "%Y-%m-%d %H:%M"
-```
-
-### lazygit
-
-lazygit picks up git colors automatically.
-
-### GitHub CLI
-
-Use with `gh` for consistent colors:
-
-```bash
-gh pr list --json title,url
-```
+<!-- extras:end -->

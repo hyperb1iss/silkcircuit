@@ -1,24 +1,99 @@
-# Extras & Integrations
+# Extras and Integrations
 
-Extend SilkCircuit across your entire development environment.
+SilkCircuit is one palette wearing thirty different formats. Every file under
+`extras/` is generated from `lua/silkcircuit/variants.lua` by `make build`, in
+all five variants, so the hex your terminal draws is the hex your editor draws
+and CI fails if the two drift apart.
 
-## Overview
+Dawn is the light variant. Neon, vibrant, soft, and glow are dark.
 
-SilkCircuit is a complete visual identity system for your workflow. These extras bring consistent neon energy to terminals, VS Code, system monitors, and more.
+## Install everything at once
 
-## Available Extras
+The installer detects what you have, drops each theme where its tool looks for
+it, and prints the one line that turns it on.
 
-### Code Editors
+```bash
+git clone https://github.com/hyperb1iss/silkcircuit.git
+cd silkcircuit
 
-| Extra                             | Variants | Description                         |
-| --------------------------------- | -------- | ----------------------------------- |
-| [VS Code](/extras/vscode)         | 5        | Full VSCode theme with all variants |
-| [Neovim Plugins](/extras/plugins) | All      | 25+ plugin integrations             |
+./install.sh --dry-run     # see what it would touch
+./install.sh               # all five variants, side by side
+./install.sh --variant glow
+```
 
-### Terminals
+```powershell
+.\install.ps1 -Variant neon
+```
 
-Generated from the palette by `make build`, five variants each. See the
-[terminal guide](/extras/terminals) for install steps.
+Anything it overwrites is copied to `*.silkcircuit.bak` first, and it refuses
+to add untracked files to a dotfiles repo it does not own. Tools that read a
+single file rather than a directory of themes (lsd, procs, Starship,
+fastfetch, dmesg) take neon unless `--variant` says otherwise.
+
+## Editors
+
+| Extra                             | What it covers                                |
+| --------------------------------- | --------------------------------------------- |
+| [VS Code](/extras/vscode)         | Five themes in one extension                  |
+| [Helix](/extras/helix)            | Syntax, markup, diffs, diagnostics, interface |
+| [AstroNvim](/extras/astronvim)    | A complete AstroNvim configuration            |
+| [Neovim Plugins](/extras/plugins) | The flagship theme's plugin integrations      |
+
+## Terminals
+
+The [terminal guide](/extras/terminals) has the install path and enable line
+for all eight in one table, plus the ANSI contract they share.
+
+[Kitty](/extras/kitty) · [Alacritty](/extras/alacritty) ·
+[Ghostty](/extras/ghostty) · [WezTerm](/extras/wezterm) ·
+[Warp](/extras/warp) · [foot](/extras/foot) · [iTerm2](/extras/iterm2) ·
+[Windows Terminal](/extras/windows-terminal)
+
+## Multiplexers
+
+| Extra                    | Turn it on                                         |
+| ------------------------ | -------------------------------------------------- |
+| [tmux](/extras/tmux)     | `source-file ~/.config/tmux/silkcircuit-neon.conf` |
+| [Zellij](/extras/zellij) | `theme "silkcircuit-neon"`                         |
+
+## Shell and CLI
+
+| Extra                          | Turn it on                                           |
+| ------------------------------ | ---------------------------------------------------- |
+| [Starship](/extras/starship)   | Copy to `~/.config/starship.toml`                    |
+| [fzf](/extras/fzf)             | `source ~/.config/fzf/silkcircuit-neon.sh`           |
+| [bat](/extras/bat)             | `--theme=silkcircuit-neon`, then `bat cache --build` |
+| [lsd](/extras/lsd)             | `color: theme: custom`                               |
+| [procs](/extras/procs)         | Copy to `~/.config/procs/config.toml`                |
+| [fastfetch](/extras/fastfetch) | Copy to `~/.config/fastfetch/config.jsonc`           |
+| [Atuin](/extras/atuin)         | `[theme] name = "silkcircuit-neon"`                  |
+
+## Git
+
+| Extra                      | Turn it on                                      |
+| -------------------------- | ----------------------------------------------- |
+| [Git](/extras/git)         | `git config --global --add include.path <file>` |
+| [lazygit](/extras/lazygit) | Merge the `gui.theme` block into your config    |
+
+## System and desktop
+
+| Extra                            | Turn it on                                 |
+| -------------------------------- | ------------------------------------------ |
+| [btop](/extras/btop)             | Esc, Options, Color theme                  |
+| [k9s](/extras/k9s)               | `k9s.ui.skin: silkcircuit-neon`            |
+| [dmesg](/extras/dmesg)           | `~/.config/terminal-colors.d/dmesg.scheme` |
+| [COSMIC Desktop](/extras/cosmic) | Settings, Desktop, Appearance, Import      |
+
+## Apps
+
+| Extra                    | Turn it on                                |
+| ------------------------ | ----------------------------------------- |
+| [Chrome](/extras/chrome) | Load unpacked from `extras/chrome-theme/` |
+| [Slack](/extras/slack)   | Paste the line into a custom theme        |
+
+## Every generated file
+
+Regenerate the lot with `make build`, and this table with `make docs`.
 
 <!-- extras:start -->
 
@@ -57,95 +132,14 @@ Generated from the palette by `make build`, five variants each. See the
 
 <!-- extras:end -->
 
-### System Tools
+## Color consistency
 
-| Extra                | Variants | Description                        |
-| -------------------- | -------- | ---------------------------------- |
-| [btop](/extras/btop) | 5        | System monitor theme               |
-| [K9s](/extras/k9s)   | 5        | Kubernetes dashboard               |
-| [Git](/extras/git)   | 1        | Git config with SilkCircuit colors |
-| [FZF](/extras/fzf)   | 1        | Fuzzy finder integration           |
+`palette/silkcircuit-<variant>.json` is the authoritative list: every color as
+hex, RGB, and HSL, with the sixteen ANSI slots under the `terminal` key. The
+same directory carries base16 and base24 scheme files for
+[tinted-theming](https://github.com/tinted-theming/home) builders such as tinty
+and stylix, which covers targets SilkCircuit does not generate directly.
 
-### CLI and Desktop
-
-Each of these ships a single config in `extras/` that the universal installer
-picks up automatically.
-
-| Extra     | Variants | Description                     |
-| --------- | -------- | ------------------------------- |
-| Starship  | 1        | Prompt segments and symbols     |
-| tmux      | 1        | Status line, panes, and windows |
-| lazygit   | 1        | Git TUI colors                  |
-| bat       | 1        | `bat` syntax highlighting theme |
-| lsd       | 1        | Directory listing colors        |
-| atuin     | 1        | Shell history search            |
-| procs     | 1        | Process viewer columns          |
-| fastfetch | 1        | System info readout             |
-| dmesg     | 5        | Kernel log colors               |
-| COSMIC    | 5        | COSMIC Desktop theme            |
-
-### Applications
-
-| Extra                    | Variants | Description              |
-| ------------------------ | -------- | ------------------------ |
-| [Chrome](/extras/chrome) | 5        | Browser theme + DevTools |
-| [Slack](/extras/slack)   | 1        | Workspace theme          |
-
-### Neovim Distributions
-
-| Extra                          | Description                      |
-| ------------------------------ | -------------------------------- |
-| [AstroNvim](/extras/astronvim) | Complete AstroNvim configuration |
-
-## Quick Setup
-
-Get the full SilkCircuit experience:
-
-```bash
-# Clone the repository
-git clone https://github.com/hyperb1iss/silkcircuit.git
-cd silkcircuit
-
-# Install git colors
-cat extras/gitconfig >> ~/.gitconfig
-
-# Copy terminal theme (choose your terminal and variant)
-cp extras/kitty/silkcircuit-neon.conf ~/.config/kitty/themes/
-# OR
-cp extras/alacritty/silkcircuit-neon.toml ~/.config/alacritty/themes/
-
-# For AstroNvim users
-cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/
-```
-
-## Color Consistency
-
-All extras use the same color palette for a cohesive experience:
-
-| Color           | Hex       | Usage              |
-| --------------- | --------- | ------------------ |
-| Electric Purple | `#e135ff` | Primary accents    |
-| Neon Cyan       | `#80ffea` | Metadata, links    |
-| Hot Pink        | `#ff79c6` | Secondary elements |
-| Bright Yellow   | `#ffdd00` | Highlights         |
-| Neon Green      | `#50fa7b` | Success states     |
-| Error Red       | `#ff5555` | Errors, deletions  |
-
-## Variant Support
-
-Most extras support multiple variants:
-
-| Variant | Available In                  |
-| ------- | ----------------------------- |
-| Neon    | VS Code, btop, K9s, Terminals |
-| Vibrant | VS Code, btop, K9s            |
-| Soft    | VS Code, btop, K9s            |
-| Glow    | VS Code, btop, K9s            |
-| Dawn    | VS Code, btop, K9s, Terminals |
-
-## Pro Tips
-
-1. **Enable true colors** in your terminal for best results
-2. **Use consistent variants** across tools for cohesive aesthetic
-3. **Check variant support** when switching themes
-4. **Test in your environment**: some terminals render colors differently
+Nothing is retuned per tool. A color that reads as purple in Neovim reads as
+the same purple in btop, and changing it in one place changes it everywhere on
+the next `make build`.

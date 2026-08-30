@@ -1,114 +1,50 @@
-# btop Theme
+# btop
 
-System monitoring with SilkCircuit style.
+Themes for [btop](https://github.com/aristocratos/btop): box borders, the CPU,
+memory, network, and process gradients, meters, and the selected row.
 
-## Overview
-
-btop++ is a resource monitor with a beautiful interface. SilkCircuit provides themes for all five variants.
-
-## Installation
+## Install
 
 ```bash
-# Copy all variants
-cp extras/btop/silkcircuit_*.theme ~/.config/btop/themes/
-
-# Or copy a specific variant
-cp extras/btop/silkcircuit_neon.theme ~/.config/btop/themes/
+mkdir -p ~/.config/btop/themes
+cp extras/btop/silkcircuit-*.theme ~/.config/btop/themes/
 ```
 
-## Available Themes
+Then pick one inside btop: `Esc`, Options, Color theme, silkcircuit-neon.
+btop writes the choice back to `~/.config/btop/btop.conf`:
 
-| File                        | Variant                 |
-| --------------------------- | ----------------------- |
-| `silkcircuit_neon.theme`    | Neon (100% intensity)   |
-| `silkcircuit_vibrant.theme` | Vibrant (85% intensity) |
-| `silkcircuit_soft.theme`    | Soft (70% intensity)    |
-| `silkcircuit_glow.theme`    | Glow (maximum contrast) |
-| `silkcircuit_dawn.theme`    | Dawn (light theme)      |
-
-## Activation
-
-1. Launch btop: `btop`
-2. Press `Esc` to open menu
-3. Select "Options"
-4. Navigate to "Color theme"
-5. Choose your SilkCircuit variant
-
-## Color Mapping
-
-| Element          | Color           |
-| ---------------- | --------------- |
-| CPU graphs       | Electric Purple |
-| Memory meters    | Neon Cyan       |
-| Network activity | Hot Pink        |
-| Disk usage       | Yellow          |
-| Process list     | Foreground      |
-| Highlighted      | Selection color |
-
-## Configuration
-
-btop stores settings in `~/.config/btop/btop.conf`:
-
-```conf
-# Theme setting
-color_theme = "silkcircuit_neon"
-
-# Other recommended settings
-theme_background = True
+```ini
+color_theme = "silkcircuit-neon"
 truecolor = True
 ```
 
-## Screenshots
+The installer does the same thing: `./install.sh --variant neon`.
 
-Each variant offers a unique monitoring experience:
+## Color mapping
 
-- **Neon**: Maximum vibrancy for dark rooms
-- **Vibrant**: Balanced colors for everyday use
-- **Soft**: Easy on the eyes for extended monitoring
-- **Glow**: Ultra-high contrast on dark backgrounds
-- **Dawn**: Light theme for bright environments
+| Box          | Gradient                       |
+| ------------ | ------------------------------ |
+| CPU          | purple through pink to magenta |
+| Memory       | cyan                           |
+| Network      | pink and cyan                  |
+| Process list | foreground with a purple title |
 
-## Customization
+## Colors look washed out
 
-Theme files use INI format. Edit to customize:
-
-```ini
-[main]
-theme[main_bg] = "#12101a"
-theme[main_fg] = "#f8f8f2"
-
-[cpu]
-theme[cpu_start] = "#e135ff"
-theme[cpu_mid] = "#ff79c6"
-theme[cpu_end] = "#ff00ff"
-```
+btop falls back to 256 colors when it cannot tell that the terminal does
+24-bit. Set `truecolor = True` in `btop.conf` and check that `$COLORTERM`
+reads `truecolor`.
 
 ## Files
 
-```
-extras/btop/
-├── README.md
-├── silkcircuit_neon.theme
-├── silkcircuit_vibrant.theme
-├── silkcircuit_soft.theme
-├── silkcircuit_glow.theme
-└── silkcircuit_dawn.theme
-```
+<!-- extras:start target=btop -->
 
-## Troubleshooting
+| Variant | File                                    |
+| ------- | --------------------------------------- |
+| neon    | `extras/btop/silkcircuit-neon.theme`    |
+| vibrant | `extras/btop/silkcircuit-vibrant.theme` |
+| soft    | `extras/btop/silkcircuit-soft.theme`    |
+| glow    | `extras/btop/silkcircuit-glow.theme`    |
+| dawn    | `extras/btop/silkcircuit-dawn.theme`    |
 
-### Colors look washed out
-
-Enable true color in btop.conf:
-
-```conf
-truecolor = True
-```
-
-### Theme not appearing
-
-Verify the theme is in the correct location:
-
-```bash
-ls ~/.config/btop/themes/silkcircuit*.theme
-```
+<!-- extras:end -->
