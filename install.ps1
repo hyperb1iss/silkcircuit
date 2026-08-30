@@ -133,10 +133,11 @@ function Write-PlainText {
     )
 
     $directory = Split-Path -Parent $Path
-    if ($directory -and -not (Test-Path -LiteralPath $directory)) {
-        New-Item -ItemType Directory -Path $directory -Force | Out-Null
+    if ($directory -and -not (New-SafeDirectory $directory)) {
+        return $false
     }
     [System.IO.File]::WriteAllText($Path, $Content, (New-Object System.Text.UTF8Encoding($Bom.IsPresent)))
+    return $true
 }
 
 # Get-Content decodes a byte order mark away and WriteAllText would not put it
@@ -147,6 +148,23 @@ function Test-FileBom {
     try {
         $head = [System.IO.File]::ReadAllBytes($Path)
         return ($head.Length -ge 3 -and $head[0] -eq 0xEF -and $head[1] -eq 0xBB -and $head[2] -eq 0xBF)
+    } catch {
+        return $false
+    }
+}
+
+# ErrorActionPreference is Stop, so an unwritable path would throw out of
+# whichever install function touched it and take the whole run with it. Every
+# directory this script creates goes through here instead.
+function New-SafeDirectory {
+    param([string]$Path)
+
+    if ([string]::IsNullOrWhiteSpace($Path)) { return $false }
+    if (Test-Path -LiteralPath $Path -PathType Container) { return $true }
+
+    try {
+        New-Item -ItemType Directory -Path $Path -Force -ErrorAction Stop | Out-Null
+        return $true
     } catch {
         return $false
     }
@@ -361,8 +379,10 @@ function Copy-SilkFile {
     }
 
     $destinationDir = Split-Path -Parent $Destination
-    if (-not (Test-Path -LiteralPath $destinationDir)) {
-        New-Item -ItemType Directory -Path $destinationDir -Force | Out-Null
+    if (-not (New-SafeDirectory $destinationDir)) {
+        Write-Fail "${Label}: cannot create $destinationDir"
+        [void]$script:Failed.Add($Label)
+        return $false
     }
 
     $destinationItem = Get-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
@@ -411,8 +431,10 @@ function Copy-SilkDirectory {
         return $true
     }
 
-    if (-not (Test-Path -LiteralPath $Destination)) {
-        New-Item -ItemType Directory -Path $Destination -Force | Out-Null
+    if (-not (New-SafeDirectory $Destination)) {
+        Write-Fail "${Label}: cannot create $Destination"
+        [void]$script:Failed.Add($Label)
+        return $false
     }
 
     try {
@@ -578,6 +600,28 @@ function Find-DirectChild {
     return -1
 }
 
+# Back up and write, reporting rather than throwing if either step fails. The
+# backup happens only here, so a config we decline to edit is left with no
+# stray .bak beside it.
+function Save-K9sConfig {
+    param(
+        [string]$Path,
+        [string]$Content,
+        [bool]$Bom,
+        [string]$Skin
+    )
+
+    try {
+        Copy-Item -LiteralPath $Path -Destination "$Path.silkcircuit.bak" -Force -ErrorAction Stop
+        [void](Write-PlainText $Path $Content -Bom:$Bom)
+        return $true
+    } catch {
+        Write-Warn "k9s: cannot write $Path"
+        Write-Dim "Set k9s.ui.skin to $Skin yourself"
+        return $false
+    }
+}
+
 # Point an existing k9s config at a skin, without ever writing a second
 # top-level "k9s:" mapping. k9s parses with gopkg.in/yaml.v3, which rejects a
 # duplicate key outright, so appending a sibling block does not merely look
@@ -600,14 +644,30 @@ function Set-K9sSkin {
         return $true
     }
 
+    # Only ever rewrite a regular file. Something else at that path (a
+    # directory, most likely) is a problem to report, not to write around.
+    if ((Test-Path -LiteralPath $ConfigPath) -and (Test-Path -LiteralPath $ConfigPath -PathType Container)) {
+        Write-Warn "k9s: $ConfigPath is not a file"
+        Write-Dim "Set k9s.ui.skin to $Skin yourself"
+        return $false
+    }
+
     $configDir = Split-Path -Parent $ConfigPath
-    if (-not (Test-Path -LiteralPath $configDir)) {
-        New-Item -ItemType Directory -Path $configDir -Force | Out-Null
+    if (-not (New-SafeDirectory $configDir)) {
+        Write-Warn "k9s: cannot write $ConfigPath"
+        Write-Dim "Set k9s.ui.skin to $Skin yourself"
+        return $false
     }
 
     if (-not (Test-Path -LiteralPath $ConfigPath)) {
-        Write-PlainText $ConfigPath "k9s:`r`n  ui:`r`n    skin: $Skin`r`n"
-        return $true
+        try {
+            [void](Write-PlainText $ConfigPath "k9s:`r`n  ui:`r`n    skin: $Skin`r`n")
+            return $true
+        } catch {
+            Write-Warn "k9s: cannot write $ConfigPath"
+            Write-Dim "Set k9s.ui.skin to $Skin yourself"
+            return $false
+        }
     }
 
     $raw = Get-Content -LiteralPath $ConfigPath -Raw
@@ -644,9 +704,7 @@ function Set-K9sSkin {
         $out.Add("k9s:")
         $out.Add("  ui:")
         $out.Add("    skin: $Skin")
-        Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
-        Write-PlainText $ConfigPath (($out -join $newline) + $newline) -Bom:$hadBom
-        return $true
+        return (Save-K9sConfig $ConfigPath (($out -join $newline) + $newline) $hadBom $Skin)
     }
 
     # Anything but a comment after the colon means a flow mapping, an anchor, or
@@ -702,11 +760,7 @@ function Set-K9sSkin {
         }
     }
 
-    # Back up only once we know we are actually going to write, so a declined
-    # config is left with no stray .bak beside it.
-    Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
-    Write-PlainText $ConfigPath (($out -join $newline) + $newline) -Bom:$hadBom
-    return $true
+    return (Save-K9sConfig $ConfigPath (($out -join $newline) + $newline) $hadBom $Skin)
 }
 
 function Detect-All {
