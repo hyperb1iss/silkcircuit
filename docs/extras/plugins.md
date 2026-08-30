@@ -1,85 +1,98 @@
 # Neovim Plugin Integrations
 
-SilkCircuit automatically themes 25+ Neovim plugins.
+SilkCircuit ships 39 Neovim plugin integrations.
 
-## Auto-Detection
+## No Detection Required
 
-SilkCircuit detects installed plugins and applies matching styles automatically. No configuration needed for most plugins.
+Every enabled integration's highlight groups are defined whether or not the plugin is installed. Defining a group for a plugin you do not have costs nothing, and it means the theme never has to load a plugin to decide what to style. Detection still runs, but only so `:SilkCircuitIntegrations` and `:checkhealth silkcircuit` can report what you have.
+
+The config key is in the last column of each table below. Set one to `false` to skip that integration's groups entirely.
 
 ## Supported Plugins
 
 ### File Explorers
 
-| Plugin        | Status        |
-| ------------- | ------------- |
-| neo-tree.nvim | Auto-detected |
-| nvim-tree.lua | Auto-detected |
+| Plugin        | Config key |
+| ------------- | ---------- |
+| neo-tree.nvim | `neotree`  |
+| nvim-tree.lua | `nvimtree` |
+| oil.nvim      | `oil`      |
 
-### Fuzzy Finders
+### Pickers and Fuzzy Finders
 
-| Plugin         | Status        |
-| -------------- | ------------- |
-| telescope.nvim | Auto-detected |
+| Plugin         | Config key  |
+| -------------- | ----------- |
+| telescope.nvim | `telescope` |
+| fzf-lua        | `fzf_lua`   |
+| snacks.nvim    | `snacks`    |
 
 ### Git Integration
 
-| Plugin        | Status        |
-| ------------- | ------------- |
-| gitsigns.nvim | Auto-detected |
-| neogit        | Auto-detected |
-| octo.nvim     | Auto-detected |
+| Plugin        | Config key |
+| ------------- | ---------- |
+| gitsigns.nvim | `gitsigns` |
+| neogit        | `neogit`   |
+| octo.nvim     | `octo`     |
+| grug-far.nvim | `grug_far` |
 
-### LSP & Completion
+### LSP and Completion
 
-| Plugin         | Status        |
-| -------------- | ------------- |
-| nvim-lspconfig | Auto-detected |
-| nvim-cmp       | Auto-detected |
-| mason.nvim     | Auto-detected |
+| Plugin           | Config key           |
+| ---------------- | -------------------- |
+| Neovim's own LSP | `lsp` (`native_lsp`) |
+| nvim-cmp         | `cmp`                |
+| blink.cmp        | `blink_cmp`          |
+| mason.nvim       | `mason`              |
+| fidget.nvim      | `fidget`             |
+| trouble.nvim     | `trouble`            |
 
 ### UI Components
 
-| Plugin                | Status        |
-| --------------------- | ------------- |
-| lualine.nvim          | Auto-detected |
-| bufferline.nvim       | Auto-detected |
-| nvim-notify           | Auto-detected |
-| noice.nvim            | Auto-detected |
-| indent-blankline.nvim | Auto-detected |
-| which-key.nvim        | Auto-detected |
-| alpha-nvim            | Auto-detected |
+| Plugin                | Config key         |
+| --------------------- | ------------------ |
+| lualine.nvim          | `lualine`          |
+| bufferline.nvim       | `bufferline`       |
+| dropbar.nvim          | `dropbar`          |
+| lazy.nvim             | `lazy`             |
+| nvim-notify           | `notify`           |
+| noice.nvim            | `noice`            |
+| indent-blankline.nvim | `indent_blankline` |
+| which-key.nvim        | `which_key`        |
+| alpha-nvim            | `alpha`            |
 
 ### Editing
 
-| Plugin                  | Status        |
-| ----------------------- | ------------- |
-| nvim-treesitter         | Auto-detected |
-| flash.nvim              | Auto-detected |
-| mini.nvim               | Auto-detected |
-| harpoon                 | Auto-detected |
-| rainbow-delimiters.nvim | Auto-detected |
+| Plugin                  | Config key           |
+| ----------------------- | -------------------- |
+| nvim-treesitter         | `treesitter`         |
+| nvim-treesitter-context | `treesitter_context` |
+| flash.nvim              | `flash`              |
+| mini.nvim               | `mini`               |
+| harpoon                 | `harpoon`            |
+| rainbow-delimiters.nvim | `rainbow_delimiters` |
 
-### Debugging
+### Testing and Debugging
 
-| Plugin      | Status        |
-| ----------- | ------------- |
-| nvim-dap    | Auto-detected |
-| nvim-dap-ui | Auto-detected |
+| Plugin      | Config key         |
+| ----------- | ------------------ |
+| nvim-dap    | `dap` (`nvim_dap`) |
+| nvim-dap-ui | `dap` (`nvim_dap`) |
+| neotest     | `neotest`          |
 
 ### Other
 
-| Plugin               | Status        |
-| -------------------- | ------------- |
-| aerial.nvim          | Auto-detected |
-| avante.nvim          | Auto-detected |
-| snacks.nvim          | Auto-detected |
-| nvim-ufo             | Auto-detected |
-| nvim-window-picker   | Auto-detected |
-| render-markdown.nvim | Auto-detected |
+| Plugin               | Config key        |
+| -------------------- | ----------------- |
+| aerial.nvim          | `aerial`          |
+| avante.nvim          | `avante`          |
+| nvim-ufo             | `ufo`             |
+| nvim-window-picker   | `window_picker`   |
+| render-markdown.nvim | `render-markdown` |
+| Markdown syntax      | `markdown`        |
 
 ## Check Integrations
 
-See which integrations are active:
+See which integrations are themed, which of their plugins are installed, and which are switched off:
 
 ```vim
 :SilkCircuitIntegrations
@@ -141,9 +154,11 @@ Telescope gains SilkCircuit styling:
 
 ### Plugin not styled
 
-1. Check if plugin is supported: `:SilkCircuitIntegrations`
-2. Verify plugin is installed and loaded
-3. Try `:colorscheme silkcircuit` to reload
+1. Check the integration name with `:SilkCircuitIntegrations`
+2. Confirm its config key is not set to `false`
+3. Reload with `:colorscheme silkcircuit`
+
+If the plugin has no integration at all, `on_highlights` below is the escape hatch.
 
 ### Conflicts with plugin themes
 

@@ -210,7 +210,7 @@ silkcircuit_preferences.json there to forget them.
 ==============================================================================
 7. INTEGRATIONS                                     *silkcircuit-integrations*
 
-SilkCircuit defines highlight groups for these 29 integrations. Every one is
+SilkCircuit defines highlight groups for these 39 integrations. Every one is
 enabled by default; set a key to false to skip its groups: >lua
     require("silkcircuit").setup({
       integrations = {
@@ -223,14 +223,14 @@ enabled by default; set a key to false to skip its groups: >lua
 The config keys:
 
     Core          treesitter, lsp (alias native_lsp), markdown
-    Explorers     neotree, nvimtree
+    Explorers     neotree, nvimtree, oil
     Git           gitsigns, neogit, octo
     UI            bufferline, lualine, indent_blankline, alpha, which_key,
-                  telescope, snacks
-    Messages      cmp, notify, noice
-    Motion        flash, harpoon
-    Tools         mason, mini, dap (alias nvim_dap), aerial, avante
-    Visual        rainbow_delimiters, render-markdown
+                  telescope, fzf_lua, snacks, dropbar, lazy
+    Messages      cmp, blink_cmp, notify, noice, fidget
+    Motion        flash, harpoon, trouble, grug_far
+    Tools         mason, mini, dap (alias nvim_dap), neotest, aerial, avante
+    Visual        rainbow_delimiters, render-markdown, treesitter_context
     Windows       ufo, window_picker
 
 Highlights load for every enabled integration whether or not the plugin is

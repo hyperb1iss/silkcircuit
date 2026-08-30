@@ -33,14 +33,14 @@ One palette, one semantic system, five intensity variants, every tool in your wo
 
 ### 🌐 Platforms
 
-| Category         | Targets                                                            |
-| ---------------- | ------------------------------------------------------------------ |
-| 💻 **Editors**   | Neovim (25+ plugin integrations), VS Code (Marketplace), AstroNvim |
-| 🖥️ **Terminals** | Ghostty, Kitty, Alacritty, Warp, Windows Terminal                  |
-| 🌐 **Browsers**  | Chrome (Web Store, 5 variants + DevTools CSS)                      |
-| 🔧 **CLI Tools** | btop, K9s, lazygit, bat, fzf, lsd, procs, atuin, Starship          |
-| ⚙️ **System**    | COSMIC Desktop, fastfetch, dmesg, tmux                             |
-| 🎯 **Other**     | Git (delta integration), Slack, Lualine                            |
+| Category         | Targets                                                           |
+| ---------------- | ----------------------------------------------------------------- |
+| 💻 **Editors**   | Neovim (39 plugin integrations), VS Code (Marketplace), AstroNvim |
+| 🖥️ **Terminals** | Ghostty, Kitty, Alacritty, Warp, Windows Terminal                 |
+| 🌐 **Browsers**  | Chrome (Web Store, 5 variants + DevTools CSS)                     |
+| 🔧 **CLI Tools** | btop, K9s, lazygit, bat, fzf, lsd, procs, atuin, Starship         |
+| ⚙️ **System**    | COSMIC Desktop, fastfetch, dmesg, tmux                            |
+| 🎯 **Other**     | Git (delta integration), Slack, Lualine                           |
 
 ### 🎛️ Variants
 
