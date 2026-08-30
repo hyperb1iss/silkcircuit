@@ -696,9 +696,9 @@ install_btop() {
 # and editing it would set a skin k9s never reads while quietly rewriting a
 # block we were not asked to touch.
 #
-# Returns 3 when the config uses a shape we will not edit blind, and 4 when we
-# cannot write it at all, so the caller reports the real reason rather than
-# guessing.
+# Returns 3 when the config uses a shape we will not edit blind, 4 when we
+# cannot write it, and 5 when we cannot read it, so the caller reports the real
+# reason rather than guessing.
 set_k9s_skin() {
     local config="$1"
     local skin="$2"
@@ -714,6 +714,10 @@ set_k9s_skin() {
 
     if [[ ! -w "$(dirname "$config")" ]]; then
         return 4
+    fi
+
+    if [[ -f "$config" && ! -r "$config" ]]; then
+        return 5
     fi
 
     awk -v skin="$skin" -v q="'" '
@@ -861,7 +865,7 @@ set_k9s_skin() {
                 }
             }
         }
-    ' "$config" > "${config}.silkcircuit.new" || rc=$?
+    ' "$config" > "${config}.silkcircuit.new" 2>/dev/null || rc=$?
 
     if [[ $rc -eq 0 ]]; then
         # Back up only once we know we are actually going to write, so a
@@ -901,21 +905,31 @@ install_k9s() {
     local skin_set=true
     if [[ "$DRY_RUN" == true ]]; then
         diminfo "dry-run: would set the skin to ${skin} in ${config}"
+    elif [[ -e "$config" && ! -f "$config" ]]; then
+        # A directory, a socket, anything that is not a regular file. Writing to
+        # it would fail and abort the run.
+        warn "k9s: ${config} is not a file"
+        diminfo "Set k9s.ui.skin to ${skin} yourself"
+        skin_set=false
     elif [[ -f "$config" ]]; then
         local k9s_rc=0
         set_k9s_skin "$config" "$skin" || k9s_rc=$?
         if [[ $k9s_rc -ne 0 ]]; then
-            if [[ $k9s_rc -eq 3 ]]; then
-                warn "k9s: ${config} uses a shape this installer will not edit blind"
-            else
-                warn "k9s: cannot write ${config}"
-            fi
+            case "$k9s_rc" in
+                3) warn "k9s: ${config} uses a shape this installer will not edit blind" ;;
+                5) warn "k9s: cannot read ${config}" ;;
+                *) warn "k9s: cannot write ${config}" ;;
+            esac
             diminfo "Set k9s.ui.skin to ${skin} yourself"
             skin_set=false
         fi
     else
-        mkdir -p "$k9s_dir"
-        printf 'k9s:\n  ui:\n    skin: %s\n' "$skin" > "$config"
+        mkdir -p "$k9s_dir" 2>/dev/null || true
+        if ! printf 'k9s:\n  ui:\n    skin: %s\n' "$skin" > "$config" 2>/dev/null; then
+            warn "k9s: cannot write ${config}"
+            diminfo "Set k9s.ui.skin to ${skin} yourself"
+            skin_set=false
+        fi
     fi
 
     success "Installed ${COPIED} k9s skins"
