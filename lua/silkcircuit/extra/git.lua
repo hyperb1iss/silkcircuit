@@ -4,6 +4,10 @@ local M = {}
 -- unquoted "#e135ff bold" parses as an empty value and the slot silently falls
 -- back to the git default.
 --
+-- syntax-theme names the bat theme by its file stem, not by the name inside the
+-- plist: that is what bat matches on, so extras/bat/silkcircuit-neon.tmTheme is
+-- "silkcircuit-neon" no matter what the plist calls itself.
+--
 -- The delta block leaves the plus and minus line backgrounds on delta's own
 -- `auto`, which is the one place the palette cannot supply a value: diff_add and
 -- diff_delete are foreground greens and reds on four variants and near-black
@@ -75,7 +79,7 @@ local TEMPLATE = [[
 	navigate = true
 	line-numbers = true
 	side-by-side = false
-	syntax-theme = "${meta.name}"
+	syntax-theme = "${meta.slug}"
 	file-style = "${yellow} bold"
 	file-decoration-style = "${yellow} ul"
 	hunk-header-style = "file line-number syntax"

@@ -1,9 +1,0 @@
-# SilkCircuit theme for bat
---theme="SilkCircuit"
---italic-text=always
---map-syntax="*.conf:INI"
---map-syntax="*.service:INI"
---map-syntax="*.zsh:Bourne Again Shell (bash)"
---map-syntax="*.zshrc:Bourne Again Shell (bash)"
---map-syntax=".zshrc:Bourne Again Shell (bash)"
---map-syntax=".zprofile:Bourne Again Shell (bash)"

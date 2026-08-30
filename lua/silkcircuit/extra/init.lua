@@ -165,6 +165,12 @@ M.targets = {
     comment = "none",
     url = "https://code.visualstudio.com/api/extension-guides/color-theme",
   },
+  bat = {
+    label = "bat",
+    ext = "tmTheme",
+    comment = "xml",
+    url = "https://github.com/sharkdp/bat#adding-new-themes",
+  },
   fastfetch = {
     label = "fastfetch",
     ext = "jsonc",
@@ -235,7 +241,9 @@ local COMMENTS = {
   xml = function(lines)
     local out = { "<!--" }
     for _, line in ipairs(lines) do
-      out[#out + 1] = "  " .. line
+      -- An indented blank line is trailing whitespace, which the pre-commit
+      -- hook strips and the next build puts back, forever.
+      out[#out + 1] = line == "" and "" or ("  " .. line)
     end
     out[#out + 1] = "-->"
     return table.concat(out, "\n")
