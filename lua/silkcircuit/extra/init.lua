@@ -74,6 +74,11 @@ M.targets = {
     is_full = true,
     url = "https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes",
   },
+  btop = {
+    label = "btop",
+    ext = "theme",
+    url = "https://github.com/aristocratos/btop#themes",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
@@ -166,24 +171,32 @@ end
 
 --- Palette for one variant, plus the derived tables templates reach for.
 ---
---- `rgb.<key>` is `{ r, g, b }` as 0-255 integers and `hex_nohash.<key>` drops
---- the leading '#'. Both are built once per variant because formats like the
---- Chrome manifest and the COSMIC ron files need integers, not hex.
+--- `rgb.<key>` is `{ r, g, b }` as 0-255 integers, `rgbf.<key>` is the same
+--- channels as 0..1 floats at six decimals, and `hex_nohash.<key>` drops the
+--- leading '#'. All three are built once per variant because formats like the
+--- Chrome manifest and the COSMIC ron files need numbers, not hex.
 function M.colors(variant)
   local colors = variants.get_colors(variant)
 
-  local rgb, nohash = {}, {}
+  local rgb, rgbf, nohash = {}, {}, {}
   for key, value in pairs(colors) do
     if type(value) == "string" then
       local r, g, b = value:match(HEX6)
       if r then
-        rgb[key] = { r = tonumber(r, 16), g = tonumber(g, 16), b = tonumber(b, 16) }
+        local ri, gi, bi = tonumber(r, 16), tonumber(g, 16), tonumber(b, 16)
+        rgb[key] = { r = ri, g = gi, b = bi }
+        rgbf[key] = {
+          r = string.format("%.6f", ri / 255),
+          g = string.format("%.6f", gi / 255),
+          b = string.format("%.6f", bi / 255),
+        }
         nohash[key] = value:sub(2)
       end
     end
   end
 
   colors.rgb = rgb
+  colors.rgbf = rgbf
   colors.hex_nohash = nohash
   colors.meta = {
     variant = variant,

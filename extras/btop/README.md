@@ -8,10 +8,8 @@ Electric system monitoring with vibrant purples, blazing pinks, and neon accents
 
 ```bash
 # Linux/macOS
-cp silkcircuit_*.theme ~/.config/btop/themes/
-
-# Or create a symlink for automatic updates
-ln -sf "$(pwd)/silkcircuit_*.theme" ~/.config/btop/themes/
+mkdir -p ~/.config/btop/themes
+cp silkcircuit-*.theme ~/.config/btop/themes/
 ```
 
 2. Open btop and press `Esc` to open menu
@@ -36,6 +34,10 @@ Muted tones for comfortable extended monitoring sessions.
 
 Ultra-dark backgrounds with pure neon accents for OLED displays.
 
+### Dawn
+
+A light background for bright rooms, with the same electric accents.
+
 ## Color Scheme
 
 - **CPU Box**: Electric purple
@@ -47,12 +49,12 @@ Ultra-dark backgrounds with pure neon accents for OLED displays.
 
 ## Customization
 
-To modify colors, edit the theme files directly. Each color uses hex format:
+These files are generated from the palette by `scripts/build`, so edits to them
+are overwritten on the next build. Change the colors in
+`lua/silkcircuit/extra/btop.lua` (or in the palette itself) and rebuild:
 
 ```bash
-theme[main_bg]="#12101a"  # Background color
-theme[title]="#ff00ff"    # Box titles
-theme[hi_fg]="#80ffea"    # Keyboard shortcuts
+make build
 ```
 
 ## Screenshots
