@@ -33,14 +33,15 @@ One palette, one semantic system, five intensity variants, every tool in your wo
 
 ### 🌐 Platforms
 
-| Category         | Targets                                                           |
-| ---------------- | ----------------------------------------------------------------- |
-| 💻 **Editors**   | Neovim (39 plugin integrations), VS Code (Marketplace), AstroNvim |
-| 🖥️ **Terminals** | Ghostty, Kitty, Alacritty, Warp, Windows Terminal                 |
-| 🌐 **Browsers**  | Chrome (Web Store, 5 variants + DevTools CSS)                     |
-| 🔧 **CLI Tools** | btop, K9s, lazygit, bat, fzf, lsd, procs, atuin, Starship         |
-| ⚙️ **System**    | COSMIC Desktop, fastfetch, dmesg, tmux                            |
-| 🎯 **Other**     | Git (delta integration), Slack, Lualine                           |
+| Category            | Targets                                                                  |
+| ------------------- | ------------------------------------------------------------------------ |
+| 💻 **Editors**      | Neovim (39 plugin integrations), VS Code (Marketplace), AstroNvim, Helix |
+| 🖥️ **Terminals**    | Ghostty, Kitty, Alacritty, WezTerm, foot, iTerm2, Warp, Windows Terminal |
+| 🪟 **Multiplexers** | tmux, Zellij                                                             |
+| 🌐 **Browsers**     | Chrome (Web Store, 5 variants + DevTools CSS)                            |
+| 🔧 **CLI Tools**    | btop, K9s, lazygit, bat, fzf, lsd, procs, atuin, Starship                |
+| ⚙️ **System**       | COSMIC Desktop, fastfetch, dmesg                                         |
+| 🎯 **Other**        | Git (delta integration), Slack, Lualine                                  |
 
 ### 🎛️ Variants
 
@@ -231,7 +232,7 @@ Copy-Item extras\starship\silkcircuit-neon.toml "$HOME\.config\starship.toml"
 
 ## 💜 Neovim
 
-The Neovim theme is the most feature-rich target: it loads in about 5ms with every one of its 29 plugin integrations defined up front, and it remembers your variant across sessions.
+The Neovim theme is the most feature-rich target: it loads in about 5ms with every one of its 39 plugin integrations defined up front, and it remembers your variant across sessions.
 
 <div align="center">
   <img src="assets/screenshots/nvim-telescope.png" alt="Telescope integration" width="85%">
@@ -298,16 +299,19 @@ SilkCircuit extends far beyond your editor. The [extras guide](https://hyperb1is
 
 ### 🎨 Color Palette
 
+The neon variant's core roles. The other four remap the same roles to their own values, listed on the [variant pages](https://hyperb1iss.github.io/silkcircuit/variants/).
+
 | Color              | Hex       | Usage                                                                              |
 | ------------------ | --------- | ---------------------------------------------------------------------------------- |
-| Background         | `#0a0a0f` | ![#0a0a0f](https://placehold.co/20x20/0a0a0f/0a0a0f.png)                           |
-| Foreground         | `#e0e0e0` | ![#e0e0e0](https://placehold.co/20x20/e0e0e0/e0e0e0.png)                           |
+| Background         | `#12101a` | ![#12101a](https://placehold.co/20x20/12101a/12101a.png)                           |
+| Foreground         | `#f8f8f2` | ![#f8f8f2](https://placehold.co/20x20/f8f8f2/f8f8f2.png)                           |
 | 💜 Electric Purple | `#e135ff` | ![#e135ff](https://placehold.co/20x20/e135ff/e135ff.png) Keywords, primary accents |
-| 🌸 Hot Pink        | `#ff79c6` | ![#ff79c6](https://placehold.co/20x20/ff79c6/ff79c6.png) Strings, secondary        |
+| 🌸 Soft Pink       | `#ff99ff` | ![#ff99ff](https://placehold.co/20x20/ff99ff/ff99ff.png) Strings                   |
 | 💎 Neon Cyan       | `#80ffea` | ![#80ffea](https://placehold.co/20x20/80ffea/80ffea.png) Functions, links          |
-| ✅ Success Green   | `#50fa7b` | ![#50fa7b](https://placehold.co/20x20/50fa7b/50fa7b.png) Success states            |
-| ⚡ Electric Yellow | `#f1fa8c` | ![#f1fa8c](https://placehold.co/20x20/f1fa8c/f1fa8c.png) Warnings, variables       |
-| 🧡 Warm Orange     | `#ffb86c` | ![#ffb86c](https://placehold.co/20x20/ffb86c/ffb86c.png) Numbers, constants        |
+| 🌺 Hot Coral       | `#ff6ac1` | ![#ff6ac1](https://placehold.co/20x20/ff6ac1/ff6ac1.png) Numbers, constants        |
+| ⚡ Electric Yellow | `#f1fa8c` | ![#f1fa8c](https://placehold.co/20x20/f1fa8c/f1fa8c.png) Classes, types            |
+| ✅ Success Green   | `#50fa7b` | ![#50fa7b](https://placehold.co/20x20/50fa7b/50fa7b.png) Success, git additions    |
+| ❌ Error Red       | `#ff6363` | ![#ff6363](https://placehold.co/20x20/ff6363/ff6363.png) Errors, git deletions     |
 
 ## 📸 Screenshot Gallery
 

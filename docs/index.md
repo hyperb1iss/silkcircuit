@@ -4,7 +4,7 @@ layout: home
 hero:
   name: SilkCircuit
   text: Electric Meets Elegant
-  tagline: A vibrant cyberpunk color system for Neovim, VS Code, terminals, browsers, and 20+ tools
+  tagline: A vibrant cyberpunk color system for Neovim, VS Code, terminals, browsers, and 30 tools
   image:
     src: /logo.png
     alt: SilkCircuit
@@ -21,7 +21,7 @@ features:
     title: 5 Electric Variants
     details: Neon, Vibrant, Soft, Glow, and Dawn - from maximum intensity dark themes to a beautiful light mode
   - icon: 🎨
-    title: 35+ Plugin Integrations
+    title: 39 Plugin Integrations
     details: Telescope, Neo-tree, LSP, nvim-cmp, and your entire toolchain, all defined up front
   - icon: 👁️
     title: WCAG AA Compliant

@@ -24,7 +24,7 @@ CONTENTS                                            *silkcircuit-contents*
 1. INTRODUCTION                                     *silkcircuit-introduction*
 
 SilkCircuit is a Neovim colorscheme built on electric purples, hot pinks and
-glowing cyan. It ships five variants, themes 29 plugins, and persists your
+glowing cyan. It ships five variants, themes 39 plugins, and persists your
 variant and glow-mode choices between sessions.
 
 Highlights are defined for every enabled integration whether or not the

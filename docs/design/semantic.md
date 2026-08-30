@@ -125,7 +125,7 @@ end
 
 2. **Maintain across variants**: The meaning stays constant; only intensity changes.
 
-3. **Apply to plugins**: All 35+ integrations follow the same color semantics.
+3. **Apply to plugins**: All 39 integrations follow the same color semantics.
 
 4. **Extend thoughtfully**: New elements should map to existing semantic colors.
 

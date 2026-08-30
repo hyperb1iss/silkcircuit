@@ -201,7 +201,7 @@ Configuration
 - OK Dim inactive: false
 
 Plugin integrations
-- OK 29 integrations available, 5 plugins detected
+- OK 39 integrations available, 5 plugins detected
 - OK Detected: cmp, gitsigns, lualine, telescope, treesitter
 
 User preferences
