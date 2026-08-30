@@ -107,15 +107,15 @@ function M.get_highlights(colors, opts)
   highlights.Boolean = apply_style({ fg = sem.boolean }, "booleans")
   highlights.Float = { fg = sem.number }
 
-  highlights.Identifier = { fg = sem.variable }
+  highlights.Identifier = apply_style({ fg = sem.variable }, "variables")
   highlights.Function = apply_style({ fg = sem.func, bold = true }, "functions")
 
-  highlights.Statement = { fg = sem.keyword }
-  highlights.Conditional = apply_style({ fg = sem.keyword }, "conditionals")
-  highlights.Repeat = apply_style({ fg = sem.keyword }, "loops")
+  highlights.Statement = apply_style({ fg = sem.keyword, bold = true }, "keywords")
+  highlights.Conditional = apply_style({ fg = sem.keyword, bold = true }, "keywords")
+  highlights.Repeat = apply_style({ fg = sem.keyword, bold = true }, "keywords")
   highlights.Label = { fg = colors.cyan_bright }
   highlights.Operator = apply_style({ fg = sem.operator }, "operators")
-  highlights.Keyword = apply_style({ fg = sem.keyword }, "keywords")
+  highlights.Keyword = apply_style({ fg = sem.keyword, bold = true }, "keywords")
   highlights.Exception = { fg = colors.purple }
 
   highlights.PreProc = { fg = colors.pink_bright }

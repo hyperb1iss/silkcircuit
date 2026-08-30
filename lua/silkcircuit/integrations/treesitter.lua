@@ -4,21 +4,18 @@ local M = {}
 -- Provides enhanced syntax highlighting using TreeSitter's parsing capabilities
 
 function M.get(colors, opts)
+  local util = require("silkcircuit.util")
   local highlights = {}
 
-  -- Apply user style preferences
   local function apply_style(base, style_key)
-    if opts.styles and opts.styles[style_key] then
-      return vim.tbl_deep_extend("force", base, opts.styles[style_key])
-    end
-    return base
+    return util.merge_styles(base, opts.styles and opts.styles[style_key])
   end
 
   -- Get semantic colors
   local sem = require("silkcircuit.palette").semantic
 
   -- Identifiers
-  highlights["@variable"] = { fg = sem.variable }
+  highlights["@variable"] = apply_style({ fg = sem.variable }, "variables")
   highlights["@variable.builtin"] = { fg = colors.coral, italic = true }
   highlights["@variable.parameter"] = { fg = sem.parameter }
   highlights["@variable.member"] = { fg = sem.property }
@@ -70,18 +67,18 @@ function M.get(colors, opts)
 
   -- Keywords
   highlights["@keyword"] = apply_style({ fg = sem.keyword, bold = true }, "keywords")
-  highlights["@keyword.coroutine"] = { fg = colors.keyword }
-  highlights["@keyword.function"] = { fg = colors.purple }
-  highlights["@keyword.operator"] = { fg = colors.operator }
-  highlights["@keyword.import"] = { fg = colors.purple }
-  highlights["@keyword.storage"] = { fg = colors.purple }
-  highlights["@keyword.repeat"] = { fg = colors.keyword }
-  highlights["@keyword.return"] = { fg = colors.keyword }
-  highlights["@keyword.debug"] = { fg = colors.red }
-  highlights["@keyword.exception"] = { fg = colors.keyword }
-  highlights["@keyword.conditional"] = { fg = colors.keyword }
+  highlights["@keyword.coroutine"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
+  highlights["@keyword.function"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
+  highlights["@keyword.operator"] = apply_style({ fg = colors.operator, bold = true }, "keywords")
+  highlights["@keyword.import"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
+  highlights["@keyword.storage"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
+  highlights["@keyword.repeat"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
+  highlights["@keyword.return"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
+  highlights["@keyword.debug"] = apply_style({ fg = colors.red, bold = true }, "keywords")
+  highlights["@keyword.exception"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
+  highlights["@keyword.conditional"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
   highlights["@keyword.conditional.ternary"] = { fg = colors.operator }
-  highlights["@keyword.directive"] = { fg = colors.purple }
+  highlights["@keyword.directive"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
   highlights["@keyword.directive.define"] = { fg = colors.purple }
 
   -- Punctuation
@@ -205,7 +202,7 @@ function M.get(colors, opts)
   highlights["@attribute.python"] = { fg = colors.green_bright }
 
   -- JavaScript/JSX
-  highlights["@keyword.export"] = { fg = colors.cyan }
+  highlights["@keyword.export"] = apply_style({ fg = colors.cyan, bold = true }, "keywords")
 
   -- Gitignore
   highlights["@string.special.path.gitignore"] = { fg = colors.fg }
@@ -214,9 +211,9 @@ function M.get(colors, opts)
   highlights["zshKSHFunction"] = { link = "Function" }
 
   -- Additional highlights for better coverage
-  highlights["@keyword.modifier"] = { fg = colors.purple }
-  highlights["@keyword.type"] = { fg = colors.purple }
-  highlights["@keyword.storage"] = { fg = colors.purple }
+  highlights["@keyword.modifier"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
+  highlights["@keyword.type"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
+  highlights["@keyword.storage"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
 
   -- Legacy mappings (for backward compatibility)
   highlights["@parameter"] = highlights["@variable.parameter"]
