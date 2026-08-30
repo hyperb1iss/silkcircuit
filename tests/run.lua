@@ -13,11 +13,30 @@
 -- temporary directory, which is where minimal_init.lua builds the sandbox.
 -- os.exit() skips that teardown and leaks the sandbox on every run.
 
-local root = vim.g.silkcircuit_test_root or vim.fn.getcwd()
+-- Refuse to run without the sandbox. The specs reset state by deleting the
+-- preferences file and the compiled cache under stdpath(), so running this
+-- script against a real Neovim config would delete the user's own. Anything
+-- that starts the runner without tests/minimal_init.lua (an -u NONE
+-- invocation, say) stops here instead.
+if not vim.g.silkcircuit_test_sandbox then
+  vim.api.nvim_err_writeln(
+    "tests/run.lua must be started by scripts/test, which loads tests/minimal_init.lua"
+  )
+  vim.cmd("cquit 2")
+end
+
+local root = vim.g.silkcircuit_test_root
 package.path = root .. "/tests/?.lua;" .. package.path
 
 local H = require("helpers")
 local emit = H.emit
+
+-- Theme chatter is captured per block by H.quiet, but lua/silkcircuit/init.lua
+-- defers util.compile() by 100ms, so its notify fires long after whichever
+-- block triggered it has restored the real vim.notify. Left alone it lands in
+-- the middle of the TAP stream. Everything goes to a sink for the whole run;
+-- H.quiet still layers over it where a spec wants to read the messages.
+vim.notify = function() end
 
 -- ---------------------------------------------------------------------------
 -- Arguments
