@@ -51,10 +51,12 @@ M.defaults = {
     alpha = true,
     which_key = true,
     telescope = true,
+    fzf_lua = true,
     snacks = true,
 
     -- Completion and messages
     cmp = true,
+    blink_cmp = true,
     notify = true,
     noice = true,
 
