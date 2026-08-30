@@ -28,6 +28,11 @@ M.variants = { "neon", "vibrant", "soft", "glow", "dawn" }
 ---   filename Function(variant) returning the file name, for formats whose
 ---            tooling dictates a name the default pattern cannot express.
 M.targets = {
+  helix = {
+    label = "Helix",
+    ext = "toml",
+    url = "https://docs.helix-editor.com/themes.html",
+  },
   iterm2 = {
     label = "iTerm2",
     ext = "itermcolors",
