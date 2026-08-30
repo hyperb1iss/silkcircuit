@@ -9,17 +9,32 @@
 
 local M = {}
 
--- The two roles no single palette key can serve in both a dark and a light
--- theme. A drop shadow has to darken whatever sits under it. A hover has to
--- move away from the purple beneath it, which means brighter on a dark theme
--- and deeper on a light one, where pink_bright drops under 4.5:1 against the
--- background it carries as text.
+-- Roles no single palette key can serve in both a dark and a light theme.
+-- Dawn's cyan and coral are mixed to sit on a near-white page, so they read at
+-- 2.8:1 and 4.2:1 as ink there and cannot carry the accents that work on the
+-- dark variants. Each falls back to a purple or pink that clears 4.5:1.
+--
+--   shadow        has to darken whatever sits under it
+--   accent_border focus rings, active indicators, section headers: the cyan
+--                 chrome that answers Neovim's FloatBorder
+--   accent_hover  the step away from the purple underneath a button
+--   accent_warm   debugging and merge conflicts, which want their own hue
 local DERIVED = {
   dark = function(colors)
-    return { shadow = colors.bg_darker, accent_hover = colors.pink_bright }
+    return {
+      shadow = colors.bg_darker,
+      accent_border = colors.border,
+      accent_hover = colors.pink_bright,
+      accent_warm = colors.coral,
+    }
   end,
   light = function(colors)
-    return { shadow = colors.gray_light .. "50", accent_hover = colors.pink }
+    return {
+      shadow = colors.gray_light .. "50",
+      accent_border = colors.purple,
+      accent_hover = colors.pink,
+      accent_warm = colors.pink,
+    }
   end,
 }
 
@@ -62,8 +77,8 @@ local TEMPLATE = [==[
     "editor.findMatchHighlightBackground": "${purple}22",
     "editor.wordHighlightBackground": "${bg_visual}66",
     "editor.wordHighlightStrongBackground": "${purple}44",
-    "editorBracketMatch.background": "${purple}44",
-    "editorBracketMatch.border": "${purple}",
+    "editorBracketMatch.background": "${accent_border}44",
+    "editorBracketMatch.border": "${accent_border}",
     "editorCodeLens.foreground": "${comment}",
     "editorCursor.background": "${bg}",
     "editorCursor.foreground": "${pink}",
@@ -75,18 +90,18 @@ local TEMPLATE = [==[
     "editorGroupHeader.tabsBorder": "${bg_float}",
     "editorGutter.addedBackground": "${green}",
     "editorGutter.deletedBackground": "${red}",
-    "editorGutter.modifiedBackground": "${cyan}",
+    "editorGutter.modifiedBackground": "${git_change}",
     "editorHoverWidget.background": "${bg_float}",
     "editorHoverWidget.border": "${purple}",
     "editorIndentGuide.background": "${bg_visual}",
     "editorIndentGuide.activeBackground": "${cyan}",
-    "editorInfo.foreground": "${cyan}",
+    "editorInfo.foreground": "${info}",
     "editorLineNumber.foreground": "${comment}",
-    "editorLineNumber.activeForeground": "${purple}",
+    "editorLineNumber.activeForeground": "${accent_border}",
     "editorLink.activeForeground": "${cyan}",
     "editorMarkerNavigation.background": "${bg_float}",
     "editorMarkerNavigationError.background": "${red}",
-    "editorMarkerNavigationInfo.background": "${cyan}",
+    "editorMarkerNavigationInfo.background": "${info}",
     "editorMarkerNavigationWarning.background": "${yellow}",
     "editorOverviewRuler.border": "${purple}",
     "editorOverviewRuler.currentContentForeground": "${purple}",
@@ -95,7 +110,7 @@ local TEMPLATE = [==[
     "editorSuggestWidget.background": "${bg_float}",
     "editorSuggestWidget.border": "${purple}",
     "editorSuggestWidget.foreground": "${fg}",
-    "editorSuggestWidget.highlightForeground": "${purple}",
+    "editorSuggestWidget.highlightForeground": "${accent_border}",
     "editorSuggestWidget.selectedBackground": "${bg_visual}",
     "editorWarning.foreground": "${yellow}",
     "editorWhitespace.foreground": "${bg_visual}",
@@ -105,13 +120,13 @@ local TEMPLATE = [==[
     "extensionButton.prominentBackground": "${purple}",
     "extensionButton.prominentForeground": "${bg}",
     "extensionButton.prominentHoverBackground": "${accent_hover}",
-    "focusBorder": "${purple}",
+    "focusBorder": "${accent_border}",
     "foreground": "${fg}",
     "gitDecoration.addedResourceForeground": "${green}",
-    "gitDecoration.conflictingResourceForeground": "${pink}",
+    "gitDecoration.conflictingResourceForeground": "${accent_warm}",
     "gitDecoration.deletedResourceForeground": "${red}",
     "gitDecoration.ignoredResourceForeground": "${comment}",
-    "gitDecoration.modifiedResourceForeground": "${cyan}",
+    "gitDecoration.modifiedResourceForeground": "${git_change}",
     "gitDecoration.submoduleResourceForeground": "${comment}",
     "gitDecoration.untrackedResourceForeground": "${yellow}",
     "icon.foreground": "${purple}",
@@ -120,11 +135,11 @@ local TEMPLATE = [==[
     "input.foreground": "${fg}",
     "input.placeholderForeground": "${comment}",
     "inputOption.activeBackground": "${purple}44",
-    "inputOption.activeBorder": "${purple}",
+    "inputOption.activeBorder": "${accent_border}",
     "inputValidation.errorBackground": "${red}22",
     "inputValidation.errorBorder": "${red}",
-    "inputValidation.infoBackground": "${cyan}22",
-    "inputValidation.infoBorder": "${cyan}",
+    "inputValidation.infoBackground": "${info}22",
+    "inputValidation.infoBorder": "${info}",
     "inputValidation.warningBackground": "${yellow}22",
     "inputValidation.warningBorder": "${yellow}",
     "list.activeSelectionBackground": "${purple}33",
@@ -132,7 +147,7 @@ local TEMPLATE = [==[
     "list.dropBackground": "${purple}22",
     "list.focusBackground": "${purple}33",
     "list.focusForeground": "${fg}",
-    "list.highlightForeground": "${purple}",
+    "list.highlightForeground": "${accent_border}",
     "list.hoverBackground": "${purple}22",
     "list.hoverForeground": "${fg}",
     "list.inactiveSelectionBackground": "${purple}22",
@@ -141,12 +156,12 @@ local TEMPLATE = [==[
     "list.warningForeground": "${yellow}",
     "listFilterWidget.background": "${bg_float}",
     "listFilterWidget.noMatchesOutline": "${red}",
-    "listFilterWidget.outline": "${purple}",
+    "listFilterWidget.outline": "${accent_border}",
     "menu.background": "${bg_float}",
     "menu.border": "${purple}",
     "menu.foreground": "${fg}",
     "menu.selectionBackground": "${purple}33",
-    "menu.selectionBorder": "${purple}",
+    "menu.selectionBorder": "${accent_border}",
     "menu.selectionForeground": "${fg}",
     "menu.separatorBackground": "${purple}",
     "menubar.selectionBackground": "${purple}33",
@@ -168,16 +183,16 @@ local TEMPLATE = [==[
     "notifications.border": "${purple}",
     "notifications.foreground": "${fg}",
     "notificationsErrorIcon.foreground": "${red}",
-    "notificationsInfoIcon.foreground": "${cyan}",
+    "notificationsInfoIcon.foreground": "${info}",
     "notificationsWarningIcon.foreground": "${yellow}",
     "panel.background": "${bg}",
     "panel.border": "${purple}",
-    "panel.dropBorder": "${purple}",
+    "panel.dropBorder": "${accent_border}",
     "panelInput.border": "${purple}",
-    "panelTitle.activeBorder": "${purple}",
+    "panelTitle.activeBorder": "${accent_border}",
     "panelTitle.activeForeground": "${fg}",
     "panelTitle.inactiveForeground": "${comment}",
-    "peekView.border": "${purple}",
+    "peekView.border": "${accent_border}",
     "peekViewEditor.background": "${bg}",
     "peekViewEditor.matchHighlightBackground": "${purple}44",
     "peekViewResult.background": "${bg_float}",
@@ -190,8 +205,8 @@ local TEMPLATE = [==[
     "peekViewTitleDescription.foreground": "${comment}",
     "peekViewTitleLabel.foreground": "${fg}",
     "pickerGroup.border": "${purple}",
-    "pickerGroup.foreground": "${purple}",
-    "progressBar.background": "${purple}",
+    "pickerGroup.foreground": "${accent_border}",
+    "progressBar.background": "${accent_border}",
     "quickInput.background": "${bg_float}",
     "quickInput.foreground": "${fg}",
     "scrollbar.shadow": "${shadow}",
@@ -206,8 +221,8 @@ local TEMPLATE = [==[
     "settings.dropdownBorder": "${purple}",
     "settings.dropdownForeground": "${fg}",
     "settings.dropdownListBorder": "${purple}",
-    "settings.headerForeground": "${purple}",
-    "settings.modifiedItemIndicator": "${purple}",
+    "settings.headerForeground": "${accent_border}",
+    "settings.modifiedItemIndicator": "${accent_border}",
     "settings.numberInputBackground": "${bg_highlight}",
     "settings.numberInputBorder": "${purple}",
     "settings.numberInputForeground": "${fg}",
@@ -220,10 +235,10 @@ local TEMPLATE = [==[
     "sideBar.foreground": "${fg}",
     "sideBarSectionHeader.background": "${bg}",
     "sideBarSectionHeader.border": "${bg_float}",
-    "sideBarSectionHeader.foreground": "${purple}",
+    "sideBarSectionHeader.foreground": "${accent_border}",
     "sideBarTitle.foreground": "${pink_soft}",
     "statusBar.background": "${bg_dark}",
-    "statusBar.debuggingBackground": "${pink}",
+    "statusBar.debuggingBackground": "${accent_warm}",
     "statusBar.debuggingForeground": "${bg}",
     "statusBar.foreground": "${fg}",
     "statusBar.noFolderBackground": "${bg_dark}",
@@ -236,12 +251,12 @@ local TEMPLATE = [==[
     "statusBarItem.remoteBackground": "${cyan}",
     "statusBarItem.remoteForeground": "${bg}",
     "tab.activeBackground": "${bg}",
-    "tab.activeBorder": "${purple}",
+    "tab.activeBorder": "${accent_border}",
     "tab.activeForeground": "${fg}",
     "tab.activeModifiedBorder": "${cyan}",
     "tab.border": "${bg_float}",
     "tab.hoverBackground": "${purple}22",
-    "tab.hoverBorder": "${purple}66",
+    "tab.hoverBorder": "${accent_border}66",
     "tab.inactiveBackground": "${bg_dark}",
     "tab.inactiveForeground": "${comment}",
     "tab.inactiveModifiedBorder": "${comment}",
