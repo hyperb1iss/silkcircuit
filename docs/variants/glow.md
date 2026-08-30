@@ -28,12 +28,13 @@ Ultra-dark backgrounds with pure neon colors for maximum contrast.
 
 ### Supporting Colors
 
-| Color | Hex       | Usage                  |
-| ----- | --------- | ---------------------- |
-| Green | `#00ff00` | Success, git additions |
-| Red   | `#ff2244` | Errors, git deletions  |
-| Blue  | `#0099ff` | Links, info            |
-| Gray  | `#818181` | Comments, muted text   |
+| Color   | Hex       | Usage                         |
+| ------- | --------- | ----------------------------- |
+| Green   | `#00ff00` | Success, git additions        |
+| Red     | `#ff2244` | Errors, git deletions         |
+| Blue    | `#0099ff` | Links, info                   |
+| Gray    | `#818181` | Line numbers, non-text glyphs |
+| Comment | `#cc66ff` | Comments                      |
 
 ## Terminal Colors
 

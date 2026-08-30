@@ -28,12 +28,13 @@ Balanced energy with slightly toned-down saturation for everyday coding.
 
 ### Supporting Colors
 
-| Color | Hex       | Usage                  |
-| ----- | --------- | ---------------------- |
-| Green | `#00ff66` | Success, git additions |
-| Red   | `#ff3366` | Errors, git deletions  |
-| Blue  | `#6699ff` | Links, info            |
-| Gray  | `#728989` | Comments, muted text   |
+| Color   | Hex       | Usage                         |
+| ------- | --------- | ----------------------------- |
+| Green   | `#00ff66` | Success, git additions        |
+| Red     | `#ff3366` | Errors, git deletions         |
+| Blue    | `#6699ff` | Links, info                   |
+| Gray    | `#728989` | Line numbers, non-text glyphs |
+| Comment | `#b366ff` | Comments                      |
 
 ## Terminal Colors
 

@@ -112,7 +112,7 @@ require("silkcircuit").setup({
   on_highlights = function(highlights, colors)
     -- Use theme colors
     highlights.Function = { fg = colors.cyan, bold = true }
-    highlights.Comment = { fg = colors.gray, italic = true }
+    highlights.Comment = { fg = colors.comment, italic = true }
 
     -- Or custom colors
     highlights.MyCustomGroup = { fg = "#ff00ff", bg = "#000000" }
@@ -134,7 +134,8 @@ The `colors` table includes:
 | `yellow`    | Classes, types         |
 | `green`     | Success, git add       |
 | `red`       | Errors, git delete     |
-| `gray`      | Comments, muted text   |
+| `gray`      | Line numbers, glyphs   |
+| `comment`   | Comments (purple)      |
 | `bg`        | Background             |
 | `fg`        | Foreground             |
 

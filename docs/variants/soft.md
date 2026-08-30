@@ -28,12 +28,13 @@ Gentle colors for marathon coding sessions and late-night work.
 
 ### Supporting Colors
 
-| Color | Hex       | Usage                  |
-| ----- | --------- | ---------------------- |
-| Green | `#66ff99` | Success, git additions |
-| Red   | `#ff6677` | Errors, git deletions  |
-| Blue  | `#92aaff` | Links, info            |
-| Gray  | `#7e9494` | Comments, muted text   |
+| Color   | Hex       | Usage                         |
+| ------- | --------- | ----------------------------- |
+| Green   | `#66ff99` | Success, git additions        |
+| Red     | `#ff6677` | Errors, git deletions         |
+| Blue    | `#92aaff` | Links, info                   |
+| Gray    | `#7e9494` | Line numbers, non-text glyphs |
+| Comment | `#b199ff` | Comments                      |
 
 ## Terminal Colors
 

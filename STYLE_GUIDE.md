@@ -153,19 +153,19 @@ SilkCircuit uses five carefully crafted variants, each with precisely tuned colo
 
 ### Universal Supporting Colors
 
-**Success Green** (`#50fa7b` / Soft: `#66ff99` / Glow: `#00ff00` / Dawn: `#1d6e46`)
+**Success Green** (`#50fa7b` / Vibrant: `#00ff66` / Soft: `#66ff99` / Glow: `#00ff00` / Dawn: `#1d6e46`)
 
 - Success states, git additions, confirmations
 - Semantic: Growth, positive actions, validation
 - Applications: Success messages, add buttons, valid states
 
-**Warning Yellow** (`#f1fa8c` / Soft: `#ffe699` / Glow: `#ffff00` / Dawn: `#796100`)
+**Warning Yellow** (`#f1fa8c` / Vibrant: `#ffcc00` / Soft: `#ffe699` / Glow: `#ffff00` / Dawn: `#796100`)
 
 - Caution, attention, modification
 - Semantic: Alert, change, pending
 - Applications: Warning messages, modified indicators
 
-**Error Red** (`#ff6363` / Soft: `#ff6677` / Glow: `#ff2244` / Dawn: `#c1272d`)
+**Error Red** (`#ff6363` / Vibrant: `#ff3366` / Soft: `#ff6677` / Glow: `#ff2244` / Dawn: `#c1272d`)
 
 - Errors, deletions, danger
 - Semantic: Stop, danger, removal

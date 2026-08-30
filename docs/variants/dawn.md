@@ -28,21 +28,24 @@ A beautiful light theme for daytime coding with electric accents.
 
 ### Supporting Colors
 
-| Color | Hex       | Usage                  |
-| ----- | --------- | ---------------------- |
-| Green | `#1d6e46` | Success, git additions |
-| Red   | `#c1272d` | Errors, git deletions  |
-| Blue  | `#1454dc` | Links, info            |
-| Gray  | `#686177` | Comments, muted text   |
+| Color   | Hex       | Usage                         |
+| ------- | --------- | ----------------------------- |
+| Green   | `#1d6e46` | Success, git additions        |
+| Red     | `#c1272d` | Errors, git deletions         |
+| Blue    | `#1454dc` | Links, info                   |
+| Gray    | `#686177` | Line numbers, non-text glyphs |
+| Comment | `#7353a9` | Comments                      |
 
 ### Background Spectrum
 
-| Element      | Hex       | Usage                  |
-| ------------ | --------- | ---------------------- |
-| bg           | `#faf8ff` | Main editor background |
-| bg_dark      | `#f4f0ff` | Sidebar, panels        |
-| bg_highlight | `#f7f4ff` | Popups, highlights     |
-| bg_visual    | `#d4c8f0` | Selection              |
+| Element       | Hex       | Usage                   |
+| ------------- | --------- | ----------------------- |
+| bg            | `#faf8ff` | Main editor background  |
+| bg_highlight  | `#f7f4ff` | Cursorline              |
+| bg_dark       | `#f4f0ff` | Sidebar, panels         |
+| bg_float      | `#e8dffd` | Popups, menus, dividers |
+| bg_statusline | `#ded3f8` | Statusline, tab bar     |
+| bg_visual     | `#d4c8f0` | Selection               |
 
 ## Terminal Colors
 

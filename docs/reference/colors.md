@@ -28,12 +28,12 @@ Complete color palette for all SilkCircuit variants.
 
 ### Status Colors
 
-| Status  | Neon      | Soft      | Glow      | Dawn      |
-| ------- | --------- | --------- | --------- | --------- |
-| Success | `#50fa7b` | `#66ff99` | `#00ff00` | `#1d6e46` |
-| Warning | `#f1fa8c` | `#ffe699` | `#ffff00` | `#796100` |
-| Error   | `#ff6363` | `#ff6677` | `#ff2244` | `#c1272d` |
-| Info    | `#82aaff` | `#92aaff` | `#0099ff` | `#1454dc` |
+| Status  | Neon      | Vibrant   | Soft      | Glow      | Dawn      |
+| ------- | --------- | --------- | --------- | --------- | --------- |
+| Success | `#50fa7b` | `#00ff66` | `#66ff99` | `#00ff00` | `#1d6e46` |
+| Warning | `#f1fa8c` | `#ffcc00` | `#ffe699` | `#ffff00` | `#796100` |
+| Error   | `#ff6363` | `#ff3366` | `#ff6677` | `#ff2244` | `#c1272d` |
+| Info    | `#82aaff` | `#6699ff` | `#92aaff` | `#0099ff` | `#1454dc` |
 
 ## Neon Palette
 

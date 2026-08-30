@@ -41,7 +41,7 @@ Toggle glow mode for enhanced visual effects.
 :SilkCircuitGlow
 ```
 
-Glow mode adds subtle text shadows and enhanced highlighting to syntax elements.
+Glow mode brightens functions, keywords, strings, types and float borders on top of the current variant.
 
 ---
 
@@ -53,7 +53,7 @@ Validate WCAG contrast compliance.
 :SilkCircuitContrast
 ```
 
-Checks all highlight groups against WCAG AA standards (4.5:1 ratio) and reports any issues.
+Measures every color the theme renders as text against the current variant's background and reports anything below the WCAG AA ratio of 4.5:1.
 
 ---
 

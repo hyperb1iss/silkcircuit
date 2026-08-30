@@ -22,10 +22,7 @@ Every color should carry the same meaning across your entire application.
 
 Never sacrifice accessibility for aesthetics.
 
-```css
-/* Test all color combinations */
-:silkcircuitcontrast;
-```
+In Neovim, `:SilkCircuitContrast` measures every text color against the active variant's background and reports anything under 4.5:1.
 
 ### Apply glow effects sparingly
 
