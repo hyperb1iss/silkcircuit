@@ -55,29 +55,14 @@ and `palette/` carries the same colors as JSON and base16/base24 schemes.
 | Target                          | Format                                                                                             | Generated files                                                                                                                                                                                                                                          |
 | ------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Alacritty                       | [reference](https://alacritty.org/config-alacritty.html#colors)                                    | [neon](alacritty/silkcircuit-neon.toml) · [vibrant](alacritty/silkcircuit-vibrant.toml) · [soft](alacritty/silkcircuit-soft.toml) · [glow](alacritty/silkcircuit-glow.toml) · [dawn](alacritty/silkcircuit-dawn.toml)                                    |
-| Atuin                           | [reference](https://github.com/atuinsh/atuin/blob/main/crates/atuin-client/src/theme.rs)           | [neon](atuin/silkcircuit-neon.toml) · [vibrant](atuin/silkcircuit-vibrant.toml) · [soft](atuin/silkcircuit-soft.toml) · [glow](atuin/silkcircuit-glow.toml) · [dawn](atuin/silkcircuit-dawn.toml)                                                        |
-| btop                            | [reference](https://github.com/aristocratos/btop#themes)                                           | [neon](btop/silkcircuit-neon.theme) · [vibrant](btop/silkcircuit-vibrant.theme) · [soft](btop/silkcircuit-soft.theme) · [glow](btop/silkcircuit-glow.theme) · [dawn](btop/silkcircuit-dawn.theme)                                                        |
-| COSMIC Desktop                  | [reference](https://github.com/pop-os/cosmic-theme)                                                | [neon](cosmic/silkcircuit-neon.ron) · [vibrant](cosmic/silkcircuit-vibrant.ron) · [soft](cosmic/silkcircuit-soft.ron) · [glow](cosmic/silkcircuit-glow.ron) · [dawn](cosmic/silkcircuit-dawn.ron)                                                        |
-| dmesg                           | [reference](https://www.man7.org/linux/man-pages/man5/terminal-colors.d.5.html)                    | [neon](dmesg/silkcircuit-neon.scheme) · [vibrant](dmesg/silkcircuit-vibrant.scheme) · [soft](dmesg/silkcircuit-soft.scheme) · [glow](dmesg/silkcircuit-glow.scheme) · [dawn](dmesg/silkcircuit-dawn.scheme)                                              |
-| foot                            | [reference](https://codeberg.org/dnkl/foot/src/branch/master/doc/foot.ini.5.scd)                   | [neon](foot/silkcircuit-neon.ini) · [vibrant](foot/silkcircuit-vibrant.ini) · [soft](foot/silkcircuit-soft.ini) · [glow](foot/silkcircuit-glow.ini) · [dawn](foot/silkcircuit-dawn.ini)                                                                  |
-| fzf                             | [reference](https://github.com/junegunn/fzf/blob/master/man/man1/fzf.1)                            | [neon](fzf/silkcircuit-neon.sh) · [vibrant](fzf/silkcircuit-vibrant.sh) · [soft](fzf/silkcircuit-soft.sh) · [glow](fzf/silkcircuit-glow.sh) · [dawn](fzf/silkcircuit-dawn.sh)                                                                            |
-| fzf (PowerShell)                | [reference](https://github.com/junegunn/fzf/blob/master/man/man1/fzf.1)                            | [neon](fzf/silkcircuit-neon.ps1) · [vibrant](fzf/silkcircuit-vibrant.ps1) · [soft](fzf/silkcircuit-soft.ps1) · [glow](fzf/silkcircuit-glow.ps1) · [dawn](fzf/silkcircuit-dawn.ps1)                                                                       |
 | Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                       | [neon](ghostty/silkcircuit-neon) · [vibrant](ghostty/silkcircuit-vibrant) · [soft](ghostty/silkcircuit-soft) · [glow](ghostty/silkcircuit-glow) · [dawn](ghostty/silkcircuit-dawn)                                                                       |
 | Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | [neon](ghostty/silkcircuit-neon.css) · [vibrant](ghostty/silkcircuit-vibrant.css) · [soft](ghostty/silkcircuit-soft.css) · [glow](ghostty/silkcircuit-glow.css) · [dawn](ghostty/silkcircuit-dawn.css)                                                   |
-| Helix                           | [reference](https://docs.helix-editor.com/themes.html)                                             | [neon](helix/silkcircuit-neon.toml) · [vibrant](helix/silkcircuit-vibrant.toml) · [soft](helix/silkcircuit-soft.toml) · [glow](helix/silkcircuit-glow.toml) · [dawn](helix/silkcircuit-dawn.toml)                                                        |
-| iTerm2                          | [reference](https://iterm2.com/documentation-preferences-profiles-colors.html)                     | [neon](iterm2/silkcircuit-neon.itermcolors) · [vibrant](iterm2/silkcircuit-vibrant.itermcolors) · [soft](iterm2/silkcircuit-soft.itermcolors) · [glow](iterm2/silkcircuit-glow.itermcolors) · [dawn](iterm2/silkcircuit-dawn.itermcolors)                |
-| k9s                             | [reference](https://k9scli.io/topics/skins/)                                                       | [neon](k9s/silkcircuit-neon.yaml) · [vibrant](k9s/silkcircuit-vibrant.yaml) · [soft](k9s/silkcircuit-soft.yaml) · [glow](k9s/silkcircuit-glow.yaml) · [dawn](k9s/silkcircuit-dawn.yaml)                                                                  |
 | Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | [neon](kitty/silkcircuit-neon.conf) · [vibrant](kitty/silkcircuit-vibrant.conf) · [soft](kitty/silkcircuit-soft.conf) · [glow](kitty/silkcircuit-glow.conf) · [dawn](kitty/silkcircuit-dawn.conf)                                                        |
-| lazygit                         | [reference](https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes)  | [neon](lazygit/silkcircuit-neon.yml) · [vibrant](lazygit/silkcircuit-vibrant.yml) · [soft](lazygit/silkcircuit-soft.yml) · [glow](lazygit/silkcircuit-glow.yml) · [dawn](lazygit/silkcircuit-dawn.yml)                                                   |
-| Slack                           | [reference](https://slack.com/help/articles/205166057-Change-your-Slack-theme)                     | [neon](slack/silkcircuit-neon.txt) · [vibrant](slack/silkcircuit-vibrant.txt) · [soft](slack/silkcircuit-soft.txt) · [glow](slack/silkcircuit-glow.txt) · [dawn](slack/silkcircuit-dawn.txt)                                                             |
-| tmux                            | [reference](https://man.openbsd.org/tmux#STYLES)                                                   | [neon](tmux/silkcircuit-neon.conf) · [vibrant](tmux/silkcircuit-vibrant.conf) · [soft](tmux/silkcircuit-soft.conf) · [glow](tmux/silkcircuit-glow.conf) · [dawn](tmux/silkcircuit-dawn.conf)                                                             |
-| VS Code                         | [reference](https://code.visualstudio.com/api/extension-guides/color-theme)                        | [neon](vscode/themes/silkcircuit-neon.json) · [vibrant](vscode/themes/silkcircuit-vibrant.json) · [soft](vscode/themes/silkcircuit-soft.json) · [glow](vscode/themes/silkcircuit-glow.json) · [dawn](vscode/themes/silkcircuit-dawn.json)                |
+| lsd                             | [reference](https://github.com/lsd-rs/lsd/blob/master/doc/colors.md)                               | [neon](lsd/silkcircuit-neon.yaml) · [vibrant](lsd/silkcircuit-vibrant.yaml) · [soft](lsd/silkcircuit-soft.yaml) · [glow](lsd/silkcircuit-glow.yaml) · [dawn](lsd/silkcircuit-dawn.yaml)                                                                  |
 | Warp                            | [reference](https://docs.warp.dev/terminal/appearance/custom-themes)                               | [neon](warp/silkcircuit-neon.yaml) · [vibrant](warp/silkcircuit-vibrant.yaml) · [soft](warp/silkcircuit-soft.yaml) · [glow](warp/silkcircuit-glow.yaml) · [dawn](warp/silkcircuit-dawn.yaml)                                                             |
 | WezTerm                         | [reference](https://wezterm.org/config/appearance.html#defining-a-color-scheme-in-a-separate-file) | [neon](wezterm/silkcircuit-neon.toml) · [vibrant](wezterm/silkcircuit-vibrant.toml) · [soft](wezterm/silkcircuit-soft.toml) · [glow](wezterm/silkcircuit-glow.toml) · [dawn](wezterm/silkcircuit-dawn.toml)                                              |
 | Windows Terminal                | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes)   | [neon](windows-terminal/silkcircuit-neon.json) · [vibrant](windows-terminal/silkcircuit-vibrant.json) · [soft](windows-terminal/silkcircuit-soft.json) · [glow](windows-terminal/silkcircuit-glow.json) · [dawn](windows-terminal/silkcircuit-dawn.json) |
 | Windows Terminal (every scheme) | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes)   | [every variant](windows-terminal/silkcircuit.json)                                                                                                                                                                                                       |
-| Zellij                          | [reference](https://zellij.dev/documentation/themes)                                               | [neon](zellij/silkcircuit-neon.kdl) · [vibrant](zellij/silkcircuit-vibrant.kdl) · [soft](zellij/silkcircuit-soft.kdl) · [glow](zellij/silkcircuit-glow.kdl) · [dawn](zellij/silkcircuit-dawn.kdl)                                                        |
-| Zellij (every theme)            | [reference](https://zellij.dev/documentation/themes)                                               | [every variant](zellij/silkcircuit.kdl)                                                                                                                                                                                                                  |
 
 <!-- extras:end -->
 
@@ -106,24 +91,23 @@ make chrome
 # Select: extras/chrome-theme/silkcircuit-{neon,vibrant,soft,glow,dawn}/
 ```
 
-### 💬 Slack Theme (`slack/`)
+### 💬 Slack Theme (`slack-theme.txt`)
 
-All five variants, each as the ten-color line Slack's importer reads:
+Transform your Slack workspace with SilkCircuit's 4-color themes:
 
-- **Sidebar surfaces** that follow the variant's own backgrounds
-- **Electric purple** for the active channel
-- **Neon green** presence indicators
-- **Hot pink** mention badges
+- **Deep purple** navigation (#2E1B7A)
+- **Electric purple** for selected items (#E135FF)
+- **Neon green** presence indicators (#50FA7B)
+- **Hot pink** notifications (#FF79C6)
 
 **Setup:**
 
 ```bash
-# Open Slack → Preferences → Themes → Create a custom theme
-# Paste the last line of extras/slack/silkcircuit-neon.txt into the color box
+# Open Slack → Preferences → Themes
+# Copy hex values from extras/slack-theme.txt
+# Click each color circle and paste the corresponding hex value
+# Enable "Window gradient" for best effect
 ```
-
-Every file also lists the ten slots by name, so you can set them one at a
-time instead of pasting.
 
 ### 📊 btop Theme (`btop/`)
 
