@@ -1,52 +1,41 @@
-# Compiled Lua
+# Neovim / Lua
 *.luac
+.tests/
+luacov.stats.out
+luacov.report.out
 
-# LuaRocks build artifacts
-*.src.rock
-*.zip
-*.tar.gz
+# Node (docs site)
+node_modules/
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+npm-debug.log*
+.pnpm-store/
 
-# Object files
-*.o
-*.os
-*.ko
-*.obj
-*.elf
+# Python (scripts/)
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-*.def
-*.exp
-
-# Shared objects
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Cache
+# Build output and packaged artifacts
+dist/
+build/
 cache/
 .cache/
+*.vsix
+*.zip
+*.tar.gz
+*.src.rock
+silkcircuit-chrome-*.zip
+Cached Theme.pak
 
-# Neovim
-.luarc.json
+# Test output
+test-results/
+coverage/
 
-# Development
+# Editors and OS
 .vscode/
 .idea/
 *.swp
@@ -54,29 +43,6 @@ cache/
 *~
 .DS_Store
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.mypy_cache/
-
-# Testing
-test-results/
-coverage/
-
-# Documentation build
-docs/_build/
-
-# Package files
-dist/
-build/
-
-# Environment
+# Local environment
 .env
 .env.local
-
-# Pre-commit
-.pre-commit-config.yaml.lock
-silkcircuit-chrome-*.zip
-Cached Theme.pak
