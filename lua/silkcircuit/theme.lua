@@ -25,30 +25,44 @@ function M.get_highlights(colors, opts)
   highlights.CursorColumn = { link = "CursorLine" }
   highlights.ColorColumn = { bg = colors.bg_highlight }
   highlights.LineNr = { fg = colors.gray }
+  highlights.LineNrAbove = { link = "LineNr" }
+  highlights.LineNrBelow = { link = "LineNr" }
   highlights.VertSplit = { fg = colors.bg_highlight }
   highlights.WinSeparator = { fg = colors.bg_highlight }
   highlights.FloatBorder =
     { fg = sem.border, bg = opts.transparent and colors.none or colors.bg_highlight }
   highlights.FloatTitle =
     { fg = colors.pink, bg = opts.transparent and colors.none or colors.bg_highlight, bold = true }
+  highlights.FloatFooter =
+    { fg = colors.purple, bg = opts.transparent and colors.none or colors.bg_highlight }
   highlights.WinBar = { fg = colors.pink_bright }
   highlights.WinBarNC = { fg = colors.purple_muted }
   highlights.SignColumn = { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg }
+  highlights.CursorLineSign = { bg = colors.bg_highlight }
   highlights.Folded = { fg = colors.gray, bg = colors.bg_highlight }
   highlights.FoldColumn = { fg = colors.gray }
+  highlights.CursorLineFold = { fg = colors.purple, bg = colors.bg_highlight }
   highlights.EndOfBuffer = { fg = colors.bg }
 
   -- Statusline
   highlights.StatusLine = { fg = colors.fg_light, bg = colors.bg_highlight }
   highlights.StatusLineNC = { fg = colors.gray, bg = colors.bg_highlight }
+  highlights.StatusLineTerm = { fg = colors.fg_light, bg = colors.bg_statusline, bold = true }
+  highlights.StatusLineTermNC = { fg = colors.fg_dark, bg = colors.bg_statusline }
 
-  -- Pmenu
+  -- Pmenu. Neovim 0.11 splits the popup row into label, kind and extra, and
+  -- highlights the matched prefix separately from the rest of the label.
   highlights.Pmenu = { fg = colors.fg, bg = colors.bg_highlight }
   highlights.PmenuSel = { fg = colors.bg, bg = colors.purple }
   highlights.PmenuSbar = { bg = colors.bg_highlight }
   highlights.PmenuThumb = { bg = colors.gray }
-  highlights.PmenuExtra = { fg = colors.gray }
-  highlights.PmenuExtraSel = { fg = colors.purple_muted }
+  highlights.PmenuMatch = { fg = colors.pink, bg = colors.bg_highlight, bold = true }
+  highlights.PmenuMatchSel = { fg = colors.bg, bg = colors.purple, bold = true }
+  highlights.PmenuKind = { fg = colors.purple, bg = colors.bg_highlight }
+  highlights.PmenuKindSel = { fg = colors.bg, bg = colors.purple }
+  highlights.PmenuExtra = { fg = colors.purple_muted, bg = colors.bg_highlight }
+  highlights.PmenuExtraSel = { fg = colors.bg, bg = colors.purple, italic = true }
+  highlights.ComplMatchIns = { link = "Comment" }
 
   -- Tabs
   highlights.TabLine = { fg = colors.gray, bg = colors.bg_highlight }
@@ -59,10 +73,13 @@ function M.get_highlights(colors, opts)
   highlights.Search = { fg = colors.bg, bg = colors.yellow }
   highlights.IncSearch = { fg = colors.bg, bg = colors.coral }
   highlights.CurSearch = { fg = colors.bg, bg = colors.pink }
+  highlights.Substitute = { fg = colors.bg, bg = colors.red }
   highlights.Visual = { bg = colors.selection }
   highlights.VisualNOS = { bg = colors.selection }
   highlights.Selection = { bg = colors.selection }
   highlights.MatchParen = { fg = colors.pink, bold = true }
+  highlights.SnippetTabstop = { bg = colors.selection }
+  highlights.QuickFixLine = { bg = colors.bg_visual, bold = true }
 
   -- Diagnostics handled in integrations/native_lsp.lua
 
@@ -90,6 +107,11 @@ function M.get_highlights(colors, opts)
   highlights.diffAdded = { fg = colors.git_add }
   highlights.diffRemoved = { fg = colors.git_delete }
   highlights.diffChanged = { fg = colors.git_change }
+
+  -- The unprefixed diff groups Neovim exposes for statuslines and plugins
+  highlights.Added = { fg = colors.git_add }
+  highlights.Changed = { fg = colors.git_change }
+  highlights.Removed = { fg = colors.git_delete }
 
   -- Spell
   highlights.SpellBad = { undercurl = true, sp = colors.error }

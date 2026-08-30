@@ -46,10 +46,18 @@ function M.get(colors, opts)
   highlights.DiagnosticSignHint = { fg = colors.hint, bg = colors.bg }
   highlights.DiagnosticSignOk = { fg = colors.green_bright, bg = colors.bg }
 
-  -- LSP References
+  -- Code the server marks as unused or deprecated. Both are deliberately
+  -- de-emphasised: Unnecessary reads as dead weight, Deprecated keeps the
+  -- surrounding foreground and only strikes through in the warning colour.
+  highlights.DiagnosticUnnecessary = { link = "Comment" }
+  highlights.DiagnosticDeprecated = { strikethrough = true, sp = colors.warning }
+
+  -- LSP References. Target is the symbol under the cursor itself, the one the
+  -- other three are references to.
   highlights.LspReferenceText = { bg = colors.bg_highlight, bold = true }
   highlights.LspReferenceRead = { bg = colors.bg_highlight, bold = true }
   highlights.LspReferenceWrite = { bg = colors.selection, bold = true }
+  highlights.LspReferenceTarget = { bg = colors.selection_highlight, bold = true }
 
   -- LSP Signature Help
   highlights.LspSignatureActiveParameter = { fg = colors.pink_bright, bold = true, italic = true }
@@ -157,6 +165,12 @@ function M.get(colors, opts)
   highlights["@lsp.type.macro"] = { fg = colors.purple }
   highlights["@lsp.type.decorator"] = { fg = sem.decorator }
 
+  highlights["@lsp.type.event"] = { link = "@constant" }
+  highlights["@lsp.type.modifier"] = { link = "@keyword.modifier" }
+  highlights["@lsp.type.regexp"] = { link = "@string.regexp" }
+  highlights["@lsp.type.string"] = { link = "@string" }
+  highlights["@lsp.type.typeParameter"] = { link = "@type" }
+
   -- LSP Semantic Token links
   highlights["@lsp.type.boolean"] = { link = "@boolean" }
   highlights["@lsp.type.builtinType"] = { link = "@type.builtin" }
@@ -181,6 +195,7 @@ function M.get(colors, opts)
   highlights["@lsp.typemod.type.defaultLibrary"] = { link = "@type.builtin" }
   highlights["@lsp.typemod.variable.defaultLibrary"] = { link = "@variable.builtin" }
   highlights["@lsp.typemod.variable.injected"] = { link = "@variable" }
+  highlights["@lsp.mod.deprecated"] = { link = "DiagnosticDeprecated" }
 
   return highlights
 end
