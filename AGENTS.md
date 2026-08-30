@@ -9,7 +9,7 @@ SilkCircuit is a unified design system featuring neon purples, electric pinks, a
 
 ## Core Principles
 
-1. **Performance First** - Theme loads in <5ms with bytecode compilation
+1. **Performance First** - Theme loads in a few milliseconds with every integration defined
 2. **Accessibility** - All colors meet WCAG AA contrast standards
 3. **Plugin Auto-Detection** - Automatically detect and theme installed plugins
 4. **User Choice** - Five variants (neon/vibrant/soft/glow/dawn) with persistent preferences
@@ -125,9 +125,8 @@ green local run means a green pipeline.
 
 1. Run `make check` - Must pass
 2. Test all variants - `:SilkCircuit neon|vibrant|soft|glow|dawn`
-3. Check compilation - `:SilkCircuitCompile`
-4. Verify contrast - `:SilkCircuitContrast`
-5. Run checkhealth - `:checkhealth silkcircuit`
+3. Verify contrast - `:SilkCircuitContrast`
+4. Run checkhealth - `:checkhealth silkcircuit`
 
 ### Manual Testing
 
@@ -229,9 +228,9 @@ Examples:
 - Include before/after screenshots for visual changes
 - Read `CONTRIBUTING.md` before your first PR
 
-There is no CHANGELOG.md to update. The release workflow builds release
-notes from the commit log between tags, so the commit subject you write is
-the changelog entry users read.
+Do not edit CHANGELOG.md by hand. release-please generates it from the
+conventional commit subjects on main, so the subject you write is the
+changelog entry users read.
 
 ## Debugging
 
@@ -239,8 +238,7 @@ the changelog entry users read.
 
 1. **Highlights not applying**: Check `:hi {GroupName}`
 2. **Plugin not detected**: Verify in `:SilkCircuitIntegrations`
-3. **Slow loading**: Run `:SilkCircuitCompile`
-4. **Colors look wrong**: Check terminal true color support
+3. **Colors look wrong**: Check terminal true color support
 
 ### Debug Mode
 
@@ -264,7 +262,6 @@ vim.g.silkcircuit_debug = true
 - `:SilkCircuit {variant}` - Switch variant
 - `:SilkCircuitGlow` - Toggle glow mode
 - `:SilkCircuitContrast` - Check WCAG compliance
-- `:SilkCircuitCompile` - Compile for performance
 - `:SilkCircuitIntegrations` - Show detected plugins
 - `:checkhealth silkcircuit` - Full diagnostics
 

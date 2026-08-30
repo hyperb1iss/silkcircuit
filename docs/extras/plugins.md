@@ -26,7 +26,6 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 | Plugin        | Status        |
 | ------------- | ------------- |
 | gitsigns.nvim | Auto-detected |
-| diffview.nvim | Auto-detected |
 | neogit        | Auto-detected |
 | octo.nvim     | Auto-detected |
 
@@ -37,7 +36,6 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 | nvim-lspconfig | Auto-detected |
 | nvim-cmp       | Auto-detected |
 | mason.nvim     | Auto-detected |
-| trouble.nvim   | Auto-detected |
 
 ### UI Components
 
@@ -49,7 +47,6 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 | noice.nvim            | Auto-detected |
 | indent-blankline.nvim | Auto-detected |
 | which-key.nvim        | Auto-detected |
-| dashboard-nvim        | Auto-detected |
 | alpha-nvim            | Auto-detected |
 
 ### Editing
@@ -58,7 +55,6 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 | ----------------------- | ------------- |
 | nvim-treesitter         | Auto-detected |
 | flash.nvim              | Auto-detected |
-| leap.nvim               | Auto-detected |
 | mini.nvim               | Auto-detected |
 | harpoon                 | Auto-detected |
 | rainbow-delimiters.nvim | Auto-detected |
@@ -74,14 +70,12 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 
 | Plugin               | Status        |
 | -------------------- | ------------- |
-| lazy.nvim            | Auto-detected |
 | aerial.nvim          | Auto-detected |
 | avante.nvim          | Auto-detected |
 | snacks.nvim          | Auto-detected |
 | nvim-ufo             | Auto-detected |
 | nvim-window-picker   | Auto-detected |
 | render-markdown.nvim | Auto-detected |
-| symbols-outline.nvim | Auto-detected |
 
 ## Check Integrations
 
