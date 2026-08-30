@@ -58,7 +58,7 @@ function M.get_luminance(hex)
     if c <= 0.03928 then
       return c / 12.92
     else
-      return math.pow((c + 0.055) / 1.055, 2.4)
+      return ((c + 0.055) / 1.055) ^ 2.4
     end
   end
 
