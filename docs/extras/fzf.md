@@ -28,8 +28,8 @@ The installer does either one: `./install.sh --variant neon` or
 
 ## Requires fzf 0.52
 
-The files set `selected-fg`, `selected-bg`, `selected-hl`, and `border`, which
-older releases reject outright rather than ignore.
+The files set `selected-fg`, `selected-bg`, `selected-hl`, and `border`.
+Older releases do not know those names.
 
 ## Setting your own options
 

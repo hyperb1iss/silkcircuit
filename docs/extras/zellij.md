@@ -19,8 +19,8 @@ theme "silkcircuit-neon"
 `extras/zellij/silkcircuit.kdl` holds all five themes in one file, for anyone
 who would rather drop in a single theme file than five.
 
-Needs Zellij 0.42 or newer, which is where the current theme format with
-`text_unselected` and the ribbon slots landed.
+Needs Zellij 0.42 or newer. Older releases do not understand the
+`text_unselected` and ribbon slots these themes are written against.
 
 The installer does the same thing: `./install.sh --variant neon`.
 
