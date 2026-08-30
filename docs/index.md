@@ -21,7 +21,7 @@ features:
     title: 5 Electric Variants
     details: Neon, Vibrant, Soft, Glow, and Dawn - from maximum intensity dark themes to a beautiful light mode
   - icon: 🎨
-    title: 40+ Plugin Integrations
+    title: 25+ Plugin Integrations
     details: Auto-detected support for Telescope, Neo-tree, LSP, nvim-cmp, and your entire toolchain
   - icon: 👁️
     title: WCAG AA Compliant

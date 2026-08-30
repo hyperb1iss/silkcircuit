@@ -1,6 +1,6 @@
 # Neovim Plugin Integrations
 
-SilkCircuit automatically themes 40+ Neovim plugins.
+SilkCircuit automatically themes 25+ Neovim plugins.
 
 ## Auto-Detection
 
@@ -14,33 +14,30 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 | ------------- | ------------- |
 | neo-tree.nvim | Auto-detected |
 | nvim-tree.lua | Auto-detected |
-| oil.nvim      | Auto-detected |
 
 ### Fuzzy Finders
 
 | Plugin         | Status        |
 | -------------- | ------------- |
 | telescope.nvim | Auto-detected |
-| fzf-lua        | Auto-detected |
 
 ### Git Integration
 
 | Plugin        | Status        |
 | ------------- | ------------- |
 | gitsigns.nvim | Auto-detected |
-| vim-fugitive  | Auto-detected |
 | diffview.nvim | Auto-detected |
 | neogit        | Auto-detected |
+| octo.nvim     | Auto-detected |
 
 ### LSP & Completion
 
-| Plugin             | Status        |
-| ------------------ | ------------- |
-| nvim-lspconfig     | Auto-detected |
-| nvim-cmp           | Auto-detected |
-| mason.nvim         | Auto-detected |
-| trouble.nvim       | Auto-detected |
-| lsp_signature.nvim | Auto-detected |
+| Plugin         | Status        |
+| -------------- | ------------- |
+| nvim-lspconfig | Auto-detected |
+| nvim-cmp       | Auto-detected |
+| mason.nvim     | Auto-detected |
+| trouble.nvim   | Auto-detected |
 
 ### UI Components
 
@@ -57,13 +54,14 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 
 ### Editing
 
-| Plugin          | Status        |
-| --------------- | ------------- |
-| nvim-treesitter | Auto-detected |
-| nvim-surround   | Auto-detected |
-| flash.nvim      | Auto-detected |
-| leap.nvim       | Auto-detected |
-| mini.nvim       | Auto-detected |
+| Plugin                  | Status        |
+| ----------------------- | ------------- |
+| nvim-treesitter         | Auto-detected |
+| flash.nvim              | Auto-detected |
+| leap.nvim               | Auto-detected |
+| mini.nvim               | Auto-detected |
+| harpoon                 | Auto-detected |
+| rainbow-delimiters.nvim | Auto-detected |
 
 ### Debugging
 
@@ -74,13 +72,16 @@ SilkCircuit detects installed plugins and applies matching styles automatically.
 
 ### Other
 
-| Plugin                | Status        |
-| --------------------- | ------------- |
-| lazy.nvim             | Auto-detected |
-| aerial.nvim           | Auto-detected |
-| symbols-outline.nvim  | Auto-detected |
-| todo-comments.nvim    | Auto-detected |
-| markdown-preview.nvim | Auto-detected |
+| Plugin               | Status        |
+| -------------------- | ------------- |
+| lazy.nvim            | Auto-detected |
+| aerial.nvim          | Auto-detected |
+| avante.nvim          | Auto-detected |
+| snacks.nvim          | Auto-detected |
+| nvim-ufo             | Auto-detected |
+| nvim-window-picker   | Auto-detected |
+| render-markdown.nvim | Auto-detected |
+| symbols-outline.nvim | Auto-detected |
 
 ## Check Integrations
 

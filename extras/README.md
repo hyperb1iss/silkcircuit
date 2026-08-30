@@ -18,7 +18,7 @@ Complete AstroNvim setup with SilkCircuit styling:
 
 ```bash
 # Copy all AstroNvim configs
-cp -r extras/astronvim/* ~/.config/nvim/lua/
+cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/
 ```
 
 ### ⚡ Git Configuration (`gitconfig`)
@@ -89,7 +89,7 @@ Full SilkCircuit browser theming across all five variants.
 - **24 theme color keys**: frame, toolbar, omnibox, tabs, NTP, tab groups
 - **Circuit-trace NTP backgrounds**: unique per variant
 - **DevTools CSS**: modern CM6 + `--sys-color-*` tokens
-- **Chrome pages CSS**:`--cr-*` overrides for internal pages
+- **Chrome pages CSS**: `--cr-*` overrides for internal pages
 
 **Setup:**
 
@@ -114,7 +114,7 @@ Transform your Slack workspace with SilkCircuit's 4-color themes:
 
 ```bash
 # Open Slack → Preferences → Themes
-# Copy hex values from slack-theme-simple.txt
+# Copy hex values from extras/slack-theme.txt
 # Click each color circle and paste the corresponding hex value
 # Enable "Window gradient" for best effect
 ```
@@ -132,9 +132,60 @@ System monitoring with SilkCircuit style:
 
 ```bash
 # Copy to btop themes directory
-cp btop/silkcircuit_*.theme ~/.config/btop/themes/
+cp extras/btop/silkcircuit_*.theme ~/.config/btop/themes/
 
 # In btop: Esc → Options → Color theme → Select variant
+```
+
+### ☸️ K9s Skins (`k9s/`)
+
+Kubernetes dashboard skins in all five variants (`silkcircuit.yaml` plus
+`silkcircuit-{vibrant,soft,glow,dawn}.yaml`).
+
+**Setup:**
+
+```bash
+cp extras/k9s/silkcircuit*.yaml ~/.config/k9s/skins/
+# Then set k9s.ui.skin in ~/.config/k9s/config.yaml, or press :skin in K9s
+```
+
+### 🖥️ Ghostty (`ghostty/`)
+
+Native Ghostty themes in all five variants, each paired with a `.css` file for
+Ghostty's custom shader surfaces.
+
+**Setup:**
+
+```bash
+cp extras/ghostty/silkcircuit-* ~/.config/ghostty/themes/
+# Then add: theme = dark:silkcircuit-neon,light:silkcircuit-dawn
+```
+
+### 🛠️ CLI and System Tools
+
+One config per tool, all drawing on the same palette:
+
+- **Starship** (`starship/starship.toml`) - Prompt with SilkCircuit segments
+- **tmux** (`tmux.conf`) - Status line, panes, and window styling
+- **lazygit** (`lazygit/config.yml`) - Git TUI colors
+- **bat** (`bat/SilkCircuit.tmTheme`, `bat/config`) - Syntax highlighting for `bat`
+- **lsd** (`lsd/colors.yaml`, `lsd/config.yaml`) - Directory listing colors
+- **atuin** (`atuin/silkcircuit.toml`) - Shell history search
+- **procs** (`procs/config.toml`) - Process viewer columns
+- **fastfetch** (`fastfetch/config.jsonc`) - System info readout
+- **dmesg** (`dmesg/*.scheme`) - Kernel log colors, all five variants
+- **COSMIC Desktop** (`cosmic/*.ron`) - Desktop theme, all five variants
+
+**Setup:**
+
+```bash
+cp extras/starship/starship.toml ~/.config/starship.toml
+cp extras/lazygit/config.yml ~/.config/lazygit/config.yml
+cp extras/bat/SilkCircuit.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
+cp extras/lsd/*.yaml ~/.config/lsd/
+cp extras/atuin/silkcircuit.toml ~/.config/atuin/themes/
+cp extras/procs/config.toml ~/.config/procs/config.toml
+cp extras/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
 ```
 
 ### 🎨 Enhanced Tools
@@ -142,7 +193,8 @@ cp btop/silkcircuit_*.theme ~/.config/btop/themes/
 Additional tool configurations for the complete experience:
 
 - **Lualine config** (`lualine-config.lua`) - Standalone statusline setup
-- **FZF integration** (`fzf.sh`) - Fuzzy finder with SilkCircuit colors
+- **Avante config** (`avante-config.lua`) - Themed avante.nvim AI sidebar
+- **FZF integration** (`fzf.sh`, `fzf.ps1`) - Fuzzy finder with SilkCircuit colors
 
 ## 🎨 Color Palette Reference
 
@@ -175,7 +227,7 @@ cp extras/kitty.conf ~/.config/kitty/themes/silkcircuit.conf
 cp extras/alacritty.yml ~/.config/alacritty/themes/silkcircuit.yml
 
 # For AstroNvim users
-cp -r extras/astronvim/* ~/.config/nvim/lua/
+cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/
 ```
 
 ## 🌟 Pro Tips

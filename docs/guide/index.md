@@ -28,7 +28,7 @@ All color combinations meet WCAG AA standards (4.5:1 contrast ratio minimum). Co
 
 ## Features at a Glance
 
-- 🎨 **40+ Plugin Integrations**: Auto-detected and themed
+- 🎨 **25+ Plugin Integrations**: Auto-detected and themed
 - 🏎️ **<5ms Load Time**: Bytecode compiled
 - 👁️ **WCAG AA Compliant**: Validated contrast ratios
 - 💾 **Persistent Preferences**: Settings survive across sessions
