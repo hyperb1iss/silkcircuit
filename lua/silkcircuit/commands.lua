@@ -41,17 +41,9 @@ function M.setup()
       return
     end
 
-    -- Update config and reload
-    local config = require("silkcircuit.config")
-    config.options.variant = variant
-
-    -- Save preference
+    require("silkcircuit.config").set("variant", variant)
     preferences.set("variant", variant)
 
-    -- Force palette reload
-    package.loaded["silkcircuit.palette"] = nil
-
-    -- Reload theme
     vim.cmd("colorscheme silkcircuit")
     vim.notify(
       "Switched to '" .. variant .. "' variant → " .. variants.variants[variant].description,
