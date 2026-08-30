@@ -7,8 +7,63 @@ local base = {
   none = "NONE",
 }
 
--- Create variant by adjusting saturation/brightness
-local function create_variant(intensity, variant_name)
+local HEX6 = "^#%x%x%x%x%x%x$"
+local HEX8 = "^#(%x%x%x%x%x%x)(%x%x)$"
+
+-- Flatten "#RRGGBBAA" onto the variant background. nvim_set_hl only accepts
+-- solid colors, so an alpha value silently loses the whole highlight group.
+local function flatten_alpha(colors)
+  for key, value in pairs(colors) do
+    if type(value) == "string" then
+      local rgb, alpha = value:match(HEX8)
+      if rgb then
+        colors[key] = color_utils.blend("#" .. rgb, colors.bg, tonumber(alpha, 16) / 255)
+      end
+    end
+  end
+end
+
+-- Derive the keys every variant shares but none of them spell out. A variant
+-- that sets one of these explicitly keeps its own value.
+local function derive_keys(colors)
+  -- utils/colors takes the amount as how much of the source color survives,
+  -- so 0.97 is a hairline step away and 0.7 is a firm one.
+  local light = color_utils.is_bright(colors.bg)
+
+  -- Floats share the core theme's popup background so NormalFloat and every
+  -- integration's float body agree.
+  colors.bg_float = colors.bg_float or colors.bg_highlight
+  colors.bg_statusline = colors.bg_statusline or colors.bg_highlight
+  colors.bg_darker = colors.bg_darker or color_utils.darken(colors.bg_dark, light and 0.97 or 0.7)
+
+  colors.border = colors.border or colors.cyan_bright
+  colors.keyword = colors.keyword or colors.purple
+  colors.operator = colors.operator or colors.fg_dark
+  colors.string = colors.string or colors.pink_soft
+  colors.comment = colors.comment or colors.purple_muted
+  colors.gray_muted = colors.gray_muted
+    or (light and color_utils.lighten(colors.gray, 0.6) or color_utils.darken(colors.gray, 0.7))
+end
+
+-- Every value that looks like a color must be renderable by nvim_set_hl.
+local function assert_renderable(colors, variant_name)
+  for key, value in pairs(colors) do
+    if type(value) == "string" and value ~= "NONE" then
+      assert(
+        value:match(HEX6),
+        string.format(
+          "silkcircuit: variant '%s' key '%s' is not a solid color: %s",
+          variant_name,
+          key,
+          value
+        )
+      )
+    end
+  end
+end
+
+-- Build one of the three VSCode-derived dark variants
+local function create_variant(variant_name)
   -- Set base colors based on variant
   local backgrounds = {}
   if variant_name == "neon" then
@@ -50,7 +105,6 @@ local function create_variant(intensity, variant_name)
     gray_dark = "#5f7e97",
   })
 
-  -- Neon colors with intensity adjustment
   local neon_colors = {}
 
   if variant_name == "soft" then
@@ -122,7 +176,7 @@ local function create_variant(intensity, variant_name)
       pink_soft = "#ff99ff",
 
       -- Others (from VSCode vibrant)
-      coral = "#F78C6C",
+      coral = "#f78c6c",
       red = "#ff3366",
       red_dark = "#ff3366",
       red_error = "#ff3366",
@@ -150,9 +204,9 @@ local function create_variant(intensity, variant_name)
       green_bright = "#50fa7b", -- VSCode green
 
       -- Blues
-      blue = "#82AAFF", -- VSCode blue
+      blue = "#82aaff", -- VSCode blue
       blue_bright = "#82b1ff", -- VSCode bright blue
-      blue_light = "#82AAFF", -- Keep consistent
+      blue_light = "#82aaff", -- Keep consistent
       blue_gray = "#6272a4", -- VSCode comment/gray
 
       -- Pinks/Magentas
@@ -170,14 +224,6 @@ local function create_variant(intensity, variant_name)
       yellow_bright = "#ffffa5", -- VSCode bright yellow (terminal)
       yellow_light = "#ffffcc", -- Light yellow
     }
-  end
-
-  -- Apply intensity adjustments (skip for soft and vibrant variants as we use exact colors)
-  if intensity < 1.0 and variant_name ~= "soft" and variant_name ~= "vibrant" then
-    for key, color in pairs(neon_colors) do
-      -- Reduce saturation for softer variants by blending with gray
-      neon_colors[key] = color_utils.blend(color, "#808080", intensity)
-    end
   end
 
   -- Merge adjusted colors
@@ -216,7 +262,7 @@ local function create_variant(intensity, variant_name)
   -- Glow effects
   colors.glow_pink = colors.pink
   colors.glow_purple = colors.purple
-  colors.glow_cyan = intensity > 0.8 and "#00ffff" or colors.cyan
+  colors.glow_cyan = variant_name == "soft" and colors.cyan or "#00ffff"
 
   -- Terminal colors (updated for soft variant to match VSCode)
   if variant_name == "soft" then
@@ -258,12 +304,12 @@ local function create_variant(intensity, variant_name)
   -- Diagnostic colors
   colors.error = "#ff5874"
   colors.warning = "#ecc48d"
-  colors.info = "#82AAFF"
+  colors.info = "#82aaff"
   colors.hint = "#7fdbca"
 
   -- Git colors
   colors.git_add = "#addb67"
-  colors.git_change = "#82AAFF"
+  colors.git_change = "#82aaff"
   colors.git_delete = "#ff5874"
 
   return colors
@@ -485,27 +531,22 @@ end
 M.variants = {
   neon = {
     name = "neon",
-    intensity = 1.0,
     description = "Maximum neon intensity - the original SilkCircuit experience",
   },
   vibrant = {
     name = "vibrant",
-    intensity = 0.85,
     description = "Slightly toned down - easier on the eyes for longer sessions",
   },
   soft = {
     name = "soft",
-    intensity = 0.7,
     description = "Softer colors - comfortable for extended coding",
   },
   glow = {
     name = "glow",
-    intensity = 1.0,
     description = "Ultra-dark backgrounds with pure neon colors - maximum contrast",
   },
   dawn = {
     name = "dawn",
-    intensity = 1.0,
     description = "Light theme for daytime - electric accents on soft backgrounds",
   },
 }
@@ -513,24 +554,26 @@ M.variants = {
 -- Get colors for a specific variant
 function M.get_colors(variant_name)
   variant_name = variant_name or "neon"
-  local variant = M.variants[variant_name]
 
-  if not variant then
+  if not M.variants[variant_name] then
     vim.notify("Unknown variant: " .. variant_name .. ", using 'neon'", vim.log.levels.WARN)
-    variant = M.variants.neon
     variant_name = "neon"
   end
 
-  -- Use special variant functions for glow and dawn
+  local colors
   if variant_name == "glow" then
-    return create_glow_variant()
+    colors = create_glow_variant()
+  elseif variant_name == "dawn" then
+    colors = create_dawn_variant()
+  else
+    colors = create_variant(variant_name)
   end
 
-  if variant_name == "dawn" then
-    return create_dawn_variant()
-  end
+  flatten_alpha(colors)
+  derive_keys(colors)
+  assert_renderable(colors, variant_name)
 
-  return create_variant(variant.intensity, variant_name)
+  return colors
 end
 
 -- Get current variant from config or default

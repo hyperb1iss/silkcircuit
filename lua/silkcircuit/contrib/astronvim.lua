@@ -124,7 +124,7 @@ function M.status_colors(_)
     folder_open = c.glow_purple,
 
     -- Completion menu
-    pmenu_bg = c.bg_popup,
+    pmenu_bg = c.bg_float,
     pmenu_fg = c.fg,
     pmenu_sel_bg = c.glow_purple,
     pmenu_sel_fg = c.bg,
