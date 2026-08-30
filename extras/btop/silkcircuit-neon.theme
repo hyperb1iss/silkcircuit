@@ -50,40 +50,40 @@ theme[temp_end]="#ff6363"
 
 # CPU graph colors (purple -> pink -> cyan)
 theme[cpu_start]="#e135ff"
-theme[cpu_mid]="#ff00ff"
+theme[cpu_mid]="#ff69ff"
 theme[cpu_end]="#80ffea"
 
 # Mem/Disk free meter (cyan -> purple -> pink)
 theme[free_start]="#80ffea"
 theme[free_mid]="#e135ff"
-theme[free_end]="#ff00ff"
+theme[free_end]="#ff69ff"
 
 # Mem/Disk cached meter (muted purple -> purple -> pink)
 theme[cached_start]="#9580ff"
 theme[cached_mid]="#e135ff"
-theme[cached_end]="#ff00ff"
+theme[cached_end]="#ff69ff"
 
 # Mem/Disk available meter (pink -> orange -> red)
 theme[available_start]="#ff00ff"
 theme[available_mid]="#ff6ac1"
 theme[available_end]="#ff6363"
 
-# Mem/Disk used meter (green -> bright cyan -> cyan)
+# Mem/Disk used meter (green -> light cyan -> cyan)
 theme[used_start]="#50fa7b"
-theme[used_mid]="#5fffff"
+theme[used_mid]="#9ffcf9"
 theme[used_end]="#80ffea"
 
-# Download graph colors (pink -> purple)
-theme[download_start]="#ff00ff"
+# Download graph colors (light pink -> pink -> purple)
+theme[download_start]="#ff69ff"
 theme[download_mid]="#ff00ff"
 theme[download_end]="#e135ff"
 
-# Upload graph colors (cyan -> green)
+# Upload graph colors (cyan -> light cyan -> green)
 theme[upload_start]="#80ffea"
-theme[upload_mid]="#5fffff"
+theme[upload_mid]="#9ffcf9"
 theme[upload_end]="#50fa7b"
 
 # Process box color gradient for threads, mem and cpu usage (cyan -> purple -> pink)
 theme[process_start]="#80ffea"
 theme[process_mid]="#e135ff"
-theme[process_end]="#ff00ff"
+theme[process_end]="#ff69ff"

@@ -51,43 +51,43 @@ theme[temp_end]="${red}"
 
 # CPU graph colors (purple -> pink -> cyan)
 theme[cpu_start]="${purple}"
-theme[cpu_mid]="${pink}"
+theme[cpu_mid]="${pink_bright}"
 theme[cpu_end]="${cyan}"
 
 # Mem/Disk free meter (cyan -> purple -> pink)
 theme[free_start]="${cyan}"
 theme[free_mid]="${purple}"
-theme[free_end]="${pink}"
+theme[free_end]="${pink_bright}"
 
 # Mem/Disk cached meter (muted purple -> purple -> pink)
 theme[cached_start]="${purple_muted}"
 theme[cached_mid]="${purple}"
-theme[cached_end]="${pink}"
+theme[cached_end]="${pink_bright}"
 
 # Mem/Disk available meter (pink -> orange -> red)
 theme[available_start]="${pink}"
 theme[available_mid]="${orange}"
 theme[available_end]="${red}"
 
-# Mem/Disk used meter (green -> bright cyan -> cyan)
+# Mem/Disk used meter (green -> light cyan -> cyan)
 theme[used_start]="${green}"
-theme[used_mid]="${cyan_bright}"
+theme[used_mid]="${cyan_light}"
 theme[used_end]="${cyan}"
 
-# Download graph colors (pink -> purple)
-theme[download_start]="${pink}"
+# Download graph colors (light pink -> pink -> purple)
+theme[download_start]="${pink_bright}"
 theme[download_mid]="${pink}"
 theme[download_end]="${purple}"
 
-# Upload graph colors (cyan -> green)
+# Upload graph colors (cyan -> light cyan -> green)
 theme[upload_start]="${cyan}"
-theme[upload_mid]="${cyan_bright}"
+theme[upload_mid]="${cyan_light}"
 theme[upload_end]="${green}"
 
 # Process box color gradient for threads, mem and cpu usage (cyan -> purple -> pink)
 theme[process_start]="${cyan}"
 theme[process_mid]="${purple}"
-theme[process_end]="${pink}"
+theme[process_end]="${pink_bright}"
 ]]
 
 function M.generate(colors)
