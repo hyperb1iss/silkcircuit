@@ -10,12 +10,8 @@ Vibrant neon theme for K9s featuring electric purples, hot pinks, and glowing cy
 # Create the skins directory if it doesn't exist
 mkdir -p ~/.config/k9s/skins
 
-# Copy the theme file (choose your variant)
-cp silkcircuit.yaml ~/.config/k9s/skins/       # Default neon variant
-cp silkcircuit-vibrant.yaml ~/.config/k9s/skins/  # Ultra-vibrant
-cp silkcircuit-soft.yaml ~/.config/k9s/skins/     # Softer colors
-cp silkcircuit-glow.yaml ~/.config/k9s/skins/     # Pure neon glow
-cp silkcircuit-dawn.yaml ~/.config/k9s/skins/     # Light theme
+# Copy every variant, or just the one you want
+cp silkcircuit-*.yaml ~/.config/k9s/skins/
 ```
 
 2. Configure K9s to use the theme by editing `~/.config/k9s/config.yaml`:
@@ -23,13 +19,13 @@ cp silkcircuit-dawn.yaml ~/.config/k9s/skins/     # Light theme
 ```yaml
 k9s:
   ui:
-    skin: silkcircuit # Or silkcircuit-vibrant, silkcircuit-soft, etc.
+    skin: silkcircuit-neon # Or -vibrant, -soft, -glow, -dawn
 ```
 
 3. Alternatively, set the theme via environment variable:
 
 ```bash
-export K9S_SKIN="silkcircuit"
+export K9S_SKIN="silkcircuit-neon"
 ```
 
 ## Variants
@@ -68,7 +64,9 @@ The theme uses the SilkCircuit signature colors:
 
 ## Customization
 
-You can customize any color by editing the YAML file. The main sections are:
+These skins are generated from the palette by `scripts/build`, so edits to them
+are overwritten on the next build. Change the mapping in
+`lua/silkcircuit/extra/k9s.lua` and run `make build`. The sections are:
 
 - **body**: Main background and foreground colors
 - **frame**: UI chrome (borders, menus, crumbs, status)

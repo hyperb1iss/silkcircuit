@@ -28,6 +28,7 @@ Generated from the palette by `make build`, five variants each. See the
 | btop                            | [reference](https://github.com/aristocratos/btop#themes)                                           | `extras/btop/silkcircuit-{neon,vibrant,soft,glow,dawn}.theme`            |
 | Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                       | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`               |
 | Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
+| k9s                             | [reference](https://k9scli.io/topics/skins/)                                                       | `extras/k9s/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`              |
 | Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`            |
 | Warp                            | [reference](https://docs.warp.dev/terminal/appearance/custom-themes)                               | `extras/warp/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`             |
 | WezTerm                         | [reference](https://wezterm.org/config/appearance.html#defining-a-color-scheme-in-a-separate-file) | `extras/wezterm/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`          |
