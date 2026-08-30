@@ -282,9 +282,9 @@ body,
 
   /* Status surfaces */
   --sys-color-surface-error: {"rgba(255, 99, 99, 0.08)" if is_dark else "rgba(193, 39, 45, 0.08)"} !important;
-  --sys-color-surface-green: {"rgba(80, 250, 123, 0.08)" if is_dark else "rgba(45, 134, 89, 0.08)"} !important;
-  --sys-color-surface-yellow: {"rgba(241, 250, 140, 0.08)" if is_dark else "rgba(168, 134, 0, 0.08)"} !important;
-  --sys-color-surface-yellow-high: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(168, 134, 0, 0.15)"} !important;
+  --sys-color-surface-green: {"rgba(80, 250, 123, 0.08)" if is_dark else "rgba(29, 110, 70, 0.08)"} !important;
+  --sys-color-surface-yellow: {"rgba(241, 250, 140, 0.08)" if is_dark else "rgba(121, 97, 0, 0.08)"} !important;
+  --sys-color-surface-yellow-high: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(121, 97, 0, 0.15)"} !important;
 
   /* ── Text colors ────────────────────────────────────────────────── */
 
@@ -332,7 +332,7 @@ body,
   --sys-color-purple-bright: {v["purple"]} !important;
   --sys-color-yellow: {v["yellow"]} !important;
   --sys-color-yellow-bright: {v["yellow"]} !important;
-  --sys-color-yellow-container: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(168, 134, 0, 0.12)"} !important;
+  --sys-color-yellow-container: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(121, 97, 0, 0.12)"} !important;
   --sys-color-yellow-outline: {v["yellow"]} !important;
 
   /* Error / status */
@@ -394,7 +394,7 @@ body,
   /* ── UI chrome overrides ────────────────────────────────────────── */
 
   --override-toolbar-background-color: {v["bg_dark"]} !important;
-  --override-current-search-result-background-color: {"rgba(241, 250, 140, 0.3)" if is_dark else "rgba(168, 134, 0, 0.2)"} !important;
+  --override-current-search-result-background-color: {"rgba(241, 250, 140, 0.3)" if is_dark else "rgba(121, 97, 0, 0.2)"} !important;
   --app-color-toolbar-background: {v["bg_dark"]} !important;
 
   /* Links */
@@ -467,11 +467,11 @@ body,
 }}
 
 .cm-selectionMatch {{
-  background-color: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(168, 134, 0, 0.12)"} !important;
+  background-color: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(121, 97, 0, 0.12)"} !important;
 }}
 
 .cm-matchingBracket {{
-  background-color: {"rgba(128, 255, 234, 0.2)" if is_dark else "rgba(0, 127, 142, 0.15)"} !important;
+  background-color: {"rgba(128, 255, 234, 0.2)" if is_dark else "rgba(0, 110, 114, 0.15)"} !important;
   outline: 1px solid {v["cyan"]} !important;
 }}
 
@@ -500,7 +500,7 @@ body,
 }}
 
 .console-message-wrapper.console-warning-level {{
-  background-color: {"rgba(241, 250, 140, 0.08)" if is_dark else "rgba(168, 134, 0, 0.06)"} !important;
+  background-color: {"rgba(241, 250, 140, 0.08)" if is_dark else "rgba(121, 97, 0, 0.06)"} !important;
   border-left-color: {v["yellow"]} !important;
 }}
 
@@ -544,11 +544,11 @@ body,
 /* ── Sources panel ──────────────────────────────────────────────────── */
 
 .breakpoint-item.hit {{
-  background-color: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(168, 134, 0, 0.1)"} !important;
+  background-color: {"rgba(241, 250, 140, 0.15)" if is_dark else "rgba(121, 97, 0, 0.1)"} !important;
 }}
 
 .paused-message {{
-  background-color: {"rgba(241, 250, 140, 0.1)" if is_dark else "rgba(168, 134, 0, 0.08)"} !important;
+  background-color: {"rgba(241, 250, 140, 0.1)" if is_dark else "rgba(121, 97, 0, 0.08)"} !important;
   color: {v["yellow"]} !important;
 }}
 

@@ -31,9 +31,9 @@ body,
 
   /* Status surfaces */
   --sys-color-surface-error: rgba(193, 39, 45, 0.08) !important;
-  --sys-color-surface-green: rgba(45, 134, 89, 0.08) !important;
-  --sys-color-surface-yellow: rgba(168, 134, 0, 0.08) !important;
-  --sys-color-surface-yellow-high: rgba(168, 134, 0, 0.15) !important;
+  --sys-color-surface-green: rgba(29, 110, 70, 0.08) !important;
+  --sys-color-surface-yellow: rgba(121, 97, 0, 0.08) !important;
+  --sys-color-surface-yellow-high: rgba(121, 97, 0, 0.15) !important;
 
   /* ── Text colors ────────────────────────────────────────────────── */
 
@@ -81,7 +81,7 @@ body,
   --sys-color-purple-bright: #7e2bd5 !important;
   --sys-color-yellow: #796100 !important;
   --sys-color-yellow-bright: #796100 !important;
-  --sys-color-yellow-container: rgba(168, 134, 0, 0.12) !important;
+  --sys-color-yellow-container: rgba(121, 97, 0, 0.12) !important;
   --sys-color-yellow-outline: #796100 !important;
 
   /* Error / status */
@@ -143,7 +143,7 @@ body,
   /* ── UI chrome overrides ────────────────────────────────────────── */
 
   --override-toolbar-background-color: #f4f0ff !important;
-  --override-current-search-result-background-color: rgba(168, 134, 0, 0.2) !important;
+  --override-current-search-result-background-color: rgba(121, 97, 0, 0.2) !important;
   --app-color-toolbar-background: #f4f0ff !important;
 
   /* Links */
@@ -216,11 +216,11 @@ body,
 }
 
 .cm-selectionMatch {
-  background-color: rgba(168, 134, 0, 0.12) !important;
+  background-color: rgba(121, 97, 0, 0.12) !important;
 }
 
 .cm-matchingBracket {
-  background-color: rgba(0, 127, 142, 0.15) !important;
+  background-color: rgba(0, 110, 114, 0.15) !important;
   outline: 1px solid #006e72 !important;
 }
 
@@ -249,7 +249,7 @@ body,
 }
 
 .console-message-wrapper.console-warning-level {
-  background-color: rgba(168, 134, 0, 0.06) !important;
+  background-color: rgba(121, 97, 0, 0.06) !important;
   border-left-color: #796100 !important;
 }
 
@@ -293,11 +293,11 @@ body,
 /* ── Sources panel ──────────────────────────────────────────────────── */
 
 .breakpoint-item.hit {
-  background-color: rgba(168, 134, 0, 0.1) !important;
+  background-color: rgba(121, 97, 0, 0.1) !important;
 }
 
 .paused-message {
-  background-color: rgba(168, 134, 0, 0.08) !important;
+  background-color: rgba(121, 97, 0, 0.08) !important;
   color: #796100 !important;
 }
 
