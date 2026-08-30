@@ -4,15 +4,15 @@ export default defineConfig({
   title: 'SilkCircuit',
   description: 'Electric Dreams for Neovim - A vibrant theme with neon purples, blazing pinks, and glowing cyan accents',
 
-  base: '/silkcircuit-nvim/',
+  base: '/silkcircuit/',
 
   head: [
-    ['link', { rel: 'icon', href: '/silkcircuit-nvim/favicon.svg' }],
+    ['link', { rel: 'icon', href: '/silkcircuit/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#e135ff' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:title', content: 'SilkCircuit - Electric Dreams for Neovim' }],
     ['meta', { name: 'og:description', content: 'A vibrant Neovim theme with neon purples, blazing pinks, and glowing cyan accents. WCAG AA compliant with 5 variants.' }],
-    ['meta', { name: 'og:image', content: '/silkcircuit-nvim/og-image.png' }],
+    ['meta', { name: 'og:image', content: '/silkcircuit/og-image.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
 
@@ -124,11 +124,11 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/hyperb1iss/silkcircuit-nvim' }
+      { icon: 'github', link: 'https://github.com/hyperb1iss/silkcircuit' }
     ],
 
     editLink: {
-      pattern: 'https://github.com/hyperb1iss/silkcircuit-nvim/edit/main/docs/:path',
+      pattern: 'https://github.com/hyperb1iss/silkcircuit/edit/main/docs/:path',
       text: 'Edit this page on GitHub'
     },
 
