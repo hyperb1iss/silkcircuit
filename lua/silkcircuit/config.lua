@@ -9,8 +9,8 @@ M.defaults = {
 
   styles = {
     comments = { italic = true },
-    keywords = { italic = false },
-    functions = { bold = false },
+    keywords = {},
+    functions = {},
     variables = {},
     operators = {},
     booleans = {},
