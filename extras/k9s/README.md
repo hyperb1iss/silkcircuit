@@ -80,8 +80,6 @@ You can customize any color by editing the YAML file. The main sections are:
 - For the best experience, use a Nerd Font for proper icon rendering
 - The glow variant looks amazing on OLED displays
 
-## Screenshots
-
 ## License
 
 Same as the main SilkCircuit project - MIT
