@@ -9,8 +9,8 @@ AstroNvim is an aesthetic and feature-rich Neovim configuration. SilkCircuit pro
 ## Installation
 
 ```bash
-# Copy all AstroNvim configs to your config directory
-cp -r extras/astronvim/* ~/.config/nvim/lua/
+# Copy the AstroNvim configs to your config directory
+cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/
 ```
 
 ## Included Configurations

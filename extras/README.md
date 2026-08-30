@@ -151,14 +151,21 @@ cp extras/k9s/silkcircuit*.yaml ~/.config/k9s/skins/
 
 ### 🖥️ Ghostty (`ghostty/`)
 
-Native Ghostty themes in all five variants, each paired with a `.css` file for
-Ghostty's custom shader surfaces.
+Native Ghostty themes in all five variants. Each theme has a matching `.css`
+file that styles Ghostty's GTK window chrome, meaning the headerbar, tabs, split
+dividers, and overlays. The CSS applies on Linux only, where Ghostty uses GTK.
 
 **Setup:**
 
 ```bash
-cp extras/ghostty/silkcircuit-* ~/.config/ghostty/themes/
-# Then add: theme = dark:silkcircuit-neon,light:silkcircuit-dawn
+mkdir -p ~/.config/ghostty/themes
+cp extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn} ~/.config/ghostty/themes/
+# Then in ~/.config/ghostty/config:
+#   theme = dark:silkcircuit-neon,light:silkcircuit-dawn
+
+# Linux only, for the GTK window chrome:
+cp extras/ghostty/silkcircuit-neon.css ~/.config/ghostty/silkcircuit.css
+# Then add: gtk-custom-css = ~/.config/ghostty/silkcircuit.css
 ```
 
 ### 🛠️ CLI and System Tools
