@@ -180,6 +180,11 @@ M.targets = {
     ext = "toml",
     url = "https://github.com/dalance/procs#configuration",
   },
+  starship = {
+    label = "Starship",
+    ext = "toml",
+    url = "https://starship.rs/config/#color-palettes",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
