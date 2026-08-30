@@ -4,12 +4,96 @@
 -- lua/silkcircuit/utils/colors.lua, so a bug in the theme's own colour maths
 -- cannot make this spec agree with it.
 --
--- Only body text is asserted for now: fg on bg at AAA (7:1) and the muted
--- fg_dark at AA (4.5:1). The full terminal table is printed so a later pass
--- can tighten the rest against real numbers.
+-- Two bars, matching what each role actually is:
+--
+--   ink     4.5:1, body text. Every syntax and diagnostic colour, plus gray,
+--           which carries line numbers. Measured against every surface a
+--           target paints text on: the page, the float body and the
+--           cursorline band. gray reaches a float through Noice, whose
+--           NoiceFormatDate, NoiceFormatLevelDebug and NoiceFormatLevelOff
+--           carry no background and so composite on NoiceCmdlinePopup.
+--   chrome  3:1, non-text UI: separators, borders, indent guides, and the
+--           accents that only ever fill an ANSI bright slot or a gradient
+--           stop. A key earns this tier by having no consumer that renders
+--           it as text, which is checked by grep, not assumed.
+--
+-- gray_muted is the one text colour under neither bar. It marks ignored and
+-- trace-level output in Snacks, lsd and bat, where being hard to read is the
+-- point, and it measures 2.43 to 3.03:1. It is left ungated deliberately
+-- rather than by omission.
+--
+-- The terminal table takes 3:1 on the page for the six chromatic normals.
+-- black and white are the poles of the ramp rather than colours, and on dawn
+-- ANSI white is the page itself, so gating them would assert nothing.
 
 local H = require("helpers")
 local describe, it = H.describe, H.it
+
+local INK_ROLES = {
+  "fg",
+  "fg_dark",
+  "purple",
+  "purple_dark",
+  "purple_muted",
+  "pink",
+  "pink_soft",
+  "pink_bright",
+  "cyan",
+  "cyan_bright",
+  "green",
+  "green_bright",
+  "yellow",
+  "coral",
+  "orange",
+  "blue",
+  "red",
+  "error",
+  "warning",
+  "info",
+  "hint",
+  "git_add",
+  "git_change",
+  "git_delete",
+  "fg_light",
+  -- carries line numbers, and Noice composites it on a float body
+  "gray",
+  -- type.builtin in Helix, rainbow delimiters and neotree file sizes in
+  -- Neovim, and git_changed in the AstroNvim contrib theme
+  "yellow_bright",
+  "red_dark",
+  "red_error",
+  -- markdown headings, Aerial and Alpha titles, and glow.lua's String
+  "glow_purple",
+  "glow_pink",
+  "glow_cyan",
+  -- derived in variants.lua, and rendered as syntax like the rest
+  "keyword",
+  "string",
+  "comment",
+  "operator",
+}
+
+local CHROME_ROLES = {
+  "fg_gutter",
+  "blue_gray",
+  "gray_dark",
+  "border",
+  "red_bright",
+  "blue_bright",
+  "cyan_light",
+  "green_light",
+  "blue_light",
+  "yellow_light",
+}
+
+local TERMINAL_NORMALS = {
+  "terminal_red",
+  "terminal_green",
+  "terminal_yellow",
+  "terminal_blue",
+  "terminal_magenta",
+  "terminal_cyan",
+}
 
 local TERMINAL_KEYS = {
   "terminal_black",
@@ -22,9 +106,56 @@ local TERMINAL_KEYS = {
   "terminal_white",
 }
 
+-- Surfaces a target paints text on, named for the report.
+local INK_SURFACES = { "bg", "bg_float", "bg_highlight" }
+
 local function colors_for(variant)
   H.reset_modules()
   return require("silkcircuit.variants").get_colors(variant)
+end
+
+-- Measure `keys` against `surfaces` and report the worst pair per key.
+local function check(colors, keys, surfaces, minimum, variant, label)
+  for _, key in ipairs(keys) do
+    local value = colors[key]
+    if H.is_hex6(value) then
+      for _, surface in ipairs(surfaces) do
+        local ratio = H.contrast(value, colors[surface])
+        H.at_least(
+          ratio,
+          minimum,
+          string.format(
+            "%s: %s (%s, %s) on %s (%s) is %.2f:1, needs %.1f:1",
+            variant,
+            key,
+            value,
+            label,
+            surface,
+            colors[surface],
+            ratio,
+            minimum
+          )
+        )
+      end
+    end
+  end
+end
+
+-- The lowest ratio any of `keys` reaches across `surfaces`, for the log.
+local function worst(colors, keys, surfaces)
+  local low, low_key, low_surface = math.huge, nil, nil
+  for _, key in ipairs(keys) do
+    local value = colors[key]
+    if H.is_hex6(value) then
+      for _, surface in ipairs(surfaces) do
+        local ratio = H.contrast(value, colors[surface])
+        if ratio < low then
+          low, low_key, low_surface = ratio, key, surface
+        end
+      end
+    end
+  end
+  return low, low_key, low_surface
 end
 
 describe("contrast", function()
@@ -54,6 +185,48 @@ describe("contrast", function()
 
       H.at_least(fg, 7.0, variant .. ": fg on bg is below WCAG AAA")
       H.at_least(muted, 4.5, variant .. ": fg_dark on bg is below WCAG AA")
+    end)
+
+    it(variant .. " keeps every syntax colour at AA on every text surface", function()
+      local colors = colors_for(variant)
+
+      local low, key, surface = worst(colors, INK_ROLES, INK_SURFACES)
+      H.note(
+        string.format(
+          "%s  worst ink %s (%s) on %s: %.2f:1",
+          variant,
+          key,
+          colors[key],
+          surface,
+          low
+        )
+      )
+
+      check(colors, INK_ROLES, INK_SURFACES, 4.5, variant, "ink")
+    end)
+
+    it(variant .. " keeps chrome and accents at 3:1", function()
+      local colors = colors_for(variant)
+
+      local low, key, surface = worst(colors, CHROME_ROLES, INK_SURFACES)
+      H.note(
+        string.format(
+          "%s  worst chrome %s (%s) on %s: %.2f:1",
+          variant,
+          key,
+          colors[key],
+          surface,
+          low
+        )
+      )
+
+      check(colors, CHROME_ROLES, INK_SURFACES, 3.0, variant, "chrome")
+    end)
+
+    it(variant .. " keeps the terminal normals at 3:1", function()
+      local colors = colors_for(variant)
+
+      check(colors, TERMINAL_NORMALS, { "bg" }, 3.0, variant, "ansi normal")
     end)
   end
 end)
