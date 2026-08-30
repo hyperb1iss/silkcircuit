@@ -140,14 +140,15 @@ function Write-PlainText {
     return $true
 }
 
-# Get-Content decodes a byte order mark away and WriteAllText would not put it
-# back, so a file that had one would quietly lose it.
-function Test-FileBom {
-    param([string]$Path)
+# WriteAllText re-encodes as UTF-8, so a config holding bytes that are not
+# valid UTF-8 would come back with replacement characters where the user's
+# text used to be. Better to leave it alone and say so.
+function Test-Utf8Bytes {
+    param([byte[]]$Bytes)
 
     try {
-        $head = [System.IO.File]::ReadAllBytes($Path)
-        return ($head.Length -ge 3 -and $head[0] -eq 0xEF -and $head[1] -eq 0xBB -and $head[2] -eq 0xBF)
+        [void](New-Object System.Text.UTF8Encoding($false, $true)).GetString($Bytes)
+        return $true
     } catch {
         return $false
     }
@@ -613,6 +614,15 @@ function Save-K9sConfig {
 
     try {
         Copy-Item -LiteralPath $Path -Destination "$Path.silkcircuit.bak" -Force -ErrorAction Stop
+
+        # WriteAllText follows a link and rewrites its target, which is how a
+        # dotfiles repo gets edited behind the user's back. Drop the link so a
+        # real file lands here instead, the same rule Copy-SilkFile follows.
+        $item = Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+        if ($item -and $item.LinkType) {
+            Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+        }
+
         [void](Write-PlainText $Path $Content -Bom:$Bom)
         return $true
     } catch {
@@ -659,7 +669,28 @@ function Set-K9sSkin {
         return $false
     }
 
-    if (-not (Test-Path -LiteralPath $ConfigPath)) {
+    # Read first, because whether the file is really there is not something
+    # Test-Path or File::Exists can answer: both report true for a link whose
+    # target is gone, which is the trap commit 4dbe234 documents. A read that
+    # fails on a link is that stale link, and dropping it leaves a real file
+    # here instead of one inside whatever repo it used to point at.
+    $bytes = $null
+    if (Test-Path -LiteralPath $ConfigPath) {
+        try {
+            $bytes = [System.IO.File]::ReadAllBytes($ConfigPath)
+        } catch {
+            $link = Get-Item -LiteralPath $ConfigPath -Force -ErrorAction SilentlyContinue
+            if ($link -and $link.LinkType) {
+                Remove-Item -LiteralPath $ConfigPath -Force -ErrorAction SilentlyContinue
+            } else {
+                Write-Warn "k9s: cannot read $ConfigPath"
+                Write-Dim "Set k9s.ui.skin to $Skin yourself"
+                return $false
+            }
+        }
+    }
+
+    if ($null -eq $bytes) {
         try {
             [void](Write-PlainText $ConfigPath "k9s:`r`n  ui:`r`n    skin: $Skin`r`n")
             return $true
@@ -670,6 +701,12 @@ function Set-K9sSkin {
         }
     }
 
+    if (-not (Test-Utf8Bytes $bytes)) {
+        Write-Warn "k9s: $ConfigPath is not valid UTF-8, leaving it alone"
+        Write-Dim "Set k9s.ui.skin to $Skin yourself"
+        return $false
+    }
+
     try {
         $raw = Get-Content -LiteralPath $ConfigPath -Raw -ErrorAction Stop
     } catch {
@@ -678,7 +715,7 @@ function Set-K9sSkin {
         return $false
     }
     if (-not $raw) { $raw = "" }
-    $hadBom = Test-FileBom $ConfigPath
+    $hadBom = ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF)
 
     # Keep whatever line ending the file already uses; splicing CRLF into an LF
     # config leaves a mixed file and a noisy diff.

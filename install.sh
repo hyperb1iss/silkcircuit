@@ -720,6 +720,9 @@ set_k9s_skin() {
         return 5
     fi
 
+    local work
+    work="$(mktemp "${config}.silkcircuit.XXXXXX" 2>/dev/null)" || return 4
+
     awk -v skin="$skin" -v q="'" '
         function indent_of(text) {
             match(text, /^[[:space:]]*/)
@@ -803,8 +806,15 @@ set_k9s_skin() {
                 if (indent_of(line[i]) == 0 && line[i] ~ root_pattern) { root_at = i; break }
             }
 
-            # No k9s mapping yet, so a fresh one cannot be a duplicate.
+            # No k9s mapping yet, so a fresh one cannot be a duplicate, unless
+            # the document is a sequence, where appending one is invalid.
             if (root_at == 0) {
+                for (i = 1; i <= NR; i++) {
+                    if (line[i] ~ /^[[:space:]]*$/) continue
+                    if (line[i] ~ /^[[:space:]]*#/) continue
+                    if (line[i] ~ /^-[[:space:]]/) { emit_all(); exit 3 }
+                    break
+                }
                 emit_all()
                 if (NR > 0) print cr
                 print "k9s:" cr
@@ -865,18 +875,30 @@ set_k9s_skin() {
                 }
             }
         }
-    ' "$config" > "${config}.silkcircuit.new" 2>/dev/null || rc=$?
+    ' "$config" > "$work" 2>/dev/null || rc=$?
 
-    if [[ $rc -eq 0 ]]; then
-        # Back up only once we know we are actually going to write, so a
-        # declined config is left with no stray .bak beside it.
-        cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
-        mv "${config}.silkcircuit.new" "$config"
-        return 0
+    if [[ $rc -ne 0 ]]; then
+        rm -f "$work"
+        # awk failing on the file itself (invalid bytes, unreadable mid-stream)
+        # is not a shape we recognise either.
+        [[ $rc -eq 3 ]] || rc=6
+        return "$rc"
     fi
 
-    rm -f "${config}.silkcircuit.new"
-    return "$rc"
+    # Back up only once we know we are going to write, so a declined config is
+    # left with no stray .bak beside it.
+    cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
+
+    # Never write through a symlink. It usually points into a dotfiles repo,
+    # and rewriting the file inside it is exactly what this installer refuses
+    # to do elsewhere. Dropping the link leaves a real file here instead.
+    rm -f "$config"
+
+    if ! mv "$work" "$config" 2>/dev/null; then
+        rm -f "$work"
+        return 4
+    fi
+    return 0
 }
 
 install_k9s() {
@@ -903,6 +925,13 @@ install_k9s() {
     local skin="silkcircuit-${PRIMARY}"
     local config="${k9s_dir}/config.yaml"
     local skin_set=true
+
+    # A link whose target is gone reads as "no config" to -e and -f, so the
+    # create below would follow it and write into whatever repo it points at.
+    # Drop it, exactly as safe_copy drops a link before copying.
+    if [[ -L "$config" && ! -e "$config" ]]; then
+        rm -f "$config"
+    fi
     if [[ "$DRY_RUN" == true ]]; then
         diminfo "dry-run: would set the skin to ${skin} in ${config}"
     elif [[ -e "$config" && ! -f "$config" ]]; then
@@ -918,6 +947,7 @@ install_k9s() {
             case "$k9s_rc" in
                 3) warn "k9s: ${config} uses a shape this installer will not edit blind" ;;
                 5) warn "k9s: cannot read ${config}" ;;
+                6) warn "k9s: could not parse ${config}, leaving it alone" ;;
                 *) warn "k9s: cannot write ${config}" ;;
             esac
             diminfo "Set k9s.ui.skin to ${skin} yourself"
