@@ -19,9 +19,5 @@ python = "3.14"
 node = "24"
 "npm:prettier" = "3.9.6"
 
-# Neovim runs the test suite. CI additionally tests stable, nightly, and the
-# 0.10 floor; this pin is the version `make test` uses locally.
-"aqua:neovim/neovim" = "0.12"
-
 # Git hooks.
 "aqua:pre-commit/pre-commit" = "4.6.2"

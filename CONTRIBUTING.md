@@ -12,11 +12,14 @@ The toolchain is pinned in `mise.toml`. Install [mise](https://mise.jdx.dev), th
 make setup
 ```
 
-That installs every linter, formatter, and the Neovim the test suite runs
-against, all at the exact versions CI uses, and wires up the git hooks. It takes
-about ten seconds because everything is a prebuilt binary. If you skip mise, the
-Makefile falls back to whatever is on your `PATH`, and you get to explain the
-formatting diffs yourself.
+That installs every linter and formatter at the exact versions CI uses and
+wires up the git hooks. It takes about ten seconds because everything is a
+prebuilt binary. If you skip mise, the Makefile falls back to whatever is on
+your `PATH`, and you get to explain the formatting diffs yourself.
+
+Neovim is the one thing the toolchain does not pin. Bring your own, 0.10 or
+newer, from brew or your distro. The theme has to work with whatever you
+actually run, and CI covers stable, nightly, and the 0.10 floor.
 
 `make` on its own lists everything available.
 
@@ -41,13 +44,18 @@ scripts/test --filter palette
 
 ## Where the colors live
 
-`lua/silkcircuit/variants.lua` is the source of truth. Every other target,
-Chrome, VS Code, the terminal configs under `extras/`, renders from it.
+`lua/silkcircuit/variants.lua` is canonical. Every target under `extras/`,
+Chrome, VS Code, and the terminal configs, is meant to be generated from it by
+`make build`, and the generators are landing one target at a time.
 
-So **do not hand-edit generated files.** Anything under
+So **do not hand-edit a file that has a generator.** Anything under
 `extras/chrome-theme/` comes out of `scripts/generate_chrome_themes.py` and gets
-overwritten the next time someone runs `make chrome`. If a generated file is
-wrong, the generator or the palette is wrong. Fix it there.
+overwritten the next time someone runs `make chrome`. If it is wrong, the
+generator or the palette is wrong. Fix it there.
+
+For a target whose generator has not landed yet, edit its file directly, but
+match the values in `variants.lua` exactly. Every hex you type by hand is one
+the generator will later have to agree with.
 
 ## A change ships all five variants or it does not ship
 
