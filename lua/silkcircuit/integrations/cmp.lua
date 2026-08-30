@@ -36,11 +36,6 @@ function M.highlights(colors, _)
 
     CmpItemMenu = { fg = colors.gray },
 
-    -- Scrollbar
-    PmenuSel = { bg = colors.selection },
-    PmenuSbar = { bg = colors.bg_highlight },
-    PmenuThumb = { bg = colors.gray },
-
     -- Ghost text
     CmpGhostText = { fg = colors.gray, italic = true },
 
