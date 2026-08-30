@@ -138,8 +138,9 @@ local function create_variant(variant_name)
 
       -- Others (from VSCode soft)
       coral = "#ff99dd", -- Numbers/constants
-      red = "#ff6677", -- Errors/invalid
+      red = "#ff6677", -- Errors/invalid, terminal.ansiRed
       red_dark = "#ff6677", -- Consistent red
+      red_bright = "#ff7788", -- terminal.ansiBrightRed
       red_error = "#ff6677", -- Error foreground
       orange = "#ff99dd", -- Orange mapped to coral
       yellow = "#ffe699", -- Classes/types/warnings
@@ -179,6 +180,7 @@ local function create_variant(variant_name)
       coral = "#f78c6c",
       red = "#ff3366",
       red_dark = "#ff3366",
+      red_bright = "#ff6677", -- terminal.ansiBrightRed
       red_error = "#ff3366",
       orange = "#ff00aa",
       yellow = "#ffcc00",
@@ -218,6 +220,7 @@ local function create_variant(variant_name)
       coral = "#ff6ac1", -- VSCode orange/coral
       red = "#ff6363", -- VSCode error red
       red_dark = "#ff6363", -- Keep consistent
+      red_bright = "#ff8787", -- terminal.ansiBrightRed
       red_error = "#ff6363", -- VSCode error
       orange = "#ff6ac1", -- VSCode number/constant color
       yellow = "#f1fa8c", -- VSCode class/type color
@@ -264,10 +267,14 @@ local function create_variant(variant_name)
   colors.glow_purple = colors.purple
   colors.glow_cyan = variant_name == "soft" and colors.cyan or "#00ffff"
 
-  -- Terminal colors (updated for soft variant to match VSCode)
+  -- Terminal colors. Every slot carries the colour its ANSI name promises:
+  -- red is the red family, magenta is the brand pink, blue is the blue. The
+  -- brand's purple-leaning blue keeps the identity without lying about the
+  -- role, and base08 in the base16 export is this same red, so tinty
+  -- consumers and the generated terminal files agree.
   if variant_name == "soft" then
     colors.terminal_black = "#141220" -- terminal.ansiBlack
-    colors.terminal_red = "#ff6677" -- terminal.ansiRed
+    colors.terminal_red = colors.red -- terminal.ansiRed
     colors.terminal_green = "#66ff99" -- terminal.ansiGreen
     colors.terminal_yellow = "#ffe699" -- terminal.ansiYellow
     colors.terminal_blue = "#92aaff" -- terminal.ansiBlue
@@ -275,7 +282,7 @@ local function create_variant(variant_name)
     colors.terminal_cyan = "#99ffee" -- terminal.ansiCyan
     colors.terminal_white = "#f8f8f2" -- terminal.ansiWhite
     colors.terminal_bright_black = "#6272a4" -- terminal.ansiBrightBlack
-    colors.terminal_bright_red = "#ff7788" -- terminal.ansiBrightRed
+    colors.terminal_bright_red = colors.red_bright -- terminal.ansiBrightRed
     colors.terminal_bright_green = "#80ffb3" -- terminal.ansiBrightGreen
     colors.terminal_bright_yellow = "#ffffa5" -- terminal.ansiBrightYellow
     colors.terminal_bright_blue = "#a2bbff" -- terminal.ansiBrightBlue
@@ -284,15 +291,15 @@ local function create_variant(variant_name)
     colors.terminal_bright_white = "#ffffff" -- terminal.ansiBrightWhite
   else
     colors.terminal_black = colors.bg
-    colors.terminal_red = colors.pink_bright
+    colors.terminal_red = colors.red
     colors.terminal_green = colors.green
     colors.terminal_yellow = colors.yellow
-    colors.terminal_blue = colors.purple
+    colors.terminal_blue = colors.blue
     colors.terminal_magenta = colors.pink
     colors.terminal_cyan = colors.cyan
     colors.terminal_white = colors.fg
     colors.terminal_bright_black = colors.gray
-    colors.terminal_bright_red = colors.red
+    colors.terminal_bright_red = colors.red_bright
     colors.terminal_bright_green = colors.green_bright
     colors.terminal_bright_yellow = colors.yellow_bright
     colors.terminal_bright_blue = colors.blue_bright
@@ -361,8 +368,9 @@ local function create_dawn_variant()
     pink_soft = "#9c4a88", -- Strings (softer magenta)
 
     coral = "#b42a74", -- Numbers/constants
-    red = "#c1272d", -- Errors
+    red = "#c1272d", -- Errors, terminal.ansiRed
     red_dark = "#9b1c21", -- Darker red
+    red_bright = "#dc2626", -- terminal.ansiBrightRed
     red_error = "#c1272d", -- Error color
     orange = "#a64718", -- Orange accent
     yellow = "#796100", -- Classes/types (golden)
@@ -391,7 +399,7 @@ local function create_dawn_variant()
     -- output stays readable on the page; the bright slots are the lighter
     -- emphasis tier, which is the only direction "bright" can mean here.
     terminal_black = "#2b2540",
-    terminal_red = "#c1272d",
+    terminal_red = "#c1272d", -- == red, and base08 in the base16 export
     terminal_green = "#1d6e46",
     terminal_yellow = "#796100",
     terminal_blue = "#1454dc",
@@ -469,9 +477,10 @@ local function create_glow_variant()
     pink_soft = "#ff99ff", -- Strings (lighter pink)
 
     coral = "#ff66ff", -- Numbers/constants
-    red = "#ff0066", -- Errors
-    red_dark = "#ff0066",
-    red_error = "#ff0066",
+    red = "#ff2244", -- Errors, terminal.ansiRed
+    red_dark = "#ff2244",
+    red_bright = "#ff6666", -- terminal.ansiBrightRed
+    red_error = "#ff2244",
     orange = "#ff66ff", -- Orange mapped to pink variant
     yellow = "#ffff00", -- Classes/types (PURE YELLOW - the pop!)
     yellow_bright = "#ffff66", -- Bright yellow
@@ -487,7 +496,7 @@ local function create_glow_variant()
     -- Diff colors from VSCode
     diff_add = "#00ff0022", -- diffEditor.insertedTextBackground
     diff_change = "#00ffff44", -- Match find colors
-    diff_delete = "#ff006622", -- diffEditor.removedTextBackground
+    diff_delete = "#ff224422", -- diffEditor.removedTextBackground
     diff_text = "#ff00ff44",
 
     -- Glow effects - pure neon
@@ -497,7 +506,7 @@ local function create_glow_variant()
 
     -- Terminal colors from VSCode
     terminal_black = "#000000",
-    terminal_red = "#ff0066",
+    terminal_red = "#ff2244", -- == red, and base08 in the base16 export
     terminal_green = "#00ff00",
     terminal_yellow = "#ffff00",
     terminal_blue = "#0099ff",
@@ -514,7 +523,7 @@ local function create_glow_variant()
     terminal_bright_white = "#ffffff",
 
     -- Diagnostic colors
-    error = "#ff0066",
+    error = "#ff2244",
     warning = "#ffff00",
     info = "#00ffff",
     hint = "#66ffff",
@@ -522,7 +531,7 @@ local function create_glow_variant()
     -- Git colors
     git_add = "#00ff00",
     git_change = "#00ffff",
-    git_delete = "#ff0066",
+    git_delete = "#ff2244",
 
     -- Special
     none = "NONE",
