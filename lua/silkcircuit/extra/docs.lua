@@ -20,7 +20,7 @@ local MARK_END = "<!-- extras:end -->"
 local function same_table(a, b)
   local function normalize(text)
     return (
-      text:gsub(" *|+ *", "|"):gsub("%-%-+", "-"):gsub("%s+", " "):gsub("^ ", ""):gsub(" $", "")
+      text:gsub(" *|+ *", "|"):gsub("|%-+", "|-"):gsub("%s+", " "):gsub("^ ", ""):gsub(" $", "")
     )
   end
   return normalize(a) == normalize(b)
