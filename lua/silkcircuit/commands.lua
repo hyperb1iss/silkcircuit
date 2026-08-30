@@ -65,18 +65,6 @@ function M.setup()
     desc = "Switch SilkCircuit theme variant",
   })
 
-  -- Compile command
-  vim.api.nvim_create_user_command("SilkCircuitCompile", function()
-    local util = require("silkcircuit.util")
-    local success = util.compile(true)
-    if success then
-      vim.notify(
-        "√ Theme compiled successfully! Reload with :colorscheme silkcircuit",
-        vim.log.levels.INFO
-      )
-    end
-  end, { desc = "Compile SilkCircuit theme for faster loading" })
-
   -- Integration status command
   vim.api.nvim_create_user_command("SilkCircuitIntegrations", function()
     local integrations = require("silkcircuit.integrations")
