@@ -55,11 +55,11 @@ function M.get(colors, opts)
   highlights["@property"] = { fg = sem.property }
 
   -- Functions
-  highlights["@function"] = apply_style({ fg = sem.func, bold = true }, "functions")
+  highlights["@function"] = apply_style({ fg = sem.func }, "functions")
   highlights["@function.builtin"] = { fg = sem.function_builtin }
   highlights["@function.call"] = { fg = sem.func_call }
   highlights["@function.macro"] = { fg = colors.purple }
-  highlights["@function.method"] = apply_style({ fg = sem.method, bold = true }, "functions")
+  highlights["@function.method"] = apply_style({ fg = sem.method }, "functions")
   highlights["@function.method.call"] = { fg = sem.func_call }
 
   highlights["@constructor"] = { fg = sem.type }
@@ -67,18 +67,18 @@ function M.get(colors, opts)
 
   -- Keywords
   highlights["@keyword"] = apply_style({ fg = sem.keyword, bold = true }, "keywords")
-  highlights["@keyword.coroutine"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
-  highlights["@keyword.function"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
-  highlights["@keyword.operator"] = apply_style({ fg = colors.operator, bold = true }, "keywords")
-  highlights["@keyword.import"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
-  highlights["@keyword.storage"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
-  highlights["@keyword.repeat"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
-  highlights["@keyword.return"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
-  highlights["@keyword.debug"] = apply_style({ fg = colors.red, bold = true }, "keywords")
-  highlights["@keyword.exception"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
-  highlights["@keyword.conditional"] = apply_style({ fg = colors.keyword, bold = true }, "keywords")
+  highlights["@keyword.coroutine"] = apply_style({ fg = colors.keyword }, "keywords")
+  highlights["@keyword.function"] = apply_style({ fg = colors.purple }, "keywords")
+  highlights["@keyword.operator"] = apply_style({ fg = colors.operator }, "keywords")
+  highlights["@keyword.import"] = apply_style({ fg = colors.purple }, "keywords")
+  highlights["@keyword.storage"] = apply_style({ fg = colors.purple }, "keywords")
+  highlights["@keyword.repeat"] = apply_style({ fg = colors.keyword }, "keywords")
+  highlights["@keyword.return"] = apply_style({ fg = colors.keyword }, "keywords")
+  highlights["@keyword.debug"] = apply_style({ fg = colors.red }, "keywords")
+  highlights["@keyword.exception"] = apply_style({ fg = colors.keyword }, "keywords")
+  highlights["@keyword.conditional"] = apply_style({ fg = colors.keyword }, "keywords")
   highlights["@keyword.conditional.ternary"] = { fg = colors.operator }
-  highlights["@keyword.directive"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
+  highlights["@keyword.directive"] = apply_style({ fg = colors.purple }, "keywords")
   highlights["@keyword.directive.define"] = { fg = colors.purple }
 
   -- Punctuation
@@ -202,7 +202,7 @@ function M.get(colors, opts)
   highlights["@attribute.python"] = { fg = colors.green_bright }
 
   -- JavaScript/JSX
-  highlights["@keyword.export"] = apply_style({ fg = colors.cyan, bold = true }, "keywords")
+  highlights["@keyword.export"] = apply_style({ fg = colors.cyan }, "keywords")
 
   -- Gitignore
   highlights["@string.special.path.gitignore"] = { fg = colors.fg }
@@ -211,9 +211,9 @@ function M.get(colors, opts)
   highlights["zshKSHFunction"] = { link = "Function" }
 
   -- Additional highlights for better coverage
-  highlights["@keyword.modifier"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
-  highlights["@keyword.type"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
-  highlights["@keyword.storage"] = apply_style({ fg = colors.purple, bold = true }, "keywords")
+  highlights["@keyword.modifier"] = apply_style({ fg = colors.purple }, "keywords")
+  highlights["@keyword.type"] = apply_style({ fg = colors.purple }, "keywords")
+  highlights["@keyword.storage"] = apply_style({ fg = colors.purple }, "keywords")
 
   -- Legacy mappings (for backward compatibility)
   highlights["@parameter"] = highlights["@variable.parameter"]
