@@ -11,6 +11,21 @@ local M = {}
 local MARK_START = "<!-- extras:start -->"
 local MARK_END = "<!-- extras:end -->"
 
+--- Compare two marker blocks ignoring table alignment.
+---
+--- The generator writes single-space table cells and prettier then pads them
+--- into columns, so comparing raw text calls every file changed on every run.
+--- That buries the pages that really did change, and an aborted run leaves
+--- alignment churn behind in the tree.
+local function same_table(a, b)
+  local function normalize(text)
+    return (
+      text:gsub(" *|+ *", "|"):gsub("%-%-+", "-"):gsub("%s+", " "):gsub("^ ", ""):gsub(" $", "")
+    )
+  end
+  return normalize(a) == normalize(b)
+end
+
 -- The docs site links to pages, not to repository files, so it lists the
 -- generated names as code instead of as links that VitePress would try to
 -- resolve into routes.
@@ -60,7 +75,7 @@ end
 -- A per-target block on a docs page. One target per block, several blocks per
 -- page where a page covers a target that ships in two formats. The end marker
 -- has to be escaped: its dashes are pattern quantifiers otherwise.
-local TARGET_BLOCK = "(<!%-%- extras:start target=([%w%-]+) %-%->).-(<!%-%- extras:end %-%->)"
+local TARGET_BLOCK = "(<!%-%- extras:start target=([%w%-]+) %-%->)(.-)(<!%-%- extras:end %-%->)"
 
 --- File list for one target, for the block on that target's own docs page.
 local function files_for(extra, name)
@@ -103,14 +118,18 @@ local function generate_pages(extra, root, changed)
     local path = dir .. "/" .. entry
     local content = table.concat(vim.fn.readfile(path), "\n")
 
-    local updated = content:gsub(TARGET_BLOCK, function(open, name, close)
+    local updated = content:gsub(TARGET_BLOCK, function(open, name, body, close)
       if not extra.targets[name] then
         error(
           string.format("silkcircuit.extra: docs/extras/%s names unknown target '%s'", entry, name),
           0
         )
       end
-      return open .. "\n\n" .. files_for(extra, name) .. "\n\n" .. close
+      local rendered = files_for(extra, name)
+      if same_table(body, rendered) then
+        return open .. body .. close
+      end
+      return open .. "\n\n" .. rendered .. "\n\n" .. close
     end)
 
     if updated ~= content then
@@ -138,11 +157,16 @@ function M.generate(opts)
       error(string.format("silkcircuit.extra: %s has no extras marker block", destination.path), 0)
     end
 
-    local updated = content:sub(1, head + #MARK_START - 1)
-      .. "\n\n"
-      .. table_for(extra, destination)
-      .. "\n\n"
-      .. content:sub(tail)
+    local rendered = table_for(extra, destination)
+    local body = content:sub(head + #MARK_START, tail - 1)
+    local updated = content
+    if not same_table(body, rendered) then
+      updated = content:sub(1, head + #MARK_START - 1)
+        .. "\n\n"
+        .. rendered
+        .. "\n\n"
+        .. content:sub(tail)
+    end
 
     if updated ~= content then
       extra.write(path, updated)
