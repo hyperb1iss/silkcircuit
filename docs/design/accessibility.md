@@ -4,14 +4,16 @@ SilkCircuit is designed with accessibility as a core principle.
 
 ## WCAG AA Compliance
 
-All SilkCircuit color combinations meet or exceed WCAG AA standards:
+Contrast is measured rather than asserted. The test suite computes every ratio from the WCAG formula and fails if any pair falls under its bar, and `:checkhealth silkcircuit` reports the text numbers for whichever variant you are running.
 
-| Criterion          | Requirement   | SilkCircuit |
-| ------------------ | ------------- | ----------- |
-| Normal text        | 4.5:1 minimum | Verified    |
-| Large text (18pt+) | 3:1 minimum   | Verified    |
-| UI elements        | 3:1 minimum   | Verified    |
-| Graphics           | 3:1 minimum   | Verified    |
+| Criterion          | Requirement   | SilkCircuit                                                               |
+| ------------------ | ------------- | ------------------------------------------------------------------------- |
+| Normal text        | 4.5:1 minimum | Gated for every text color on the page, the float body and the cursorline |
+| Large text (18pt+) | 3:1 minimum   | Covered by the stricter 4.5:1 text bar                                    |
+| UI elements        | 3:1 minimum   | Gated for borders, gutters, indent guides and the ANSI normals            |
+| Graphics           | 3:1 minimum   | A design target, not machine-checked                                      |
+
+`:checkhealth silkcircuit` runs the narrower version of the text check, measuring each distinct text color against the active variant's own background. On neon it reports 19 colors checked and no issues.
 
 ## Variant Accessibility
 

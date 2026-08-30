@@ -12,66 +12,37 @@ This command verifies your SilkCircuit installation and configuration.
 
 ## Check Categories
 
-### Version Compatibility
+The report is grouped into six sections. A full transcript is at the [bottom of this page](#health-check-output-example).
 
-Verifies Neovim version meets requirements:
+### SilkCircuit
 
-- **Required:** Neovim 0.10.0+
-
-```
-✓ Neovim version: 0.10.0 (OK)
-```
-
-### True Color Support
-
-Checks if your terminal supports 24-bit colors:
-
-```
-✓ True colors enabled ($COLORTERM=truecolor)
-✓ termguicolors is set
-```
+Reports the running Neovim version (0.10.0 or later is required), whether `termguicolors` is on, and whether SilkCircuit is the active colorscheme. A missing `termguicolors` is an error, since every highlight the theme sets is a 24-bit color.
 
 If true colors aren't working:
 
 1. Add `vim.opt.termguicolors = true` to your config
-2. Verify terminal supports true colors
-3. Check `$COLORTERM` environment variable
+2. Verify your terminal supports true colors
+3. Check the `$COLORTERM` environment variable
 
-### Theme Status
+### Configuration
 
-Confirms SilkCircuit is properly loaded:
+Echoes the four settings that change what gets painted: the active variant, `transparent`, `terminal_colors`, and `dim_inactive`.
 
-```
-✓ SilkCircuit theme loaded
-✓ Current variant: neon
-```
+### Plugin integrations
 
-### Plugin Integrations
+Reports how many integrations the theme ships, how many of their plugins it can see on your runtime path, and which ones those are. Detection is for this report only and never gates loading, so an integration you have not installed still has its highlights defined. Any integration you switched off in `setup()` is listed as a warning.
 
-Lists detected plugin integrations:
+### User preferences
 
-```
-✓ telescope.nvim: themed
-✓ neo-tree.nvim: themed
-✓ nvim-cmp: themed
-✓ gitsigns.nvim: themed
-```
+Shows the saved variant and glow setting if `~/.local/share/nvim/silkcircuit_preferences.json` exists, and says so plainly when it doesn't.
 
-### WCAG Compliance
+### WCAG contrast
 
-Validates contrast ratios meet accessibility standards:
+Measures every distinct text color in the active variant against that variant's own background and reports how many clear WCAG AA at 4.5:1. Anything short of the ratio is listed individually as a warning or an error.
 
-```
-✓ All highlight groups meet WCAG AA contrast (4.5:1)
-```
+### Commands
 
-### User Preferences
-
-Shows whether a saved variant or glow setting is overriding the configured defaults:
-
-```
-✓ No saved preferences, using the configured values
-```
+Lists the commands the plugin registered, as a reminder of what is available.
 
 ## Common Issues
 

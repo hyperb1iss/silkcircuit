@@ -22,13 +22,13 @@ features:
     details: Neon, Vibrant, Soft, Glow, and Dawn - from maximum intensity dark themes to a beautiful light mode
   - icon: 🎨
     title: 35+ Plugin Integrations
-    details: Auto-detected support for Telescope, Neo-tree, LSP, nvim-cmp, and your entire toolchain
+    details: Telescope, Neo-tree, LSP, nvim-cmp, and your entire toolchain, all defined up front
   - icon: 👁️
     title: WCAG AA Compliant
     details: Every color combination validated for accessibility with 4.5:1+ contrast ratios
   - icon: 🏎️
-    title: <5ms Load Time
-    details: Bytecode compilation with intelligent caching for instant theme loading
+    title: "~5ms Load Time"
+    details: Loads in about 5ms with every integration defined up front. No cache to regenerate, nothing to warm.
   - icon: 🌈
     title: Semantic Colors
     details: Consistent color meanings across all languages and plugins for intuitive coding

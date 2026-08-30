@@ -65,7 +65,7 @@ Show detected plugin integrations.
 :SilkCircuitIntegrations
 ```
 
-Lists all plugins that SilkCircuit has detected and themed.
+Lists all plugins that SilkCircuit has detected.
 
 ---
 
@@ -86,7 +86,6 @@ Verifies:
 - Theme loading status
 - Plugin integrations
 - WCAG contrast compliance
-- Cache status
 
 ---
 
