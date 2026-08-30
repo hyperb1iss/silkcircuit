@@ -5,8 +5,9 @@ local M = {}
 -- with the DOCTYPE and no <?xml?> declaration: a declaration is only legal as
 -- the very first thing in a file, and the banner is already there.
 --
--- The theme name inside the plist is what `bat --theme` matches on, not the
--- file name.
+-- bat matches `--theme` against the file stem, not the name inside the plist,
+-- so these are silkcircuit-neon through silkcircuit-dawn. The plist name is
+-- there for TextMate and Sublime, which do read it.
 local UUIDS = {
   neon = "b1a7c0de-5c17-4e0a-9f31-7e2c4d8a1f01",
   vibrant = "b1a7c0de-5c17-4e0a-9f31-7e2c4d8a1f02",
@@ -186,7 +187,7 @@ local TEMPLATE = [[
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>${green_bright}</string>
+				<string>${green}</string>
 				<key>fontStyle</key>
 				<string>italic</string>
 			</dict>
@@ -212,7 +213,7 @@ local TEMPLATE = [[
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>${cyan_bright}</string>
+				<string>${fg}</string>
 			</dict>
 		</dict>
 		<dict>
@@ -302,7 +303,7 @@ local TEMPLATE = [[
 			<key>settings</key>
 			<dict>
 				<key>background</key>
-				<string>${yellow}</string>
+				<string>${orange}</string>
 				<key>foreground</key>
 				<string>${bg}</string>
 			</dict>
@@ -444,7 +445,7 @@ local TEMPLATE = [[
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>${yellow}</string>
+				<string>${pink}</string>
 				<key>background</key>
 				<string>${bg_highlight}</string>
 			</dict>

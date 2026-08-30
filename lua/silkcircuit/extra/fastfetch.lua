@@ -2,8 +2,9 @@ local M = {}
 
 -- fastfetch has taken #RRGGBB in every colour slot since 2.42.0, so the logo
 -- ramp and the key, separator and value colours are palette hexes rather than
--- ANSI approximations. The ramp runs cool to hot across nine logo slots, which
--- is as many as fastfetch exposes.
+-- ANSI approximations. The ramp runs cool to hot across the nine logo slots
+-- fastfetch exposes, picking stops that stay distinct on glow, where several
+-- cyans collapse onto one hex, and legible on dawn, where the light ones do.
 local TEMPLATE = [[
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
@@ -31,15 +32,15 @@ local TEMPLATE = [[
     "type": "auto",
     "padding": { "top": 1, "right": 6 },
     "color": {
-      "1": "${cyan_bright}",
-      "2": "${cyan}",
-      "3": "${blue}",
-      "4": "${purple_dark}",
-      "5": "${purple}",
-      "6": "${pink_bright}",
-      "7": "${pink}",
-      "8": "${pink_soft}",
-      "9": "${coral}"
+      "1": "${cyan}",
+      "2": "${blue}",
+      "3": "${purple_dark}",
+      "4": "${purple}",
+      "5": "${pink_bright}",
+      "6": "${pink}",
+      "7": "${pink_soft}",
+      "8": "${coral}",
+      "9": "${red}"
     }
   },
   "modules": [
