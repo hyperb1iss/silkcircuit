@@ -1,0 +1,27 @@
+# SilkCircuit development toolchain.
+#
+# Run `mise install` (or `make setup`) to get every tool this repo checks with,
+# at the exact versions CI uses. Formatters and linters are pinned exactly so a
+# local `make fmt` and a CI `make fmt-check` can never disagree.
+
+[tools]
+# Lua: the theme itself.
+"aqua:Kampfkarren/selene" = "0.31.0"
+"aqua:JohnnyMorganz/StyLua" = "2.5.2"
+
+# Python: the extras generators under scripts/. uv provisions the Pillow
+# dependency that generate_chrome_themes.py declares inline (PEP 723).
+python = "3.14"
+"aqua:astral-sh/uv" = "0.9.30"
+"aqua:astral-sh/ruff" = "0.16.5"
+
+# JS: the VitePress docs site and the VS Code extension packaging.
+node = "24"
+"npm:prettier" = "3.9.6"
+
+# Neovim runs the test suite. CI additionally tests stable, nightly, and the
+# 0.10 floor; this pin is the version `make test` uses locally.
+"aqua:neovim/neovim" = "0.12"
+
+# Git hooks.
+"aqua:pre-commit/pre-commit" = "4.6.2"
