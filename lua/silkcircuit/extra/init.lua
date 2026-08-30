@@ -50,6 +50,11 @@ M.targets = {
     comment = "css",
     url = "https://ghostty.org/docs/config/reference#gtk-custom-css",
   },
+  tmux = {
+    label = "tmux",
+    ext = "conf",
+    url = "https://man.openbsd.org/tmux#STYLES",
+  },
   warp = {
     label = "Warp",
     ext = "yaml",
