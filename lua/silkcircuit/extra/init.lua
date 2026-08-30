@@ -151,6 +151,11 @@ M.targets = {
     is_full = true,
     url = "https://zellij.dev/documentation/themes",
   },
+  slack = {
+    label = "Slack",
+    ext = "txt",
+    url = "https://slack.com/help/articles/205166057-Change-your-Slack-theme",
+  },
   vscode = {
     label = "VS Code",
     -- The extension manifest, icon, and README live in extras/vscode, so the
