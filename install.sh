@@ -121,6 +121,14 @@ detect_all() {
         pulse_dot "Warp" "missing"
     fi
 
+    # WezTerm
+    if cmd_exists wezterm || dir_exists "$HOME/.config/wezterm"; then
+        DETECTED+=("wezterm")
+        pulse_dot "WezTerm" "found"
+    else
+        pulse_dot "WezTerm" "missing"
+    fi
+
     # btop
     if cmd_exists btop || dir_exists "$HOME/.config/btop"; then
         DETECTED+=("btop")
@@ -395,6 +403,22 @@ install_warp() {
     done
     success "Installed ${count} Warp themes"
     diminfo "Activate: Settings -> Appearance -> Themes -> SilkCircuit Neon"
+}
+
+install_wezterm() {
+    local theme_dir="$HOME/.config/wezterm/colors"
+    printf "${PURPLE}${BOLD}  >> WezTerm${RESET}\n"
+
+    local count=0
+    for f in "${EXTRAS_DIR}/wezterm/silkcircuit-"*.toml; do
+        local name
+        name=$(basename "$f")
+        if safe_copy "$f" "${theme_dir}/${name}" "wezterm:${name}"; then
+            count=$((count + 1))
+        fi
+    done
+    success "Installed ${count} WezTerm color schemes"
+    diminfo "Activate in wezterm.lua: config.color_scheme = \"SilkCircuit Neon\""
 }
 
 install_btop() {
@@ -738,6 +762,7 @@ run_installs() {
             alacritty)        install_alacritty ;;
             kitty)            install_kitty ;;
             warp)             install_warp ;;
+            wezterm)          install_wezterm ;;
             btop)             install_btop ;;
             k9s)              install_k9s ;;
             fzf)              install_fzf ;;

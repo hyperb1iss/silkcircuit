@@ -22,15 +22,16 @@ Generated from the palette by `make build`, five variants each. See the
 
 <!-- extras:start -->
 
-| Target                          | Format                                                                                           | Generated files                                                          |
-| ------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| Alacritty                       | [reference](https://alacritty.org/config-alacritty.html#colors)                                  | `extras/alacritty/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`        |
-| Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                     | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`               |
-| Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                            | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
-| Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                  | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`            |
-| Warp                            | [reference](https://docs.warp.dev/terminal/appearance/custom-themes)                             | `extras/warp/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`             |
-| Windows Terminal                | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes) | `extras/windows-terminal/silkcircuit-{neon,vibrant,soft,glow,dawn}.json` |
-| Windows Terminal (every scheme) | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes) | `extras/windows-terminal/silkcircuit.json`                               |
+| Target                          | Format                                                                                             | Generated files                                                          |
+| ------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Alacritty                       | [reference](https://alacritty.org/config-alacritty.html#colors)                                    | `extras/alacritty/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`        |
+| Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                       | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`               |
+| Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
+| Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`            |
+| Warp                            | [reference](https://docs.warp.dev/terminal/appearance/custom-themes)                               | `extras/warp/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`             |
+| WezTerm                         | [reference](https://wezterm.org/config/appearance.html#defining-a-color-scheme-in-a-separate-file) | `extras/wezterm/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`          |
+| Windows Terminal                | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes)   | `extras/windows-terminal/silkcircuit-{neon,vibrant,soft,glow,dawn}.json` |
+| Windows Terminal (every scheme) | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes)   | `extras/windows-terminal/silkcircuit.json`                               |
 
 <!-- extras:end -->
 
