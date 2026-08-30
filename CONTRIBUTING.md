@@ -50,7 +50,7 @@ tools, all five variants each. `extras/chrome-theme/` is generated too, by
 `make chrome`, which reads the JSON in `palette/`.
 
 So **do not hand-edit a generated file.** The next build overwrites it. If a
-colour is wrong, the palette is wrong, or the mapping in
+color is wrong, the palette is wrong, or the mapping in
 `lua/silkcircuit/extra/<target>.lua` is. Fix it there and rebuild.
 
 What survives a build is the hand-written `README.md` inside a target

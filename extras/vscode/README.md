@@ -246,11 +246,11 @@ SilkCircuit is a full ecosystem: editor, terminal, system tools, and even your b
   - Every one at `extras/<terminal>/silkcircuit-{neon,vibrant,soft,glow,dawn}.<ext>`
 - **CLI & Git**
   - **fzf** theme: `extras/fzf/silkcircuit-{neon,vibrant,soft,glow,dawn}.sh`
-  - **git** colours plus a delta feature block: `extras/git/silkcircuit-*.gitconfig`
+  - **git** colors plus a delta feature block: `extras/git/silkcircuit-*.gitconfig`
   - **bat**, **lsd**, **procs**, **starship**, **fastfetch**, **atuin**, **lazygit**
 - **System tools**
   - **btop** themes: `extras/btop/silkcircuit-{neon,vibrant,soft,glow,dawn}.theme`
-  - **k9s** skins, **dmesg** colours, **COSMIC Desktop** themes
+  - **k9s** skins, **dmesg** colors, **COSMIC Desktop** themes
 - **Browsers & Apps**
   - **Chrome DevTools + Chrome pages**: `extras/chrome-theme/` (see `extras/chrome-theme/README.md`)
   - **Slack**: `extras/slack/silkcircuit-{neon,vibrant,soft,glow,dawn}.txt`

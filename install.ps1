@@ -1353,7 +1353,7 @@ function Install-Slack {
     Write-Success "Staged $count Slack themes"
     Write-Dim "Preferences -> Themes -> Create a custom theme, then paste this line:"
 
-    # The line to paste is ten hex colours, so it starts with "#" exactly like
+    # The line to paste is ten hex colors, so it starts with "#" exactly like
     # the comments above it. Match its shape rather than filtering comments out.
     $source = Join-Path $sourceDir "silkcircuit-$script:Primary.txt"
     $line = $null
@@ -1369,7 +1369,7 @@ function Install-Slack {
     if ($line) {
         Write-Dim $line
     } else {
-        Write-Dim "Could not read the colours from $source"
+        Write-Dim "Could not read the colors from $source"
     }
 }
 

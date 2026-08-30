@@ -16,7 +16,7 @@ The installer does the same thing: `./install.sh --variant neon`.
 ## Palette indices, not hex
 
 procs takes an xterm-256 index per column rather than a hex value, so the
-palette is quantised at build time to the nearest entry in the 6x6x6 color cube
+palette is quantized at build time to the nearest entry in the 6x6x6 color cube
 or the grey ramp. The first sixteen slots are deliberately never used: those
 are whatever the terminal decided they are, and picking one would hand the
 theme back to the terminal.
