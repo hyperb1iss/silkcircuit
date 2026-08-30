@@ -266,7 +266,7 @@ local CUBE_LEVELS = { 0, 95, 135, 175, 215, 255 }
 --- has to be quantised. Only the 6x6x6 cube (16-231) and the 24-step grey ramp
 --- (232-255) are candidates: the first sixteen slots are whatever the user's
 --- terminal decided they are, so picking one would hand the theme back to the
---- terminal. Ties keep the lower index, which makes the mapping deterministic.
+--- terminal. The choice is deterministic for a given input.
 local function nearest_x256(r, g, b)
   local function nearest_level(value)
     local best, best_distance = 1, math.huge
@@ -353,7 +353,7 @@ function M.colors(variant)
           b = string.format("%.6f", bi / 255),
         }
         nohash[key] = value:sub(2)
-        x256[key] = nearest_x256(r, g, b)
+        x256[key] = nearest_x256(ri, gi, bi)
       end
     end
   end
