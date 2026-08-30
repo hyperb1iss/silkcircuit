@@ -454,13 +454,15 @@ local function create_glow_variant()
     gray_light = "#cc66ff",
     gray_dark = "#666666",
 
-    -- Pure neon colors from VSCode glow theme
-    purple = "#ff00ff", -- Keywords (pure magenta)
+    -- Pure neon colors. Purple and pink are separate hues here, not two names
+    -- for magenta, so the purple -> pink -> cyan ramp the gradients are built
+    -- on has three stops instead of two.
+    purple = "#d633ff", -- Keywords (electric violet)
     purple_dark = "#cc66ff", -- Comments/muted
     purple_muted = "#cc66ff", -- Comments
 
     cyan = "#00ffff", -- Functions/operators (pure cyan)
-    cyan_bright = "#00ffff", -- Bright cyan
+    cyan_bright = "#00d9ff", -- Properties, float borders (colder cyan)
     cyan_light = "#66ffff", -- Light cyan
 
     green = "#00ff00", -- Git added/inserted (pure green)
@@ -501,7 +503,7 @@ local function create_glow_variant()
 
     -- Glow effects - pure neon
     glow_pink = "#ff00ff",
-    glow_purple = "#ff00ff",
+    glow_purple = "#d633ff",
     glow_cyan = "#00ffff",
 
     -- Terminal colors from VSCode
