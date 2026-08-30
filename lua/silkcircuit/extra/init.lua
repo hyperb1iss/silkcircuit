@@ -170,6 +170,11 @@ M.targets = {
     ext = "yaml",
     url = "https://github.com/lsd-rs/lsd/blob/master/doc/colors.md",
   },
+  procs = {
+    label = "procs",
+    ext = "toml",
+    url = "https://github.com/dalance/procs#configuration",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"

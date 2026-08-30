@@ -29,6 +29,7 @@ Generated from the palette by `make build`, five variants each. See the
 | Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
 | Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`            |
 | lsd                             | [reference](https://github.com/lsd-rs/lsd/blob/master/doc/colors.md)                               | `extras/lsd/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`              |
+| procs                           | [reference](https://github.com/dalance/procs#configuration)                                        | `extras/procs/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`            |
 | Warp                            | [reference](https://docs.warp.dev/terminal/appearance/custom-themes)                               | `extras/warp/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`             |
 | WezTerm                         | [reference](https://wezterm.org/config/appearance.html#defining-a-color-scheme-in-a-separate-file) | `extras/wezterm/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`          |
 | Windows Terminal                | [reference](https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes)   | `extras/windows-terminal/silkcircuit-{neon,vibrant,soft,glow,dawn}.json` |
