@@ -43,11 +43,54 @@ jobs:
     env:
       VSCE_PAT: ${{ secrets.VSCE_PAT }}
       OVSX_PAT: ${{ secrets.OVSX_PAT }}
+      IRIS_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       GH_TOKEN: ${{ github.token }}
       TAG: ${{ needs.release-please.outputs.tag_name }}
     steps:
       - name: → Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: → Find the previous release tag
+        if: env.IRIS_KEY != ''
+        id: prev
+        run: |
+          prev=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null \
+            || git rev-list --max-parents=0 HEAD | tail -1)
+          echo "ref=$prev" >> "$GITHUB_OUTPUT"
+
+      - name: → Write release notes with git-iris
+        if: env.IRIS_KEY != ''
+        id: iris
+        uses: hyperb1iss/git-iris@v2.1.0
+        with:
+          command: release-notes
+          from: ${{ steps.prev.outputs.ref }}
+          to: ${{ env.TAG }}
+          version-name: ${{ env.TAG }}
+          provider: anthropic
+          api-key: ${{ env.IRIS_KEY }}
+          output-file: RELEASE_NOTES.md
+          custom-instructions: >-
+            You are writing release notes for SilkCircuit, a cyberpunk color
+            system whose voice is electric meets elegant. Lead with what a
+            user sees and feels after upgrading, not with the commit log.
+            Group changes by surface: the Neovim theme, the terminals, the
+            CLI tools, the editors and apps, the toolchain. Name the five
+            variants (neon, vibrant, soft, glow, dawn) where they matter.
+            Call out breaking changes early and plainly, with the one-line
+            migration for each. Keep sections short and confident; no
+            hedging, no filler, no em dashes. Emoji are welcome sparingly
+            from this set: purple heart, crystal ball, lightning, moon,
+            butterfly, gem, wand, rainbow; never rocket, sparkles, party
+            popper, or fire. Credit outside contributors by handle when the
+            history shows them. End with install and upgrade pointers,
+            not a sign-off.
+
+      - name: → Put the styled notes on the release
+        if: env.IRIS_KEY != ''
+        run: gh release edit "$TAG" --notes-file RELEASE_NOTES.md
 
       - name: → Setup Node
         uses: actions/setup-node@v7
