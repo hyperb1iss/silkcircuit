@@ -121,7 +121,7 @@ Regenerate the lot with `make build`, and this table with `make docs`.
 | lazygit                         | [reference](https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes)  | `extras/lazygit/silkcircuit-{neon,vibrant,soft,glow,dawn}.yml`           |
 | lsd                             | [reference](https://github.com/lsd-rs/lsd/blob/master/doc/colors.md)                               | `extras/lsd/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`              |
 | procs                           | [reference](https://github.com/dalance/procs#configuration)                                        | `extras/procs/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`            |
-| Slack                           | [reference](https://slack.com/help/articles/205166057-Change-your-Slack-theme)                     | `extras/slack/silkcircuit-{neon,vibrant,soft,glow,dawn}.txt`             |
+| Slack                           | [reference](https://slack.com/help/articles/205166337-Change-your-Slack-theme)                     | `extras/slack/silkcircuit-{neon,vibrant,soft,glow,dawn}.txt`             |
 | Starship                        | [reference](https://starship.rs/config/#color-palettes)                                            | `extras/starship/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`         |
 | tmux                            | [reference](https://man.openbsd.org/tmux#STYLES)                                                   | `extras/tmux/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`             |
 | VS Code                         | [reference](https://code.visualstudio.com/api/extension-guides/color-theme)                        | `extras/vscode/themes/silkcircuit-{neon,vibrant,soft,glow,dawn}.json`    |

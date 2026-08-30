@@ -154,7 +154,7 @@ M.targets = {
   slack = {
     label = "Slack",
     ext = "txt",
-    url = "https://slack.com/help/articles/205166057-Change-your-Slack-theme",
+    url = "https://slack.com/help/articles/205166337-Change-your-Slack-theme",
   },
   vscode = {
     label = "VS Code",
