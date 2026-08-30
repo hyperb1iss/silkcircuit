@@ -128,14 +128,28 @@ function Get-VariantLabel {
 function Write-PlainText {
     param(
         [string]$Path,
-        [string]$Content
+        [string]$Content,
+        [switch]$Bom
     )
 
     $directory = Split-Path -Parent $Path
     if ($directory -and -not (Test-Path -LiteralPath $directory)) {
         New-Item -ItemType Directory -Path $directory -Force | Out-Null
     }
-    [System.IO.File]::WriteAllText($Path, $Content, (New-Object System.Text.UTF8Encoding($false)))
+    [System.IO.File]::WriteAllText($Path, $Content, (New-Object System.Text.UTF8Encoding($Bom.IsPresent)))
+}
+
+# Get-Content decodes a byte order mark away and WriteAllText would not put it
+# back, so a file that had one would quietly lose it.
+function Test-FileBom {
+    param([string]$Path)
+
+    try {
+        $head = [System.IO.File]::ReadAllBytes($Path)
+        return ($head.Length -ge 3 -and $head[0] -eq 0xEF -and $head[1] -eq 0xBB -and $head[2] -eq 0xBF)
+    } catch {
+        return $false
+    }
 }
 
 # Detection accepts a tool's config directory in any of several places, so the
@@ -598,13 +612,21 @@ function Set-K9sSkin {
 
     $raw = Get-Content -LiteralPath $ConfigPath -Raw
     if (-not $raw) { $raw = "" }
+    $hadBom = Test-FileBom $ConfigPath
 
     # Keep whatever line ending the file already uses; splicing CRLF into an LF
     # config leaves a mixed file and a noisy diff.
     $newline = if ($raw.Contains("`r`n")) { "`r`n" } else { "`n" }
+    # Trailing blank lines come back from the split and would be re-emitted as
+    # padding. Stop at one element: PowerShell expands 0..-1 to 0,-1, which
+    # indexes the first and last entries and grows the array, so a single empty
+    # line would spin here forever.
     $lines = [string[]]($raw -split "`r?`n")
-    while ($lines.Count -gt 0 -and $lines[-1] -eq "") {
+    while ($lines.Count -gt 1 -and $lines[-1] -eq "") {
         $lines = $lines[0..($lines.Count - 2)]
+    }
+    if ($lines.Count -eq 1 -and $lines[0] -eq "") {
+        $lines = [string[]]@()
     }
 
     $rootPattern = Get-KeyPattern "k9s"
@@ -617,13 +639,13 @@ function Set-K9sSkin {
 
     if ($rootAt -lt 0) {
         # No k9s mapping yet, so a fresh one cannot be a duplicate.
-        Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
         foreach ($line in $lines) { $out.Add($line) }
         if ($lines.Count -gt 0) { $out.Add("") }
         $out.Add("k9s:")
         $out.Add("  ui:")
         $out.Add("    skin: $Skin")
-        Write-PlainText $ConfigPath (($out -join $newline) + $newline)
+        Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
+        Write-PlainText $ConfigPath (($out -join $newline) + $newline) -Bom:$hadBom
         return $true
     }
 
@@ -637,12 +659,23 @@ function Set-K9sSkin {
         return $false
     }
 
-    Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
-
     $lastLine = $lines.Count - 1
     $rootInner = Get-ChildIndent $lines $rootAt 0 $lastLine
     $blockEnd = Get-BlockExtent $lines $rootAt $rootInner $lastLine
-    $uiAt = Find-DirectChild $lines $rootAt $blockEnd $rootInner ((Get-KeyPattern "ui") + "\s*(#.*)?$")
+    $uiPattern = Get-KeyPattern "ui"
+    $uiAt = Find-DirectChild $lines $rootAt $blockEnd $rootInner $uiPattern
+
+    # Same rule as the root: anything but a comment after the colon is a flow
+    # mapping or a scalar, and block-style children cannot be spliced under
+    # either.
+    if ($uiAt -ge 0) {
+        $uiRest = $lines[$uiAt] -replace $uiPattern, ""
+        if ($uiRest -notmatch "^\s*(#.*)?$") {
+            Write-Warn "k9s: $ConfigPath uses a shape this installer will not edit blind"
+            Write-Dim "Set k9s.ui.skin to $Skin yourself"
+            return $false
+        }
+    }
 
     if ($uiAt -ge 0) {
         $uiInner = Get-ChildIndent $lines $uiAt $rootInner $blockEnd
@@ -669,7 +702,10 @@ function Set-K9sSkin {
         }
     }
 
-    Write-PlainText $ConfigPath (($out -join $newline) + $newline)
+    # Back up only once we know we are actually going to write, so a declined
+    # config is left with no stray .bak beside it.
+    Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
+    Write-PlainText $ConfigPath (($out -join $newline) + $newline) -Bom:$hadBom
     return $true
 }
 
