@@ -226,6 +226,11 @@ function M.build(opts)
     end
   end
 
+  for _, relative in ipairs(require("silkcircuit.extra.palette").generate(root)) do
+    written[#written + 1] = relative
+    print("  " .. relative)
+  end
+
   return written
 end
 
