@@ -19,7 +19,7 @@ Ultra-dark backgrounds with pure neon colors for maximum contrast.
 
 | Color     | Hex       | Usage                  |
 | --------- | --------- | ---------------------- |
-| Purple    | `#ff00ff` | Keywords, control flow |
+| Purple    | `#d633ff` | Keywords, control flow |
 | Cyan      | `#00ffff` | Functions, methods     |
 | Pink      | `#ff00ff` | Tags, booleans         |
 | Pink Soft | `#ff99ff` | Strings                |
@@ -31,16 +31,16 @@ Ultra-dark backgrounds with pure neon colors for maximum contrast.
 | Color | Hex       | Usage                  |
 | ----- | --------- | ---------------------- |
 | Green | `#00ff00` | Success, git additions |
-| Red   | `#ff0066` | Errors, git deletions  |
+| Red   | `#ff2244` | Errors, git deletions  |
 | Blue  | `#0099ff` | Links, info            |
-| Gray  | `#666666` | Comments, muted text   |
+| Gray  | `#818181` | Comments, muted text   |
 
 ## Terminal Colors
 
 ```yaml
 # ANSI Colors
 black: "#000000"
-red: "#ff0066"
+red: "#ff2244"
 green: "#00ff00"
 yellow: "#ffff00"
 blue: "#0099ff"
@@ -49,7 +49,7 @@ cyan: "#00ffff"
 white: "#ffffff"
 
 # Bright variants
-bright_black: "#666666"
+bright_black: "#818181"
 bright_red: "#ff6666"
 bright_green: "#66ff66"
 bright_yellow: "#ffff66"

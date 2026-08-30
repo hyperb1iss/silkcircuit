@@ -12,7 +12,9 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | --------- | --------- | ----------------- |
 | Base      | `#12101a` | Editor background |
 | Dark      | `#0a0812` | Sidebar, panels   |
-| Highlight | `#1a162a` | Popups, menus     |
+| Highlight | `#1a162a` | Cursorline        |
+| Statusbar | `#1d1a2d` | Statusline, tabs  |
+| Float     | `#221e32` | Popups, dividers  |
 
 **Primary Colors:**
 
@@ -33,7 +35,9 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | --------- | --------- | ----------------- |
 | Base      | `#0f0c1a` | Editor background |
 | Dark      | `#08060f` | Sidebar, panels   |
-| Highlight | `#0a0614` | Popups, menus     |
+| Highlight | `#151026` | Cursorline        |
+| Statusbar | `#1a142d` | Statusline, tabs  |
+| Float     | `#1e1834` | Popups, dividers  |
 
 **Primary Colors:**
 
@@ -43,7 +47,7 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | Cyan      | `#00ffcc` | Functions, methods     |
 | Pink      | `#ff00cc` | Tags, booleans         |
 | Pink Soft | `#ff99ff` | Strings                |
-| Coral     | `#F78C6C` | Numbers, constants     |
+| Coral     | `#ff5fa8` | Numbers, constants     |
 | Yellow    | `#ffcc00` | Classes, types         |
 
 ### Soft (70% intensity)
@@ -54,7 +58,9 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | --------- | --------- | ----------------- |
 | Base      | `#1a1626` | Editor background |
 | Dark      | `#141220` | Sidebar, panels   |
-| Highlight | `#3e3456` | Popups, menus     |
+| Highlight | `#201b30` | Cursorline        |
+| Statusbar | `#252036` | Statusline, tabs  |
+| Float     | `#2b253d` | Popups, dividers  |
 
 **Primary Colors:**
 
@@ -75,13 +81,15 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | --------- | --------- | ----------------- |
 | Base      | `#0a0816` | Editor background |
 | Dark      | `#000000` | Sidebar, panels   |
-| Highlight | `#1a0033` | Popups, menus     |
+| Highlight | `#1a0033` | Cursorline        |
+| Statusbar | `#20003d` | Statusline, tabs  |
+| Float     | `#250047` | Popups, dividers  |
 
 **Primary Colors:**
 
 | Color     | Hex       | Usage                  |
 | --------- | --------- | ---------------------- |
-| Purple    | `#ff00ff` | Keywords, control flow |
+| Purple    | `#d633ff` | Keywords, control flow |
 | Cyan      | `#00ffff` | Functions, methods     |
 | Pink      | `#ff00ff` | Tags, booleans         |
 | Pink Soft | `#ff99ff` | Strings                |
@@ -95,19 +103,21 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | Element   | Hex       | Usage             |
 | --------- | --------- | ----------------- |
 | Base      | `#faf8ff` | Editor background |
-| Dark      | `#f1ecff` | Sidebar, panels   |
-| Highlight | `#e8e0ff` | Popups, menus     |
+| Dark      | `#f4f0ff` | Sidebar, panels   |
+| Highlight | `#f7f4ff` | Cursorline        |
+| Float     | `#e8dffd` | Popups, dividers  |
+| Statusbar | `#ded3f8` | Statusline, tabs  |
 
 **Primary Colors:**
 
 | Color     | Hex       | Usage                  |
 | --------- | --------- | ---------------------- |
 | Purple    | `#7e2bd5` | Keywords, control flow |
-| Cyan      | `#007f8e` | Functions, methods     |
+| Cyan      | `#006e72` | Functions, methods     |
 | Pink      | `#b40077` | Tags, booleans         |
-| Pink Soft | `#9c4a88` | Strings                |
-| Coral     | `#c74a8c` | Numbers, constants     |
-| Yellow    | `#a88600` | Classes, types         |
+| Pink Soft | `#9e4087` | Strings                |
+| Coral     | `#b42a74` | Numbers, constants     |
+| Yellow    | `#796100` | Classes, types         |
 
 ## Universal Supporting Colors
 
@@ -120,7 +130,7 @@ These colors maintain semantic meaning across all variants:
 | Neon/Vibrant | `#50fa7b` | Git add, success states |
 | Soft         | `#66ff99` | Git add, success states |
 | Glow         | `#00ff00` | Git add, success states |
-| Dawn         | `#2d8659` | Git add, success states |
+| Dawn         | `#1d6e46` | Git add, success states |
 
 ### Warning
 
@@ -129,7 +139,7 @@ These colors maintain semantic meaning across all variants:
 | Neon/Vibrant | `#f1fa8c` | Caution, modified |
 | Soft         | `#ffe699` | Caution, modified |
 | Glow         | `#ffff00` | Caution, modified |
-| Dawn         | `#a88600` | Caution, modified |
+| Dawn         | `#796100` | Caution, modified |
 
 ### Error
 
@@ -137,7 +147,7 @@ These colors maintain semantic meaning across all variants:
 | ------------ | --------- | ----------------- |
 | Neon/Vibrant | `#ff6363` | Errors, deletions |
 | Soft         | `#ff6677` | Errors, deletions |
-| Glow         | `#ff0066` | Errors, deletions |
+| Glow         | `#ff2244` | Errors, deletions |
 | Dawn         | `#c1272d` | Errors, deletions |
 
 ## Interactive States
@@ -172,16 +182,16 @@ These colors maintain semantic meaning across all variants:
 /* Light theme (Dawn variant) */
 :root.dawn {
   --sc-purple: #7e2bd5;
-  --sc-cyan: #007f8e;
+  --sc-cyan: #006e72;
   --sc-pink: #b40077;
-  --sc-pink-soft: #9c4a88;
-  --sc-coral: #c74a8c;
-  --sc-yellow: #a88600;
-  --sc-green: #2d8659;
+  --sc-pink-soft: #9e4087;
+  --sc-coral: #b42a74;
+  --sc-yellow: #796100;
+  --sc-green: #1d6e46;
   --sc-red: #c1272d;
   --sc-bg: #faf8ff;
-  --sc-bg-dark: #f1ecff;
-  --sc-bg-highlight: #e8e0ff;
+  --sc-bg-dark: #f4f0ff;
+  --sc-bg-highlight: #f7f4ff;
   --sc-fg: #2b2540;
 }
 ```

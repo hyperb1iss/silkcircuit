@@ -23,7 +23,7 @@ Balanced energy with slightly toned-down saturation for everyday coding.
 | Cyan      | `#00ffcc` | Functions, methods     |
 | Pink      | `#ff00cc` | Tags, booleans         |
 | Pink Soft | `#ff99ff` | Strings                |
-| Coral     | `#F78C6C` | Numbers, constants     |
+| Coral     | `#ff5fa8` | Numbers, constants     |
 | Yellow    | `#ffcc00` | Classes, types         |
 
 ### Supporting Colors
@@ -33,24 +33,24 @@ Balanced energy with slightly toned-down saturation for everyday coding.
 | Green | `#00ff66` | Success, git additions |
 | Red   | `#ff3366` | Errors, git deletions  |
 | Blue  | `#6699ff` | Links, info            |
-| Gray  | `#6272a4` | Comments, muted text   |
+| Gray  | `#728989` | Comments, muted text   |
 
 ## Terminal Colors
 
 ```yaml
 # ANSI Colors
 black: "#0f0c1a"
-red: "#ff66ff"
+red: "#ff3366"
 green: "#00ff66"
 yellow: "#ffcc00"
-blue: "#ff00ff"
+blue: "#6699ff"
 magenta: "#ff00cc"
 cyan: "#00ffcc"
 white: "#f8f8f2"
 
 # Bright variants
-bright_black: "#637777"
-bright_red: "#ff3366"
+bright_black: "#728989"
+bright_red: "#ff6677"
 bright_green: "#66ff99"
 bright_yellow: "#ffff66"
 bright_blue: "#88aaff"

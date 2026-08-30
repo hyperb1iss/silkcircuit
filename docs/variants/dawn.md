@@ -20,28 +20,28 @@ A beautiful light theme for daytime coding with electric accents.
 | Color     | Hex       | Usage                  |
 | --------- | --------- | ---------------------- |
 | Purple    | `#7e2bd5` | Keywords, control flow |
-| Cyan      | `#007f8e` | Functions, methods     |
+| Cyan      | `#006e72` | Functions, methods     |
 | Pink      | `#b40077` | Tags, booleans         |
-| Pink Soft | `#9c4a88` | Strings                |
-| Coral     | `#c74a8c` | Numbers, constants     |
-| Yellow    | `#a88600` | Classes, types         |
+| Pink Soft | `#9e4087` | Strings                |
+| Coral     | `#b42a74` | Numbers, constants     |
+| Yellow    | `#796100` | Classes, types         |
 
 ### Supporting Colors
 
 | Color | Hex       | Usage                  |
 | ----- | --------- | ---------------------- |
-| Green | `#2d8659` | Success, git additions |
+| Green | `#1d6e46` | Success, git additions |
 | Red   | `#c1272d` | Errors, git deletions  |
-| Blue  | `#2563eb` | Links, info            |
-| Gray  | `#8e84a8` | Comments, muted text   |
+| Blue  | `#1454dc` | Links, info            |
+| Gray  | `#686177` | Comments, muted text   |
 
 ### Background Spectrum
 
 | Element      | Hex       | Usage                  |
 | ------------ | --------- | ---------------------- |
 | bg           | `#faf8ff` | Main editor background |
-| bg_dark      | `#f1ecff` | Sidebar, panels        |
-| bg_highlight | `#e8e0ff` | Popups, highlights     |
+| bg_dark      | `#f4f0ff` | Sidebar, panels        |
+| bg_highlight | `#f7f4ff` | Popups, highlights     |
 | bg_visual    | `#d4c8f0` | Selection              |
 
 ## Terminal Colors
@@ -50,21 +50,21 @@ A beautiful light theme for daytime coding with electric accents.
 # ANSI Colors
 black: "#2b2540"
 red: "#c1272d"
-green: "#2d8659"
-yellow: "#a88600"
-blue: "#2563eb"
+green: "#1d6e46"
+yellow: "#796100"
+blue: "#1454dc"
 magenta: "#b40077"
-cyan: "#007f8e"
+cyan: "#006e72"
 white: "#faf8ff"
 
 # Bright variants
 bright_black: "#5a4d6e"
 bright_red: "#dc2626"
-bright_green: "#38a169"
-bright_yellow: "#d69e00"
-bright_blue: "#3b82f6"
-bright_magenta: "#c04a8f"
-bright_cyan: "#009fae"
+bright_green: "#288855"
+bright_yellow: "#7f5f00"
+bright_blue: "#2572ef"
+bright_magenta: "#d92a99"
+bright_cyan: "#048397"
 bright_white: "#ffffff"
 ```
 

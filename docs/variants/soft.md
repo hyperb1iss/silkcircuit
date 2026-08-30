@@ -33,7 +33,7 @@ Gentle colors for marathon coding sessions and late-night work.
 | Green | `#66ff99` | Success, git additions |
 | Red   | `#ff6677` | Errors, git deletions  |
 | Blue  | `#92aaff` | Links, info            |
-| Gray  | `#b199ff` | Comments, muted text   |
+| Gray  | `#7e9494` | Comments, muted text   |
 
 ## Terminal Colors
 

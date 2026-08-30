@@ -237,9 +237,8 @@ User preferences
 - OK No saved preferences, using the configured values
 
 WCAG contrast
-- OK Checked 18 distinct text colors against the 'neon' background (#12101a)
-- OK 17 of 18 meet WCAG AA (4.5:1)
-- WARNING gray (#637777, line numbers, non-text) on #12101a is 3.98:1, AA needs 4.5:1
+- OK Checked 19 distinct text colors against the 'neon' background (#12101a)
+- OK All 19 meet WCAG AA (4.5:1)
 
 Commands
 - OK :SilkCircuit [neon|vibrant|soft|glow|dawn] - switch variant
