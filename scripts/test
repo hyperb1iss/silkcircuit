@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Run the SilkCircuit test suite in a headless Neovim.
+#
+#   scripts/test                     # everything
+#   scripts/test --filter isolation  # one spec file
+#
+# SILKCIRCUIT_UPDATE_SNAPSHOTS=1 scripts/test --filter snapshot rewrites the
+# highlight snapshots under tests/snapshots/.
+#
+# `-l` implies --headless and still honours `-u`, so tests/minimal_init.lua is
+# sourced before the runner script starts (verified on Neovim 0.12.5).
+
+set -euo pipefail
+
+root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$root"
+
+exec nvim --clean -u tests/minimal_init.lua -l tests/run.lua "$@"

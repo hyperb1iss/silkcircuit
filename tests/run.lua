@@ -1,53 +1,163 @@
--- Run tests inside actual Neovim
-vim.opt.runtimepath:prepend(vim.fn.getcwd())
+-- Self-contained headless test runner for SilkCircuit.
+--
+--   scripts/test [--filter <pattern>]
+--
+-- Discovers tests/spec/*_spec.lua, runs the describe/it blocks each file
+-- registers, prints TAP output and exits non-zero when anything fails.
+--
+-- No plugin dependency and no global `assert` override: specs assert through
+-- tests/helpers.lua, and the only pcall here is the one that turns a failing
+-- case into a reported failure.
 
--- Simple test framework
-local tests = {}
-local results = { passed = 0, failed = 0, errors = {} }
+local root = vim.g.silkcircuit_test_root or vim.fn.getcwd()
+package.path = root .. "/tests/?.lua;" .. package.path
 
-_G.describe = function(name, fn)
-  print("\n→ " .. name)
-  fn()
-end
+local H = require("helpers")
+local emit = H.emit
 
-_G.it = function(name, fn)
-  local ok, err = pcall(fn)
-  if ok then
-    print("  ✓ " .. name)
-    results.passed = results.passed + 1
+-- ---------------------------------------------------------------------------
+-- Arguments
+-- ---------------------------------------------------------------------------
+
+local filter = nil
+local argv = _G.arg or {}
+local index = 1
+while argv[index] do
+  local value = argv[index]
+  if value == "--filter" or value == "-f" then
+    index = index + 1
+    filter = argv[index]
+  elseif value:match("^%-%-filter=") then
+    filter = value:sub(#"--filter=" + 1)
   else
-    print("  ✗ " .. name)
-    print("    • " .. err)
-    results.failed = results.failed + 1
-    table.insert(results.errors, { test = name, error = err })
+    io.stderr:write("unknown argument: " .. tostring(value) .. "\n")
+    os.exit(2)
+  end
+  index = index + 1
+end
+
+-- ---------------------------------------------------------------------------
+-- Registration
+-- ---------------------------------------------------------------------------
+
+-- describe/it live on the helpers module rather than in _G: specs pick them up
+-- as locals, which keeps the global namespace and the linter clean.
+local cases = {}
+local suite = nil
+
+function H.describe(name, fn)
+  local outer = suite
+  suite = outer and (outer .. " " .. name) or name
+  fn()
+  suite = outer
+end
+
+function H.it(name, fn)
+  cases[#cases + 1] = { name = suite and (suite .. " · " .. name) or name, fn = fn }
+end
+
+-- ---------------------------------------------------------------------------
+-- Discovery
+-- ---------------------------------------------------------------------------
+
+local spec_files = vim.fn.glob(root .. "/tests/spec/*_spec.lua", false, true)
+table.sort(spec_files)
+
+local selected = {}
+for _, path in ipairs(spec_files) do
+  local basename = vim.fn.fnamemodify(path, ":t:r")
+  if not filter or basename:match(filter) then
+    selected[#selected + 1] = path
   end
 end
 
-_G.assert = function(condition, message)
-  if not condition then
-    error(message or "Assertion failed", 2)
+if #selected == 0 then
+  io.stderr:write(
+    string.format(
+      "no spec files matched%s (looked in %s/tests/spec)\n",
+      filter and (" filter '" .. filter .. "'") or "",
+      root
+    )
+  )
+  os.exit(2)
+end
+
+local load_failures = {}
+for _, path in ipairs(selected) do
+  local chunk, err = loadfile(path)
+  if chunk then
+    local ok, run_err = pcall(chunk)
+    if not ok then
+      load_failures[#load_failures + 1] = { path = path, message = tostring(run_err) }
+    end
+  else
+    load_failures[#load_failures + 1] = { path = path, message = tostring(err) }
   end
 end
 
--- Run all test files
-local test_files = vim.fn.glob("tests/unit/*.lua", false, true)
-for _, file in ipairs(test_files) do
-  dofile(file)
-end
+-- ---------------------------------------------------------------------------
+-- Execution
+-- ---------------------------------------------------------------------------
 
--- Summary
-print("\n" .. string.rep("═", 60))
-print("★ TEST SUMMARY")
-print(string.rep("═", 60))
-print(string.format("\nTotal: %d passed, %d failed\n", results.passed, results.failed))
-
-if results.failed > 0 then
-  print("Failed tests:")
-  for _, err in ipairs(results.errors) do
-    print("  • " .. err.test .. ": " .. err.error)
+local function diagnostic(text)
+  for line in tostring(text):gmatch("[^\n]+") do
+    emit("# " .. line)
   end
-  vim.cmd("cquit 1")
-else
-  print("✓ All tests passed!")
-  vim.cmd("quit")
 end
+
+local function traceback(message)
+  return tostring(message) .. "\n" .. debug.traceback("", 2)
+end
+
+emit("TAP version 13")
+emit(string.format("1..%d", #cases + #load_failures))
+
+local number = 0
+local failed = 0
+local failures = {}
+
+for _, failure in ipairs(load_failures) do
+  number = number + 1
+  failed = failed + 1
+  local name = "load " .. vim.fn.fnamemodify(failure.path, ":t")
+  emit(string.format("not ok %d - %s", number, name))
+  diagnostic(failure.message)
+  failures[#failures + 1] = name
+end
+
+local started = vim.uv.hrtime()
+
+for _, case in ipairs(cases) do
+  number = number + 1
+  local ok, err = xpcall(case.fn, traceback)
+  if ok then
+    emit(string.format("ok %d - %s", number, case.name))
+  else
+    failed = failed + 1
+    emit(string.format("not ok %d - %s", number, case.name))
+    diagnostic(err)
+    failures[#failures + 1] = case.name
+  end
+end
+
+local elapsed = (vim.uv.hrtime() - started) / 1e6
+
+emit("#")
+emit(
+  string.format(
+    "# %d run, %d passed, %d failed in %.0fms",
+    number,
+    number - failed,
+    failed,
+    elapsed
+  )
+)
+if failed > 0 then
+  emit("# failing cases:")
+  for _, name in ipairs(failures) do
+    emit("#   " .. name)
+  end
+end
+
+io.stdout:flush()
+os.exit(failed == 0 and 0 or 1)
