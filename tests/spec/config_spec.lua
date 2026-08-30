@@ -47,13 +47,24 @@ describe("config", function()
     H.eq(hl.bg and H.hex(hl.bg), "#010203", "on_highlights override did not reach Normal")
   end)
 
-  it("transparent = true clears Normal's background", function()
+  it("transparent = true clears Normal's background but keeps its text", function()
     H.load_full("neon", { transparent = true })
     local hl = H.get_hl("Normal") or {}
+    -- fg first: an undefined Normal has no bg either, and would otherwise
+    -- satisfy this case without the theme having loaded at all.
+    H.ok(hl.fg ~= nil, "Normal has no foreground, so it was never defined: " .. vim.inspect(hl))
     H.eq(hl.bg, nil, "Normal still has a background: " .. vim.inspect(hl))
   end)
 
   it("a disabled integration defines none of its groups", function()
+    -- Prove the group is there to lose before proving it is gone, or an
+    -- integration that never defined it would pass this case for free.
+    H.load_full("neon")
+    H.ok(
+      H.has_attributes(H.get_hl("TelescopeSelection")),
+      "TelescopeSelection is undefined even with telescope enabled, so this case proves nothing"
+    )
+
     H.load_full("neon", { integrations = { telescope = false } })
     local hl = H.get_hl("TelescopeSelection")
     H.ok(

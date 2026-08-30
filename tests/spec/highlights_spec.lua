@@ -65,9 +65,16 @@ describe("highlights", function()
     it(variant .. " defines the groups editors depend on", function()
       local record = H.load_full(variant)
       local missing = {}
+      local rejected = {}
+      for _, failure in ipairs(record.errors) do
+        rejected[failure.group] = failure.message
+      end
+
       for _, group in ipairs(REQUIRED_GROUPS) do
-        if record.opts[group] == nil then
-          missing[#missing + 1] = group .. " (never set by the theme)"
+        if rejected[group] then
+          missing[#missing + 1] = group .. " (rejected by nvim_set_hl: " .. rejected[group] .. ")"
+        elseif record.opts[group] == nil then
+          missing[#missing + 1] = group .. " (no integration defines it)"
         elseif not H.has_attributes(H.get_hl(group)) then
           missing[#missing + 1] = group .. " (set, but resolves to nothing)"
         end

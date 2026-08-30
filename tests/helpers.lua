@@ -10,10 +10,44 @@ H.root = vim.g.silkcircuit_test_root or vim.fn.getcwd()
 
 H.variants = { "neon", "vibrant", "soft", "glow", "dawn" }
 
--- Plugin modules the colorscheme must never `require`. A lazy-loaded setup
--- hands the colorscheme to Neovim long before these exist, so touching one is
--- either a hard error or a silent no-op that skips the integration.
-H.foreign_modules = { "lualine", "gitsigns", "telescope", "cmp", "neo-tree", "snacks" }
+-- A module is the theme's own when this repository ships the file, and
+-- foreign otherwise. Ownership is read off the lua/ tree rather than matched
+-- against a name prefix, because the theme legitimately ships
+-- lua/lualine/themes/silkcircuit.lua: it lives under a plugin's namespace by
+-- lualine's own convention while being entirely ours, and it loads whether or
+-- not lualine is installed. A prefix rule would either miss it or wave through
+-- every real lualine module alongside it.
+--
+-- Everything else is foreign, and a lazy-loaded setup hands the colorscheme to
+-- Neovim long before any of it exists, so touching one is either a hard error
+-- or a silent no-op that skips the integration.
+local own_modules = nil
+
+local function shipped_modules()
+  if own_modules then
+    return own_modules
+  end
+
+  own_modules = {}
+  local lua_dir = H.root .. "/lua"
+  for _, path in ipairs(vim.fn.glob(lua_dir .. "/**/*.lua", false, true)) do
+    local name = path:sub(#lua_dir + 2):gsub("%.lua$", ""):gsub("/", ".")
+    own_modules[name] = true
+    -- foo/init.lua is required as `foo`
+    local package_name = name:match("^(.*)%.init$")
+    if package_name then
+      own_modules[package_name] = true
+    end
+  end
+  return own_modules
+end
+
+function H.is_foreign_module(name)
+  if name:match("^vim%.") then
+    return false
+  end
+  return not shipped_modules()[name]
+end
 
 -- ---------------------------------------------------------------------------
 -- Assertions
@@ -305,11 +339,69 @@ function H.load_full(variant, opts)
   return H.load(variant, H.all_integrations(opts))
 end
 
--- Deliberately unguarded: nvim_get_hl only errors on a malformed group name,
--- which is a bug in the spec, not a fact about the theme. An undefined group
--- comes back as an empty table.
+-- Parse one `:highlight <name>` line. Neovim renders a group as
+--   Name       xxx cterm=bold gui=bold guifg=#ff00ff blend=50
+-- or `links to Other`, or `cleared`, followed by a "Last set from" trailer.
+local function parse_highlight_output(text)
+  local body = text:gsub("\n", " "):gsub("Last set from.*$", "")
+  local attrs = body:match("xxx%s+(.*)$")
+  if not attrs then
+    return {}
+  end
+
+  local linked = attrs:match("^links to (%S+)")
+  if linked then
+    return { link = linked }
+  end
+
+  local parsed = {}
+  for token in attrs:gmatch("%S+") do
+    local key, value = token:match("^([%w_]+)=(.+)$")
+    if not key then
+      -- a bare attribute name, e.g. `underline`
+      parsed[token] = true
+    elseif key == "blend" or key == "ctermfg" or key == "ctermbg" then
+      parsed[key] = tonumber(value)
+    elseif key == "guifg" then
+      parsed.fg = value
+    elseif key == "guibg" then
+      parsed.bg = value
+    elseif key == "guisp" then
+      parsed.sp = value
+    elseif key == "gui" or key == "cterm" then
+      for name in value:gmatch("[^,]+") do
+        if name ~= "NONE" then
+          parsed[name] = true
+        end
+      end
+    end
+  end
+
+  if parsed.cleared then
+    return {}
+  end
+  return parsed
+end
+
+-- nvim_get_hl is the primary read, but it reports nothing at all for a group
+-- whose only attribute is `blend`: NoiceCursor = { blend = 100 } comes back as
+-- an empty dict even though `:hi NoiceCursor` prints blend=100. Fall back to
+-- parsing that output so a blend-only group is not mistaken for an unstyled
+-- one.
+--
+-- Deliberately unguarded otherwise: nvim_get_hl only errors on a malformed
+-- group name, which is a bug in the spec, not a fact about the theme.
 function H.get_hl(group)
-  return vim.api.nvim_get_hl(0, { name = group })
+  local hl = vim.api.nvim_get_hl(0, { name = group })
+  if next(hl) ~= nil then
+    return hl
+  end
+
+  local ok, result = pcall(vim.api.nvim_exec2, "highlight " .. group, { output = true })
+  if not ok or not result.output then
+    return hl
+  end
+  return parse_highlight_output(result.output)
 end
 
 -- True when a highlight carries any actual styling. nvim_get_hl() returns an
@@ -323,8 +415,8 @@ end
 -- Plugin isolation
 -- ---------------------------------------------------------------------------
 
--- Run `fn` with a searcher in front of the module path that records any
--- attempt to require one of `names`, and return the attempts.
+-- Run `fn` with a searcher in front of the module path that records every
+-- require of a module the theme does not own, and return those names.
 --
 -- By default the searcher declines, so `require` fails exactly as it would for
 -- a plugin that is not installed. With `opts.raise` it instead hands back a
@@ -333,19 +425,15 @@ end
 -- a sentinel in package.loaded after a loader raises, and every later require
 -- of that module fails with "loop or previous error loading module". A theme
 -- that probes for plugins can therefore poison them for the whole session.
-function H.watch_requires(names, fn, opts)
+function H.watch_requires(fn, opts)
   opts = opts or {}
-  local watched = {}
-  for _, name in ipairs(names) do
-    watched[name] = true
-  end
 
   local attempts = {}
   -- Neovim runs LuaJIT, so this is package.loaders rather than 5.2's
   -- package.searchers.
   local searchers = package.loaders
   local searcher = function(name)
-    if not watched[name] then
+    if not H.is_foreign_module(name) then
       return nil
     end
     attempts[#attempts + 1] = name

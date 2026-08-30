@@ -55,6 +55,11 @@ describe("preferences", function()
         expected,
         "the first load ignored the saved variant, so it only takes effect on the second"
       )
+      H.eq(
+        require("silkcircuit.variants").get_current_variant(),
+        "glow",
+        "the painted colours came from glow but the active variant disagrees"
+      )
     end)
   end)
 
