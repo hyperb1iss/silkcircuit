@@ -10,9 +10,10 @@
 local M = {}
 
 -- Roles no single palette key can serve in both a dark and a light theme.
--- Dawn's cyan and coral are mixed to sit on a near-white page, so they read at
--- 2.8:1 and 4.2:1 as ink there and cannot carry the accents that work on the
--- dark variants. Each falls back to a purple or pink that clears 4.5:1.
+-- The palette retune brought dawn's cyan and coral above 5.4:1 as ink, so
+-- the light fallbacks below are no longer about contrast: they keep dawn's
+-- accents in the purple and pink family the light theme is built around,
+-- where a cyan focus ring would read as a different brand.
 --
 --   shadow        has to darken whatever sits under it
 --   accent_border focus rings, active indicators, section headers: the cyan
