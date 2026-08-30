@@ -529,9 +529,10 @@ function Install-WindowsTerminal {
     Write-Host "$script:Purple$script:Bold  >> Windows Terminal$script:Reset"
 
     $target = Join-Path $script:ConfigRoot "windows-terminal.json"
-    if (Copy-SilkFile (Join-Path $script:ExtrasDir "windows-terminal.json") $target "windows-terminal") {
-        Write-Success "Windows Terminal scheme installed"
-        Write-Dim "Import into Windows Terminal settings.json from: $target"
+    $source = Join-PathParts $script:ExtrasDir "windows-terminal" "silkcircuit.json"
+    if (Copy-SilkFile $source $target "windows-terminal") {
+        Write-Success "Windows Terminal schemes installed"
+        Write-Dim "Paste the schemes array into settings.json from: $target"
     }
 }
 

@@ -385,11 +385,16 @@ install_warp() {
     local theme_dir="$HOME/.warp/themes"
     printf "${PURPLE}${BOLD}  >> Warp${RESET}\n"
 
-    safe_copy "${EXTRAS_DIR}/warp.yaml" "${theme_dir}/silkcircuit.yaml" "warp:dark"
-    if [[ -f "${EXTRAS_DIR}/warp-dawn.yaml" ]]; then
-        safe_copy "${EXTRAS_DIR}/warp-dawn.yaml" "${theme_dir}/silkcircuit-dawn.yaml" "warp:dawn"
-    fi
-    success "Installed Warp themes"
+    local count=0
+    for f in "${EXTRAS_DIR}/warp/silkcircuit-"*.yaml; do
+        local name
+        name=$(basename "$f")
+        if safe_copy "$f" "${theme_dir}/${name}" "warp:${name}"; then
+            count=$((count + 1))
+        fi
+    done
+    success "Installed ${count} Warp themes"
+    diminfo "Activate: Settings -> Appearance -> Themes -> SilkCircuit Neon"
 }
 
 install_btop() {
@@ -672,9 +677,10 @@ install_windows_terminal() {
     printf "${PURPLE}${BOLD}  >> Windows Terminal${RESET}\n"
 
     local target="$HOME/.config/silkcircuit/windows-terminal.json"
-    if safe_copy "${EXTRAS_DIR}/windows-terminal.json" "$target" "windows-terminal"; then
-        success "Windows Terminal theme installed"
-        diminfo "Import into Windows Terminal settings.json"
+    if safe_copy "${EXTRAS_DIR}/windows-terminal/silkcircuit.json" "$target" "windows-terminal"; then
+        success "Windows Terminal schemes installed"
+        diminfo "Paste the schemes array into Windows Terminal settings.json:"
+        diminfo "$target"
     fi
 }
 
