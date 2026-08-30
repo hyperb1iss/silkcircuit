@@ -1,12 +1,12 @@
 # 🌈 SilkCircuit Extras
 
 Everything in this directory is generated from `lua/silkcircuit/variants.lua`
-by `make build`, in all five variants, so a colour you change in the palette
+by `make build`, in all five variants, so a color you change in the palette
 changes here too on the next build. Files are named
 `<target>/silkcircuit-<variant>.<ext>`, where the variant is one of `neon`,
 `vibrant`, `soft`, `glow`, or `dawn`. Dawn is light, the rest are dark.
 
-Do not hand-edit a generated file. The next build overwrites it. The colours
+Do not hand-edit a generated file. The next build overwrites it. The colors
 live in `lua/silkcircuit/variants.lua` and the mapping to each format lives in
 `lua/silkcircuit/extra/<target>.lua`.
 
@@ -140,9 +140,9 @@ cp -r astronvim/community.lua astronvim/plugins ~/.config/nvim/lua/
 than generated targets: a standalone lualine setup and a themed avante.nvim
 sidebar. Copy the parts you want into your own config.
 
-## 🎨 Colour reference
+## 🎨 Color reference
 
-`palette/silkcircuit-<variant>.json` is the authoritative list: every colour as
+`palette/silkcircuit-<variant>.json` is the authoritative list: every color as
 hex, RGB, and HSL, with the sixteen ANSI slots under the `terminal` key. The
 same directory carries base16 and base24 scheme files for
 [tinted-theming](https://github.com/tinted-theming/home) builders such as tinty

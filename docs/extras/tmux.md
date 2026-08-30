@@ -28,7 +28,7 @@ The installer does the same thing: `./install.sh`, or
 Two of the options this theme sets are the reason. `copy-mode-match-style`
 arrived in 3.2 and `popup-style` in 3.3, but `menu-style` and
 `menu-border-style` only landed in 3.4, and tmux aborts a
-`source-file` on the first option it does not recognise.
+`source-file` on the first option it does not recognize.
 
 ## True color inside tmux
 

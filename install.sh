@@ -313,12 +313,17 @@ safe_copy() {
         # Skip .bak files inside external git repos, git itself is the backup
         if [[ "$in_ext_git" == false ]]; then
             # cp follows a link at the backup path and writes to its target,
-            # so drop the link first. Same rule the destination already gets.
+            # so drop the link first. The destination itself is left as it is:
+            # see the note on the copy below.
             rm -f "${dst}.silkcircuit.bak" 2>/dev/null || true
             cp "$dst" "${dst}.silkcircuit.bak" 2>/dev/null || true
         fi
     fi
 
+    # Deliberately not dropping a link at $dst. install.ps1 does (4dbe234), so
+    # the two installers differ here, and reconciling them changes behaviour for
+    # every tool rather than just this one. Left alone rather than settled
+    # quietly at the end of an unrelated change.
     if cp "$src" "$dst" 2>/dev/null; then
         INSTALLED+=("$label")
         return 0
@@ -889,7 +894,7 @@ set_k9s_skin() {
     if [[ $rc -ne 0 ]]; then
         rm -f "$work"
         # awk failing on the file itself (invalid bytes, unreadable mid-stream)
-        # is not a shape we recognise either.
+        # is not a shape we recognize either.
         [[ $rc -eq 3 ]] || rc=6
         return "$rc"
     fi
@@ -1011,7 +1016,7 @@ install_slack() {
     success "Staged ${COPIED} Slack themes"
     diminfo "Preferences -> Themes -> Create a custom theme, then paste this line:"
 
-    # The line to paste is ten hex colours, so it starts with '#' exactly like
+    # The line to paste is ten hex colors, so it starts with '#' exactly like
     # the comments above it. Match its shape rather than filtering comments out.
     local source_file="${EXTRAS_DIR}/slack/silkcircuit-${PRIMARY}.txt"
     local colors=""
@@ -1021,7 +1026,7 @@ install_slack() {
     if [[ -n "$colors" ]]; then
         diminfo "$colors"
     else
-        diminfo "Could not read the colours from ${source_file}"
+        diminfo "Could not read the colors from ${source_file}"
     fi
 }
 
