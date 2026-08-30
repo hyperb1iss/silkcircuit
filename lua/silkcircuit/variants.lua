@@ -111,8 +111,8 @@ local function create_variant(variant_name)
     fg_light = "#ffffff",
     fg_gutter = "#6272a4",
 
-    -- Core grays
-    gray = "#637777",
+    -- Core grays. gray is per variant: it carries line numbers, so it has
+    -- to clear AA against that variant's own background and cursorline.
     gray_light = "#d7dbe0",
     gray_dark = "#5f7e97",
   })
@@ -142,6 +142,9 @@ local function create_variant(variant_name)
       blue_bright = "#a2bbff", -- Terminal bright blue
       blue_light = "#88ffff", -- Entity types
       blue_gray = "#6272a4", -- Line numbers/borders
+
+      -- Grays
+      gray = "#7e9494", -- Line numbers, non-text glyphs
 
       -- Pinks (from VSCode soft)
       pink = "#ff99ff", -- Tags/entity names
@@ -183,6 +186,9 @@ local function create_variant(variant_name)
       blue_light = "#88aaff",
       blue_gray = "#6272a4",
 
+      -- Grays
+      gray = "#728989", -- Line numbers, non-text glyphs
+
       -- Pinks (from VSCode vibrant)
       pink = "#ff00cc", -- Electric pink
       pink_bright = "#ff66ff",
@@ -222,6 +228,9 @@ local function create_variant(variant_name)
       blue_bright = "#82b1ff", -- VSCode bright blue
       blue_light = "#82aaff", -- Keep consistent
       blue_gray = "#6272a4", -- VSCode comment/gray
+
+      -- Grays
+      gray = "#768d8d", -- Line numbers, non-text glyphs
 
       -- Pinks/Magentas
       pink = "#ff00ff", -- Pure magenta from VSCode
@@ -480,7 +489,7 @@ local function create_glow_variant()
     fg_gutter = "#cc66ff", -- editorLineNumber.foreground
 
     -- Core grays
-    gray = "#666666", -- terminal.ansiBrightBlack
+    gray = "#818181", -- Line numbers, terminal.ansiBrightBlack
     gray_light = "#cc66ff",
     gray_dark = "#666666",
 
@@ -545,7 +554,7 @@ local function create_glow_variant()
     terminal_magenta = "#ff00ff",
     terminal_cyan = "#00ffff",
     terminal_white = "#ffffff",
-    terminal_bright_black = "#666666",
+    terminal_bright_black = "#818181", -- == gray
     terminal_bright_red = "#ff6666",
     terminal_bright_green = "#66ff66",
     terminal_bright_yellow = "#ffff66",
