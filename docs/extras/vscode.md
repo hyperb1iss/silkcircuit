@@ -23,8 +23,9 @@ code --install-extension silkcircuit-theme-*.vsix
 ```
 
 The installer copies the extension directory straight into
-`~/.vscode/extensions/`, which skips the packaging step:
-`./install.sh --variant neon`.
+`~/.vscode/extensions/`, which skips the packaging step: `./install.sh`. The
+extension is one package carrying all five themes, so `--variant` does not
+narrow it; pick a theme in the editor.
 
 ## Available themes
 

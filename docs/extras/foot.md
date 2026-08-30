@@ -19,7 +19,8 @@ Every file carries both a `[colors-dark]` and a `[colors-light]` section, which
 foot 1.26 and newer switch between when it follows the system appearance
 setting. On an older foot, only the dark section applies.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Files
 

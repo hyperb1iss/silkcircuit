@@ -22,7 +22,8 @@ who would rather drop in a single theme file than five.
 Needs Zellij 0.42 or newer. Older releases do not understand the
 `text_unselected` and ribbon slots these themes are written against.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Files
 

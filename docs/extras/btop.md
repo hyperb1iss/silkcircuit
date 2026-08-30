@@ -18,7 +18,8 @@ color_theme = "silkcircuit-neon"
 truecolor = True
 ```
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Color mapping
 

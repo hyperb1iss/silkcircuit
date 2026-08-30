@@ -24,8 +24,7 @@ lazygit --use-config-file ~/.config/lazygit/config.yml,~/.config/lazygit/silkcir
 `LG_CONFIG_FILE` takes the same comma-separated list, so it works as an alias
 or an export.
 
-The installer copies the files and prints that command:
-`./install.sh --variant neon`.
+The installer copies the files and prints that command: `./install.sh`.
 
 ## Colors only
 

@@ -31,8 +31,8 @@ Or make it the default in `$(bat --config-dir)/config`:
 inherited classes all carry italics in this theme, and bat drops them
 otherwise.
 
-The installer does all of it, cache rebuild included:
-`./install.sh --variant neon`.
+The installer does all of it, cache rebuild included: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## The theme name is the file name
 

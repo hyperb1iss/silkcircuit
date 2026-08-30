@@ -9,9 +9,9 @@ environment.
 2. Import, under the theme section.
 3. Pick `extras/cosmic/silkcircuit-neon.ron`.
 
-The theme applies immediately. The installer stages the files at
+The theme applies immediately. The installer stages all five at
 `~/.config/silkcircuit/cosmic/` so the import dialog has somewhere stable to
-point at: `./install.sh --variant neon`.
+point at: `./install.sh`.
 
 ## Install by hand
 
