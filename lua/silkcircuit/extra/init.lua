@@ -25,6 +25,8 @@ M.variants = { "neon", "vibrant", "soft", "glow", "dawn" }
 ---            with dashes turned into underscores.
 ---   comment  Header comment style: "hash" (default), "css", or "none".
 ---   is_full  Render once from every variant instead of once per variant.
+---   filename Function(variant) returning the file name, for formats whose
+---            tooling dictates a name the default pattern cannot express.
 M.targets = {
   kitty = {
     label = "Kitty",
@@ -92,6 +94,35 @@ local COMMENTS = {
     out[#out + 1] = " */"
     return table.concat(out, "\n")
   end,
+  slash = function(lines)
+    local out = {}
+    for _, line in ipairs(lines) do
+      out[#out + 1] = line == "" and "//" or ("// " .. line)
+    end
+    return table.concat(out, "\n")
+  end,
+  semicolon = function(lines)
+    local out = {}
+    for _, line in ipairs(lines) do
+      out[#out + 1] = line == "" and ";" or ("; " .. line)
+    end
+    return table.concat(out, "\n")
+  end,
+  dash = function(lines)
+    local out = {}
+    for _, line in ipairs(lines) do
+      out[#out + 1] = line == "" and "--" or ("-- " .. line)
+    end
+    return table.concat(out, "\n")
+  end,
+  xml = function(lines)
+    local out = { "<!--" }
+    for _, line in ipairs(lines) do
+      out[#out + 1] = "  " .. line
+    end
+    out[#out + 1] = "-->"
+    return table.concat(out, "\n")
+  end,
   none = function()
     return nil
   end,
@@ -123,6 +154,9 @@ end
 --- File name a target writes for one variant, relative to its directory.
 function M.filename(name, variant)
   local spec = M.targets[name]
+  if spec.filename then
+    return spec.filename(variant)
+  end
   local suffix = spec.ext ~= "" and ("." .. spec.ext) or ""
   if spec.is_full then
     return "silkcircuit" .. suffix
@@ -168,31 +202,43 @@ end
 --- Expand `${key}` and `${table.key}` references against a palette.
 ---
 --- An unknown key is a hard error. Emitting a literal `${...}` into a terminal
---- config would ship a broken theme that nothing validates.
+--- config would ship a broken theme that nothing validates. Formats that need
+--- a literal `${` (shell, starship) write `$${` in the template.
 function M.template(str, colors)
+  local ESCAPE = "\1literal\1"
+  str = str:gsub("%$%$%{", ESCAPE)
   return (
-    str:gsub("($%b{})", function(ref)
-      local path = ref:sub(3, -2)
-      local value = vim.tbl_get(colors, unpack(vim.split(path, ".", { plain = true })))
-      if value == nil or type(value) == "table" then
-        error(
-          string.format(
-            "silkcircuit.extra: '%s' does not resolve to a value in variant '%s'",
-            path,
-            colors.meta and colors.meta.variant or "?"
-          ),
-          0
-        )
-      end
-      return tostring(value)
-    end)
+    str
+      :gsub("($%b{})", function(ref)
+        local path = ref:sub(3, -2)
+        local value = vim.tbl_get(colors, unpack(vim.split(path, ".", { plain = true })))
+        if value == nil or type(value) == "table" then
+          error(
+            string.format(
+              "silkcircuit.extra: '%s' does not resolve to a value in variant '%s'",
+              path,
+              colors.meta and colors.meta.variant or "?"
+            ),
+            0
+          )
+        end
+        return tostring(value)
+      end)
+      :gsub(ESCAPE, "${")
   )
 end
 
 --- Provenance banner in the target format's comment syntax.
 function M.header(name, variant)
   local spec = M.targets[name]
-  local render = COMMENTS[spec.comment or "hash"]
+  local style = spec.comment or "hash"
+  local render = COMMENTS[style]
+  if not render then
+    error(
+      string.format("silkcircuit.extra: target '%s' uses unknown comment style '%s'", name, style),
+      0
+    )
+  end
   local title = variant and ("SilkCircuit " .. titlecase(variant) .. " for " .. spec.label)
     or ("SilkCircuit for " .. spec.label)
   return render({
@@ -214,13 +260,14 @@ end
 M.write = write
 
 --- Drop every generated file in a directory so a renamed target cannot orphan
---- a stale theme. Markdown is hand-written and survives.
+--- a stale theme. Only files named like generator output go; hand-maintained
+--- neighbours (a package.json, a LICENSE, an icon) survive.
 local function wipe(dir)
   if vim.fn.isdirectory(dir) == 0 then
     return
   end
   for entry, kind in vim.fs.dir(dir) do
-    if kind == "file" and not entry:match("%.md$") then
+    if kind == "file" and entry:lower():match("^silkcircuit") and not entry:match("%.md$") then
       vim.fn.delete(dir .. "/" .. entry)
     end
   end
