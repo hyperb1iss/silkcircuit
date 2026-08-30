@@ -5,55 +5,39 @@
 -- single styled node makes it ignore the palette entirely. The styled form is
 -- what current zellij documents and it is the only one that can say what a
 -- ribbon or a pane frame should look like, so that is what these files use.
--- It needs zellij 0.41 or newer.
+-- It needs zellij 0.42, where the spec landed.
 
 local M = {}
 
--- base, background, then the four emphasis slots a component highlights words
--- with. Every component has to spell out all six; zellij errors on a partial
--- declaration.
-local COMPONENTS = {
-  { "text_unselected", "${fg}", "${bg}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  { "text_selected", "${fg}", "${bg_visual}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  {
-    "ribbon_unselected",
-    "${fg_dark}",
-    "${bg_highlight}",
-    "${purple}",
-    "${cyan}",
-    "${pink}",
-    "${yellow}",
-  },
-  { "ribbon_selected", "${bg}", "${purple}", "${fg_light}", "${cyan}", "${green}", "${yellow}" },
-  { "table_title", "${cyan}", "${bg}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  {
-    "table_cell_unselected",
-    "${fg}",
-    "${bg}",
-    "${purple}",
-    "${cyan}",
-    "${pink}",
-    "${yellow}",
-  },
-  {
-    "table_cell_selected",
-    "${fg}",
-    "${bg_visual}",
-    "${purple}",
-    "${cyan}",
-    "${pink}",
-    "${yellow}",
-  },
-  { "list_unselected", "${fg}", "${bg}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  { "list_selected", "${fg}", "${bg_visual}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  { "frame_unselected", "${bg_visual}", "${bg}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  { "frame_selected", "${border}", "${bg}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  { "frame_highlight", "${pink}", "${bg}", "${purple}", "${cyan}", "${green}", "${yellow}" },
-  { "exit_code_success", "${green}", "${bg}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-  { "exit_code_error", "${red}", "${bg}", "${purple}", "${cyan}", "${pink}", "${yellow}" },
-}
+-- Zellij paints keybinding characters with the emphasis slots, so they are real
+-- text and each quartet is chosen against the surface behind it. Anything
+-- printed on the filled purple ribbon has to come from the dark end of the
+-- palette; a neon accent on neon purple lands near 1.4:1.
+local ON_SURFACE = { "${purple}", "${cyan}", "${pink}", "${fg_dark}" }
+local ON_RIBBON = { "${purple}", "${pink}", "${fg_light}", "${fg_dark}" }
+local ON_ACCENT = { "${bg_dark}", "${bg_darker}", "${bg_highlight}", "${bg}" }
+-- bg_visual is a mid tone in every variant, so no accent clears 4.5:1 on it.
+local ON_SELECTION = { "${fg_light}", "${fg_dark}", "${fg}", "${fg_dark}" }
 
-local FIELDS = { "base", "background", "emphasis_0", "emphasis_1", "emphasis_2", "emphasis_3" }
+-- name, base, background, then the emphasis quartet. Zellij requires base and
+-- all four emphasis slots on any component it finds; only background falls back
+-- to a default. Spelling out all six keeps the file readable either way.
+local COMPONENTS = {
+  { "text_unselected", "${fg}", "${bg}", ON_SURFACE },
+  { "text_selected", "${fg}", "${bg_visual}", ON_SELECTION },
+  { "ribbon_unselected", "${fg_dark}", "${bg_highlight}", ON_RIBBON },
+  { "ribbon_selected", "${bg}", "${purple}", ON_ACCENT },
+  { "table_title", "${cyan}", "${bg}", ON_SURFACE },
+  { "table_cell_unselected", "${fg}", "${bg}", ON_SURFACE },
+  { "table_cell_selected", "${fg}", "${bg_visual}", ON_SELECTION },
+  { "list_unselected", "${fg}", "${bg}", ON_SURFACE },
+  { "list_selected", "${fg}", "${bg_visual}", ON_SELECTION },
+  { "frame_unselected", "${comment}", "${bg}", ON_SURFACE },
+  { "frame_selected", "${border}", "${bg}", ON_SURFACE },
+  { "frame_highlight", "${pink}", "${bg}", ON_SURFACE },
+  { "exit_code_success", "${green}", "${bg}", ON_SURFACE },
+  { "exit_code_error", "${red}", "${bg}", ON_SURFACE },
+}
 
 -- Ten collaborators, ten colours the palette already owns. Some variants
 -- resolve two of these to the same hex, which zellij is fine with.
@@ -77,9 +61,19 @@ function M.theme(colors, indent)
   local lines = { indent .. "${meta.slug} {" }
 
   for _, component in ipairs(COMPONENTS) do
-    lines[#lines + 1] = indent .. step .. component[1] .. " {"
-    for index, field in ipairs(FIELDS) do
-      lines[#lines + 1] = indent .. step .. step .. field .. ' "' .. component[index + 1] .. '"'
+    local name, base, background, emphasis = component[1], component[2], component[3], component[4]
+    lines[#lines + 1] = indent .. step .. name .. " {"
+    lines[#lines + 1] = indent .. step .. step .. 'base "' .. base .. '"'
+    lines[#lines + 1] = indent .. step .. step .. 'background "' .. background .. '"'
+    for index, color in ipairs(emphasis) do
+      lines[#lines + 1] = indent
+        .. step
+        .. step
+        .. "emphasis_"
+        .. (index - 1)
+        .. ' "'
+        .. color
+        .. '"'
     end
     lines[#lines + 1] = indent .. step .. "}"
   end
