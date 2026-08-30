@@ -85,6 +85,11 @@ M.targets = {
     comment = "slash",
     url = "https://github.com/pop-os/cosmic-theme",
   },
+  dmesg = {
+    label = "dmesg",
+    ext = "scheme",
+    url = "https://www.man7.org/linux/man-pages/man5/terminal-colors.d.5.html",
+  },
   k9s = {
     label = "k9s",
     ext = "yaml",

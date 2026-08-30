@@ -27,6 +27,7 @@ Generated from the palette by `make build`, five variants each. See the
 | Alacritty                       | [reference](https://alacritty.org/config-alacritty.html#colors)                                    | `extras/alacritty/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`        |
 | btop                            | [reference](https://github.com/aristocratos/btop#themes)                                           | `extras/btop/silkcircuit-{neon,vibrant,soft,glow,dawn}.theme`            |
 | COSMIC Desktop                  | [reference](https://github.com/pop-os/cosmic-theme)                                                | `extras/cosmic/silkcircuit-{neon,vibrant,soft,glow,dawn}.ron`            |
+| dmesg                           | [reference](https://www.man7.org/linux/man-pages/man5/terminal-colors.d.5.html)                    | `extras/dmesg/silkcircuit-{neon,vibrant,soft,glow,dawn}.scheme`          |
 | Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                       | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`               |
 | Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
 | k9s                             | [reference](https://k9scli.io/topics/skins/)                                                       | `extras/k9s/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`              |
