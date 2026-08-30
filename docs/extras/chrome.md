@@ -68,8 +68,9 @@ Setup: Install [Stylus](https://chromewebstore.google.com/detail/stylus/clngdbkp
 make chrome
 ```
 
-Generates all five variants from `palette/silkcircuit-<variant>.json`, the same
-palette every other target is built from.
+Generates all five variants from `palette/silkcircuit-<variant>.json`, which
+`make build` renders from `lua/silkcircuit/variants.lua` alongside every other
+target.
 
 ## Compatibility
 

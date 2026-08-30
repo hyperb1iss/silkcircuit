@@ -4,8 +4,11 @@ A full [Starship](https://starship.rs/) prompt: a powerline of segments for OS,
 user, directory, git branch and status, language versions, and Kubernetes
 context, on a named `silkcircuit` palette.
 
-A few modules ship configured but disabled, the clock among them. Set
-`disabled = false` on any of them to bring it into the prompt.
+The `format` string names every segment explicitly, so a module stays out of
+the prompt until it appears there, disabled or not. The clock, command
+duration, battery, package version, and shell all ship configured but unused.
+Bringing one in means adding it to `format`, and clearing `disabled` too for
+the clock and the shell, which are the two switched off.
 
 ## Install
 
