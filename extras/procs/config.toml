@@ -136,4 +136,4 @@ path = "unix:///var/run/docker.sock"
 [pager]
 mode = "Disable"
 detect_width = false
-use_builtin = false 
+use_builtin = false
