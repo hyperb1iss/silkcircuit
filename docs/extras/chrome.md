@@ -68,7 +68,8 @@ Setup: Install [Stylus](https://chromewebstore.google.com/detail/stylus/clngdbkp
 make chrome
 ```
 
-Generates all 5 variants from the canonical palette defined in `scripts/generate_chrome_themes.py`.
+Generates all five variants from `palette/silkcircuit-<variant>.json`, the same
+palette every other target is built from.
 
 ## Compatibility
 

@@ -18,8 +18,8 @@ k9s:
     skin: silkcircuit-neon
 ```
 
-`export K9S_SKIN=silkcircuit-neon` works too, if you would rather not edit
-the config.
+The environment variable works too, if you would rather not edit the config:
+`export K9S_SKIN=silkcircuit-neon`.
 
 The skins directory moves between platforms and k9s releases. `k9s info`
 prints where yours is, and the installer asks it before copying: `./install.sh`.

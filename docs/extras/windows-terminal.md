@@ -29,7 +29,7 @@ On a build without fragment support, paste instead:
    array.
 3. Set `"colorScheme": "SilkCircuit Neon"` on the profile you want.
 
-`.\install.ps1` also stages a copy under `%APPDATA%\silkcircuit\` so you do not
+The installer also stages a copy under `%APPDATA%\silkcircuit\` so you do not
 have to find the repository again.
 
 ## Files

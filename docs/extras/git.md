@@ -13,8 +13,8 @@ cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
 git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
 ```
 
-The installer does the same thing, include and all:
-`./install.sh --variant neon`.
+The installer does the same thing, include and all: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## What it sets
 

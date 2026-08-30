@@ -27,7 +27,7 @@ Or make it the default in `$(bat --config-dir)/config`:
 --italic-text=always
 ```
 
-`--italic-text=always` matters. Comments, strings, function names, and
+That last flag matters. Comments, strings, function names, and
 inherited classes all carry italics in this theme, and bat drops them
 otherwise.
 

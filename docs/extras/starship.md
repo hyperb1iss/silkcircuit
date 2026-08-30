@@ -1,8 +1,11 @@
 # Starship
 
 A full [Starship](https://starship.rs/) prompt: a powerline of segments for OS,
-user, directory, git branch and status, language versions, Kubernetes context,
-and the time, on a named `silkcircuit` palette.
+user, directory, git branch and status, language versions, and Kubernetes
+context, on a named `silkcircuit` palette.
+
+A few modules ship configured but disabled, the clock among them. Set
+`disabled = false` on any of them to bring it into the prompt.
 
 ## Install
 

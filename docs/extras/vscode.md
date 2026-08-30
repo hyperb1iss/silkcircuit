@@ -45,7 +45,7 @@ narrow it; pick a theme in the editor.
 | Functions      | `entity.name.function` | Cyan         |
 | Strings        | `string`               | Pink soft    |
 | Numbers        | `constant.numeric`     | Coral        |
-| Booleans       | `constant.language`    | Pink         |
+| Booleans       | `constant.language`    | Coral        |
 | Types          | `entity.name.type`     | Yellow       |
 | Comments       | `comment`              | Purple muted |
 

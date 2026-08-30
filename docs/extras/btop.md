@@ -23,12 +23,14 @@ The installer does the same thing: `./install.sh`, or
 
 ## Color mapping
 
-| Box          | Gradient                       |
-| ------------ | ------------------------------ |
-| CPU          | purple through pink to magenta |
-| Memory       | cyan                           |
-| Network      | pink and cyan                  |
-| Process list | foreground with a purple title |
+| Box          | Colour                      |
+| ------------ | --------------------------- |
+| CPU          | purple through pink to cyan |
+| Memory       | cyan                        |
+| Network      | pink and cyan               |
+| Process list | green outline               |
+
+Box titles are magenta throughout, rather than per box.
 
 ## Colors look washed out
 
