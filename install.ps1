@@ -147,7 +147,7 @@ function Resolve-ToolDir {
     )
 
     foreach ($candidate in $Candidates) {
-        if ($candidate -and (Test-Path -LiteralPath $candidate)) {
+        if ($candidate -and (Test-Path -LiteralPath $candidate -PathType Container)) {
             return $candidate
         }
     }
@@ -495,6 +495,33 @@ function Get-K9sConfigDir {
     return Join-PathParts $script:LocalAppData "k9s"
 }
 
+# Indentation of the first child under the block opened at $At, read off the
+# file rather than assumed, so a config written with four spaces keeps its shape.
+function Get-BlockIndent {
+    param(
+        [string[]]$Lines,
+        [int]$At,
+        [int]$Own
+    )
+
+    for ($i = $At + 1; $i -lt $Lines.Count; $i++) {
+        if ($Lines[$i] -match "^\s*$") {
+            continue
+        }
+        $width = ($Lines[$i] -replace "^(\s*).*$", '$1').Length
+        if ($width -gt $Own) {
+            return $width
+        }
+        break
+    }
+    return $Own + 2
+}
+
+# Point an existing k9s config at a skin without ever writing a second
+# top-level "k9s:" mapping. k9s parses with gopkg.in/yaml.v3, which rejects a
+# duplicate key outright, so appending a sibling block does not merely look
+# untidy: it stops k9s reading its config at all. More permissive parsers keep
+# only the last mapping and silently drop the rest of the user's settings.
 function Set-K9sSkin {
     param(
         [string]$ConfigPath,
@@ -517,18 +544,61 @@ function Set-K9sSkin {
     }
 
     Copy-Item -LiteralPath $ConfigPath -Destination "$ConfigPath.silkcircuit.bak" -Force
-    $content = Get-Content -LiteralPath $ConfigPath -Raw
-    if ($content -match "(?m)^\s*skin:\s*") {
-        $content = [regex]::Replace($content, "(?m)^(\s*)skin:\s*.*$", "`${1}skin: $Skin")
-    } elseif ($content -match "(?m)^(\s*)ui:\s*$") {
-        $indent = $matches[1]
-        $uiPattern = [regex]"(?m)^(\s*)ui:\s*$"
-        $content = $uiPattern.Replace($content, "${indent}ui:`r`n${indent}  skin: $Skin", 1)
-    } else {
-        $content = $content.TrimEnd() + "`r`n`r`nk9s:`r`n  ui:`r`n    skin: $Skin`r`n"
+
+    $raw = Get-Content -LiteralPath $ConfigPath -Raw
+    if (-not $raw) {
+        $raw = ""
     }
 
-    Write-PlainText $ConfigPath $content
+    # Keep whatever line ending the file already uses; splicing CRLF into an LF
+    # config leaves a mixed file and a noisy diff.
+    $newline = if ($raw.Contains("`r`n")) { "`r`n" } else { "`n" }
+    $lines = [string[]]($raw -split "`r?`n")
+    while ($lines.Count -gt 0 -and $lines[-1] -eq "") {
+        $lines = $lines[0..($lines.Count - 2)]
+    }
+
+    $skinAt = -1
+    $uiAt = -1
+    $rootAt = -1
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        if ($skinAt -lt 0 -and $lines[$i] -match "^\s*skin:") { $skinAt = $i }
+        if ($uiAt -lt 0 -and $lines[$i] -match "^\s*ui:\s*$") { $uiAt = $i }
+        if ($rootAt -lt 0 -and $lines[$i] -match "^k9s:\s*$") { $rootAt = $i }
+    }
+
+    $out = [System.Collections.Generic.List[string]]::new()
+    if ($skinAt -ge 0) {
+        $indent = ($lines[$skinAt] -replace "^(\s*).*$", '$1')
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            if ($i -eq $skinAt) { $out.Add("${indent}skin: $Skin") } else { $out.Add($lines[$i]) }
+        }
+    } elseif ($uiAt -ge 0) {
+        $own = ($lines[$uiAt] -replace "^(\s*).*$", '$1').Length
+        $inner = " " * (Get-BlockIndent $lines $uiAt $own)
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            $out.Add($lines[$i])
+            if ($i -eq $uiAt) { $out.Add("${inner}skin: $Skin") }
+        }
+    } elseif ($rootAt -ge 0) {
+        $inner = " " * (Get-BlockIndent $lines $rootAt 0)
+        $deeper = " " * (2 * $inner.Length)
+        for ($i = 0; $i -lt $lines.Count; $i++) {
+            $out.Add($lines[$i])
+            if ($i -eq $rootAt) {
+                $out.Add("${inner}ui:")
+                $out.Add("${deeper}skin: $Skin")
+            }
+        }
+    } else {
+        foreach ($line in $lines) { $out.Add($line) }
+        $out.Add("")
+        $out.Add("k9s:")
+        $out.Add("  ui:")
+        $out.Add("    skin: $Skin")
+    }
+
+    Write-PlainText $ConfigPath (($out -join $newline) + $newline)
 }
 
 function Detect-All {
@@ -549,7 +619,10 @@ function Detect-All {
 
     Add-Detection "alacritty" "Alacritty" (
         (Test-Command "alacritty") -or
-        (Test-AnyPath @((Join-PathParts $script:AppData "alacritty")))
+        (Test-AnyPath @(
+            (Join-PathParts $script:AppData "alacritty"),
+            (Join-PathParts $script:HomeConfig "alacritty")
+        ))
     )
 
     Add-Detection "wezterm" "WezTerm" (
@@ -617,17 +690,26 @@ function Detect-All {
 
     Add-Detection "bat" "bat" (
         (Test-Command "bat") -or
-        (Test-AnyPath @((Join-PathParts $script:AppData "bat")))
+        (Test-AnyPath @(
+            (Join-PathParts $script:AppData "bat"),
+            (Join-PathParts $script:HomeConfig "bat")
+        ))
     )
 
     Add-Detection "lsd" "lsd" (
         (Test-Command "lsd") -or
-        (Test-AnyPath @((Join-PathParts $script:AppData "lsd")))
+        (Test-AnyPath @(
+            (Join-PathParts $script:AppData "lsd"),
+            (Join-PathParts $script:HomeConfig "lsd")
+        ))
     )
 
     Add-Detection "procs" "procs" (
         (Test-Command "procs") -or
-        (Test-AnyPath @((Join-PathParts $script:AppData "procs")))
+        (Test-AnyPath @(
+            (Join-PathParts $script:AppData "procs"),
+            (Join-PathParts $script:HomeConfig "procs")
+        ))
     )
 
     Add-Detection "atuin" "Atuin" (
@@ -1039,7 +1121,7 @@ function Install-Slack {
     if ($line) {
         Write-Dim $line
     } else {
-        Write-Dim "The line is at the bottom of $(Join-Path $targetDir "silkcircuit-$script:Primary.txt")"
+        Write-Dim "Could not read the colours from $source"
     }
 }
 
