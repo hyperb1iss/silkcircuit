@@ -173,9 +173,12 @@ require("silkcircuit").setup({
 
 For the complete experience, use the matching terminal themes:
 
-- **Warp**: Copy `extras/warp.yaml` to `~/.warp/themes/silkcircuit.yaml`
-- **Alacritty**: Use `extras/alacritty.yml`
-- **Kitty**: Use `extras/kitty.conf`
+- **Warp**: `cp extras/warp/silkcircuit-*.yaml ~/.warp/themes/`
+- **Alacritty**: `cp extras/alacritty/silkcircuit-*.toml ~/.config/alacritty/themes/`
+- **Kitty**: `cp extras/kitty/silkcircuit-*.conf ~/.config/kitty/themes/`
+
+The [terminal guide](../../docs/extras/terminals.md) covers the rest, and
+`./install.sh` does all of it at once.
 
 ## 🌟 Pro Tips
 

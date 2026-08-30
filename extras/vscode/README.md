@@ -242,16 +242,15 @@ SilkCircuit is a full ecosystem: editor, terminal, system tools, and even your b
     - Integrations live in `lua/silkcircuit/integrations/`
   - **Lualine**: `lua/lualine/themes/silkcircuit.lua` + sample config `extras/lualine-config.lua`
 - **Terminals**
-  - **Alacritty**: `extras/alacritty.yml`
-  - **Kitty**: `extras/kitty.conf`
-  - **Warp**: `extras/warp.yaml`
-  - **Windows Terminal**: `extras/windows-terminal.json`
+  - Kitty, Alacritty, Ghostty, WezTerm, Warp, foot, iTerm2, Windows Terminal
+  - Every one at `extras/<terminal>/silkcircuit-{neon,vibrant,soft,glow,dawn}.<ext>`
 - **CLI & Git**
-  - **fzf** theme: `extras/fzf.sh`
-  - **gitconfig** with electric accents: `extras/gitconfig`
+  - **fzf** theme: `extras/fzf/silkcircuit-{neon,vibrant,soft,glow,dawn}.sh`
+  - **git** colours plus a delta feature block: `extras/git/silkcircuit-*.gitconfig`
+  - **bat**, **lsd**, **procs**, **starship**, **fastfetch**, **atuin**, **lazygit**
 - **System tools**
-  - **btop** themes: `extras/btop/silkcircuit_{glow,neon,soft,vibrant}.theme`
-  - **macchina**: `extras/macchina/silkcircuit.toml`
+  - **btop** themes: `extras/btop/silkcircuit-{neon,vibrant,soft,glow,dawn}.theme`
+  - **k9s** skins, **dmesg** colours, **COSMIC Desktop** themes
 - **Browsers & Apps**
   - **Chrome DevTools + Chrome pages**: `extras/chrome-theme/` (see `extras/chrome-theme/README.md`)
   - **Slack**: `extras/slack/silkcircuit-{neon,vibrant,soft,glow,dawn}.txt`

@@ -1,56 +1,40 @@
 # 🌈 SilkCircuit Extras
 
-Complete your neon-lit development environment with these additional configurations that perfectly complement the SilkCircuit theme.
+Everything in this directory is generated from `lua/silkcircuit/variants.lua`
+by `make build`, in all five variants, so a colour you change in the palette
+changes here too on the next build. Files are named
+`<target>/silkcircuit-<variant>.<ext>`, where the variant is one of `neon`,
+`vibrant`, `soft`, `glow`, or `dawn`. Dawn is light, the rest are dark.
 
-## 📁 What's Included
+Do not hand-edit a generated file. The next build overwrites it. The colours
+live in `lua/silkcircuit/variants.lua` and the mapping to each format lives in
+`lua/silkcircuit/extra/<target>.lua`.
 
-### 🛸 AstroNvim Integration (`astronvim/`)
+The `README.md` inside a target directory is hand-written and survives the
+build. Those, and the [per-tool pages](../docs/extras/index.md) on the docs
+site, are the authoritative install instructions.
 
-Complete AstroNvim setup with SilkCircuit styling:
+## 🪄 The installer
 
-- **Full AstroUI configuration** with neon-enhanced components
-- **Custom Lualine theme** with electric visual elements
-- **Neo-tree styling** with vibrant file icons
-- **Community integration** setup files
-- **Maximum effect mode** for the boldest experience
-
-**Setup:**
-
-```bash
-# Copy all AstroNvim configs
-cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/
-```
-
-### ⚡ Git Configuration (`gitconfig`)
-
-Transform your git experience with electric colors:
-
-- **Neon magenta** commit hashes and important elements
-- **Electric cyan** for dates and metadata
-- **Bright yellow** for branch information
-- **Matching colors** across `git log`, `git status`, and `git diff`
-- **Delta integration** with SilkCircuit color palette
-
-**Setup:**
+From the repository root, this detects what you have installed, drops each
+theme where its tool looks for it, and prints the line that turns it on:
 
 ```bash
-# Pick a variant and include it, so your own .gitconfig stays yours
-mkdir -p ~/.config/git
-cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
-git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
+./install.sh --dry-run     # see what it would touch
+./install.sh               # all five variants, side by side
+./install.sh --variant glow
 ```
 
-The file sets colours and nothing else. Delta, the pager, and the log format
-are commented opt-ins at the bottom of it; the delta feature block expects the
-matching bat theme, which `extras/bat/README.md` covers.
+```powershell
+.\install.ps1 -Variant neon
+```
 
-### 🖥️ Terminal Themes
+Tools that hold a directory of themes get every selected variant. Tools that
+read a single file (lsd, procs, Starship, fastfetch, dmesg) get neon unless
+`--variant` says otherwise. Anything replaced is copied to
+`*.silkcircuit.bak` first.
 
-Every terminal theme is rendered from `lua/silkcircuit/variants.lua` by
-`make build`, so the colors in your terminal are the colors in your editor.
-All five variants ship for every target. The
-[terminal guide](../docs/extras/terminals.md) has the install line for each one,
-and `palette/` carries the same colors as JSON and base16/base24 schemes.
+## 📁 Generated targets
 
 <!-- extras:start -->
 
@@ -89,176 +73,80 @@ and `palette/` carries the same colors as JSON and base16/base24 schemes.
 
 <!-- extras:end -->
 
-```powershell
-# fzf for PowerShell
-. .\extras\fzf.ps1
-```
+## 🔮 Setup by hand
 
-### 🌐 Chrome Theme (`chrome-theme/`)
-
-Full SilkCircuit browser theming across all five variants.
-
-- **5 variants**: Neon, Vibrant, Soft, Glow, Dawn
-- **24 theme color keys**: frame, toolbar, omnibox, tabs, NTP, tab groups
-- **Circuit-trace NTP backgrounds**: unique per variant
-- **DevTools CSS**: modern CM6 + `--sys-color-*` tokens
-- **Chrome pages CSS**: `--cr-*` overrides for internal pages
-
-**Setup:**
+The [extras guide](../docs/extras/index.md) carries a page per tool with the
+install path, the enable line, and the version floor where one matters. The
+short version:
 
 ```bash
-# Generate all variants
-make chrome
+# Terminals: a directory of themes each
+cp kitty/silkcircuit-*.conf ~/.config/kitty/themes/          # include themes/silkcircuit-neon.conf
+cp alacritty/silkcircuit-*.toml ~/.config/alacritty/themes/  # [general] import = [...]
+cp ghostty/silkcircuit-neon ~/.config/ghostty/themes/        # theme = silkcircuit-neon
+cp wezterm/silkcircuit-*.toml ~/.config/wezterm/colors/      # config.color_scheme = "SilkCircuit Neon"
+cp warp/silkcircuit-*.yaml ~/.warp/themes/                   # Settings, Appearance, Themes
+cp foot/silkcircuit-*.ini ~/.config/foot/                    # include=~/.config/foot/silkcircuit-neon.ini
 
-# Install: chrome://extensions/ → Developer mode → Load unpacked
-# Select: extras/chrome-theme/silkcircuit-{neon,vibrant,soft,glow,dawn}/
-```
+# Multiplexers
+cp tmux/silkcircuit-*.conf ~/.config/tmux/                   # source-file ~/.config/tmux/silkcircuit-neon.conf
+cp zellij/silkcircuit-*.kdl ~/.config/zellij/themes/         # theme "silkcircuit-neon"
 
-### 💬 Slack Theme (`slack-theme.txt`)
+# Editors and TUIs
+cp helix/silkcircuit-*.toml ~/.config/helix/themes/          # theme = "silkcircuit-neon"
+cp btop/silkcircuit-*.theme ~/.config/btop/themes/           # Esc, Options, Color theme
+cp k9s/silkcircuit-*.yaml ~/.config/k9s/skins/               # k9s.ui.skin: silkcircuit-neon
+cp atuin/silkcircuit-*.toml ~/.config/atuin/themes/          # [theme] name = "silkcircuit-neon"
+cp lazygit/silkcircuit-*.yml ~/.config/lazygit/              # merge the gui.theme block
+cp fzf/silkcircuit-*.sh ~/.config/fzf/                       # source ~/.config/fzf/silkcircuit-neon.sh
+cp bat/silkcircuit-*.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
 
-Transform your Slack workspace with SilkCircuit's 4-color themes:
+# One config slot each, so pick a variant
+cp lsd/silkcircuit-neon.yaml ~/.config/lsd/colors.yaml       # plus color: theme: custom
+cp procs/silkcircuit-neon.toml ~/.config/procs/config.toml
+cp starship/silkcircuit-neon.toml ~/.config/starship.toml
+cp fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
+cp dmesg/silkcircuit-neon.scheme ~/.config/terminal-colors.d/dmesg.scheme
 
-- **Deep purple** navigation (#2E1B7A)
-- **Electric purple** for selected items (#E135FF)
-- **Neon green** presence indicators (#50FA7B)
-- **Hot pink** notifications (#FF79C6)
-
-**Setup:**
-
-```bash
-# Open Slack → Preferences → Themes
-# Copy hex values from extras/slack-theme.txt
-# Click each color circle and paste the corresponding hex value
-# Enable "Window gradient" for best effect
-```
-
-### 📊 btop Theme (`btop/`)
-
-System monitoring with SilkCircuit style:
-
-- **Electric purple** CPU graphs
-- **Neon cyan** memory meters
-- **Hot pink** network activity
-- **All 5 variants** (Neon, Vibrant, Soft, Glow, Dawn) for different vibes
-
-**Setup:**
-
-```bash
-# Copy to btop themes directory
-cp extras/btop/silkcircuit_*.theme ~/.config/btop/themes/
-
-# In btop: Esc → Options → Color theme → Select variant
-```
-
-### ☸️ K9s Skins (`k9s/`)
-
-Kubernetes dashboard skins in all five variants (`silkcircuit.yaml` plus
-`silkcircuit-{vibrant,soft,glow,dawn}.yaml`).
-
-**Setup:**
-
-```bash
-cp extras/k9s/silkcircuit*.yaml ~/.config/k9s/skins/
-# Then set k9s.ui.skin in ~/.config/k9s/config.yaml, or press :skin in K9s
-```
-
-### 🖥️ Ghostty (`ghostty/`)
-
-Native Ghostty themes in all five variants. Each theme has a matching `.css`
-file that styles Ghostty's GTK window chrome, meaning the headerbar, tabs, split
-dividers, and overlays. The CSS applies on Linux only, where Ghostty uses GTK.
-
-**Setup:**
-
-```bash
-mkdir -p ~/.config/ghostty/themes
-cp extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn} ~/.config/ghostty/themes/
-# Then in ~/.config/ghostty/config:
-#   theme = dark:silkcircuit-neon,light:silkcircuit-dawn
-
-# Linux only, for the GTK window chrome:
-cp extras/ghostty/silkcircuit-neon.css ~/.config/ghostty/silkcircuit.css
-# Then add: gtk-custom-css = ~/.config/ghostty/silkcircuit.css
-```
-
-### 🛠️ CLI and System Tools
-
-One config per tool, all drawing on the same palette:
-
-- **Starship** (`starship/silkcircuit-*.toml`) - Prompt with SilkCircuit segments
-- **tmux** (`tmux.conf`) - Status line, panes, and window styling
-- **lazygit** (`lazygit/config.yml`) - Git TUI colors
-- **bat** (`bat/silkcircuit-*.tmTheme`) - Syntax highlighting for `bat` and `delta`
-- **Git** (`git/silkcircuit-*.gitconfig`) - Colour slots plus a delta feature block
-- **lsd** (`lsd/silkcircuit-*.yaml`) - Directory listing colors
-- **atuin** (`atuin/silkcircuit.toml`) - Shell history search
-- **procs** (`procs/silkcircuit-*.toml`) - Process viewer columns
-- **fastfetch** (`fastfetch/silkcircuit-*.jsonc`) - System info readout
-- **dmesg** (`dmesg/*.scheme`) - Kernel log colors, all five variants
-- **COSMIC Desktop** (`cosmic/*.ron`) - Desktop theme, all five variants
-
-**Setup:**
-
-```bash
-cp extras/starship/silkcircuit-neon.toml ~/.config/starship.toml
-cp extras/lazygit/config.yml ~/.config/lazygit/config.yml
-cp extras/bat/silkcircuit-neon.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
-cp extras/lsd/silkcircuit-neon.yaml ~/.config/lsd/colors.yaml
-cp extras/atuin/silkcircuit.toml ~/.config/atuin/themes/
-cp extras/procs/silkcircuit-neon.toml ~/.config/procs/config.toml
-cp extras/fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
-```
-
-### 🎨 Enhanced Tools
-
-Additional tool configurations for the complete experience:
-
-- **Lualine config** (`lualine-config.lua`) - Standalone statusline setup
-- **Avante config** (`avante-config.lua`) - Themed avante.nvim AI sidebar
-- **FZF integration** (`fzf.sh`, `fzf.ps1`) - Fuzzy finder with SilkCircuit colors
-
-## 🎨 Color Palette Reference
-
-All configurations use these colors to maintain consistency:
-
-| ANSI  | Hex       | Usage                               |
-| ----- | --------- | ----------------------------------- |
-| `201` | `#ff00ff` | Neon magenta - Primary accents      |
-| `213` | `#ff79c6` | Bright magenta - Secondary elements |
-| `51`  | `#00ffff` | Electric cyan - Metadata            |
-| `220` | `#ffdd00` | Bright yellow - Branch info         |
-| `149` | `#50fa7b` | Green - Success/additions           |
-| `197` | `#ff5555` | Red - Errors/deletions              |
-
-## 🎯 Quick Setup
-
-Get the full SilkCircuit experience instantly:
-
-```bash
-# Clone the theme
-git clone https://github.com/hyperb1iss/silkcircuit.git
-cd silkcircuit
-
-# Install git colors
+# Git: copy and include, so your own .gitconfig stays yours
 mkdir -p ~/.config/git
-cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
+cp git/silkcircuit-neon.gitconfig ~/.config/git/
 git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
-
-# Copy terminal theme (choose your terminal and variant)
-cp extras/kitty/silkcircuit-neon.conf ~/.config/kitty/themes/
-# OR
-cp extras/alacritty/silkcircuit-neon.toml ~/.config/alacritty/themes/
-
-# For AstroNvim users
-cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/
 ```
 
-## 🌟 Pro Tips
+### 🖥️ Imported rather than copied
 
-1. **Terminal Setup**: Enable true color support in your terminal for best results
-2. **Git Aliases**: Use `git lg` for the beautiful one-line log format
-3. **AstroNvim**: Try both default and "maximum effect" Lualine configs
-4. **Consistency**: Use matching colors across all tools for cohesive aesthetic
+iTerm2, COSMIC Desktop, and Windows Terminal have no drop-in directory, so
+their files get imported or pasted. Slack takes one comma-separated line, which
+is the last line of `slack/silkcircuit-<variant>.txt`. See
+[iTerm2](../docs/extras/iterm2.md), [COSMIC](../docs/extras/cosmic.md),
+[Windows Terminal](../docs/extras/windows-terminal.md), and
+[Slack](../docs/extras/slack.md).
+
+### 🌐 Chrome
+
+`chrome-theme/` is generated separately by `make chrome`, which reads the JSON
+in `palette/`. Load a variant unpacked from
+`chrome-theme/silkcircuit-<variant>/` at `chrome://extensions/` with Developer
+mode on. Full details in [chrome-theme/README.md](chrome-theme/README.md).
+
+### 🛸 AstroNvim and the Neovim helpers
+
+```bash
+cp -r astronvim/community.lua astronvim/plugins ~/.config/nvim/lua/
+```
+
+`lualine-config.lua` and `avante-config.lua` are hand-written examples rather
+than generated targets: a standalone lualine setup and a themed avante.nvim
+sidebar. Copy the parts you want into your own config.
+
+## 🎨 Colour reference
+
+`palette/silkcircuit-<variant>.json` is the authoritative list: every colour as
+hex, RGB, and HSL, with the sixteen ANSI slots under the `terminal` key. The
+same directory carries base16 and base24 scheme files for
+[tinted-theming](https://github.com/tinted-theming/home) builders such as tinty
+and stylix.
 
 ---
 

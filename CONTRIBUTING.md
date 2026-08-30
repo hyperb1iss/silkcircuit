@@ -44,18 +44,27 @@ scripts/test --filter palette
 
 ## Where the colors live
 
-`lua/silkcircuit/variants.lua` is canonical. Every target under `extras/`,
-Chrome, VS Code, and the terminal configs, is meant to be generated from it by
-`make build`, and the generators are landing one target at a time.
+`lua/silkcircuit/variants.lua` is canonical. Every target under `extras/` is
+generated from it by `make build`: terminals, multiplexers, VS Code, the CLI
+tools, all five variants each. `extras/chrome-theme/` is generated too, by
+`make chrome`, which reads the JSON in `palette/`.
 
-So **do not hand-edit a file that has a generator.** Anything under
-`extras/chrome-theme/` comes out of `scripts/generate_chrome_themes.py` and gets
-overwritten the next time someone runs `make chrome`. If it is wrong, the
-generator or the palette is wrong. Fix it there.
+So **do not hand-edit a generated file.** The next build overwrites it. If a
+colour is wrong, the palette is wrong, or the mapping in
+`lua/silkcircuit/extra/<target>.lua` is. Fix it there and rebuild.
 
-For a target whose generator has not landed yet, edit its file directly, but
-match the values in `variants.lua` exactly. Every hex you type by hand is one
-the generator will later have to agree with.
+What survives a build is the hand-written `README.md` inside a target
+directory, and the pages under `docs/extras/`. Both are the install
+instructions someone actually follows, so a change to where a file goes or how
+it gets switched on belongs in them.
+
+Adding a target means four things: a registry entry in
+`lua/silkcircuit/extra/init.lua`, a module beside it that returns a string, an
+install function in both `install.sh` and `install.ps1`, and a page under
+`docs/extras/` carrying an `extras:start target=<name>` block that `make docs`
+fills in. The installers take `--variant`, so an install function copies one
+file per selected variant when the tool holds a directory of themes, and takes
+the primary variant when it reads a single file.
 
 ## A change ships all five variants or it does not ship
 
