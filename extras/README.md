@@ -4,7 +4,7 @@ Complete your neon-lit development environment with these additional configurati
 
 ## 📁 What's Included
 
-### 🚀 AstroNvim Integration (`astronvim/`)
+### 🛸 AstroNvim Integration (`astronvim/`)
 
 Complete AstroNvim setup with SilkCircuit styling:
 

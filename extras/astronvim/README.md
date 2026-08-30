@@ -2,7 +2,7 @@
 
 Complete guide for integrating the SilkCircuit theme with AstroNvim for a neon-enhanced development experience!
 
-## 🚀 Quick Setup
+## 🪄 Quick Setup
 
 ### Option 1: Plugin-based Setup (Recommended)
 
@@ -44,7 +44,7 @@ Complete guide for integrating the SilkCircuit theme with AstroNvim for a neon-e
 
 ### AstroNvim-Specific Integrations
 
-- ✨ **AstroUI** integration with custom highlights
+- 🎨 **AstroUI** integration with custom highlights
 - 🌈 **StatusLine** with SilkCircuit color scheme and neon mode indicators
 - 📁 **Neo-tree** with modern, colorful styling
 - 🔍 **Telescope** with neon borders
@@ -52,7 +52,7 @@ Complete guide for integrating the SilkCircuit theme with AstroNvim for a neon-e
 - 📊 **Dashboard/Alpha** custom colors
 - 🌟 **LSP** and diagnostic styling
 
-## 🚀 Statusline Options
+## 💎 Statusline Options
 
 ### Option 1: AstroNvim Default (Recommended)
 
@@ -193,4 +193,4 @@ AstroNvim's default keybindings work perfectly with SilkCircuit:
 - `<leader>e` - Neo-tree toggle (colorful file tree)
 - `<leader>fh` - Telescope help (glowing interface)
 
-Enjoy your new neon-lit AstroNvim setup with SilkCircuit! 💜✨
+Enjoy your new neon-lit AstroNvim setup with SilkCircuit! 💜

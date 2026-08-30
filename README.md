@@ -276,7 +276,7 @@ SilkCircuit extends far beyond your editor. See [extras/README.md](extras/README
 | 💎 Neon Cyan       | `#80ffea` | ![#80ffea](https://placehold.co/20x20/80ffea/80ffea.png) Functions, links          |
 | ✅ Success Green   | `#50fa7b` | ![#50fa7b](https://placehold.co/20x20/50fa7b/50fa7b.png) Success states            |
 | ⚡ Electric Yellow | `#f1fa8c` | ![#f1fa8c](https://placehold.co/20x20/f1fa8c/f1fa8c.png) Warnings, variables       |
-| 🔥 Warm Orange     | `#ffb86c` | ![#ffb86c](https://placehold.co/20x20/ffb86c/ffb86c.png) Numbers, constants        |
+| 🧡 Warm Orange     | `#ffb86c` | ![#ffb86c](https://placehold.co/20x20/ffb86c/ffb86c.png) Numbers, constants        |
 
 ## 📸 Screenshot Gallery
 

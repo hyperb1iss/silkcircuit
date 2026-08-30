@@ -217,9 +217,8 @@ font-family:
 **Code/Monospace:**
 
 ```css
-font-family:
-  "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", "Monaco", "Menlo", "Roboto Mono",
-  monospace;
+font-family: "JetBrains Mono", "Fira Code", "SF Mono", "Cascadia Code", "Monaco", "Menlo",
+  "Roboto Mono", monospace;
 ```
 
 **Display (Headlines):**
@@ -237,17 +236,17 @@ font-family:
 #### Mobile (320px+)
 
 ```css
---sc-text-xs: 0.75rem (12px) --sc-text-sm: 0.875rem (14px) --sc-text-base: 1rem (16px)
-  --sc-text-lg: 1.125rem (18px) --sc-text-xl: 1.25rem (20px) --sc-text-2xl: 1.5rem (24px)
-  --sc-text-3xl: 1.875rem (30px) --sc-text-4xl: 2.25rem (36px);
+--sc-text-xs: 0.75rem (12px) --sc-text-sm: 0.875rem (14px) --sc-text-base: 1rem (16px) --sc-text-lg:
+  1.125rem (18px) --sc-text-xl: 1.25rem (20px) --sc-text-2xl: 1.5rem (24px) --sc-text-3xl: 1.875rem
+  (30px) --sc-text-4xl: 2.25rem (36px);
 ```
 
 #### Desktop (1024px+)
 
 ```css
---sc-text-xs: 0.75rem (12px) --sc-text-sm: 0.875rem (14px) --sc-text-base: 1rem (16px)
-  --sc-text-lg: 1.125rem (18px) --sc-text-xl: 1.25rem (20px) --sc-text-2xl: 1.5rem (24px)
-  --sc-text-3xl: 2rem (32px) --sc-text-4xl: 2.5rem (40px) --sc-text-5xl: 3rem (48px);
+--sc-text-xs: 0.75rem (12px) --sc-text-sm: 0.875rem (14px) --sc-text-base: 1rem (16px) --sc-text-lg:
+  1.125rem (18px) --sc-text-xl: 1.25rem (20px) --sc-text-2xl: 1.5rem (24px) --sc-text-3xl: 2rem
+  (32px) --sc-text-4xl: 2.5rem (40px) --sc-text-5xl: 3rem (48px);
 ```
 
 ### Code Typography
@@ -334,9 +333,13 @@ font-family:
 ### Timing Functions
 
 ```css
---sc-ease-linear: linear --sc-ease-in: cubic-bezier(0.4, 0, 1, 1)
-  --sc-ease-out: cubic-bezier(0, 0, 0.2, 1) --sc-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1)
-  --sc-ease-back: cubic-bezier(0.34, 1.56, 0.64, 1)
+--sc-ease-linear: linear --sc-ease-in: cubic-bezier(0.4, 0, 1, 1) --sc-ease-out: cubic-bezier(
+    0,
+    0,
+    0.2,
+    1
+  )
+  --sc-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1) --sc-ease-back: cubic-bezier(0.34, 1.56, 0.64, 1)
   --sc-ease-elastic: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 ```
 
@@ -495,7 +498,7 @@ Navigation:   →  ←  ↑  ↓  ↗  ↙  ⟶  ⟵
 Bullets:      •  ▪  ▫  ◦  ●  ○  ▲  ▼
 Status:       √  ×  !  ?  ✓  ✗  ⚠  ℹ
 Code:         ⟨  ⟩  ❮  ❯  ‹  ›  «  »
-Electric:     ⚡  ⭐  ✨  💎  💜  🌟  ⭑
+Electric:     ⚡  ⭐  ✦  💎  💜  🌟  ⭑
 ```
 
 ### Icon Color Usage
@@ -918,9 +921,8 @@ export const createSilkCircuitTheme = (variant = "neon") => ({
 
 /* Neon variant hero */
 .silkcircuit-hero[data-variant="neon"] {
-  background:
-    radial-gradient(circle at center, #e135ff20 0%, transparent 50%),
-    linear-gradient(135deg, #12101a 0%, #0a0812 100%);
+  background: radial-gradient(circle at center, #e135ff20 0%, transparent 50%), linear-gradient(135deg, #12101a
+        0%, #0a0812 100%);
 }
 
 .silkcircuit-hero[data-variant="neon"] .hero-title {
@@ -942,9 +944,8 @@ export const createSilkCircuitTheme = (variant = "neon") => ({
 
 /* Glow variant hero */
 .silkcircuit-hero[data-variant="glow"] {
-  background:
-    radial-gradient(circle at center, #ff00ff30 0%, transparent 50%),
-    linear-gradient(135deg, #0a0816 0%, #000000 100%);
+  background: radial-gradient(circle at center, #ff00ff30 0%, transparent 50%), linear-gradient(135deg, #0a0816
+        0%, #000000 100%);
 }
 
 .silkcircuit-hero[data-variant="glow"] .hero-title {
@@ -998,7 +999,7 @@ export const createSilkCircuitTheme = (variant = "neon") => ({
 
 ---
 
-## 🚀 Implementation Checklist
+## 🎯 Implementation Checklist
 
 When creating new SilkCircuit implementations:
 
