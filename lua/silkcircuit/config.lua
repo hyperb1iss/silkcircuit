@@ -22,81 +22,61 @@ M.defaults = {
   -- Custom highlight group overrides
   on_highlights = nil,
 
-  -- Plugin integrations (all enabled by default)
+  -- Plugin integrations. One key per module in silkcircuit/integrations, all
+  -- enabled by default. Highlights are defined whether or not the plugin is
+  -- installed; set a key to false to skip its groups entirely.
   integrations = {
-    -- Auto-detect plugins and load their integrations
+    -- Deprecated no-op. Detection is passive now and never gates highlights.
     auto_detect = true,
 
-    -- Core integrations (essential - always enabled)
+    -- Core
     treesitter = true,
     lsp = true,
     native_lsp = { enabled = true }, -- Alias for lsp
-    telescope = true,
-    nvimtree = true,
+    markdown = true,
+
+    -- File explorers
     neotree = true,
+    nvimtree = true,
 
-    -- Git integrations
+    -- Git
     gitsigns = true,
-    gitgutter = true,
-    diffview = true,
+    neogit = true,
+    octo = true,
 
-    -- UI integrations
-    indent_blankline = true,
+    -- UI
     bufferline = true,
     lualine = true,
-    dashboard = true,
+    indent_blankline = true,
     alpha = true,
     which_key = true,
+    telescope = true,
+    snacks = true,
 
-    -- Completion and snippets
+    -- Completion and messages
     cmp = true,
-    blink_cmp = true, -- Support for blink.cmp
-
-    -- Notifications
     notify = true,
     noice = true,
 
     -- Navigation and motion
-    hop = true,
-    leap = true,
     flash = true,
+    harpoon = true,
 
     -- Development tools
-    lazy = true,
     mason = true,
     mini = true,
     dap = true, -- Alias for nvim_dap
-    dap_ui = true, -- Alias for nvim_dap_ui
     nvim_dap = true,
-    nvim_dap_ui = true,
-
-    -- Code analysis
-    trouble = true,
-    outline = true,
-    symbols_outline = true, -- Alias for outline
-    illuminate = true,
     aerial = true,
+    avante = true,
 
     -- Visual enhancements
     rainbow_delimiters = true,
-    ts_rainbow = false, -- Legacy rainbow support
+    ["render-markdown"] = true,
 
-    -- Folding
+    -- Folding and windows
     ufo = true,
-
-    -- Window management
     window_picker = true,
-    colorful_winsep = { enabled = true, color = "purple" },
-
-    -- Miscellaneous
-    markdown = true,
-    semantic_tokens = true,
-
-    -- Snacks.nvim support
-    snacks = {
-      enabled = true,
-      indent_scope_color = "purple",
-    },
   },
 }
 
@@ -117,30 +97,33 @@ function M.get()
   return M.options
 end
 
--- Check if a plugin integration is enabled
+-- Config keys that name the same integration. An explicit false on either
+-- spelling disables it, so older configs keep working.
+local aliases = {
+  native_lsp = "lsp",
+  lsp = "native_lsp",
+  nvim_dap = "dap",
+  dap = "nvim_dap",
+  ["render-markdown"] = "render_markdown",
+}
+
+-- Check if a plugin integration is enabled. Integrations are on unless a
+-- config key says otherwise.
 function M.is_enabled(integration)
   local integrations = M.get().integrations
 
-  -- Handle aliases
-  local aliases = {
-    native_lsp = "lsp",
-    dap = "nvim_dap",
-    dap_ui = "nvim_dap_ui",
-    symbols_outline = "outline",
-  }
-
-  -- Check if this is an aliased integration
-  local actual_integration = aliases[integration] or integration
-
-  -- Check the integration status
-  local status = integrations[actual_integration]
-
-  -- Handle table-style integrations (like native_lsp = { enabled = true })
-  if type(status) == "table" then
-    return status.enabled ~= false
+  for _, key in ipairs({ integration, aliases[integration] }) do
+    local status = integrations[key]
+    if type(status) == "table" then
+      if status.enabled == false then
+        return false
+      end
+    elseif status == false then
+      return false
+    end
   end
 
-  return status ~= false
+  return true
 end
 
 -- Get style for a syntax group

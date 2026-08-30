@@ -2,297 +2,162 @@ local M = {}
 local config = require("silkcircuit.config")
 local util = require("silkcircuit.util")
 
--- Plugin detection mapping
-local plugin_mapping = {
-  -- Native features
-  treesitter = function()
-    return vim.treesitter ~= nil or pcall(require, "nvim-treesitter")
-  end,
-  native_lsp = function()
-    return vim.fn.has("nvim-0.5") == 1
-  end,
+-- The single registry: one entry per integration module in this directory.
+--
+-- `modules` and `plugin` describe how to *recognize* the plugin, and are used
+-- only for reporting through :SilkCircuitIntegrations and :checkhealth. They
+-- never gate whether highlights load. Defining a highlight group for a plugin
+-- that is not installed costs nothing, and gating on detection is what forced
+-- the theme to require foreign plugins in the first place.
+--
+-- Order matters: treesitter and native_lsp go first so later entries can
+-- override anything they set.
+local registry = {
+  { name = "treesitter", always = true },
+  { name = "native_lsp", always = true },
+  { name = "markdown", always = true },
 
-  -- File explorers
-  nvimtree = function()
-    return vim.fn.exists("g:loaded_nvim_tree") == 1
-  end,
-  neotree = function()
-    return pcall(require, "neo-tree")
-  end,
-
-  -- Git
-  gitsigns = function()
-    return pcall(require, "gitsigns")
-  end,
-  gitgutter = function()
-    return vim.fn.exists("g:loaded_gitgutter") == 1
-  end,
-  diffview = function()
-    return pcall(require, "diffview")
-  end,
-
-  -- UI enhancements
-  telescope = function()
-    return pcall(require, "telescope")
-  end,
-  bufferline = function()
-    return pcall(require, "bufferline")
-  end,
-  lualine = function()
-    return pcall(require, "lualine")
-  end,
-  indent_blankline = function()
-    return pcall(require, "ibl") or pcall(require, "indent_blankline")
-  end,
-
-  -- Start screens
-  dashboard = function()
-    return pcall(require, "dashboard")
-  end,
-  alpha = function()
-    return pcall(require, "alpha")
-  end,
-
-  -- Completion
-  cmp = function()
-    return pcall(require, "cmp")
-  end,
-
-  -- Notifications
-  notify = function()
-    return pcall(require, "notify")
-  end,
-  noice = function()
-    return pcall(require, "noice")
-  end,
-
-  -- Navigation
-  hop = function()
-    return pcall(require, "hop")
-  end,
-  leap = function()
-    return pcall(require, "leap")
-  end,
-  flash = function()
-    return pcall(require, "flash")
-  end,
-
-  -- Plugin management
-  lazy = function()
-    return pcall(require, "lazy")
-  end,
-  mason = function()
-    return pcall(require, "mason")
-  end,
-
-  -- Debugging
-  nvim_dap = function()
-    return pcall(require, "dap")
-  end,
-
-  -- Diagnostics
-  trouble = function()
-    return pcall(require, "trouble")
-  end,
-
-  -- Code outline
-  outline = function()
-    return pcall(require, "outline") or pcall(require, "symbols-outline")
-  end,
-  aerial = function()
-    return pcall(require, "aerial")
-  end,
-
-  -- Highlighting
-  illuminate = function()
-    return vim.fn.exists("g:loaded_illuminate") == 1 or pcall(require, "illuminate")
-  end,
-  rainbow_delimiters = function()
-    return pcall(require, "rainbow-delimiters")
-  end,
-
-  -- Folding
-  ufo = function()
-    return pcall(require, "ufo")
-  end,
-
-  -- Window management
-  window_picker = function()
-    return pcall(require, "window-picker")
-  end,
-  which_key = function()
-    return pcall(require, "which-key")
-  end,
-
-  -- Languages
-  markdown = function()
-    return true
-  end, -- Always available for markdown files
-
-  -- mini.nvim modules
-  mini = function()
-    return pcall(require, "mini.base16")
-      or pcall(require, "mini.statusline")
-      or pcall(require, "mini.starter")
-      or pcall(require, "mini.tabline")
-      or pcall(require, "mini.files")
-      or pcall(require, "mini.pick")
-  end,
-
-  -- snacks.nvim
-  snacks = function()
-    return pcall(require, "snacks")
-  end,
-
-  -- render-markdown.nvim
-  ["render-markdown"] = function()
-    return pcall(require, "render-markdown")
-  end,
-
-  -- octo.nvim
-  octo = function()
-    return pcall(require, "octo")
-  end,
-
-  -- avante.nvim
-  avante = function()
-    return pcall(require, "avante")
-  end,
+  { name = "aerial", modules = { "aerial" }, plugin = "aerial.nvim" },
+  { name = "alpha", modules = { "alpha" }, plugin = "alpha-nvim" },
+  { name = "avante", modules = { "avante" }, plugin = "avante.nvim" },
+  { name = "bufferline", modules = { "bufferline" }, plugin = "bufferline.nvim" },
+  { name = "cmp", modules = { "cmp" }, plugin = "nvim-cmp" },
+  { name = "flash", modules = { "flash" }, plugin = "flash.nvim" },
+  { name = "gitsigns", modules = { "gitsigns" }, plugin = "gitsigns.nvim" },
+  { name = "harpoon", modules = { "harpoon" }, plugin = "harpoon" },
+  {
+    name = "indent_blankline",
+    modules = { "ibl", "indent_blankline" },
+    plugin = "indent-blankline.nvim",
+  },
+  { name = "lualine", modules = { "lualine" }, plugin = "lualine.nvim" },
+  { name = "mason", modules = { "mason" }, plugin = "mason.nvim" },
+  {
+    name = "mini",
+    modules = { "mini.statusline", "mini.files", "mini.pick" },
+    plugin = "mini.nvim",
+  },
+  { name = "neogit", modules = { "neogit" }, plugin = "neogit" },
+  { name = "neotree", modules = { "neo-tree" }, plugin = "neo-tree.nvim" },
+  { name = "noice", modules = { "noice" }, plugin = "noice.nvim" },
+  { name = "notify", modules = { "notify" }, plugin = "nvim-notify" },
+  { name = "nvim_dap", modules = { "dap" }, plugin = "nvim-dap" },
+  { name = "nvimtree", modules = { "nvim-tree" }, plugin = "nvim-tree.lua" },
+  { name = "octo", modules = { "octo" }, plugin = "octo.nvim" },
+  {
+    name = "rainbow_delimiters",
+    modules = { "rainbow-delimiters" },
+    plugin = "rainbow-delimiters.nvim",
+  },
+  { name = "render-markdown", modules = { "render-markdown" }, plugin = "render-markdown.nvim" },
+  { name = "snacks", modules = { "snacks" }, plugin = "snacks.nvim" },
+  { name = "telescope", modules = { "telescope" }, plugin = "telescope.nvim" },
+  { name = "ufo", modules = { "ufo" }, plugin = "nvim-ufo" },
+  { name = "which_key", modules = { "which-key" }, plugin = "which-key.nvim" },
+  { name = "window_picker", modules = { "window-picker" }, plugin = "nvim-window-picker" },
 }
 
--- Check if a plugin is installed
-local function is_plugin_installed(name)
-  local detector = plugin_mapping[name]
-  if detector then
-    return detector()
+-- Is a lua module present on the runtime path, without loading it?
+local function module_on_rtp(mod)
+  local path = mod:gsub("%.", "/")
+  return #vim.api.nvim_get_runtime_file("lua/" .. path .. ".lua", false) > 0
+    or #vim.api.nvim_get_runtime_file("lua/" .. path .. "/init.lua", false) > 0
+end
+
+-- Is a plugin known to lazy.nvim? Reading lazy's own spec avoids touching the
+-- plugin: under lazy, `require` is not passive, it force-loads the spec and
+-- runs its config.
+local function known_to_lazy(entry)
+  if not package.loaded["lazy.core.config"] then
+    return false
+  end
+  local ok, lazy_config = pcall(require, "lazy.core.config")
+  if not ok or type(lazy_config.plugins) ~= "table" then
+    return false
+  end
+  return lazy_config.plugins[entry.plugin] ~= nil
+end
+
+-- Detect a plugin without ever requiring it.
+local function is_installed(entry)
+  if entry.always then
+    return true
+  end
+  for _, mod in ipairs(entry.modules or {}) do
+    if package.loaded[mod] then
+      return true
+    end
+  end
+  if known_to_lazy(entry) then
+    return true
+  end
+  for _, mod in ipairs(entry.modules or {}) do
+    if module_on_rtp(mod) then
+      return true
+    end
   end
   return false
 end
 
--- List of all available integrations
-local all_integrations = {
-  "aerial",
-  "alpha",
-  "avante",
-  "bufferline",
-  "cmp",
-  "dashboard",
-  "diffview",
-  "gitsigns",
-  "gitgutter",
-  "hop",
-  "indent_blankline",
-  "leap",
-  "lualine",
-  "markdown",
-  "mason",
-  "mini",
-  "native_lsp",
-  "neotree",
-  "noice",
-  "notify",
-  "nvim_dap",
-  "nvimtree",
-  "octo",
-  "outline",
-  "rainbow_delimiters",
-  "snacks",
-  "render-markdown",
-  "telescope",
-  "treesitter",
-  "trouble",
-  "ufo",
-  "which_key",
-  "window_picker",
-}
-
--- Load all enabled integrations
+-- Load every enabled integration's highlights, installed or not
 function M.load(colors, opts)
-  -- Core integrations that should always be loaded
-  local core_integrations = {
-    "treesitter",
-    "native_lsp",
-  }
-
-  local available = all_integrations
-
-  -- Process core integrations first
-  for _, integration in ipairs(core_integrations) do
-    if config.is_enabled(integration) and is_plugin_installed(integration) then
-      local ok, module = pcall(require, "silkcircuit.integrations." .. integration)
-      if ok then
-        local highlights = module.get and module.get(colors, opts)
-          or (module.highlights and module.highlights(colors, opts))
-        if highlights then
-          util.load_highlights(highlights)
-        end
-      end
-    end
-  end
-
-  -- Process other integrations
-  for _, integration in ipairs(available) do
-    -- Skip if already processed as core
-    local is_core = vim.tbl_contains(core_integrations, integration)
-
-    if not is_core then
-      -- Auto-detect and load if enabled
-      if config.is_enabled(integration) then
-        if opts.integrations.auto_detect and is_plugin_installed(integration) then
-          local ok, module = pcall(require, "silkcircuit.integrations." .. integration)
-          if ok then
-            local highlights = module.get and module.get(colors, opts)
-              or (module.highlights and module.highlights(colors, opts))
-            if highlights then
-              util.load_highlights(highlights)
-            end
-          end
-        elseif not opts.integrations.auto_detect then
-          -- Manual mode - load if explicitly enabled
-          local ok_manual, module_manual =
-            pcall(require, "silkcircuit.integrations." .. integration)
-          if ok_manual then
-            local manual_highlights = module_manual.get and module_manual.get(colors, opts)
-              or (module_manual.highlights and module_manual.highlights(colors, opts))
-            if manual_highlights then
-              util.load_highlights(manual_highlights)
-            end
-          end
-        end
+  for _, entry in ipairs(registry) do
+    if config.is_enabled(entry.name) then
+      local module = require("silkcircuit.integrations." .. entry.name)
+      local get = module.get or module.highlights
+      if get then
+        util.load_highlights(get(colors, opts))
       end
     end
   end
 end
 
--- Get list of detected plugins
+-- Names of the plugins we can see, for reporting only
 function M.get_detected_plugins()
   local detected = {}
-  for name, detector in pairs(plugin_mapping) do
-    if detector() then
-      table.insert(detected, name)
+  for _, entry in ipairs(registry) do
+    if is_installed(entry) then
+      table.insert(detected, entry.name)
     end
   end
   table.sort(detected)
   return detected
 end
 
--- Debug function to show integration status
-function M.debug()
-  local detected = M.get_detected_plugins()
-  local enabled = {}
-  local disabled = {}
+-- Every integration this theme ships, in load order
+function M.list()
+  local names = {}
+  for _, entry in ipairs(registry) do
+    table.insert(names, entry.name)
+  end
+  return names
+end
 
-  for _, plugin in ipairs(detected) do
-    if config.is_enabled(plugin) then
-      table.insert(enabled, plugin)
+-- Report integration status for :SilkCircuitIntegrations
+function M.debug()
+  local lines = { "SilkCircuit integrations" }
+  local themed, detected, off = {}, {}, {}
+
+  for _, entry in ipairs(registry) do
+    local enabled = config.is_enabled(entry.name)
+    if not enabled then
+      table.insert(off, entry.name)
+    elseif is_installed(entry) then
+      table.insert(detected, entry.name)
     else
-      table.insert(disabled, plugin)
+      table.insert(themed, entry.name)
     end
   end
 
-  print("SilkCircuit Integration Status:")
-  print("Detected & Enabled: " .. table.concat(enabled, ", "))
-  print("Detected & Disabled: " .. table.concat(disabled, ", "))
+  table.insert(lines, "  detected: " .. table.concat(detected, ", "))
+  if #themed > 0 then
+    table.insert(lines, "  themed anyway (not installed): " .. table.concat(themed, ", "))
+  end
+  if #off > 0 then
+    table.insert(lines, "  disabled: " .. table.concat(off, ", "))
+  end
+
+  vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO)
 end
 
 return M
