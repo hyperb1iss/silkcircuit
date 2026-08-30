@@ -69,12 +69,10 @@ local function apply_glow_highlights()
   })
 end
 
--- Enable glow mode
+-- Enable glow mode. Deliberately repaints even when glow is already on:
+-- theme.apply overwrites the groups glow owns on every colorscheme load, so
+-- restoring after a variant switch has to reapply them.
 function M.enable()
-  if glow_enabled then
-    return
-  end
-
   glow_enabled = true
   apply_glow_highlights()
   preferences.set("glow_enabled", true)
