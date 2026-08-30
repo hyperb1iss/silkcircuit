@@ -1,5 +1,10 @@
 -- Regenerates the extras tables that live between the `extras:start` and
 -- `extras:end` markers. Everything outside the markers is hand-written.
+--
+-- Two block shapes exist. A bare `extras:start` marker takes the whole
+-- registry, which is what the three overview pages want. An
+-- `extras:start target=<name>` marker takes one target's five files, which is
+-- what that target's own docs page wants.
 
 local M = {}
 
@@ -52,6 +57,70 @@ local function table_for(extra, destination)
   return table.concat(lines, "\n")
 end
 
+-- A per-target block on a docs page. One target per block, several blocks per
+-- page where a page covers a target that ships in two formats. The end marker
+-- has to be escaped: its dashes are pattern quantifiers otherwise.
+local TARGET_BLOCK = "(<!%-%- extras:start target=([%w%-]+) %-%->).-(<!%-%- extras:end %-%->)"
+
+--- File list for one target, for the block on that target's own docs page.
+local function files_for(extra, name)
+  local dir = extra.dir(name)
+  local lines = {
+    "| Variant | File |",
+    "| ------- | ---- |",
+  }
+
+  if extra.targets[name].is_full then
+    lines[#lines + 1] =
+      string.format("| every variant | `extras/%s/%s` |", dir, extra.filename(name))
+    return table.concat(lines, "\n")
+  end
+
+  for _, variant in ipairs(extra.variants) do
+    lines[#lines + 1] =
+      string.format("| %s | `extras/%s/%s` |", variant, dir, extra.filename(name, variant))
+  end
+  return table.concat(lines, "\n")
+end
+
+--- Rewrite the per-target blocks on every page under docs/extras. Pages
+--- without a block are left alone. Returns the paths that changed.
+local function generate_pages(extra, root, changed)
+  local dir = root .. "/docs/extras"
+  if vim.fn.isdirectory(dir) == 0 then
+    return
+  end
+
+  local entries = {}
+  for entry, kind in vim.fs.dir(dir) do
+    if kind == "file" and entry:match("%.md$") then
+      entries[#entries + 1] = entry
+    end
+  end
+  table.sort(entries)
+
+  for _, entry in ipairs(entries) do
+    local path = dir .. "/" .. entry
+    local content = table.concat(vim.fn.readfile(path), "\n")
+
+    local updated = content:gsub(TARGET_BLOCK, function(open, name, close)
+      if not extra.targets[name] then
+        error(
+          string.format("silkcircuit.extra: docs/extras/%s names unknown target '%s'", entry, name),
+          0
+        )
+      end
+      return open .. "\n\n" .. files_for(extra, name) .. "\n\n" .. close
+    end)
+
+    if updated ~= content then
+      extra.write(path, updated)
+      changed[#changed + 1] = "docs/extras/" .. entry
+      print("  docs/extras/" .. entry)
+    end
+  end
+end
+
 --- Rewrite every marker block. Returns the paths that changed.
 function M.generate(opts)
   opts = opts or {}
@@ -81,6 +150,8 @@ function M.generate(opts)
       print("  " .. destination.path)
     end
   end
+
+  generate_pages(extra, root, changed)
 
   return changed
 end
