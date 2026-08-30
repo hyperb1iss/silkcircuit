@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 # SilkCircuit Universal Installer
-# Detect installed apps and theme everything in neon
+# Detect installed apps and drop the generated themes where they belong
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 set -euo pipefail
@@ -26,10 +26,23 @@ BG_PURPLE='\033[48;2;40;20;60m'
 # ─── Globals ─────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 EXTRAS_DIR="${SCRIPT_DIR}/extras"
+XDG_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
+# Where files land when the app has no drop-in directory of its own and the
+# colors have to be pasted or imported by hand.
+STAGING="${XDG_CONFIG}/silkcircuit"
+
+ALL_VARIANTS=(neon vibrant soft glow dawn)
+VARIANT="all"
+SELECTED=()
+# The variant every printed "turn it on" line names, and the one single-slot
+# tools receive.
+PRIMARY="neon"
+
 DETECTED=()
 INSTALLED=()
 SKIPPED=()
 FAILED=()
+COPIED=0
 DRY_RUN=false
 INTERACTIVE=true
 
@@ -42,6 +55,7 @@ warn() { printf "${YELLOW}  ! %s${RESET}\n" "$*"; }
 fail() { printf "${RED}  x %s${RESET}\n" "$*"; }
 info() { printf "${WHITE}  %s${RESET}\n" "$*"; }
 diminfo() { printf "${GRAY}    %s${RESET}\n" "$*"; }
+section() { printf "${PURPLE}${BOLD}  >> %s${RESET}\n" "$*"; }
 
 neon_line() {
     printf "${PURPLE}"
@@ -78,218 +92,186 @@ banner() {
     printf '\n'
 }
 
+# ─── Variant selection ───────────────────────────────────────────────────────
 
+resolve_variants() {
+    if [[ "$VARIANT" == "all" ]]; then
+        SELECTED=("${ALL_VARIANTS[@]}")
+        PRIMARY="neon"
+        return 0
+    fi
 
+    local candidate
+    for candidate in "${ALL_VARIANTS[@]}"; do
+        if [[ "$candidate" == "$VARIANT" ]]; then
+            SELECTED=("$candidate")
+            PRIMARY="$candidate"
+            return 0
+        fi
+    done
+
+    fail "Unknown variant: ${VARIANT}"
+    info "Pick one of: ${ALL_VARIANTS[*]} all"
+    exit 2
+}
+
+# Tools that read exactly one file cannot hold five themes at once, so `all`
+# gives them neon and says as much rather than silently picking for you.
+single_slot_note() {
+    if [[ "$VARIANT" == "all" ]]; then
+        diminfo "$1 reads one file, so --variant all installs neon here"
+    fi
+}
 
 # ─── Detection engine ───────────────────────────────────────────────────────
 
 cmd_exists() { command -v "$1" &>/dev/null; }
 dir_exists() { [[ -d "$1" ]]; }
 
+detect() {
+    local id="$1"
+    local label="$2"
+    local found="$3"
+
+    if [[ "$found" == true ]]; then
+        DETECTED+=("$id")
+        pulse_dot "$label" "found"
+    else
+        pulse_dot "$label" "missing"
+    fi
+}
+
+detect_if() {
+    local id="$1"
+    local label="$2"
+    shift 2
+    if "$@"; then
+        detect "$id" "$label" true
+    else
+        detect "$id" "$label" false
+    fi
+}
+
+have_ghostty() { cmd_exists ghostty || dir_exists "${XDG_CONFIG}/ghostty"; }
+have_alacritty() { cmd_exists alacritty || dir_exists "${XDG_CONFIG}/alacritty"; }
+have_kitty() { cmd_exists kitty || dir_exists "${XDG_CONFIG}/kitty"; }
+have_warp() { cmd_exists warp-terminal || dir_exists "$HOME/.warp"; }
+have_wezterm() { cmd_exists wezterm || dir_exists "${XDG_CONFIG}/wezterm"; }
+have_foot() { cmd_exists foot || dir_exists "${XDG_CONFIG}/foot"; }
+have_zellij() { cmd_exists zellij || dir_exists "${XDG_CONFIG}/zellij"; }
+have_helix() { cmd_exists hx || cmd_exists helix || dir_exists "${XDG_CONFIG}/helix"; }
+have_btop() { cmd_exists btop || dir_exists "${XDG_CONFIG}/btop"; }
+have_fzf() { cmd_exists fzf || dir_exists "${XDG_CONFIG}/fzf"; }
+have_fastfetch() { cmd_exists fastfetch || dir_exists "${XDG_CONFIG}/fastfetch"; }
+have_tmux() { cmd_exists tmux || dir_exists "${XDG_CONFIG}/tmux" || [[ -f "$HOME/.tmux.conf" ]]; }
+have_bat() { cmd_exists bat || dir_exists "${XDG_CONFIG}/bat"; }
+have_lsd() { cmd_exists lsd || dir_exists "${XDG_CONFIG}/lsd"; }
+have_procs() { cmd_exists procs || dir_exists "${XDG_CONFIG}/procs"; }
+have_atuin() { cmd_exists atuin || dir_exists "${XDG_CONFIG}/atuin"; }
+have_lazygit() { cmd_exists lazygit || dir_exists "${XDG_CONFIG}/lazygit"; }
+have_cosmic() { cmd_exists cosmic-comp || dir_exists "${XDG_CONFIG}/cosmic"; }
+
+have_starship() {
+    cmd_exists starship || [[ -f "${STARSHIP_CONFIG:-${XDG_CONFIG}/starship.toml}" ]]
+}
+
+have_k9s() {
+    cmd_exists k9s || dir_exists "${XDG_CONFIG}/k9s" ||
+        dir_exists "$HOME/Library/Application Support/k9s"
+}
+
+have_iterm2() {
+    [[ -d "/Applications/iTerm.app" ]] ||
+        dir_exists "$HOME/Library/Application Support/iTerm2" ||
+        [[ "${LC_TERMINAL:-}" == "iTerm2" ]]
+}
+
+# terminal-colors.d is util-linux territory. macOS ships a dmesg that ignores it.
+have_dmesg() { [[ "$(uname)" == "Linux" ]] && cmd_exists dmesg; }
+
+have_vscode() {
+    cmd_exists code || cmd_exists code-insiders ||
+        dir_exists "$HOME/.vscode/extensions" ||
+        dir_exists "$HOME/.vscode-insiders/extensions"
+}
+
+have_slack() {
+    cmd_exists slack || [[ -d "/Applications/Slack.app" ]] ||
+        { cmd_exists flatpak && flatpak list 2>/dev/null | grep -qi slack; }
+}
+
 detect_all() {
     printf '\n'
 
-    # Ghostty
-    if cmd_exists ghostty || dir_exists "$HOME/.config/ghostty"; then
-        DETECTED+=("ghostty")
-        pulse_dot "Ghostty" "found"
-    else
-        pulse_dot "Ghostty" "missing"
-    fi
+    detect_if ghostty "Ghostty" have_ghostty
+    detect_if alacritty "Alacritty" have_alacritty
+    detect_if kitty "Kitty" have_kitty
+    detect_if warp "Warp" have_warp
+    detect_if wezterm "WezTerm" have_wezterm
+    detect_if foot "foot" have_foot
+    detect_if iterm2 "iTerm2" have_iterm2
+    detect_if tmux "tmux" have_tmux
+    detect_if zellij "Zellij" have_zellij
+    detect_if helix "Helix" have_helix
+    detect_if btop "btop" have_btop
+    detect_if k9s "k9s" have_k9s
+    detect_if fzf "fzf" have_fzf
+    detect_if fastfetch "fastfetch" have_fastfetch
+    detect_if starship "Starship" have_starship
+    detect_if bat "bat" have_bat
+    detect_if lsd "lsd" have_lsd
+    detect_if procs "procs" have_procs
+    detect_if atuin "Atuin" have_atuin
+    detect_if lazygit "lazygit" have_lazygit
+    detect_if dmesg "dmesg" have_dmesg
+    detect_if cosmic "COSMIC Desktop" have_cosmic
 
-    # Alacritty
-    if cmd_exists alacritty || dir_exists "$HOME/.config/alacritty"; then
-        DETECTED+=("alacritty")
-        pulse_dot "Alacritty" "found"
-    else
-        pulse_dot "Alacritty" "missing"
-    fi
-
-    # Kitty
-    if cmd_exists kitty || dir_exists "$HOME/.config/kitty"; then
-        DETECTED+=("kitty")
-        pulse_dot "Kitty" "found"
-    else
-        pulse_dot "Kitty" "missing"
-    fi
-
-    # Warp
-    if cmd_exists warp-terminal || dir_exists "$HOME/.warp"; then
-        DETECTED+=("warp")
-        pulse_dot "Warp" "found"
-    else
-        pulse_dot "Warp" "missing"
-    fi
-
-    # WezTerm
-    if cmd_exists wezterm || dir_exists "$HOME/.config/wezterm"; then
-        DETECTED+=("wezterm")
-        pulse_dot "WezTerm" "found"
-    else
-        pulse_dot "WezTerm" "missing"
-    fi
-
-    # btop
-    if cmd_exists btop || dir_exists "$HOME/.config/btop"; then
-        DETECTED+=("btop")
-        pulse_dot "btop" "found"
-    else
-        pulse_dot "btop" "missing"
-    fi
-
-    # k9s (macOS uses ~/Library/Application Support/k9s, Linux uses ~/.config/k9s)
-    if cmd_exists k9s || dir_exists "$HOME/.config/k9s" || dir_exists "$HOME/Library/Application Support/k9s"; then
-        DETECTED+=("k9s")
-        pulse_dot "k9s" "found"
-    else
-        pulse_dot "k9s" "missing"
-    fi
-
-    # fzf
-    if cmd_exists fzf; then
-        DETECTED+=("fzf")
-        pulse_dot "fzf" "found"
-    else
-        pulse_dot "fzf" "missing"
-    fi
-
-    # fastfetch
-    if cmd_exists fastfetch || dir_exists "$HOME/.config/fastfetch"; then
-        DETECTED+=("fastfetch")
-        pulse_dot "fastfetch" "found"
-    else
-        pulse_dot "fastfetch" "missing"
-    fi
-
-    # starship
-    if cmd_exists starship || [[ -f "$HOME/.config/starship.toml" ]]; then
-        DETECTED+=("starship")
-        pulse_dot "Starship" "found"
-    else
-        pulse_dot "Starship" "missing"
-    fi
-
-    # tmux
-    if cmd_exists tmux; then
-        DETECTED+=("tmux")
-        pulse_dot "tmux" "found"
-    else
-        pulse_dot "tmux" "missing"
-    fi
-
-    # bat
-    if cmd_exists bat; then
-        DETECTED+=("bat")
-        pulse_dot "bat" "found"
-    else
-        pulse_dot "bat" "missing"
-    fi
-
-    # lsd
-    if cmd_exists lsd; then
-        DETECTED+=("lsd")
-        pulse_dot "lsd" "found"
-    else
-        pulse_dot "lsd" "missing"
-    fi
-
-    # procs
-    if cmd_exists procs; then
-        DETECTED+=("procs")
-        pulse_dot "procs" "found"
-    else
-        pulse_dot "procs" "missing"
-    fi
-
-    # atuin
-    if cmd_exists atuin || dir_exists "$HOME/.config/atuin"; then
-        DETECTED+=("atuin")
-        pulse_dot "Atuin" "found"
-    else
-        pulse_dot "Atuin" "missing"
-    fi
-
-    # lazygit
-    if cmd_exists lazygit || dir_exists "$HOME/.config/lazygit"; then
-        DETECTED+=("lazygit")
-        pulse_dot "lazygit" "found"
-    else
-        pulse_dot "lazygit" "missing"
-    fi
-
-    # Git (with delta)
     if cmd_exists git; then
-        DETECTED+=("git")
-        pulse_dot "Git" "found"
+        detect git "Git" true
         if cmd_exists delta; then
             pulse_dot "  delta (git pager)" "found"
         fi
     else
-        pulse_dot "Git" "missing"
+        detect git "Git" false
     fi
 
-    # COSMIC Desktop
-    if dir_exists "$HOME/.config/cosmic" || cmd_exists cosmic-comp; then
-        DETECTED+=("cosmic")
-        pulse_dot "COSMIC Desktop" "found"
-    else
-        pulse_dot "COSMIC Desktop" "missing"
-    fi
-
-    # Neovim
     if cmd_exists nvim; then
-        DETECTED+=("neovim")
-        pulse_dot "Neovim" "found"
-        # Check for AstroNvim
-        if [[ -f "$HOME/.config/nvim/lua/astronvim/init.lua" ]] || \
-           grep -rql "AstroNvim" "$HOME/.config/nvim/" 2>/dev/null; then
+        detect neovim "Neovim" true
+        if [[ -f "${XDG_CONFIG}/nvim/lua/astronvim/init.lua" ]] ||
+            grep -rql "AstroNvim" "${XDG_CONFIG}/nvim/" 2>/dev/null; then
             DETECTED+=("astronvim")
             pulse_dot "  AstroNvim" "found"
         fi
     else
-        pulse_dot "Neovim" "missing"
+        detect neovim "Neovim" false
     fi
 
-    # VSCode
-    if cmd_exists code || cmd_exists code-insiders; then
-        DETECTED+=("vscode")
-        pulse_dot "VS Code" "found"
-    else
-        pulse_dot "VS Code" "missing"
-    fi
+    detect_if vscode "VS Code" have_vscode
+    detect_if slack "Slack" have_slack
 
-    # Slack
-    if cmd_exists slack || \
-       [[ -d "/Applications/Slack.app" ]] || \
-       cmd_exists flatpak && flatpak list 2>/dev/null | grep -qi slack; then
-        DETECTED+=("slack")
-        pulse_dot "Slack" "found"
-    else
-        pulse_dot "Slack" "missing"
-    fi
-
-    # Windows Terminal (WSL)
     if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
-        DETECTED+=("windows-terminal")
-        pulse_dot "Windows Terminal (WSL)" "found"
+        detect windows-terminal "Windows Terminal (WSL)" true
     else
-        pulse_dot "Windows Terminal" "missing"
+        detect windows-terminal "Windows Terminal" false
     fi
 
     printf '\n'
     printf "${GREEN}${BOLD}  %d${RESET}${WHITE} apps detected${RESET}\n\n" "${#DETECTED[@]}"
 }
 
-# ─── Install functions ───────────────────────────────────────────────────────
+# ─── Copy primitives ─────────────────────────────────────────────────────────
 
 safe_copy() {
     local src="$1"
     local dst="$2"
     local label="$3"
 
+    # A source that is not there is a skip, never a stop. One missing file used
+    # to abort the whole run under `set -e` and silently strand every tool
+    # after it.
     if [[ ! -f "$src" ]]; then
-        fail "${label}: source not found"
-        FAILED+=("$label")
+        warn "${label}: ${src#"${SCRIPT_DIR}/"} not found, skipping"
+        SKIPPED+=("$label")
         return 1
     fi
 
@@ -304,7 +286,8 @@ safe_copy() {
         # Check if target is in a different git repo than the installer
         if [[ "$repo_root" != "$(git -C "$(dirname "$src")" rev-parse --show-toplevel 2>/dev/null)" ]]; then
             in_ext_git=true
-            # Skip new files — don't introduce untracked files into external repos
+            # Skip new files, so we never introduce untracked files into
+            # someone's dotfiles repo
             if [[ ! -f "$dst" ]]; then
                 diminfo "${label}: skipped new file in git repo (${repo_root})"
                 SKIPPED+=("$label")
@@ -313,16 +296,16 @@ safe_copy() {
         fi
     fi
 
-    mkdir -p "$(dirname "$dst")"
-
     if [[ "$DRY_RUN" == true ]]; then
         diminfo "dry-run: $src -> $dst"
         INSTALLED+=("$label")
         return 0
     fi
 
+    mkdir -p "$(dirname "$dst")"
+
     if [[ -f "$dst" ]]; then
-        # Skip .bak files inside external git repos — git itself is the backup
+        # Skip .bak files inside external git repos, git itself is the backup
         if [[ "$in_ext_git" == false ]]; then
             cp "$dst" "${dst}.silkcircuit.bak" 2>/dev/null || true
         fi
@@ -332,332 +315,146 @@ safe_copy() {
         INSTALLED+=("$label")
         return 0
     else
+        fail "${label}: copy failed"
         FAILED+=("$label")
         return 1
     fi
 }
 
-install_ghostty() {
-    local theme_dir="$HOME/.config/ghostty/themes"
-    printf "${PURPLE}${BOLD}  >> Ghostty${RESET}\n"
+# Copy one file per selected variant. `pattern` is the file name with `@` where
+# the variant goes. Sets COPIED to the number that landed.
+copy_variants() {
+    local src_dir="$1"
+    local dst_dir="$2"
+    local label="$3"
+    local pattern="$4"
 
-    # Install every variant so they can switch. The .css files style the GTK
-    # window chrome on Linux and are not themes, so they stay out of themes/.
-    local count=0
-    for f in "${EXTRAS_DIR}/ghostty/silkcircuit-"*; do
-        [[ "$f" == *.css ]] && continue
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${theme_dir}/${name}" "ghostty:${name}"; then
-            count=$((count + 1))
+    COPIED=0
+    local variant name
+    for variant in "${SELECTED[@]}"; do
+        name="${pattern//@/$variant}"
+        if safe_copy "${src_dir}/${name}" "${dst_dir}/${name}" "${label}:${variant}"; then
+            COPIED=$((COPIED + 1))
         fi
     done
-    success "Installed ${count} Ghostty themes"
-    diminfo "Activate: theme = silkcircuit-neon (or vibrant/soft/glow/dawn)"
-    diminfo "Linux chrome: gtk-custom-css = extras/ghostty/silkcircuit-neon.css"
+}
+
+# ─── Terminals ───────────────────────────────────────────────────────────────
+
+install_ghostty() {
+    section "Ghostty"
+
+    copy_variants "${EXTRAS_DIR}/ghostty" "${XDG_CONFIG}/ghostty/themes" "ghostty" "silkcircuit-@"
+    local themes=$COPIED
+
+    # The .css files style the GTK window chrome on Linux. They are not themes,
+    # so they sit beside the config rather than inside themes/.
+    copy_variants "${EXTRAS_DIR}/ghostty" "${XDG_CONFIG}/ghostty" "ghostty-css" "silkcircuit-@.css"
+
+    success "Installed ${themes} Ghostty themes and ${COPIED} GTK stylesheets"
+    diminfo "In ~/.config/ghostty/config: theme = silkcircuit-${PRIMARY}"
+    diminfo "Follow the system: theme = dark:silkcircuit-neon,light:silkcircuit-dawn"
+    diminfo "Linux chrome (Ghostty 1.1+): gtk-custom-css = ~/.config/ghostty/silkcircuit-${PRIMARY}.css"
 }
 
 install_alacritty() {
-    local theme_dir="$HOME/.config/alacritty/themes"
-    printf "${PURPLE}${BOLD}  >> Alacritty${RESET}\n"
+    section "Alacritty"
 
-    local count=0
-    for f in "${EXTRAS_DIR}/alacritty/silkcircuit-"*.toml; do
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${theme_dir}/${name}" "alacritty:${name}"; then
-            count=$((count + 1))
-        fi
-    done
-    success "Installed ${count} Alacritty themes"
-    diminfo "Import in alacritty.toml: [general] import = [\"~/.config/alacritty/themes/silkcircuit-neon.toml\"]"
+    copy_variants "${EXTRAS_DIR}/alacritty" "${XDG_CONFIG}/alacritty/themes" "alacritty" "silkcircuit-@.toml"
+    success "Installed ${COPIED} Alacritty themes"
+    diminfo "In ~/.config/alacritty/alacritty.toml, under [general]:"
+    diminfo "import = [\"~/.config/alacritty/themes/silkcircuit-${PRIMARY}.toml\"]"
+    diminfo "Needs Alacritty 0.13 or newer for TOML config"
 }
 
 install_kitty() {
-    local theme_dir="$HOME/.config/kitty/themes"
-    printf "${PURPLE}${BOLD}  >> Kitty${RESET}\n"
+    section "Kitty"
 
-    local count=0
-    for f in "${EXTRAS_DIR}/kitty/silkcircuit-"*.conf; do
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${theme_dir}/${name}" "kitty:${name}"; then
-            count=$((count + 1))
-        fi
-    done
-    success "Installed ${count} Kitty themes"
-    diminfo "Activate: include themes/silkcircuit-neon.conf"
+    copy_variants "${EXTRAS_DIR}/kitty" "${XDG_CONFIG}/kitty/themes" "kitty" "silkcircuit-@.conf"
+    success "Installed ${COPIED} Kitty themes"
+    diminfo "In ~/.config/kitty/kitty.conf: include themes/silkcircuit-${PRIMARY}.conf"
 }
 
 install_warp() {
-    local theme_dir="$HOME/.warp/themes"
-    printf "${PURPLE}${BOLD}  >> Warp${RESET}\n"
+    section "Warp"
 
-    local count=0
-    for f in "${EXTRAS_DIR}/warp/silkcircuit-"*.yaml; do
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${theme_dir}/${name}" "warp:${name}"; then
-            count=$((count + 1))
-        fi
-    done
-    success "Installed ${count} Warp themes"
-    diminfo "Activate: Settings -> Appearance -> Themes -> SilkCircuit Neon"
+    copy_variants "${EXTRAS_DIR}/warp" "$HOME/.warp/themes" "warp" "silkcircuit-@.yaml"
+    success "Installed ${COPIED} Warp themes"
+    diminfo "Settings -> Appearance -> Themes -> SilkCircuit $(tr '[:lower:]' '[:upper:]' <<<"${PRIMARY:0:1}")${PRIMARY:1}"
 }
 
 install_wezterm() {
-    local theme_dir="$HOME/.config/wezterm/colors"
-    printf "${PURPLE}${BOLD}  >> WezTerm${RESET}\n"
+    section "WezTerm"
 
-    local count=0
-    for f in "${EXTRAS_DIR}/wezterm/silkcircuit-"*.toml; do
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${theme_dir}/${name}" "wezterm:${name}"; then
-            count=$((count + 1))
-        fi
-    done
-    success "Installed ${count} WezTerm color schemes"
-    diminfo "Activate in wezterm.lua: config.color_scheme = \"SilkCircuit Neon\""
+    copy_variants "${EXTRAS_DIR}/wezterm" "${XDG_CONFIG}/wezterm/colors" "wezterm" "silkcircuit-@.toml"
+    success "Installed ${COPIED} WezTerm color schemes"
+    diminfo "In ~/.config/wezterm/wezterm.lua:"
+    diminfo "config.color_scheme = \"SilkCircuit $(tr '[:lower:]' '[:upper:]' <<<"${PRIMARY:0:1}")${PRIMARY:1}\""
 }
 
-install_btop() {
-    local theme_dir="$HOME/.config/btop/themes"
-    printf "${PURPLE}${BOLD}  >> btop${RESET}\n"
+install_foot() {
+    section "foot"
 
-    local count=0
-    for f in "${EXTRAS_DIR}/btop/silkcircuit_"*.theme; do
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${theme_dir}/${name}" "btop:${name}"; then
-            count=$((count + 1))
-        fi
-    done
-    success "Installed ${count} btop themes"
-    diminfo "Select in btop: Esc -> Options -> Color theme"
+    copy_variants "${EXTRAS_DIR}/foot" "${XDG_CONFIG}/foot" "foot" "silkcircuit-@.ini"
+    success "Installed ${COPIED} foot themes"
+    diminfo "In ~/.config/foot/foot.ini: include=~/.config/foot/silkcircuit-${PRIMARY}.ini"
+    diminfo "Needs foot 1.26 or newer. Each file carries colors-dark and colors-light."
 }
 
-install_k9s() {
-    printf "${PURPLE}${BOLD}  >> k9s${RESET}\n"
+install_iterm2() {
+    section "iTerm2"
 
-    # Resolve k9s config dir: use `k9s info` if available, else platform default
-    local k9s_dir
-    if cmd_exists k9s; then
-        local k9s_cfg
-        k9s_cfg="$(k9s info 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | grep -i '^Config:' | sed 's/^[^:]*:[[:space:]]*//')"
-        [[ -n "${k9s_cfg:-}" ]] && k9s_dir="$(dirname "$k9s_cfg")" || true
-    fi
-    if [[ -z "${k9s_dir:-}" ]]; then
-        if [[ "$(uname)" == "Darwin" ]]; then
-            k9s_dir="$HOME/Library/Application Support/k9s"
-        else
-            k9s_dir="$HOME/.config/k9s"
-        fi
-    fi
-
-    local skin_dir="${k9s_dir}/skins"
-    local count=0
-    for f in "${EXTRAS_DIR}/k9s/silkcircuit"*.yaml; do
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${skin_dir}/${name}" "k9s:${name}"; then
-            count=$((count + 1))
-        fi
-    done
-
-    # Activate the skin in k9s config
-    local config="${k9s_dir}/config.yaml"
-    if [[ "$DRY_RUN" == true ]]; then
-        diminfo "dry-run: would set skin to silkcircuit in ${config}"
-    elif [[ -f "$config" ]]; then
-        if grep -q 'skin:' "$config" 2>/dev/null; then
-            sed -i.silkcircuit.bak 's/skin:.*/skin: silkcircuit/' "$config"
-        elif grep -q 'ui:' "$config" 2>/dev/null; then
-            sed -i.silkcircuit.bak '/ui:/a\
-    skin: silkcircuit' "$config"
-        else
-            printf '\nk9s:\n  ui:\n    skin: silkcircuit\n' >> "$config"
-        fi
-    else
-        mkdir -p "$k9s_dir"
-        printf 'k9s:\n  ui:\n    skin: silkcircuit\n' > "$config"
-    fi
-
-    success "Installed ${count} k9s skins"
-    diminfo "Active skin: silkcircuit"
-}
-
-install_fzf() {
-    printf "${PURPLE}${BOLD}  >> fzf${RESET}\n"
-
-    local target="$HOME/.config/silkcircuit/fzf.sh"
-    if safe_copy "${EXTRAS_DIR}/fzf.sh" "$target" "fzf"; then
-        success "Installed fzf theme"
-        diminfo "Add to shell rc: source ~/.config/silkcircuit/fzf.sh"
-    fi
-}
-
-install_git() {
-    printf "${PURPLE}${BOLD}  >> Git${RESET}\n"
-
-    local target="$HOME/.config/silkcircuit/gitconfig"
-    if safe_copy "${EXTRAS_DIR}/gitconfig" "$target" "git"; then
-        # Check if already included
-        if git config --global --get-all include.path 2>/dev/null | grep -q "silkcircuit/gitconfig"; then
-            success "Git theme already configured"
-        else
-            if [[ "$DRY_RUN" == false ]]; then
-                git config --global --add include.path "$target"
-                success "Installed Git theme (added include to .gitconfig)"
-            else
-                success "Git theme (dry-run: would add include to .gitconfig)"
-            fi
-        fi
-        if ! cmd_exists delta; then
-            diminfo "Tip: install delta for enhanced git diffs"
-        fi
-    fi
-}
-
-install_starship() {
-    printf "${PURPLE}${BOLD}  >> Starship${RESET}\n"
-
-    local target="$HOME/.config/starship.toml"
-    if safe_copy "${EXTRAS_DIR}/starship/starship.toml" "$target" "starship"; then
-        success "Installed Starship config"
-    fi
+    copy_variants "${EXTRAS_DIR}/iterm2" "${STAGING}/iterm2" "iterm2" "silkcircuit-@.itermcolors"
+    success "Staged ${COPIED} iTerm2 color presets"
+    diminfo "Settings -> Profiles -> Colors -> Color Presets -> Import, then pick:"
+    diminfo "${STAGING}/iterm2/silkcircuit-${PRIMARY}.itermcolors"
 }
 
 install_tmux() {
-    printf "${PURPLE}${BOLD}  >> tmux${RESET}\n"
+    section "tmux"
 
-    local target="$HOME/.tmux.conf"
-    if [[ -f "$target" ]] && grep -qi "silkcircuit" "$target" 2>/dev/null; then
-        success "tmux already has SilkCircuit theme"
-        INSTALLED+=("tmux")
-    else
-        if safe_copy "${EXTRAS_DIR}/tmux.conf" "$target" "tmux"; then
-            success "Installed tmux config"
-            diminfo "Reload: tmux source-file ~/.tmux.conf"
-        fi
-    fi
+    copy_variants "${EXTRAS_DIR}/tmux" "${XDG_CONFIG}/tmux" "tmux" "silkcircuit-@.conf"
+    success "Installed ${COPIED} tmux themes"
+    diminfo "In tmux.conf: source-file ~/.config/tmux/silkcircuit-${PRIMARY}.conf"
+    diminfo "Needs tmux 3.4 or newer. These are colors only, no key bindings."
 }
 
-install_bat() {
-    printf "${PURPLE}${BOLD}  >> bat${RESET}\n"
+install_zellij() {
+    section "Zellij"
 
-    local theme_dir
-    theme_dir="$(bat --config-dir 2>/dev/null)/themes"
-    local config_dir
-    config_dir="$(bat --config-dir 2>/dev/null)"
-
-    if [[ -n "$theme_dir" ]]; then
-        mkdir -p "$theme_dir"
-        if safe_copy "${EXTRAS_DIR}/bat/SilkCircuit.tmTheme" "${theme_dir}/SilkCircuit.tmTheme" "bat:theme"; then
-            safe_copy "${EXTRAS_DIR}/bat/config" "${config_dir}/config" "bat:config"
-            if [[ "$DRY_RUN" == false ]]; then
-                bat cache --build &>/dev/null || true
-            fi
-            success "Installed bat theme"
-        fi
-    else
-        warn "Could not determine bat config directory"
-        SKIPPED+=("bat")
-    fi
+    copy_variants "${EXTRAS_DIR}/zellij" "${XDG_CONFIG}/zellij/themes" "zellij" "silkcircuit-@.kdl"
+    success "Installed ${COPIED} Zellij themes"
+    diminfo "In ~/.config/zellij/config.kdl: theme \"silkcircuit-${PRIMARY}\""
+    diminfo "Needs Zellij 0.42 or newer"
 }
 
-install_lsd() {
-    printf "${PURPLE}${BOLD}  >> lsd${RESET}\n"
+install_windows_terminal() {
+    section "Windows Terminal"
 
-    local config_dir="$HOME/.config/lsd"
-    safe_copy "${EXTRAS_DIR}/lsd/colors.yaml" "${config_dir}/colors.yaml" "lsd:colors"
-    safe_copy "${EXTRAS_DIR}/lsd/config.yaml" "${config_dir}/config.yaml" "lsd:config"
-    success "Installed lsd theme"
+    local dst="${STAGING}/windows-terminal"
+    copy_variants "${EXTRAS_DIR}/windows-terminal" "$dst" "windows-terminal" "silkcircuit-@.json"
+    safe_copy "${EXTRAS_DIR}/windows-terminal/silkcircuit.json" \
+        "${dst}/silkcircuit.json" "windows-terminal:combined" || true
+
+    success "Staged ${COPIED} Windows Terminal schemes"
+    diminfo "Settings -> Open JSON file, then paste into the top-level schemes array from:"
+    diminfo "${dst}/silkcircuit.json"
+    diminfo "Then set \"colorScheme\": \"SilkCircuit Neon\" on a profile"
 }
 
-install_procs() {
-    printf "${PURPLE}${BOLD}  >> procs${RESET}\n"
+# ─── Editors ─────────────────────────────────────────────────────────────────
 
-    local target="$HOME/.config/procs/config.toml"
-    if safe_copy "${EXTRAS_DIR}/procs/config.toml" "$target" "procs"; then
-        success "Installed procs config"
-    fi
-}
+install_helix() {
+    section "Helix"
 
-install_atuin() {
-    printf "${PURPLE}${BOLD}  >> Atuin${RESET}\n"
-
-    local theme_dir="$HOME/.config/atuin/themes"
-    if safe_copy "${EXTRAS_DIR}/atuin/silkcircuit.toml" "${theme_dir}/silkcircuit.toml" "atuin"; then
-        success "Installed Atuin theme"
-        diminfo "Add to atuin config.toml: theme = \"silkcircuit\""
-    fi
-}
-
-install_lazygit() {
-    printf "${PURPLE}${BOLD}  >> lazygit${RESET}\n"
-
-    local config_dir="$HOME/.config/lazygit"
-    local target="${config_dir}/config.yml"
-
-    # If config exists, check if themed already
-    if [[ -f "$target" ]] && grep -qi "silkcircuit\|neonPurple\|#e135ff" "$target" 2>/dev/null; then
-        success "lazygit already has SilkCircuit theme"
-        INSTALLED+=("lazygit")
-        return
-    fi
-
-    mkdir -p "$config_dir"
-
-    if [[ "$DRY_RUN" == true ]]; then
-        diminfo "dry-run: would write lazygit theme to ${target}"
-        INSTALLED+=("lazygit")
-        return
-    fi
-
-    # Merge theme into existing config or create new
-    if [[ -f "$target" ]] && grep -q "gui:" "$target" 2>/dev/null; then
-        warn "Existing lazygit config found - theme file saved separately"
-        safe_copy "${EXTRAS_DIR}/lazygit/config.yml" "${config_dir}/silkcircuit-theme.yml" "lazygit:theme-ref"
-        diminfo "Merge theme settings from: ${config_dir}/silkcircuit-theme.yml"
-    else
-        safe_copy "${EXTRAS_DIR}/lazygit/config.yml" "$target" "lazygit"
-        success "Installed lazygit theme"
-    fi
-}
-
-install_fastfetch() {
-    printf "${PURPLE}${BOLD}  >> fastfetch${RESET}\n"
-
-    local target="$HOME/.config/fastfetch/config.jsonc"
-    if safe_copy "${EXTRAS_DIR}/fastfetch/config.jsonc" "$target" "fastfetch"; then
-        success "Installed fastfetch config"
-    fi
-}
-
-install_cosmic() {
-    printf "${PURPLE}${BOLD}  >> COSMIC Desktop${RESET}\n"
-
-    # Copy all variants to a central location
-    local cosmic_dir="$HOME/.config/silkcircuit/cosmic"
-    local count=0
-    for f in "${EXTRAS_DIR}/cosmic/silkcircuit-"*.ron; do
-        local name
-        name=$(basename "$f")
-        if safe_copy "$f" "${cosmic_dir}/${name}" "cosmic:${name}"; then
-            count=$((count + 1))
-        fi
-    done
-
-    success "Installed ${count} COSMIC themes"
-    diminfo "Import via: Settings -> Desktop -> Appearance -> Import"
-    diminfo "Theme files: ~/.config/silkcircuit/cosmic/"
+    copy_variants "${EXTRAS_DIR}/helix" "${XDG_CONFIG}/helix/themes" "helix" "silkcircuit-@.toml"
+    success "Installed ${COPIED} Helix themes"
+    diminfo "In ~/.config/helix/config.toml: theme = \"silkcircuit-${PRIMARY}\""
 }
 
 install_vscode() {
-    printf "${PURPLE}${BOLD}  >> VS Code${RESET}\n"
+    section "VS Code"
 
-    # Find VS Code extensions directory
     local ext_dir=""
     if [[ -d "$HOME/.vscode/extensions" ]]; then
         ext_dir="$HOME/.vscode/extensions"
@@ -667,53 +464,35 @@ install_vscode() {
 
     if [[ -z "$ext_dir" ]]; then
         warn "VS Code extensions directory not found"
-        diminfo "Install from VS Code marketplace or manually copy extras/vscode/"
+        diminfo "Install from the Marketplace, or copy extras/vscode/ in by hand"
         SKIPPED+=("vscode")
         return
     fi
 
     local dest="${ext_dir}/silkcircuit-theme"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        diminfo "dry-run: ${EXTRAS_DIR}/vscode/ -> ${dest}/"
+        INSTALLED+=("vscode")
+        return
+    fi
+
     mkdir -p "$dest"
-
-    if [[ "$DRY_RUN" == false ]]; then
-        cp -r "${EXTRAS_DIR}/vscode/"* "$dest/" 2>/dev/null
+    if cp -r "${EXTRAS_DIR}/vscode/." "$dest/" 2>/dev/null; then
         INSTALLED+=("vscode")
-        success "Installed VS Code theme"
-        diminfo "Restart VS Code and select: SilkCircuit Neon"
+        success "Installed the VS Code extension with all five themes"
+        diminfo "Restart VS Code, then Ctrl+K Ctrl+T -> SilkCircuit Neon"
     else
-        diminfo "dry-run: would copy to ${dest}/"
-        INSTALLED+=("vscode")
-    fi
-}
-
-install_slack() {
-    printf "${PURPLE}${BOLD}  >> Slack${RESET}\n"
-
-    local target="$HOME/.config/silkcircuit/slack-theme.txt"
-    if safe_copy "${EXTRAS_DIR}/slack-theme.txt" "$target" "slack"; then
-        success "Slack theme reference installed"
-        diminfo "Open: Preferences -> Themes -> paste colors from:"
-        diminfo "$target"
-    fi
-}
-
-install_windows_terminal() {
-    printf "${PURPLE}${BOLD}  >> Windows Terminal${RESET}\n"
-
-    local target="$HOME/.config/silkcircuit/windows-terminal.json"
-    if safe_copy "${EXTRAS_DIR}/windows-terminal/silkcircuit.json" "$target" "windows-terminal"; then
-        success "Windows Terminal schemes installed"
-        diminfo "Paste the schemes array into Windows Terminal settings.json:"
-        diminfo "$target"
+        fail "vscode: copy failed"
+        FAILED+=("vscode")
     fi
 }
 
 install_neovim() {
-    printf "${PURPLE}${BOLD}  >> Neovim${RESET}\n"
+    section "Neovim"
 
-    # Check if silkcircuit is already installed as a plugin
-    local found=false
-    for d in "$HOME/.local/share/nvim" "$HOME/.config/nvim"; do
+    local found=false d
+    for d in "$HOME/.local/share/nvim" "${XDG_CONFIG}/nvim"; do
         if find "$d" -path "*/silkcircuit*" -name "*.lua" 2>/dev/null | head -1 | grep -q .; then
             found=true
             break
@@ -722,6 +501,7 @@ install_neovim() {
 
     if [[ "$found" == true ]]; then
         success "SilkCircuit already installed in Neovim"
+        INSTALLED+=("neovim")
     else
         info "Add to your plugin manager:"
         diminfo "{ \"hyperb1iss/silkcircuit\", lazy = false, priority = 1000 }"
@@ -730,32 +510,255 @@ install_neovim() {
 }
 
 install_astronvim() {
-    printf "${PURPLE}${BOLD}  >> AstroNvim${RESET}\n"
+    section "AstroNvim"
 
-    local dest="$HOME/.config/nvim/lua/plugins"
-    if [[ -d "$dest" ]]; then
-        local count=0
-        for f in "${EXTRAS_DIR}/astronvim/plugins/"*.lua; do
-            local name
-            name=$(basename "$f")
-            if safe_copy "$f" "${dest}/${name}" "astronvim:${name}"; then
-                count=$((count + 1))
-            fi
-        done
-        success "Installed ${count} AstroNvim plugin configs"
-    else
+    local dest="${XDG_CONFIG}/nvim/lua/plugins"
+    if [[ ! -d "$dest" ]]; then
         warn "AstroNvim plugins directory not found"
         SKIPPED+=("astronvim")
+        return
+    fi
+
+    local count=0 f name
+    for f in "${EXTRAS_DIR}/astronvim/plugins/"*.lua; do
+        name=$(basename "$f")
+        if safe_copy "$f" "${dest}/${name}" "astronvim:${name}"; then
+            count=$((count + 1))
+        fi
+    done
+    success "Installed ${count} AstroNvim plugin configs"
+}
+
+# ─── Shell, prompt, and pagers ───────────────────────────────────────────────
+
+install_fzf() {
+    section "fzf"
+
+    copy_variants "${EXTRAS_DIR}/fzf" "${XDG_CONFIG}/fzf" "fzf" "silkcircuit-@.sh"
+    success "Installed ${COPIED} fzf color sets"
+    diminfo "In your shell rc: source ~/.config/fzf/silkcircuit-${PRIMARY}.sh"
+    diminfo "Needs fzf 0.52 or newer for the selected-* and border color names"
+}
+
+install_starship() {
+    section "Starship"
+
+    local target="${STARSHIP_CONFIG:-${XDG_CONFIG}/starship.toml}"
+    if safe_copy "${EXTRAS_DIR}/starship/silkcircuit-${PRIMARY}.toml" "$target" "starship"; then
+        success "Installed the Starship prompt"
+        diminfo "Config: ${target}"
+        single_slot_note "Starship"
+    fi
+}
+
+install_bat() {
+    section "bat"
+
+    local config_dir=""
+    if cmd_exists bat; then
+        config_dir="$(bat --config-dir 2>/dev/null || true)"
+    fi
+    [[ -n "$config_dir" ]] || config_dir="${XDG_CONFIG}/bat"
+
+    copy_variants "${EXTRAS_DIR}/bat" "${config_dir}/themes" "bat" "silkcircuit-@.tmTheme"
+
+    if [[ "$DRY_RUN" == false ]] && cmd_exists bat; then
+        bat cache --build &>/dev/null || warn "bat cache --build failed, run it by hand"
+    fi
+
+    success "Installed ${COPIED} bat themes"
+    diminfo "Use it: bat --theme=silkcircuit-${PRIMARY} file.lua"
+    diminfo "Or add --theme=silkcircuit-${PRIMARY} to ${config_dir}/config"
+    diminfo "Add --italic-text=always too, the theme leans on italics"
+}
+
+install_lsd() {
+    section "lsd"
+
+    local config_dir="${XDG_CONFIG}/lsd"
+    # lsd reads exactly one file, and it has to be called colors.yaml.
+    if safe_copy "${EXTRAS_DIR}/lsd/silkcircuit-${PRIMARY}.yaml" "${config_dir}/colors.yaml" "lsd"; then
+        local config="${config_dir}/config.yaml"
+        if [[ "$DRY_RUN" == true ]]; then
+            diminfo "dry-run: would set color.theme to custom in ${config}"
+        elif [[ -f "$config" ]]; then
+            if ! grep -q "theme:[[:space:]]*custom" "$config" 2>/dev/null; then
+                diminfo "Add to ${config}:"
+                diminfo "color:"
+                diminfo "  theme: custom"
+            fi
+        else
+            printf 'color:\n  theme: custom\n' > "$config"
+        fi
+        success "Installed the lsd color file"
+        single_slot_note "lsd"
+    fi
+}
+
+install_procs() {
+    section "procs"
+
+    if safe_copy "${EXTRAS_DIR}/procs/silkcircuit-${PRIMARY}.toml" \
+        "${XDG_CONFIG}/procs/config.toml" "procs"; then
+        success "Installed the procs config"
+        single_slot_note "procs"
+    fi
+}
+
+install_atuin() {
+    section "Atuin"
+
+    copy_variants "${EXTRAS_DIR}/atuin" "${XDG_CONFIG}/atuin/themes" "atuin" "silkcircuit-@.toml"
+    success "Installed ${COPIED} Atuin themes"
+    diminfo "In ~/.config/atuin/config.toml, under [theme]: name = \"silkcircuit-${PRIMARY}\""
+}
+
+install_fastfetch() {
+    section "fastfetch"
+
+    if safe_copy "${EXTRAS_DIR}/fastfetch/silkcircuit-${PRIMARY}.jsonc" \
+        "${XDG_CONFIG}/fastfetch/config.jsonc" "fastfetch"; then
+        success "Installed the fastfetch config"
+        single_slot_note "fastfetch"
+    fi
+}
+
+# ─── Git ─────────────────────────────────────────────────────────────────────
+
+install_git() {
+    section "Git"
+
+    local config_dir="${XDG_CONFIG}/git"
+    copy_variants "${EXTRAS_DIR}/git" "$config_dir" "git" "silkcircuit-@.gitconfig"
+
+    local include="${config_dir}/silkcircuit-${PRIMARY}.gitconfig"
+    if git config --global --get-all include.path 2>/dev/null | grep -qF "silkcircuit-${PRIMARY}.gitconfig"; then
+        success "Installed ${COPIED} Git color configs, include already in place"
+    elif [[ "$DRY_RUN" == true ]]; then
+        success "Installed ${COPIED} Git color configs (dry-run: would add the include)"
+    else
+        git config --global --add include.path "$include"
+        success "Installed ${COPIED} Git color configs and added the include"
+    fi
+
+    diminfo "Include: git config --global --add include.path ${include}"
+    if ! cmd_exists delta; then
+        diminfo "Tip: install delta for diffs that use the matching bat theme"
+    fi
+}
+
+install_lazygit() {
+    section "lazygit"
+
+    local config_dir="${XDG_CONFIG}/lazygit"
+    copy_variants "${EXTRAS_DIR}/lazygit" "$config_dir" "lazygit" "silkcircuit-@.yml"
+
+    success "Installed ${COPIED} lazygit themes"
+    diminfo "Merge the gui.theme block into ~/.config/lazygit/config.yml, or load both:"
+    diminfo "lazygit --use-config-file ~/.config/lazygit/config.yml,${config_dir}/silkcircuit-${PRIMARY}.yml"
+}
+
+# ─── System ──────────────────────────────────────────────────────────────────
+
+install_btop() {
+    section "btop"
+
+    copy_variants "${EXTRAS_DIR}/btop" "${XDG_CONFIG}/btop/themes" "btop" "silkcircuit-@.theme"
+    success "Installed ${COPIED} btop themes"
+    diminfo "In btop: Esc -> Options -> Color theme -> silkcircuit-${PRIMARY}"
+}
+
+install_k9s() {
+    section "k9s"
+
+    # Ask k9s where its config lives, since the answer moved between releases
+    # and differs per platform.
+    local k9s_dir=""
+    if cmd_exists k9s; then
+        local k9s_cfg
+        k9s_cfg="$(k9s info 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | grep -i '^Config:' | sed 's/^[^:]*:[[:space:]]*//')" || true
+        [[ -n "${k9s_cfg:-}" ]] && k9s_dir="$(dirname "$k9s_cfg")"
+    fi
+    if [[ -z "$k9s_dir" ]]; then
+        if [[ "$(uname)" == "Darwin" ]] && [[ ! -d "${XDG_CONFIG}/k9s" ]]; then
+            k9s_dir="$HOME/Library/Application Support/k9s"
+        else
+            k9s_dir="${XDG_CONFIG}/k9s"
+        fi
+    fi
+
+    copy_variants "${EXTRAS_DIR}/k9s" "${k9s_dir}/skins" "k9s" "silkcircuit-@.yaml"
+
+    local skin="silkcircuit-${PRIMARY}"
+    local config="${k9s_dir}/config.yaml"
+    if [[ "$DRY_RUN" == true ]]; then
+        diminfo "dry-run: would set the skin to ${skin} in ${config}"
+    elif [[ -f "$config" ]]; then
+        cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
+        if grep -q 'skin:' "$config" 2>/dev/null; then
+            sed -i.silkcircuit.tmp "s/skin:.*/skin: ${skin}/" "$config" && rm -f "${config}.silkcircuit.tmp"
+        elif grep -q 'ui:' "$config" 2>/dev/null; then
+            sed -i.silkcircuit.tmp "/ui:/a\\
+    skin: ${skin}" "$config" && rm -f "${config}.silkcircuit.tmp"
+        else
+            printf '\nk9s:\n  ui:\n    skin: %s\n' "$skin" >> "$config"
+        fi
+    else
+        mkdir -p "$k9s_dir"
+        printf 'k9s:\n  ui:\n    skin: %s\n' "$skin" > "$config"
+    fi
+
+    success "Installed ${COPIED} k9s skins"
+    diminfo "Active skin: ${skin}"
+}
+
+install_dmesg() {
+    section "dmesg"
+
+    # terminal-colors.d keys a scheme by the utility name, so the file has to
+    # land as dmesg.scheme no matter which variant it came from.
+    if safe_copy "${EXTRAS_DIR}/dmesg/silkcircuit-${PRIMARY}.scheme" \
+        "${XDG_CONFIG}/terminal-colors.d/dmesg.scheme" "dmesg"; then
+        success "Installed the dmesg color scheme"
+        diminfo "Colors show up with: dmesg --color=always"
+        diminfo "System-wide instead: /etc/terminal-colors.d/dmesg.scheme"
+        single_slot_note "terminal-colors.d"
+    fi
+}
+
+install_cosmic() {
+    section "COSMIC Desktop"
+
+    copy_variants "${EXTRAS_DIR}/cosmic" "${STAGING}/cosmic" "cosmic" "silkcircuit-@.ron"
+    success "Staged ${COPIED} COSMIC themes"
+    diminfo "Settings -> Desktop -> Appearance -> Import, then pick:"
+    diminfo "${STAGING}/cosmic/silkcircuit-${PRIMARY}.ron"
+    diminfo "By hand: dark variants go in com.system76.CosmicTheme.Dark.Builder/v1,"
+    diminfo "dawn goes in com.system76.CosmicTheme.Light.Builder/v1"
+}
+
+install_slack() {
+    section "Slack"
+
+    copy_variants "${EXTRAS_DIR}/slack" "${STAGING}/slack" "slack" "silkcircuit-@.txt"
+    success "Staged ${COPIED} Slack themes"
+    diminfo "Preferences -> Themes -> Create a custom theme, then paste this line:"
+
+    local source_file="${EXTRAS_DIR}/slack/silkcircuit-${PRIMARY}.txt"
+    if [[ -f "$source_file" ]]; then
+        diminfo "$(grep -v '^#' "$source_file" | grep -v '^$' | tail -1)"
     fi
 }
 
 # ─── Main install orchestrator ───────────────────────────────────────────────
 
 run_installs() {
-    printf "${PURPLE}${BOLD}  INSTALLING${RESET}${CYAN} >> all variants${RESET}\n"
+    printf "${PURPLE}${BOLD}  INSTALLING${RESET}${CYAN} >> %s${RESET}\n" \
+        "$([[ "$VARIANT" == "all" ]] && echo "all five variants" || echo "the ${VARIANT} variant")"
     neon_line 40
     printf '\n'
 
+    local app
     for app in "${DETECTED[@]}"; do
         case "$app" in
             ghostty)          install_ghostty ;;
@@ -763,18 +766,23 @@ run_installs() {
             kitty)            install_kitty ;;
             warp)             install_warp ;;
             wezterm)          install_wezterm ;;
+            foot)             install_foot ;;
+            iterm2)           install_iterm2 ;;
+            tmux)             install_tmux ;;
+            zellij)           install_zellij ;;
+            helix)            install_helix ;;
             btop)             install_btop ;;
             k9s)              install_k9s ;;
             fzf)              install_fzf ;;
             fastfetch)        install_fastfetch ;;
             starship)         install_starship ;;
-            tmux)             install_tmux ;;
             bat)              install_bat ;;
             lsd)              install_lsd ;;
             procs)            install_procs ;;
             atuin)            install_atuin ;;
             lazygit)          install_lazygit ;;
             git)              install_git ;;
+            dmesg)            install_dmesg ;;
             cosmic)           install_cosmic ;;
             vscode)           install_vscode ;;
             slack)            install_slack ;;
@@ -829,9 +837,13 @@ usage() {
     printf "${PURPLE}${BOLD}SilkCircuit Installer${RESET}\n\n"
     printf "${WHITE}Usage:${RESET} %s [options]\n\n" "$(basename "$0")"
     printf "${WHITE}Options:${RESET}\n"
+    printf "  ${CYAN}-V, --variant <name>${RESET}   neon, vibrant, soft, glow, dawn, or all (default: all)\n"
     printf "  ${CYAN}-n, --dry-run${RESET}          Show what would be installed\n"
     printf "  ${CYAN}-y, --yes${RESET}              Skip confirmation prompts\n"
     printf "  ${CYAN}-h, --help${RESET}             Show this help\n"
+    printf '\n'
+    printf "${GRAY}  Tools that hold a directory of themes get every selected variant.\n"
+    printf "  Tools that read a single file get neon unless --variant says otherwise.${RESET}\n"
     printf '\n'
 }
 
@@ -850,15 +862,23 @@ confirm_install() {
 }
 
 main() {
-    # Parse args
     while [[ $# -gt 0 ]]; do
         case "$1" in
+            -V|--variant)
+                if [[ $# -lt 2 ]]; then
+                    fail "--variant needs a name"
+                    exit 2
+                fi
+                VARIANT="$2"; shift 2 ;;
+            --variant=*)  VARIANT="${1#*=}"; shift ;;
             -n|--dry-run) DRY_RUN=true; shift ;;
             -y|--yes)     INTERACTIVE=false; shift ;;
             -h|--help)    usage; exit 0 ;;
             *)            warn "Unknown option: $1"; shift ;;
         esac
     done
+
+    resolve_variants
 
     banner
     detect_all
