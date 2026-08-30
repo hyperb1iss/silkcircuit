@@ -5,13 +5,13 @@
 
 ## Project Overview
 
-SilkCircuit is a unified design system featuring neon purples, electric pinks, and glowing cyan accents. It themes your entire dev environment: Neovim (the flagship, with 25+ plugin integrations), VS Code, Chrome, terminals, and 20+ CLI and system tools. The project prioritizes performance, WCAG AA accessibility, and a consistent visual identity across all targets.
+SilkCircuit is a unified design system featuring neon purples, electric pinks, and glowing cyan accents. It themes your entire dev environment: Neovim is the flagship, with 39 plugin integrations, and 30 generated extras targets cover VS Code, Chrome, terminals, editors, multiplexers, and CLI and system tools. The project prioritizes performance, WCAG AA accessibility, and a consistent visual identity across all targets.
 
 ## Core Principles
 
 1. **Performance First** - Theme loads in a few milliseconds with every integration defined
 2. **Accessibility** - All colors meet WCAG AA contrast standards
-3. **Plugin Auto-Detection** - Automatically detect and theme installed plugins
+3. **Passive loading** - Every integration is defined up front; detection only informs `:SilkCircuitIntegrations` and `:checkhealth`
 4. **User Choice** - Five variants (neon/vibrant/soft/glow/dawn) with persistent preferences
 
 ## Code Style Guidelines
@@ -53,13 +53,13 @@ return M
 - `palette.lua` - Color definitions and semantic mappings
 - `theme.lua` - Core highlight group definitions
 - `config.lua` - Configuration management
-- `util.lua` - Utility functions and compilation
+- `util.lua` - Highlight application and style merging
 - `utils/colors.lua` - Color math: blending, contrast ratios, variant scaling
 - `health.lua` - `:checkhealth silkcircuit` provider
 
 ### Integration System
 
-- `integrations/init.lua` - Plugin detection and loading
+- `integrations/init.lua` - The integration registry, plus loading and reporting
 - `integrations/{plugin}.lua` - Individual plugin themes
 
 ### User Features
@@ -79,9 +79,9 @@ return M
 ### New Integration
 
 1. Create `integrations/{plugin}.lua`
-2. Add to detection in `integrations/init.lua`
-3. Add to integration list
-4. Test with and without plugin
+2. Add to the registry in `integrations/init.lua`, with the `modules` and `plugin` names detection reports on
+3. Add its key to the `integrations` defaults in `config.lua`
+4. Test with and without the plugin installed; the highlights load either way
 
 Template:
 
@@ -220,7 +220,7 @@ Examples:
 
 - `fix: correct YAML key highlighting`
 - `feat: add mason.nvim integration`
-- `perf: optimize theme compilation`
+- `perf: skip disabled integrations in the load loop`
 
 ### Pull Requests
 
@@ -237,7 +237,7 @@ changelog entry users read.
 ### Common Issues
 
 1. **Highlights not applying**: Check `:hi {GroupName}`
-2. **Plugin not detected**: Verify in `:SilkCircuitIntegrations`
+2. **Plugin looks unthemed**: Confirm its key is not set to `false` in `setup()`, then check `:SilkCircuitIntegrations`
 3. **Colors look wrong**: Check terminal true color support
 
 ### Debug Mode
@@ -262,7 +262,7 @@ vim.g.silkcircuit_debug = true
 - `:SilkCircuit {variant}` - Switch variant
 - `:SilkCircuitGlow` - Toggle glow mode
 - `:SilkCircuitContrast` - Check WCAG compliance
-- `:SilkCircuitIntegrations` - Show detected plugins
+- `:SilkCircuitIntegrations` - Show integration status
 - `:checkhealth silkcircuit` - Full diagnostics
 
 ### File Locations
