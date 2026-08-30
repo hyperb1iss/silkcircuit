@@ -1,211 +1,186 @@
-.PHONY: help setup test lint format clean install-hooks compile vscode vscode-package vscode-publish-vsce vscode-publish-ovsx vscode-publish chrome
+.PHONY: help setup check lint fmt fmt-check test preview build docs \
+        chrome chrome-package vscode-package vscode-publish-vsce \
+        vscode-publish-ovsx vscode-publish clean ci
 
-# Colors matching SilkCircuit theme
-PURPLE := \033[38;2;199;146;234m
-PINK := \033[38;2;255;88;116m
-CYAN := \033[38;2;127;219;202m
-GREEN := \033[38;2;173;219;103m
-YELLOW := \033[38;2;236;196;141m
-BLUE := \033[38;2;130;170;255m
-GRAY := \033[38;2;99;119;119m
-WHITE := \033[38;2;238;255;255m
-RESET := \033[0m
-BOLD := \033[1m
+# SilkCircuit Neon palette (see STYLE_GUIDE.md)
+PURPLE := \033[38;2;225;53;255m
+PINK   := \033[38;2;255;0;255m
+CYAN   := \033[38;2;128;255;234m
+GREEN  := \033[38;2;80;250;123m
+YELLOW := \033[38;2;241;250;140m
+BLUE   := \033[38;2;130;170;255m
+CORAL  := \033[38;2;255;106;193m
+GRAY   := \033[38;2;99;119;119m
+WHITE  := \033[38;2;248;248;242m
+RESET  := \033[0m
+BOLD   := \033[1m
 
-# Unicode symbols
 CHECK := ✓
+CROSS := ✗
 ARROW := ▸
-DOT := •
-STAR := ★
+DOT   := •
+STAR  := ★
+WARN  := !
 
-# Default target
+# Run tooling through mise when it is available so everyone gets the pinned
+# versions from mise.toml. Falls back to whatever is on PATH.
+MISE := $(shell command -v mise 2>/dev/null)
+X    := $(if $(MISE),mise x --,)
+
+# Read the extension version from the manifest instead of hardcoding it.
+VSCODE_VERSION = $(shell $(X) node -p "require('./extras/vscode/package.json').version" 2>/dev/null || echo "?")
+
+# make preview VARIANT=glow
+VARIANT ?= neon
+
+define banner
+	@printf "\n$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)$(1)$(RESET)\n\n"
+endef
+
 help:
 	@printf "\n"
-	@printf "$(PURPLE)$(BOLD)SilkCircuit Theme$(RESET) $(GRAY)•$(RESET) $(CYAN)Development Commands$(RESET)\n"
-	@printf "$(GRAY)────────────────────────────────────$(RESET)\n"
-	@printf "\n"
-	@printf "  $(PURPLE)$(STAR) setup$(RESET)          $(GRAY)─$(RESET) Install development dependencies\n"
-	@printf "  $(PURPLE)$(STAR) test$(RESET)           $(GRAY)─$(RESET) Run all tests\n"
-	@printf "  $(PURPLE)$(STAR) lint$(RESET)           $(GRAY)─$(RESET) Run linters (selene)\n"
-	@printf "  $(PURPLE)$(STAR) format$(RESET)         $(GRAY)─$(RESET) Format code (stylua)\n"
-	@printf "  $(PURPLE)$(STAR) clean$(RESET)          $(GRAY)─$(RESET) Clean generated files\n"
-	@printf "  $(PURPLE)$(STAR) install-hooks$(RESET)  $(GRAY)─$(RESET) Install git pre-commit hooks\n"
-	@printf "  $(PURPLE)$(STAR) compile$(RESET)        $(GRAY)─$(RESET) Compile theme for performance\n"
-	@printf "  $(PURPLE)$(STAR) chrome$(RESET)         $(GRAY)─$(RESET) Generate Chrome theme variants\n"
-	@printf "  $(PURPLE)$(STAR) vscode$(RESET)         $(GRAY)─$(RESET) Build VSCode theme package\n"
-	@printf "  $(PURPLE)$(STAR) vscode-package$(RESET)  $(GRAY)─$(RESET) Package VSCode extension (VSIX)\n"
-	@printf "  $(PURPLE)$(STAR) vscode-publish$(RESET)  $(GRAY)─$(RESET) Publish to VSCode + Open VSX (requires tokens)\n"
-	@printf "\n"
+	@printf "  $(PURPLE)$(BOLD)SilkCircuit$(RESET) $(GRAY)$(DOT)$(RESET) $(CYAN)Development Commands$(RESET)\n"
+	@printf "  $(GRAY)────────────────────────────────────────────────$(RESET)\n\n"
+	@printf "  $(WHITE)$(BOLD)Everyday$(RESET)\n"
+	@printf "    $(PURPLE)$(STAR) setup$(RESET)           $(GRAY)─$(RESET) Install the pinned toolchain and git hooks\n"
+	@printf "    $(PURPLE)$(STAR) check$(RESET)           $(GRAY)─$(RESET) Lint, format check, and test $(GRAY)(what CI runs)$(RESET)\n"
+	@printf "    $(PURPLE)$(STAR) test$(RESET)            $(GRAY)─$(RESET) Run the test suite $(GRAY)(FILTER=name)$(RESET)\n"
+	@printf "    $(PURPLE)$(STAR) fmt$(RESET)             $(GRAY)─$(RESET) Format Lua, Python, JSON, YAML, and Markdown\n"
+	@printf "    $(PURPLE)$(STAR) lint$(RESET)            $(GRAY)─$(RESET) Run selene and ruff\n"
+	@printf "    $(PURPLE)$(STAR) preview$(RESET)         $(GRAY)─$(RESET) Open Neovim with the theme $(GRAY)(VARIANT=glow)$(RESET)\n\n"
+	@printf "  $(WHITE)$(BOLD)Generate$(RESET)\n"
+	@printf "    $(CYAN)$(STAR) build$(RESET)           $(GRAY)─$(RESET) Regenerate every extras/ target from the palette\n"
+	@printf "    $(CYAN)$(STAR) docs$(RESET)            $(GRAY)─$(RESET) Regenerate the README tables\n"
+	@printf "    $(CYAN)$(STAR) chrome$(RESET)          $(GRAY)─$(RESET) Generate the Chrome theme variants\n"
+	@printf "    $(CYAN)$(STAR) chrome-package$(RESET)  $(GRAY)─$(RESET) Zip the Chrome themes for the Web Store\n\n"
+	@printf "  $(WHITE)$(BOLD)Release$(RESET)\n"
+	@printf "    $(CORAL)$(STAR) vscode-package$(RESET)  $(GRAY)─$(RESET) Build the VSIX $(GRAY)(v$(VSCODE_VERSION))$(RESET)\n"
+	@printf "    $(CORAL)$(STAR) vscode-publish$(RESET)  $(GRAY)─$(RESET) Publish to Marketplace and Open VSX\n"
+	@printf "    $(CORAL)$(STAR) clean$(RESET)           $(GRAY)─$(RESET) Remove build output\n\n"
 
-# Install development dependencies
+# ── Everyday ────────────────────────────────────────────────────────────────
+
 setup:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Installing Development Dependencies$(RESET)\n"
-	@printf "\n"
-	@command -v selene >/dev/null 2>&1 || { \
-		printf "  $(CYAN)$(DOT)$(RESET) Installing $(PURPLE)selene$(RESET)...\n"; \
-		cargo install selene && printf "  $(GREEN)$(CHECK)$(RESET) selene installed\n"; \
-	}
-	@command -v stylua >/dev/null 2>&1 || { \
-		printf "  $(CYAN)$(DOT)$(RESET) Installing $(PURPLE)stylua$(RESET)...\n"; \
-		cargo install stylua && printf "  $(GREEN)$(CHECK)$(RESET) stylua installed\n"; \
-	}
-	@command -v pre-commit >/dev/null 2>&1 || { \
-		printf "  $(CYAN)$(DOT)$(RESET) Installing $(PURPLE)pre-commit$(RESET)...\n"; \
-		pip install --user pre-commit && printf "  $(GREEN)$(CHECK)$(RESET) pre-commit installed\n"; \
-	}
-	@printf "  $(CYAN)$(DOT)$(RESET) Installing pre-commit hooks...\n"
-	@pre-commit install >/dev/null 2>&1 && printf "  $(GREEN)$(CHECK)$(RESET) Git hooks installed\n"
-	@printf "\n"
-	@printf "$(GREEN)$(STAR) Setup complete$(RESET)\n"
-	@printf "\n"
-
-# Run tests
-test:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Running Tests$(RESET)\n"
-	@printf "\n"
-	@cd $(shell pwd) && nvim --headless -u NONE -c "luafile tests/run.lua" 2>&1
-
-# Run linters
-lint:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Running Linters$(RESET)\n"
-	@printf "\n"
-	@printf "  $(CYAN)$(DOT)$(RESET) Running selene...\n"
-	@if ! selene lua/ 2>&1; then \
-		printf "\n"; \
-		printf "$(YELLOW)$(WARNING)$(RESET) Lua linting issues found\n"; \
-		exit 1; \
-	else \
-		printf "  $(GREEN)$(CHECK)$(RESET) Lua code is clean\n"; \
-	fi
-	@printf "\n"
-	@printf "$(GREEN)$(STAR) All linting checks passed$(RESET)\n"
-	@printf "\n"
-
-# Format code
-format:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Formatting Code$(RESET)\n"
-	@printf "\n"
-	@printf "  $(CYAN)$(DOT)$(RESET) Running stylua...\n"
-	@printf "  $(YELLOW)$(DOT)$(RESET) Formatting Lua files...\n"
-	@find . -name "*.lua" -type f | xargs stylua
-	@printf "  $(GREEN)$(CHECK)$(RESET) Lua code formatted\n"
-	@printf "\n"
-	@printf "  $(CYAN)$(DOT)$(RESET) Running prettier...\n"
-	@printf "  $(YELLOW)$(DOT)$(RESET) Formatting JSON/YAML/Markdown files...\n"
-	@npx prettier --write "**/*.{json,yaml,yml,md}"
-	@printf "  $(GREEN)$(CHECK)$(RESET) JSON/YAML/Markdown formatted\n"
-	@printf "\n"
-
-# Clean generated files
-clean:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Cleaning Generated Files$(RESET)\n"
-	@printf "\n"
-	@printf "  $(CYAN)$(DOT)$(RESET) Removing cache...\n"
-	@rm -rf cache/
-	@printf "  $(CYAN)$(DOT)$(RESET) Removing .luarc.json...\n"
-	@rm -f .luarc.json
-	@printf "  $(GREEN)$(CHECK)$(RESET) Clean complete\n"
-	@printf "\n"
-
-# Install git hooks
-install-hooks:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Installing Git Hooks$(RESET)\n"
-	@printf "\n"
-	@pre-commit install >/dev/null 2>&1
+	$(call banner,Setting Up)
+ifeq ($(MISE),)
+	@printf "  $(YELLOW)$(WARN)$(RESET) $(WHITE)mise is not installed$(RESET)\n"
+	@printf "    $(GRAY)brew install mise$(RESET)   $(GRAY)or$(RESET)   $(GRAY)curl https://mise.run | sh$(RESET)\n"
+	@printf "    $(GRAY)Then re-run: make setup$(RESET)\n\n"
+	@exit 1
+else
+	@printf "  $(CYAN)$(DOT)$(RESET) Installing the pinned toolchain...\n"
+	@mise trust --quiet
+	@mise install
+	@printf "  $(GREEN)$(CHECK)$(RESET) Toolchain ready\n"
+	@printf "  $(CYAN)$(DOT)$(RESET) Installing git hooks...\n"
+	@$(X) pre-commit install >/dev/null
 	@printf "  $(GREEN)$(CHECK)$(RESET) Git hooks installed\n"
-	@printf "\n"
+	@printf "\n$(GREEN)$(STAR) Setup complete$(RESET) $(GRAY)─ try: make check$(RESET)\n\n"
+endif
 
-# Compile theme
-compile:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Compiling Theme$(RESET)\n"
-	@printf "\n"
-	@printf "  $(CYAN)$(DOT)$(RESET) Generating optimized theme...\n"
-	@nvim --headless -u scripts/compile.lua +qa 2>/dev/null
-	@printf "  $(GREEN)$(CHECK)$(RESET) Theme compiled\n"
-	@printf "\n"
+check: lint fmt-check test
+	@printf "\n$(GREEN)$(STAR) Everything passed$(RESET)\n\n"
 
-# Build VSCode theme
-vscode:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Building VSCode Theme$(RESET)\n"
-	@printf "\n"
-	@printf "  $(CYAN)$(DOT)$(RESET) Packaging extension...\n"
-	@cd extras/vscode && npx @vscode/vsce package --no-dependencies 2>/dev/null
-	@printf "  $(GREEN)$(CHECK)$(RESET) Theme packaged → extras/vscode/silkcircuit-theme-1.0.0.vsix\n"
-	@printf "\n"
-	@printf "$(CYAN)$(STAR) Install in VSCode/Cursor:$(RESET)\n"
-	@printf "  $(GRAY)Extensions → ... → Install from VSIX$(RESET)\n"
-	@printf "\n"
+lint:
+	$(call banner,Linting)
+	@printf "  $(CYAN)$(DOT)$(RESET) selene $(GRAY)lua/ tests/$(RESET)\n"
+	@$(X) selene lua/ tests/
+	@printf "  $(CYAN)$(DOT)$(RESET) ruff $(GRAY)scripts/$(RESET)\n"
+	@$(X) ruff check scripts/
+	@printf "  $(GREEN)$(CHECK)$(RESET) Lint clean\n\n"
 
-# Explicit packaging target
-vscode-package:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Packaging VSCode Extension (VSIX)$(RESET)\n"
-	@printf "\n"
-	@cd extras/vscode && npx @vscode/vsce package --no-dependencies | cat
-	@printf "  $(GREEN)$(CHECK)$(RESET) VSIX created in extras/vscode/\n"
+fmt:
+	$(call banner,Formatting)
+	@printf "  $(CYAN)$(DOT)$(RESET) stylua $(GRAY)lua/ colors/ tests/ init.lua$(RESET)\n"
+	@$(X) stylua lua/ colors/ tests/ init.lua
+	@printf "  $(CYAN)$(DOT)$(RESET) ruff format $(GRAY)scripts/$(RESET)\n"
+	@$(X) ruff format --quiet scripts/
+	@printf "  $(CYAN)$(DOT)$(RESET) prettier $(GRAY)json, yaml, markdown$(RESET)\n"
+	@$(X) prettier --write --log-level warn "**/*.{json,jsonc,yaml,yml,md}"
+	@printf "  $(GREEN)$(CHECK)$(RESET) Formatted\n\n"
 
-# Publish to VS Code Marketplace (requires VSCE_PAT)
-vscode-publish-vsce:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Publishing to VS Code Marketplace$(RESET)\n"
-	@printf "\n"
-	@cd extras/vscode && npx @vscode/vsce publish --no-dependencies | cat
-	@printf "  $(GREEN)$(CHECK)$(RESET) Published to VS Code Marketplace\n"
+fmt-check:
+	$(call banner,Checking Formatting)
+	@printf "  $(CYAN)$(DOT)$(RESET) stylua $(GRAY)lua/ colors/ tests/ init.lua$(RESET)\n"
+	@$(X) stylua --check lua/ colors/ tests/ init.lua
+	@printf "  $(CYAN)$(DOT)$(RESET) ruff format $(GRAY)scripts/$(RESET)\n"
+	@$(X) ruff format --check --quiet scripts/
+	@printf "  $(CYAN)$(DOT)$(RESET) prettier $(GRAY)json, yaml, markdown$(RESET)\n"
+	@$(X) prettier --check --log-level warn "**/*.{json,jsonc,yaml,yml,md}"
+	@printf "  $(GREEN)$(CHECK)$(RESET) Formatting clean $(GRAY)─ run 'make fmt' to fix$(RESET)\n\n"
 
-# Publish to Open VSX (requires OVSX_PAT)
-vscode-publish-ovsx:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Publishing to Open VSX$(RESET)\n"
-	@printf "\n"
-	@cd extras/vscode && npx ovsx publish | cat
-	@printf "  $(GREEN)$(CHECK)$(RESET) Published to Open VSX\n"
+test:
+	$(call banner,Running Tests)
+	@if [ -x scripts/test ]; then \
+		scripts/test $(if $(FILTER),--filter "$(FILTER)",); \
+	else \
+		printf "  $(YELLOW)$(WARN)$(RESET) $(WHITE)scripts/test not found, using the legacy runner$(RESET)\n\n"; \
+		$(X) nvim --headless -u NONE -c "luafile tests/run.lua"; \
+	fi
 
-# Convenience aggregator target
-vscode-publish: vscode-publish-vsce vscode-publish-ovsx
-	@printf "\n"
-	@printf "$(GREEN)$(STAR) VSCode extension published to both marketplaces$(RESET)\n"
-	@printf "\n"
+preview:
+	$(call banner,Previewing $(VARIANT))
+	@if [ ! -f tests/minimal_init.lua ]; then \
+		printf "  $(YELLOW)$(WARN)$(RESET) $(WHITE)tests/minimal_init.lua not found$(RESET)\n\n"; \
+		exit 1; \
+	fi
+	@$(X) nvim --clean -u tests/minimal_init.lua \
+		-c "lua require('silkcircuit').setup({ variant = '$(VARIANT)' })" \
+		-c "colorscheme silkcircuit" \
+		lua/silkcircuit/variants.lua
 
-# Build Chrome themes (all 5 variants)
+# ── Generate ────────────────────────────────────────────────────────────────
+
+build:
+	$(call banner,Building Extras)
+	@printf "  $(GRAY)The extras generator lands in wave 2. For now: make chrome$(RESET)\n\n"
+
+docs:
+	$(call banner,Building Docs Tables)
+	@printf "  $(GRAY)The README table generator lands in wave 2.$(RESET)\n\n"
+
 chrome:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Generating Chrome Themes$(RESET)\n"
-	@printf "\n"
-	@printf "  $(CYAN)$(DOT)$(RESET) Generating all 5 variants...\n"
-	@python3 scripts/generate_chrome_themes.py
-	@printf "  $(GREEN)$(CHECK)$(RESET) Chrome themes generated → extras/chrome-theme/silkcircuit-*/\n"
-	@printf "\n"
-	@printf "$(CYAN)$(STAR) Load in Chrome:$(RESET)\n"
-	@printf "  $(GRAY)chrome://extensions → Developer mode → Load unpacked$(RESET)\n"
-	@printf "\n"
+	$(call banner,Generating Chrome Themes)
+	@printf "  $(CYAN)$(DOT)$(RESET) Rendering all 5 variants...\n"
+	@uv run scripts/generate_chrome_themes.py
+	@printf "  $(CYAN)$(DOT)$(RESET) Formatting generated manifests...\n"
+	@$(X) prettier --write --log-level warn "extras/chrome-theme/**/*.json"
+	@printf "  $(GREEN)$(CHECK)$(RESET) Written to $(GRAY)extras/chrome-theme/silkcircuit-*/$(RESET)\n\n"
+	@printf "  $(CYAN)$(STAR) Load in Chrome:$(RESET) $(GRAY)chrome://extensions → Developer mode → Load unpacked$(RESET)\n\n"
 
-# Package Chrome themes as .zip files for Chrome Web Store
 chrome-package:
-	@printf "\n"
-	@printf "$(PURPLE)$(ARROW)$(RESET) $(PINK)$(BOLD)Packaging Chrome Themes$(RESET)\n"
-	@printf "\n"
+	$(call banner,Packaging Chrome Themes)
 	@for variant in neon vibrant soft glow dawn; do \
-		cd extras/chrome-theme && \
-		zip -r "../../silkcircuit-chrome-$$variant.zip" "silkcircuit-$$variant/" \
-			-x "*.DS_Store" 2>/dev/null && \
-		cd ../.. && \
+		(cd extras/chrome-theme && \
+			zip -qr "../../silkcircuit-chrome-$$variant.zip" "silkcircuit-$$variant/" -x "*.DS_Store") && \
 		printf "  $(GREEN)$(CHECK)$(RESET) silkcircuit-chrome-$$variant.zip\n"; \
 	done
-	@printf "\n"
-	@printf "$(CYAN)$(STAR) Upload to Chrome Web Store:$(RESET)\n"
-	@printf "  $(GRAY)https://chrome.google.com/webstore/devconsole$(RESET)\n"
-	@printf "\n"
+	@printf "\n  $(CYAN)$(STAR) Upload:$(RESET) $(GRAY)https://chrome.google.com/webstore/devconsole$(RESET)\n\n"
 
-# CI target
-ci: lint test
-	@printf "\n"
-	@printf "$(GREEN)$(STAR) All CI checks passed$(RESET)\n"
-	@printf "\n"
+# ── Release ─────────────────────────────────────────────────────────────────
+
+vscode-package:
+	$(call banner,Packaging VS Code Extension)
+	@cd extras/vscode && $(X) npx @vscode/vsce package --no-dependencies | cat
+	@printf "  $(GREEN)$(CHECK)$(RESET) $(GRAY)extras/vscode/silkcircuit-theme-$(VSCODE_VERSION).vsix$(RESET)\n\n"
+
+vscode-publish-vsce:
+	$(call banner,Publishing to VS Code Marketplace)
+	@cd extras/vscode && $(X) npx @vscode/vsce publish --no-dependencies | cat
+	@printf "  $(GREEN)$(CHECK)$(RESET) Published v$(VSCODE_VERSION) to the VS Code Marketplace\n\n"
+
+vscode-publish-ovsx:
+	$(call banner,Publishing to Open VSX)
+	@cd extras/vscode && $(X) npx ovsx publish | cat
+	@printf "  $(GREEN)$(CHECK)$(RESET) Published v$(VSCODE_VERSION) to Open VSX\n\n"
+
+vscode-publish: vscode-publish-vsce vscode-publish-ovsx
+	@printf "$(GREEN)$(STAR) v$(VSCODE_VERSION) is live on both marketplaces$(RESET)\n\n"
+
+clean:
+	$(call banner,Cleaning)
+	@rm -rf cache/ docs/.vitepress/dist docs/.vitepress/cache
+	@rm -f extras/vscode/*.vsix silkcircuit-chrome-*.zip
+	@printf "  $(GREEN)$(CHECK)$(RESET) Build output removed\n\n"
+
+ci: check
