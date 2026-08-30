@@ -58,18 +58,20 @@ Five intensity levels, all using the same underlying palette:
 
 ### ⚡ Universal Installer
 
-The fastest way to theme everything at once. Detects your installed tools and applies matching SilkCircuit configs with backups:
+The fastest way to theme everything at once. It detects your installed tools, drops each theme where that tool looks for it, prints the one line that turns it on, and backs up anything it replaces:
 
 ```bash
 git clone https://github.com/hyperb1iss/silkcircuit.git
 cd silkcircuit
-./install.sh
+./install.sh --dry-run     # see what it would touch
+./install.sh               # all five variants, side by side
+./install.sh --variant glow
 ```
 
 ```powershell
 git clone https://github.com/hyperb1iss/silkcircuit.git
 cd silkcircuit
-powershell -ExecutionPolicy Bypass -File .\install.ps1
+powershell -ExecutionPolicy Bypass -File .\install.ps1 -Variant neon
 ```
 
 ### 🎯 Individual Platforms
@@ -189,36 +191,38 @@ each one.
 <details>
 <summary><b>🔧 CLI Tools</b></summary>
 
+Every tool below ships all five variants. The [extras
+guide](docs/extras/index.md) has a page per tool with the exact enable line;
+these are the copies.
+
 ```bash
-# btop (5 variants)
-cp extras/btop/silkcircuit_*.theme ~/.config/btop/themes/
+# btop, k9s, Atuin, lazygit, bat, fzf: a directory of themes, take all five
+cp extras/btop/silkcircuit-*.theme ~/.config/btop/themes/
+cp extras/k9s/silkcircuit-*.yaml ~/.config/k9s/skins/
+cp extras/atuin/silkcircuit-*.toml ~/.config/atuin/themes/
+cp extras/lazygit/silkcircuit-*.yml ~/.config/lazygit/
+cp extras/bat/silkcircuit-*.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
+cp extras/fzf/silkcircuit-*.sh ~/.config/fzf/
 
-# K9s (5 variants)
-cp extras/k9s/silkcircuit*.yaml ~/.config/k9s/skins/
-
-# Git colors with delta integration (5 variants)
+# Git colors with a delta feature block
 mkdir -p ~/.config/git
 cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
 git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
 
-# bat, lsd, procs, fastfetch (5 variants each, see each directory's README)
-cp extras/bat/silkcircuit-neon.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
+# lsd, procs, Starship, fastfetch, dmesg: one config slot each, so pick a variant
 cp extras/lsd/silkcircuit-neon.yaml ~/.config/lsd/colors.yaml
 cp extras/procs/silkcircuit-neon.toml ~/.config/procs/config.toml
-cp extras/fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
-
-# fzf
-source extras/fzf.sh  # or add to .zshrc/.bashrc
-
-# Starship prompt (5 variants)
 cp extras/starship/silkcircuit-neon.toml ~/.config/starship.toml
+cp extras/fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
+cp extras/dmesg/silkcircuit-neon.scheme ~/.config/terminal-colors.d/dmesg.scheme
 ```
 
 ```powershell
 # fzf
-. .\extras\fzf.ps1
+Copy-Item extras\fzf\silkcircuit-*.ps1 "$env:APPDATA\silkcircuit\fzf\"
+. "$env:APPDATA\silkcircuit\fzf\silkcircuit-neon.ps1"
 
-# Starship prompt (5 variants)
+# Starship prompt
 New-Item -ItemType Directory -Force "$HOME\.config"
 Copy-Item extras\starship\silkcircuit-neon.toml "$HOME\.config\starship.toml"
 ```
@@ -290,7 +294,7 @@ return {
 
 ## 🌃 Full Ecosystem
 
-SilkCircuit extends far beyond your editor. See [extras/README.md](extras/README.md) for setup instructions for every supported tool.
+SilkCircuit extends far beyond your editor. The [extras guide](https://hyperb1iss.github.io/silkcircuit/extras/) has a page per tool with the install path and the line that turns it on, and [extras/README.md](extras/README.md) is the same thing next to the files.
 
 ### 🎨 Color Palette
 
