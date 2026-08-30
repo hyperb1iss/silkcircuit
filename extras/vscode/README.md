@@ -262,7 +262,7 @@ SilkCircuit is a full ecosystem: editor, terminal, system tools, and even your b
 
 All cross-platform extras live in `extras/`. See `extras/README.md` for install notes and screenshots.
 
-### 🚀 Quick start
+### 🪄 Quick start
 
 ```bash
 # Get the complete SilkCircuit experience

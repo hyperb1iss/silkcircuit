@@ -26,7 +26,7 @@ features:
   - icon: 👁️
     title: WCAG AA Compliant
     details: Every color combination validated for accessibility with 4.5:1+ contrast ratios
-  - icon: 🚀
+  - icon: 🏎️
     title: <5ms Load Time
     details: Bytecode compilation with intelligent caching for instant theme loading
   - icon: 🌈
