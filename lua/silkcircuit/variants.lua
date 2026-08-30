@@ -221,7 +221,7 @@ local function create_variant(variant_name)
       -- Greens
       green = "#50fa7b", -- VSCode green (terminal.ansiGreen)
       green_light = "#50fa7b", -- Keep consistent
-      green_bright = "#50fa7b", -- VSCode green
+      green_bright = "#86fba8", -- Decorators, terminal.ansiBrightGreen
 
       -- Blues
       blue = "#82aaff", -- VSCode blue
