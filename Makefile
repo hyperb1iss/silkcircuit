@@ -142,7 +142,7 @@ docs:
 chrome:
 	$(call banner,Generating Chrome Themes)
 	@printf "  $(CYAN)$(DOT)$(RESET) Rendering all 5 variants...\n"
-	@uv run scripts/generate_chrome_themes.py
+	@$(X) uv run scripts/generate_chrome_themes.py
 	@printf "  $(CYAN)$(DOT)$(RESET) Formatting generated manifests...\n"
 	@$(X) prettier --write --log-level warn "extras/chrome-theme/**/*.json"
 	@printf "  $(GREEN)$(CHECK)$(RESET) Written to $(GRAY)extras/chrome-theme/silkcircuit-*/$(RESET)\n\n"

@@ -13,6 +13,6 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 ignore = [
   # The formatter wraps what it can; palette strings and URLs it cannot.
   "E501",
-  # Box-drawing and block glyphs are load-bearing in the terminal output.
+  # The box-drawing and block glyphs are deliberate terminal output.
   "RUF001",
 ]
