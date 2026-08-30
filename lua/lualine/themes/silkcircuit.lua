@@ -1,5 +1,8 @@
--- Lualine theme for Silkcircuit colorscheme
--- Neon-enhanced statusline with electric visual elements
+-- Lualine theme for the SilkCircuit colorscheme.
+--
+-- Built from the active variant every time this module is required. The
+-- silkcircuit lualine integration drops this module from package.loaded on
+-- each colorscheme load, so lualine rebuilds it after a variant switch.
 
 local colors = require("silkcircuit.palette").get_colors()
 
