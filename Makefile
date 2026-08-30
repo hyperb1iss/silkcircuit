@@ -92,7 +92,7 @@ lint:
 fmt:
 	$(call banner,Formatting)
 	@printf "  $(CYAN)$(DOT)$(RESET) stylua $(GRAY)lua/ colors/ tests/ init.lua$(RESET)\n"
-	@$(X) stylua lua/ colors/ tests/ init.lua
+	@$(X) stylua lua/ colors/ tests/
 	@printf "  $(CYAN)$(DOT)$(RESET) ruff format $(GRAY)scripts/$(RESET)\n"
 	@$(X) ruff format --quiet scripts/
 	@printf "  $(CYAN)$(DOT)$(RESET) prettier $(GRAY)json, yaml, markdown$(RESET)\n"
@@ -102,7 +102,7 @@ fmt:
 fmt-check:
 	$(call banner,Checking Formatting)
 	@printf "  $(CYAN)$(DOT)$(RESET) stylua $(GRAY)lua/ colors/ tests/ init.lua$(RESET)\n"
-	@$(X) stylua --check lua/ colors/ tests/ init.lua
+	@$(X) stylua --check lua/ colors/ tests/
 	@printf "  $(CYAN)$(DOT)$(RESET) ruff format $(GRAY)scripts/$(RESET)\n"
 	@$(X) ruff format --check --quiet scripts/
 	@printf "  $(CYAN)$(DOT)$(RESET) prettier $(GRAY)json, yaml, markdown$(RESET)\n"
