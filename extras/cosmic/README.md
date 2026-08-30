@@ -39,6 +39,12 @@ cp silkcircuit-dawn.ron ~/.config/cosmic/com.system76.CosmicTheme.Light.Builder/
 
 Visit [cosmic-themes.org](https://cosmic-themes.org/) to browse and install community themes.
 
+## Customization
+
+These files are generated from the palette by `scripts/build`, so edits to them
+are overwritten on the next build. Change the mapping in
+`lua/silkcircuit/extra/cosmic.lua` and run `make build`.
+
 ## Theme Preview Colors
 
 ### Neon (Dark)
