@@ -33,7 +33,6 @@ local REQUIRED_KEYS = {
   "bg_float",
   "fg",
   "fg_dark",
-  "fg_gutter",
   "border",
   "keyword",
   "operator",

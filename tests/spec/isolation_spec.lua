@@ -41,21 +41,32 @@ describe("isolation", function()
     end)
   end
 
-  it("leaves no plugin module in package.loaded", function()
+  -- The cost of probing, not just the fact of it. Here the watched modules
+  -- exist but raise while loading, which is what a lazy.nvim stub does before
+  -- its plugin is set up. LuaJIT leaves a sentinel in package.loaded when a
+  -- loader raises, and every later require of that module fails with "loop or
+  -- previous error loading module" -- so a theme that probes on startup can
+  -- break the plugin it was looking for, for the rest of the session.
+  it("leaves no plugin module poisoned in package.loaded", function()
     H.reset()
+    for _, name in ipairs(H.foreign_modules) do
+      package.loaded[name] = nil
+    end
+
     H.quiet(function()
       H.watch_requires(H.foreign_modules, function()
         require("silkcircuit").setup({})
         vim.cmd("colorscheme silkcircuit")
-      end)
+      end, { raise = true })
     end)
 
-    local leaked = {}
+    local poisoned = {}
     for _, name in ipairs(H.foreign_modules) do
       if package.loaded[name] ~= nil then
-        leaked[#leaked + 1] = name .. " = " .. type(package.loaded[name])
+        poisoned[#poisoned + 1] = name
+        package.loaded[name] = nil
       end
     end
-    H.empty(leaked, "plugin modules left behind in package.loaded")
+    H.empty(poisoned, "these modules can no longer be required in this session")
   end)
 end)

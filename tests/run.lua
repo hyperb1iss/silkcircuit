@@ -8,6 +8,10 @@
 -- No plugin dependency and no global `assert` override: specs assert through
 -- tests/helpers.lua, and the only pcall here is the one that turns a failing
 -- case into a reported failure.
+--
+-- Exit goes through :cquit rather than os.exit so Neovim tears down its own
+-- temporary directory, which is where minimal_init.lua builds the sandbox.
+-- os.exit() skips that teardown and leaks the sandbox on every run.
 
 local root = vim.g.silkcircuit_test_root or vim.fn.getcwd()
 package.path = root .. "/tests/?.lua;" .. package.path
@@ -27,11 +31,15 @@ while argv[index] do
   if value == "--filter" or value == "-f" then
     index = index + 1
     filter = argv[index]
+    if not filter then
+      vim.api.nvim_err_writeln(value .. " needs a pattern")
+      vim.cmd("cquit 2")
+    end
   elseif value:match("^%-%-filter=") then
     filter = value:sub(#"--filter=" + 1)
   else
-    io.stderr:write("unknown argument: " .. tostring(value) .. "\n")
-    os.exit(2)
+    vim.api.nvim_err_writeln("unknown argument: " .. tostring(value))
+    vim.cmd("cquit 2")
   end
   index = index + 1
 end
@@ -72,14 +80,14 @@ for _, path in ipairs(spec_files) do
 end
 
 if #selected == 0 then
-  io.stderr:write(
+  vim.api.nvim_err_writeln(
     string.format(
-      "no spec files matched%s (looked in %s/tests/spec)\n",
+      "no spec files matched%s (looked in %s/tests/spec)",
       filter and (" filter '" .. filter .. "'") or "",
       root
     )
   )
-  os.exit(2)
+  vim.cmd("cquit 2")
 end
 
 local load_failures = {}
@@ -159,5 +167,5 @@ if failed > 0 then
   end
 end
 
-io.stdout:flush()
-os.exit(failed == 0 and 0 or 1)
+io.flush()
+vim.cmd("cquit " .. (failed == 0 and 0 or 1))

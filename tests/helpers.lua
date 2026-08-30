@@ -67,7 +67,7 @@ end
 -- system chunks headless output and occasionally drops the separator between
 -- two consecutive messages, which corrupts the TAP stream.
 function H.emit(line)
-  io.stdout:write(line, "\n")
+  io.write(line, "\n")
 end
 
 local emit = H.emit
@@ -257,7 +257,19 @@ function H.capture_highlights(fn)
     error(err, 0)
   end
 
+  -- lua/silkcircuit/util.lua walks the highlight table with pairs(), so call
+  -- order follows LuaJIT hash order and varies per process. Sort everything
+  -- the specs report on, or the diagnostics reshuffle between runs.
   table.sort(record.applied)
+  table.sort(record.errors, function(a, b)
+    return a.group < b.group
+  end)
+  table.sort(record.invalid, function(a, b)
+    if a.group ~= b.group then
+      return a.group < b.group
+    end
+    return a.key < b.key
+  end)
   return record
 end
 
@@ -293,12 +305,11 @@ function H.load_full(variant, opts)
   return H.load(variant, H.all_integrations(opts))
 end
 
+-- Deliberately unguarded: nvim_get_hl only errors on a malformed group name,
+-- which is a bug in the spec, not a fact about the theme. An undefined group
+-- comes back as an empty table.
 function H.get_hl(group)
-  local ok, hl = pcall(vim.api.nvim_get_hl, 0, { name = group })
-  if not ok then
-    return nil
-  end
-  return hl
+  return vim.api.nvim_get_hl(0, { name = group })
 end
 
 -- True when a highlight carries any actual styling. nvim_get_hl() returns an
@@ -313,10 +324,17 @@ end
 -- ---------------------------------------------------------------------------
 
 -- Run `fn` with a searcher in front of the module path that records any
--- attempt to require one of `names`. The searcher declines, so `require` fails
--- exactly as it would for a plugin that is not installed and package.loaded is
--- left untouched. Returns the list of attempted module names.
-function H.watch_requires(names, fn)
+-- attempt to require one of `names`, and return the attempts.
+--
+-- By default the searcher declines, so `require` fails exactly as it would for
+-- a plugin that is not installed. With `opts.raise` it instead hands back a
+-- loader that throws, which is what a lazy.nvim stub does for a plugin that
+-- exists but has not been set up yet. That distinction matters: LuaJIT leaves
+-- a sentinel in package.loaded after a loader raises, and every later require
+-- of that module fails with "loop or previous error loading module". A theme
+-- that probes for plugins can therefore poison them for the whole session.
+function H.watch_requires(names, fn, opts)
+  opts = opts or {}
   local watched = {}
   for _, name in ipairs(names) do
     watched[name] = true
@@ -327,8 +345,14 @@ function H.watch_requires(names, fn)
   -- package.searchers.
   local searchers = package.loaders
   local searcher = function(name)
-    if watched[name] then
-      attempts[#attempts + 1] = name
+    if not watched[name] then
+      return nil
+    end
+    attempts[#attempts + 1] = name
+    if opts.raise then
+      return function()
+        error("silkcircuit test: " .. name .. " is not loaded yet")
+      end
     end
     return nil
   end
@@ -368,8 +392,9 @@ function H.read_lines(path)
   end
   local lines = {}
   for line in file:lines() do
-    if line ~= "" then
-      lines[#lines + 1] = line
+    local trimmed = line:match("^%s*(.-)%s*$")
+    if trimmed ~= "" then
+      lines[#lines + 1] = trimmed
     end
   end
   file:close()
