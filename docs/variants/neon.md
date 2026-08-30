@@ -33,25 +33,25 @@ The original SilkCircuit experience. Maximum vibrancy and electric energy.
 | Green | `#50fa7b` | Success, git additions |
 | Red   | `#ff6363` | Errors, git deletions  |
 | Blue  | `#82AAFF` | Links, info            |
-| Gray  | `#6272a4` | Comments, muted text   |
+| Gray  | `#768d8d` | Comments, muted text   |
 
 ## Terminal Colors
 
 ```yaml
 # ANSI Colors
 black: "#12101a"
-red: "#ff69ff"
+red: "#ff6363"
 green: "#50fa7b"
 yellow: "#f1fa8c"
-blue: "#e135ff"
+blue: "#82aaff"
 magenta: "#ff00ff"
 cyan: "#80ffea"
 white: "#f8f8f2"
 
 # Bright variants
-bright_black: "#637777"
-bright_red: "#ff6363"
-bright_green: "#50fa7b"
+bright_black: "#768d8d"
+bright_red: "#ff8787"
+bright_green: "#86fba8"
 bright_yellow: "#ffffa5"
 bright_blue: "#82b1ff"
 bright_magenta: "#ff69ff"

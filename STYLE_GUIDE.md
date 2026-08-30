@@ -79,7 +79,7 @@ SilkCircuit uses five carefully crafted variants, each with precisely tuned colo
 
 **Background System:**
 
-- Base: `#12101a` | Dark: `#0a0812` | Highlight: `#1a162a`
+- Base: `#12101a` | Dark: `#0a0812` | Cursorline: `#1a162a` | Statusbar: `#1d1a2d` | Float: `#221e32`
 
 **Primary Colors:**
 
@@ -93,21 +93,21 @@ SilkCircuit uses five carefully crafted variants, each with precisely tuned colo
 
 **Background System:**
 
-- Base: `#0f0c1a` | Dark: `#08060f` | Highlight: `#0a0614`
+- Base: `#0f0c1a` | Dark: `#08060f` | Cursorline: `#151026` | Statusbar: `#1a142d` | Float: `#1e1834`
 
 **Primary Colors:**
 
 - **Pure Magenta** (`#ff00ff`) - Maximum intensity purple
 - **Electric Pink** (`#ff00cc`) - Vibrant but controlled
 - **Electric Cyan** (`#00ffcc`) - High-energy interaction color
-- **Coral** (`#F78C6C`) - Warm accent for numbers
+- **Coral** (`#ff5fa8`) - Hot coral-pink for numbers
 - **Electric Yellow** (`#ffcc00`) - Strong type highlighting
 
 #### 🌸 Soft (70% intensity)
 
 **Background System:**
 
-- Base: `#1a1626` | Dark: `#141220` | Highlight: `#3e3456`
+- Base: `#1a1626` | Dark: `#141220` | Cursorline: `#201b30` | Statusbar: `#252036` | Float: `#2b253d`
 
 **Primary Colors:**
 
@@ -121,11 +121,11 @@ SilkCircuit uses five carefully crafted variants, each with precisely tuned colo
 
 **Background System:**
 
-- Base: `#0a0816` | Dark: `#000000` | Highlight: `#1a0033`
+- Base: `#0a0816` | Dark: `#000000` | Cursorline: `#1a0033` | Statusbar: `#20003d` | Float: `#250047`
 
 **Primary Colors:**
 
-- **Pure Magenta** (`#ff00ff`) - Maximum contrast keywords
+- **Electric Violet** (`#d633ff`) - Maximum contrast keywords
 - **Pure Pink** (`#ff00ff`) - Ultra-bright emphasis
 - **Pure Cyan** (`#00ffff`) - Electric function highlighting
 - **Bright Pink** (`#ff66ff`) - High-contrast numbers
@@ -135,37 +135,37 @@ SilkCircuit uses five carefully crafted variants, each with precisely tuned colo
 
 **Background System:**
 
-- Base: `#faf8ff` | Dark: `#f1ecff` | Highlight: `#e8e0ff`
+- Base: `#faf8ff` | Dark: `#f4f0ff` | Cursorline: `#f7f4ff` | Float: `#e8dffd` | Statusbar: `#ded3f8`
 
 **Primary Colors:**
 
 - **Deep Purple** (`#7e2bd5`) - Keywords with strong contrast
 - **Magenta** (`#b40077`) - Tags, booleans, emphasis
-- **Teal** (`#007f8e`) - Functions, methods, interaction
-- **Coral** (`#c74a8c`) - Numbers, constants
-- **Golden Yellow** (`#a88600`) - Classes, types, warnings
+- **Teal** (`#006e72`) - Functions, methods, interaction
+- **Coral** (`#b42a74`) - Numbers, constants
+- **Golden Yellow** (`#796100`) - Classes, types, warnings
 
 **Text System:**
 
 - Foreground: `#2b2540` (dark purple-gray)
-- Muted: `#8e84a8` (gray-purple for comments)
+- Muted: `#7353a9` (lavender for comments)
 - Emphasized: `#1a1318` (near-black)
 
 ### Universal Supporting Colors
 
-**Success Green** (`#50fa7b` / Soft: `#66ff99` / Glow: `#00ff00` / Dawn: `#2d8659`)
+**Success Green** (`#50fa7b` / Soft: `#66ff99` / Glow: `#00ff00` / Dawn: `#1d6e46`)
 
 - Success states, git additions, confirmations
 - Semantic: Growth, positive actions, validation
 - Applications: Success messages, add buttons, valid states
 
-**Warning Yellow** (`#f1fa8c` / Soft: `#ffe699` / Glow: `#ffff00` / Dawn: `#a88600`)
+**Warning Yellow** (`#f1fa8c` / Soft: `#ffe699` / Glow: `#ffff00` / Dawn: `#796100`)
 
 - Caution, attention, modification
 - Semantic: Alert, change, pending
 - Applications: Warning messages, modified indicators
 
-**Error Red** (`#ff6363` / Soft: `#ff6677` / Glow: `#ff0066` / Dawn: `#c1272d`)
+**Error Red** (`#ff6363` / Soft: `#ff6677` / Glow: `#ff2244` / Dawn: `#c1272d`)
 
 - Errors, deletions, danger
 - Semantic: Stop, danger, removal
@@ -669,9 +669,9 @@ axe-cli --tags wcag2a,wcag2aa
 }
 
 .silkcircuit-editor[data-variant="glow"] .sc-keyword {
-  color: #ff00ff;
+  color: #d633ff;
   font-weight: bold;
-  text-shadow: 0 0 5px #ff00ff40;
+  text-shadow: 0 0 5px #d633ff40;
 }
 .silkcircuit-editor[data-variant="glow"] .sc-string {
   color: #ff99ff;
@@ -695,11 +695,11 @@ axe-cli --tags wcag2a,wcag2aa
   font-weight: bold;
 }
 .silkcircuit-editor[data-variant="dawn"] .sc-string {
-  color: #9c4a88;
+  color: #9e4087;
   font-style: italic;
 }
 .silkcircuit-editor[data-variant="dawn"] .sc-function {
-  color: #007f8e;
+  color: #006e72;
   font-weight: bold;
   font-style: italic;
 }
@@ -768,7 +768,7 @@ const variantColors = {
     secondary: "#ff99ff",
     accent: "#80ffea",
     background: "#12101a",
-    surface: "#1a162a",
+    surface: "#221e32",
     text: "#f8f8f2"
   },
   vibrant: {
@@ -776,7 +776,7 @@ const variantColors = {
     secondary: "#ff99ff",
     accent: "#00ffcc",
     background: "#0f0c1a",
-    surface: "#0a0614",
+    surface: "#1e1834",
     text: "#f8f8f2"
   },
   soft: {
@@ -784,23 +784,23 @@ const variantColors = {
     secondary: "#ffc2ff",
     accent: "#99ffee",
     background: "#1a1626",
-    surface: "#3e3456",
+    surface: "#2b253d",
     text: "#f8f8f2"
   },
   glow: {
-    primary: "#ff00ff",
+    primary: "#d633ff",
     secondary: "#ff99ff",
     accent: "#00ffff",
     background: "#0a0816",
-    surface: "#1a0033",
+    surface: "#250047",
     text: "#ffffff"
   },
   dawn: {
     primary: "#7e2bd5",
-    secondary: "#9c4a88",
-    accent: "#007f8e",
+    secondary: "#9e4087",
+    accent: "#006e72",
     background: "#faf8ff",
-    surface: "#f1ecff",
+    surface: "#e8dffd",
     text: "#2b2540"
   }
 }
@@ -808,9 +808,9 @@ const variantColors = {
 export const createSilkCircuitTheme = (variant = "neon") => ({
   colors: {
     ...variantColors[variant],
-    success: variant === "glow" ? "#00ff00" : variant === "dawn" ? "#2d8659" : "#50fa7b",
-    warning: variant === "glow" ? "#ffff00" : variant === "dawn" ? "#a88600" : "#f1fa8c",
-    error: variant === "glow" ? "#ff0066" : variant === "dawn" ? "#c1272d" : "#ff6363"
+    success: variant === "glow" ? "#00ff00" : variant === "dawn" ? "#1d6e46" : "#50fa7b",
+    warning: variant === "glow" ? "#ffff00" : variant === "dawn" ? "#796100" : "#f1fa8c",
+    error: variant === "glow" ? "#ff2244" : variant === "dawn" ? "#c1272d" : "#ff6363"
   },
   spacing: {
     xs: 4,
@@ -853,10 +853,10 @@ export const createSilkCircuitTheme = (variant = "neon") => ({
   "cursor": "#80ffea",
   "selection": "#44475a",
   "black": "#12101a",
-  "red": "#ff99ff",
+  "red": "#ff6363",
   "green": "#50fa7b",
   "yellow": "#f1fa8c",
-  "blue": "#e135ff",
+  "blue": "#82aaff",
   "magenta": "#ff00ff",
   "cyan": "#80ffea",
   "white": "#f8f8f2"
@@ -870,7 +870,7 @@ export const createSilkCircuitTheme = (variant = "neon") => ({
   "cursor": "#00ffff",
   "selection": "#ff00ff44",
   "black": "#000000",
-  "red": "#ff0066",
+  "red": "#ff2244",
   "green": "#00ff00",
   "yellow": "#ffff00",
   "blue": "#0099ff",
@@ -888,11 +888,11 @@ export const createSilkCircuitTheme = (variant = "neon") => ({
   "selection": "#d4c8f0",
   "black": "#2b2540",
   "red": "#c1272d",
-  "green": "#2d8659",
-  "yellow": "#a88600",
-  "blue": "#2563eb",
-  "magenta": "#7e2bd5",
-  "cyan": "#007f8e",
+  "green": "#1d6e46",
+  "yellow": "#796100",
+  "blue": "#1454dc",
+  "magenta": "#b40077",
+  "cyan": "#006e72",
   "white": "#faf8ff"
 }
 ```

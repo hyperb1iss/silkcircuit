@@ -22,17 +22,17 @@
   --silk-yellow: #f1fa8c;
   --silk-green: #50fa7b;
   --silk-red: #ff6363;
-  --silk-blue: #82AAFF;
+  --silk-blue: #82aaff;
   --silk-muted: #6272a4;
 
   /* Dawn (Light) Colors */
   --silk-dawn-bg: #faf8ff;
   --silk-dawn-fg: #2b2540;
   --silk-dawn-purple: #7e2bd5;
-  --silk-dawn-cyan: #007f8e;
+  --silk-dawn-cyan: #006e72;
   --silk-dawn-pink: #b40077;
-  --silk-dawn-yellow: #a88600;
-  --silk-dawn-green: #2d8659;
+  --silk-dawn-yellow: #796100;
+  --silk-dawn-green: #1d6e46;
 
   /* VitePress Brand Color Override */
   --vp-c-brand-1: var(--silk-purple);
@@ -89,19 +89,19 @@
 /* Light Mode Overrides */
 :root:not(.dark) {
   --vp-c-bg: var(--silk-dawn-bg);
-  --vp-c-bg-alt: #f1ecff;
-  --vp-c-bg-elv: #e8e0ff;
-  --vp-c-bg-soft: #e8e0ff;
+  --vp-c-bg-alt: #f4f0ff;
+  --vp-c-bg-elv: #e8dffd;
+  --vp-c-bg-soft: #e8dffd;
 
   --vp-c-text-1: var(--silk-dawn-fg);
   --vp-c-text-2: #5a4d6e;
-  --vp-c-text-3: #8e84a8;
+  --vp-c-text-3: #686177;
 
   --vp-c-brand-1: var(--silk-dawn-purple);
   --vp-c-brand-2: var(--silk-dawn-pink);
   --vp-c-brand-3: var(--silk-dawn-cyan);
 
-  --vp-code-block-bg: #f1ecff;
+  --vp-code-block-bg: #f4f0ff;
 }
 
 /* ==========================================================================
@@ -158,7 +158,7 @@
 }
 
 .VPSidebarItem.is-active > .item::before {
-  content: '▸ ';
+  content: "▸ ";
   color: var(--silk-purple);
 }
 
@@ -171,7 +171,12 @@
    ========================================================================== */
 
 .VPHero .name {
-  background: linear-gradient(135deg, var(--silk-purple) 0%, var(--silk-pink) 50%, var(--silk-cyan) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--silk-purple) 0%,
+    var(--silk-pink) 50%,
+    var(--silk-cyan) 100%
+  );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -188,15 +193,20 @@
 
 /* Blinking cursor effect */
 .VPHero .tagline::after {
-  content: '▋';
+  content: "▋";
   animation: blink 1s step-end infinite;
   color: var(--silk-purple);
   margin-left: 4px;
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 /* Hero image glow */
@@ -205,7 +215,7 @@
 }
 
 .VPHero .image-container::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -20%;
   background: radial-gradient(
@@ -331,24 +341,24 @@
 }
 
 /* Code Blocks */
-.vp-doc div[class*='language-'] {
+.vp-doc div[class*="language-"] {
   border-radius: 8px;
   border: 1px solid rgba(225, 53, 255, 0.2);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.dark .vp-doc div[class*='language-'] {
+.dark .vp-doc div[class*="language-"] {
   border-color: rgba(128, 255, 234, 0.1);
 }
 
-.vp-doc div[class*='language-']::before {
+.vp-doc div[class*="language-"]::before {
   color: var(--silk-purple);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.dark .vp-doc div[class*='language-']::before {
+.dark .vp-doc div[class*="language-"]::before {
   color: var(--silk-cyan);
 }
 
@@ -518,7 +528,7 @@
 }
 
 .variant-badge.dawn {
-  background: linear-gradient(135deg, rgba(126, 43, 213, 0.2), rgba(0, 127, 142, 0.2));
+  background: linear-gradient(135deg, rgba(126, 43, 213, 0.2), rgba(0, 110, 114, 0.2));
   color: var(--silk-dawn-purple);
   border: 1px solid var(--silk-dawn-purple);
 }
@@ -550,7 +560,14 @@
 
 .VPFooter {
   border-top: 1px solid;
-  border-image: linear-gradient(90deg, transparent, var(--silk-purple), var(--silk-cyan), transparent) 1;
+  border-image: linear-gradient(
+      90deg,
+      transparent,
+      var(--silk-purple),
+      var(--silk-cyan),
+      transparent
+    )
+    1;
 }
 
 /* ==========================================================================
@@ -581,7 +598,8 @@
 
 /* Glow Animation */
 @keyframes glow-pulse {
-  0%, 100% {
+  0%,
+  100% {
     filter: drop-shadow(0 0 8px rgba(225, 53, 255, 0.5));
   }
   50% {
@@ -591,7 +609,7 @@
 
 /* Grid background for hero */
 .VPHome::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
