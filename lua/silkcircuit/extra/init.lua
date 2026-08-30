@@ -74,6 +74,11 @@ M.targets = {
     is_full = true,
     url = "https://learn.microsoft.com/en-us/windows/terminal/customize-settings/color-schemes",
   },
+  atuin = {
+    label = "Atuin",
+    ext = "toml",
+    url = "https://github.com/atuinsh/atuin/blob/main/crates/atuin-client/src/theme.rs",
+  },
   btop = {
     label = "btop",
     ext = "theme",
