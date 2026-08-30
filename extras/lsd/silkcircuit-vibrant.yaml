@@ -15,7 +15,7 @@ permission:
   exec-sticky: [0, 255, 255]
   no-access: [255, 51, 102]
   octal: [179, 102, 255]
-  acl: [102, 255, 255]
+  acl: [0, 255, 102]
   context: [102, 153, 255]
 
 attributes:

@@ -214,7 +214,7 @@ format = "[ $symbol$context ]($style)"
 style = "bold fg:bg bg:pink"
 disabled = false
 contexts = [
-  { context_pattern = ".*[Pp][Rr][Oo][Dd].*", context_alias = "PROD", style = "bold fg:bg bg:yellow", symbol = " " },
+  { context_pattern = ".*[Pp][Rr][Oo][Dd].*", context_alias = "PROD", style = "bold fg:bg bg:red", symbol = " " },
   # EKS contexts — strip region (e.g., eks-us-west-2-int → eks-int)
   { context_pattern = "eks-[a-z]+-[a-z]+-\\d+-(?P<env>.*)", context_alias = "eks-$env", style = "bold fg:bg bg:pink" },
   # Fallback

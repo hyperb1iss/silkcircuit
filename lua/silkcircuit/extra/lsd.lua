@@ -18,7 +18,7 @@ permission:
   exec-sticky: [${rgb.cyan_bright.r}, ${rgb.cyan_bright.g}, ${rgb.cyan_bright.b}]
   no-access: [${rgb.red.r}, ${rgb.red.g}, ${rgb.red.b}]
   octal: [${rgb.purple_muted.r}, ${rgb.purple_muted.g}, ${rgb.purple_muted.b}]
-  acl: [${rgb.cyan_light.r}, ${rgb.cyan_light.g}, ${rgb.cyan_light.b}]
+  acl: [${rgb.green.r}, ${rgb.green.g}, ${rgb.green.b}]
   context: [${rgb.blue.r}, ${rgb.blue.g}, ${rgb.blue.b}]
 
 attributes:
