@@ -125,6 +125,7 @@ function M.get(colors, opts)
 
   -- Tags (HTML/JSX)
   highlights["@tag"] = { fg = sem.tag }
+  highlights["@tag.builtin"] = { fg = colors.purple }
   highlights["@tag.attribute"] = { fg = sem.attribute }
   highlights["@tag.delimiter"] = { fg = colors.cyan_bright }
 
