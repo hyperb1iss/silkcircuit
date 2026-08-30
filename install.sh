@@ -683,6 +683,79 @@ install_btop() {
     diminfo "In btop: Esc -> Options -> Color theme -> silkcircuit-${PRIMARY}"
 }
 
+# Point an existing k9s config at a skin, without ever writing a second
+# top-level `k9s:` mapping. k9s parses with gopkg.in/yaml.v3, which rejects a
+# duplicate key outright ("mapping key already defined"), so appending a sibling
+# block does not merely look untidy: it stops k9s reading its config at all.
+# More permissive parsers keep only the last mapping and silently drop whatever
+# else the user had configured.
+set_k9s_skin() {
+    local config="$1"
+    local skin="$2"
+
+    awk -v skin="$skin" '
+        function indent_of(text,   n) {
+            match(text, /^[[:space:]]*/)
+            return RLENGTH
+        }
+
+        # How far the children of the block opened at `at` are indented. Read it
+        # off an existing child rather than assuming two spaces, so a config
+        # written with four keeps its shape and stays parseable.
+        function child_indent(at, own,   i, width) {
+            for (i = at + 1; i <= NR; i++) {
+                if (line[i] ~ /^[[:space:]]*$/) continue
+                width = indent_of(line[i])
+                if (width > own) return width
+                break
+            }
+            return own + 2
+        }
+
+        function pad(width,   out) {
+            out = ""
+            while (length(out) < width) out = out " "
+            return out
+        }
+
+        { line[NR] = $0 }
+
+        END {
+            skin_at = 0; ui_at = 0; root_at = 0
+            for (i = 1; i <= NR; i++) {
+                if (!skin_at && line[i] ~ /^[[:space:]]*skin:/) skin_at = i
+                if (!ui_at && line[i] ~ /^[[:space:]]*ui:[[:space:]]*$/) ui_at = i
+                if (!root_at && line[i] ~ /^k9s:[[:space:]]*$/) root_at = i
+            }
+
+            if (skin_at) {
+                line[skin_at] = pad(indent_of(line[skin_at])) "skin: " skin
+                for (i = 1; i <= NR; i++) print line[i]
+            } else if (ui_at) {
+                own = indent_of(line[ui_at])
+                inner = pad(child_indent(ui_at, own))
+                for (i = 1; i <= NR; i++) {
+                    print line[i]
+                    if (i == ui_at) print inner "skin: " skin
+                }
+            } else if (root_at) {
+                inner = pad(child_indent(root_at, 0))
+                deeper = pad(2 * length(inner))
+                for (i = 1; i <= NR; i++) {
+                    print line[i]
+                    if (i == root_at) { print inner "ui:"; print deeper "skin: " skin }
+                }
+            } else {
+                for (i = 1; i <= NR; i++) print line[i]
+                print ""
+                print "k9s:"
+                print "  ui:"
+                print "    skin: " skin
+            }
+        }
+    ' "$config" > "${config}.silkcircuit.new" && mv "${config}.silkcircuit.new" "$config"
+}
+
 install_k9s() {
     section "k9s"
 
@@ -710,14 +783,7 @@ install_k9s() {
         diminfo "dry-run: would set the skin to ${skin} in ${config}"
     elif [[ -f "$config" ]]; then
         cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
-        if grep -q 'skin:' "$config" 2>/dev/null; then
-            sed -i.silkcircuit.tmp "s/skin:.*/skin: ${skin}/" "$config" && rm -f "${config}.silkcircuit.tmp"
-        elif grep -q 'ui:' "$config" 2>/dev/null; then
-            sed -i.silkcircuit.tmp "/ui:/a\\
-    skin: ${skin}" "$config" && rm -f "${config}.silkcircuit.tmp"
-        else
-            printf '\nk9s:\n  ui:\n    skin: %s\n' "$skin" >> "$config"
-        fi
+        set_k9s_skin "$config" "$skin"
     else
         mkdir -p "$k9s_dir"
         printf 'k9s:\n  ui:\n    skin: %s\n' "$skin" > "$config"
@@ -769,7 +835,7 @@ install_slack() {
     if [[ -n "$colors" ]]; then
         diminfo "$colors"
     else
-        diminfo "The line is at the bottom of ${STAGING}/slack/silkcircuit-${PRIMARY}.txt"
+        diminfo "Could not read the colours from ${source_file}"
     fi
 }
 
