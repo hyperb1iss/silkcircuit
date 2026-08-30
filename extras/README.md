@@ -34,13 +34,15 @@ Transform your git experience with electric colors:
 **Setup:**
 
 ```bash
-# Option 1: Include in your existing .gitconfig
-echo "[include]" >> ~/.gitconfig
-echo "    path = $(pwd)/extras/gitconfig" >> ~/.gitconfig
-
-# Option 2: Copy the relevant sections manually
-cat extras/gitconfig >> ~/.gitconfig
+# Pick a variant and include it, so your own .gitconfig stays yours
+mkdir -p ~/.config/git
+cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
+git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
 ```
+
+The file sets colours and nothing else. Delta, the pager, and the log format
+are commented opt-ins at the bottom of it; the delta feature block expects the
+matching bat theme, which `extras/bat/README.md` covers.
 
 ### 🖥️ Terminal Themes
 
@@ -167,27 +169,28 @@ cp extras/ghostty/silkcircuit-neon.css ~/.config/ghostty/silkcircuit.css
 
 One config per tool, all drawing on the same palette:
 
-- **Starship** (`starship/starship.toml`) - Prompt with SilkCircuit segments
+- **Starship** (`starship/silkcircuit-*.toml`) - Prompt with SilkCircuit segments
 - **tmux** (`tmux.conf`) - Status line, panes, and window styling
 - **lazygit** (`lazygit/config.yml`) - Git TUI colors
-- **bat** (`bat/SilkCircuit.tmTheme`, `bat/config`) - Syntax highlighting for `bat`
-- **lsd** (`lsd/colors.yaml`, `lsd/config.yaml`) - Directory listing colors
+- **bat** (`bat/silkcircuit-*.tmTheme`) - Syntax highlighting for `bat` and `delta`
+- **Git** (`git/silkcircuit-*.gitconfig`) - Colour slots plus a delta feature block
+- **lsd** (`lsd/silkcircuit-*.yaml`) - Directory listing colors
 - **atuin** (`atuin/silkcircuit.toml`) - Shell history search
-- **procs** (`procs/config.toml`) - Process viewer columns
-- **fastfetch** (`fastfetch/config.jsonc`) - System info readout
+- **procs** (`procs/silkcircuit-*.toml`) - Process viewer columns
+- **fastfetch** (`fastfetch/silkcircuit-*.jsonc`) - System info readout
 - **dmesg** (`dmesg/*.scheme`) - Kernel log colors, all five variants
 - **COSMIC Desktop** (`cosmic/*.ron`) - Desktop theme, all five variants
 
 **Setup:**
 
 ```bash
-cp extras/starship/starship.toml ~/.config/starship.toml
+cp extras/starship/silkcircuit-neon.toml ~/.config/starship.toml
 cp extras/lazygit/config.yml ~/.config/lazygit/config.yml
-cp extras/bat/SilkCircuit.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
-cp extras/lsd/*.yaml ~/.config/lsd/
+cp extras/bat/silkcircuit-neon.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
+cp extras/lsd/silkcircuit-neon.yaml ~/.config/lsd/colors.yaml
 cp extras/atuin/silkcircuit.toml ~/.config/atuin/themes/
-cp extras/procs/config.toml ~/.config/procs/config.toml
-cp extras/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
+cp extras/procs/silkcircuit-neon.toml ~/.config/procs/config.toml
+cp extras/fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
 ```
 
 ### 🎨 Enhanced Tools
@@ -221,7 +224,9 @@ git clone https://github.com/hyperb1iss/silkcircuit.git
 cd silkcircuit
 
 # Install git colors
-cat extras/gitconfig >> ~/.gitconfig
+mkdir -p ~/.config/git
+cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
+git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
 
 # Copy terminal theme (choose your terminal and variant)
 cp extras/kitty/silkcircuit-neon.conf ~/.config/kitty/themes/
