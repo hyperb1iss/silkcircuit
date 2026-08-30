@@ -115,6 +115,11 @@ resolve_variants() {
     exit 2
 }
 
+# "neon" -> "Neon", for the formats that name their themes in title case.
+variant_label() {
+    printf '%s%s' "$(printf '%s' "${1:0:1}" | tr '[:lower:]' '[:upper:]')" "${1:1}"
+}
+
 # Tools that read exactly one file cannot hold five themes at once, so `all`
 # gives them neon and says as much rather than silently picking for you.
 single_slot_note() {
@@ -353,7 +358,10 @@ install_ghostty() {
 
     success "Installed ${themes} Ghostty themes and ${COPIED} GTK stylesheets"
     diminfo "In ~/.config/ghostty/config: theme = silkcircuit-${PRIMARY}"
-    diminfo "Follow the system: theme = dark:silkcircuit-neon,light:silkcircuit-dawn"
+    # Only worth suggesting when both halves of the pair actually landed.
+    if [[ "$VARIANT" == "all" ]]; then
+        diminfo "Follow the system: theme = dark:silkcircuit-neon,light:silkcircuit-dawn"
+    fi
     diminfo "Linux chrome (Ghostty 1.1+): gtk-custom-css = ~/.config/ghostty/silkcircuit-${PRIMARY}.css"
 }
 
@@ -380,7 +388,7 @@ install_warp() {
 
     copy_variants "${EXTRAS_DIR}/warp" "$HOME/.warp/themes" "warp" "silkcircuit-@.yaml"
     success "Installed ${COPIED} Warp themes"
-    diminfo "Settings -> Appearance -> Themes -> SilkCircuit $(tr '[:lower:]' '[:upper:]' <<<"${PRIMARY:0:1}")${PRIMARY:1}"
+    diminfo "Settings -> Appearance -> Themes -> SilkCircuit $(variant_label "$PRIMARY")"
 }
 
 install_wezterm() {
@@ -389,7 +397,7 @@ install_wezterm() {
     copy_variants "${EXTRAS_DIR}/wezterm" "${XDG_CONFIG}/wezterm/colors" "wezterm" "silkcircuit-@.toml"
     success "Installed ${COPIED} WezTerm color schemes"
     diminfo "In ~/.config/wezterm/wezterm.lua:"
-    diminfo "config.color_scheme = \"SilkCircuit $(tr '[:lower:]' '[:upper:]' <<<"${PRIMARY:0:1}")${PRIMARY:1}\""
+    diminfo "config.color_scheme = \"SilkCircuit $(variant_label "$PRIMARY")\""
 }
 
 install_foot() {
@@ -422,7 +430,12 @@ install_tmux() {
 install_zellij() {
     section "Zellij"
 
-    copy_variants "${EXTRAS_DIR}/zellij" "${XDG_CONFIG}/zellij/themes" "zellij" "silkcircuit-@.kdl"
+    local theme_dir="${XDG_CONFIG}/zellij/themes"
+    copy_variants "${EXTRAS_DIR}/zellij" "$theme_dir" "zellij" "silkcircuit-@.kdl"
+    # silkcircuit.kdl carries all five in one file, for anyone who would rather
+    # keep a single theme file than five.
+    safe_copy "${EXTRAS_DIR}/zellij/silkcircuit.kdl" \
+        "${theme_dir}/silkcircuit.kdl" "zellij:combined" || true
     success "Installed ${COPIED} Zellij themes"
     diminfo "In ~/.config/zellij/config.kdl: theme \"silkcircuit-${PRIMARY}\""
     diminfo "Needs Zellij 0.42 or newer"
@@ -439,7 +452,7 @@ install_windows_terminal() {
     success "Staged ${COPIED} Windows Terminal schemes"
     diminfo "Settings -> Open JSON file, then paste into the top-level schemes array from:"
     diminfo "${dst}/silkcircuit.json"
-    diminfo "Then set \"colorScheme\": \"SilkCircuit Neon\" on a profile"
+    diminfo "Then set \"colorScheme\": \"SilkCircuit $(variant_label "$PRIMARY")\" on a profile"
 }
 
 # ─── Editors ─────────────────────────────────────────────────────────────────
@@ -480,8 +493,10 @@ install_vscode() {
     mkdir -p "$dest"
     if cp -r "${EXTRAS_DIR}/vscode/." "$dest/" 2>/dev/null; then
         INSTALLED+=("vscode")
-        success "Installed the VS Code extension with all five themes"
-        diminfo "Restart VS Code, then Ctrl+K Ctrl+T -> SilkCircuit Neon"
+        success "Installed the VS Code extension"
+        diminfo "The extension is one package carrying all five themes, so --variant"
+        diminfo "does not narrow it. Pick one in the editor instead:"
+        diminfo "Restart VS Code, then Ctrl+K Ctrl+T -> SilkCircuit $(variant_label "$PRIMARY")"
     else
         fail "vscode: copy failed"
         FAILED+=("vscode")
@@ -744,9 +759,17 @@ install_slack() {
     success "Staged ${COPIED} Slack themes"
     diminfo "Preferences -> Themes -> Create a custom theme, then paste this line:"
 
+    # The line to paste is ten hex colours, so it starts with '#' exactly like
+    # the comments above it. Match its shape rather than filtering comments out.
     local source_file="${EXTRAS_DIR}/slack/silkcircuit-${PRIMARY}.txt"
+    local colors=""
     if [[ -f "$source_file" ]]; then
-        diminfo "$(grep -v '^#' "$source_file" | grep -v '^$' | tail -1)"
+        colors="$(grep -oE '^#[0-9a-fA-F]{6}(,#[0-9a-fA-F]{6}){9}$' "$source_file" | tail -1)"
+    fi
+    if [[ -n "$colors" ]]; then
+        diminfo "$colors"
+    else
+        diminfo "The line is at the bottom of ${STAGING}/slack/silkcircuit-${PRIMARY}.txt"
     fi
 }
 

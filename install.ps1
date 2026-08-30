@@ -18,6 +18,13 @@ param(
 Set-StrictMode -Version 3.0
 $ErrorActionPreference = "Stop"
 
+# Every external command this script runs is a query, and a nonzero exit is a
+# legitimate answer from all of them: git config on an unset key, git rev-parse
+# outside a repo, k9s info without a config. With
+# $PSNativeCommandUseErrorActionPreference opted in, ErrorActionPreference of
+# Stop would turn each of those answers into a fatal error mid-install.
+$PSNativeCommandUseErrorActionPreference = $false
+
 $script:ScriptDir = if ($PSScriptRoot) {
     $PSScriptRoot
 } else {
@@ -99,6 +106,9 @@ function Join-PathParts {
 }
 
 function Resolve-Variants {
+    # ValidateSet matches case-insensitively but preserves what the caller
+    # typed, and every generated file name is lowercase.
+    $script:Variant = $Variant.ToLowerInvariant()
     if ($Variant -eq "all") {
         $script:Selected = $script:AllVariants
         $script:Primary = "neon"
@@ -111,6 +121,37 @@ function Resolve-Variants {
 function Get-VariantLabel {
     param([string]$Name)
     return $Name.Substring(0, 1).ToUpperInvariant() + $Name.Substring(1)
+}
+
+# Set-Content -Encoding UTF8 writes a BOM on Windows PowerShell 5.1, which we
+# would be prepending to a config the user already had. Write the bytes instead.
+function Write-PlainText {
+    param(
+        [string]$Path,
+        [string]$Content
+    )
+
+    $directory = Split-Path -Parent $Path
+    if ($directory -and -not (Test-Path -LiteralPath $directory)) {
+        New-Item -ItemType Directory -Path $directory -Force | Out-Null
+    }
+    [System.IO.File]::WriteAllText($Path, $Content, (New-Object System.Text.UTF8Encoding($false)))
+}
+
+# Detection accepts a tool's config directory in any of several places, so the
+# install has to land in the one that actually exists rather than assuming.
+function Resolve-ToolDir {
+    param(
+        [string[]]$Candidates,
+        [string]$Default
+    )
+
+    foreach ($candidate in $Candidates) {
+        if ($candidate -and (Test-Path -LiteralPath $candidate)) {
+            return $candidate
+        }
+    }
+    return $Default
 }
 
 function Write-Success {
@@ -200,6 +241,10 @@ function Normalize-Path {
         return $null
     }
 
+    if ($Path.StartsWith("~")) {
+        $Path = Join-Path $script:HomeDir $Path.Substring(1).TrimStart([char[]]"\/")
+    }
+
     try {
         return [System.IO.Path]::GetFullPath($Path).TrimEnd([char[]]"\/").ToLowerInvariant()
     } catch {
@@ -241,6 +286,9 @@ function Get-GitRoot {
     return $null
 }
 
+$script:SourceGitRoot = $null
+$script:SourceGitRootResolved = $false
+
 function Test-ExternalGitTarget {
     param(
         [string]$Source,
@@ -252,7 +300,13 @@ function Test-ExternalGitTarget {
         return $false
     }
 
-    $sourceRoot = Get-GitRoot -Path (Split-Path -Parent $Source)
+    # Every source lives in this repository, so its root is worth asking for
+    # once rather than twice per copied file.
+    if (-not $script:SourceGitRootResolved) {
+        $script:SourceGitRoot = Get-GitRoot -Path $script:ScriptDir
+        $script:SourceGitRootResolved = $true
+    }
+    $sourceRoot = $script:SourceGitRoot
     $destinationRoot = Get-GitRoot -Path $destinationDir
     if (-not $sourceRoot -or -not $destinationRoot) {
         return $false
@@ -276,8 +330,12 @@ function Copy-SilkFile {
         return $false
     }
 
-    if (Test-ExternalGitTarget -Source $Source -Destination $Destination) {
-        Write-Dim "${Label}: skipped, destination is tracked by another git repo"
+    # Adding an untracked file to someone's dotfiles repo is rude; replacing a
+    # file that is already tracked is not, because git is their backup. This is
+    # the same rule install.sh applies.
+    $inExternalGit = Test-ExternalGitTarget -Source $Source -Destination $Destination
+    if ($inExternalGit -and -not (Test-Path -LiteralPath $Destination -PathType Leaf)) {
+        Write-Dim "${Label}: skipped new file in a git repo this installer does not own"
         [void]$script:Skipped.Add($Label)
         return $false
     }
@@ -295,7 +353,7 @@ function Copy-SilkFile {
 
     $destinationItem = Get-Item -LiteralPath $Destination -Force -ErrorAction SilentlyContinue
 
-    if ($destinationItem) {
+    if ($destinationItem -and -not $inExternalGit) {
         try {
             Copy-Item -LiteralPath $Destination -Destination "$Destination.silkcircuit.bak" -Force -ErrorAction Stop
         } catch {
@@ -413,7 +471,7 @@ function Get-K9sConfigDir {
     if (Test-Command "k9s") {
         $info = & k9s info 2>$null
         foreach ($line in $info) {
-            $plain = $line -replace "`e\[[0-9;]*m", ""
+            $plain = $line -replace "$script:Esc\[[0-9;]*m", ""
             if ($plain -match "^\s*Config:\s*(.+)$") {
                 $configPath = $matches[1].Trim()
                 if ($configPath) {
@@ -454,7 +512,7 @@ function Set-K9sSkin {
     }
 
     if (-not (Test-Path -LiteralPath $ConfigPath)) {
-        Set-Content -LiteralPath $ConfigPath -Value "k9s:`r`n  ui:`r`n    skin: $Skin`r`n" -Encoding UTF8
+        Write-PlainText $ConfigPath "k9s:`r`n  ui:`r`n    skin: $Skin`r`n"
         return
     }
 
@@ -470,7 +528,7 @@ function Set-K9sSkin {
         $content = $content.TrimEnd() + "`r`n`r`nk9s:`r`n  ui:`r`n    skin: $Skin`r`n"
     }
 
-    Set-Content -LiteralPath $ConfigPath -Value $content -Encoding UTF8
+    Write-PlainText $ConfigPath $content
 }
 
 function Detect-All {
@@ -496,7 +554,10 @@ function Detect-All {
 
     Add-Detection "wezterm" "WezTerm" (
         (Test-Command "wezterm") -or
-        (Test-AnyPath @((Join-PathParts $script:AppData "wezterm")))
+        (Test-AnyPath @(
+            (Join-PathParts $script:HomeConfig "wezterm"),
+            (Join-PathParts $script:AppData "wezterm")
+        ))
     )
 
     Add-Detection "btop" "btop" (
@@ -645,7 +706,8 @@ function Install-WindowsTerminal {
 
     if ($installed) {
         Write-Success "Installed the schemes as a Windows Terminal fragment, $count staged"
-        Write-Dim "Restart Windows Terminal, then set a profile colorScheme to SilkCircuit Neon"
+        Write-Dim "The fragment carries all five schemes; Windows Terminal picks per profile"
+        Write-Dim "Restart Windows Terminal, then set a profile colorScheme to SilkCircuit $(Get-VariantLabel $script:Primary)"
     } else {
         Write-Success "Staged $count Windows Terminal schemes"
     }
@@ -656,18 +718,29 @@ function Install-Ghostty {
     Write-Host "$script:Purple$script:Bold  >> Ghostty$script:Reset"
 
     $sourceDir = Join-Path $script:ExtrasDir "ghostty"
-    $themeDir = Join-PathParts $script:AppData "ghostty" "themes"
+    $root = Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "ghostty"),
+        (Join-PathParts $script:AppData "com.mitchellh.ghostty"),
+        (Join-PathParts $script:LocalAppData "ghostty")
+    ) (Join-PathParts $script:AppData "ghostty")
+    $themeDir = Join-Path $root "themes"
     $count = Copy-SilkVariants $sourceDir $themeDir "ghostty" "silkcircuit-@"
 
     Write-Success "Installed $count Ghostty themes"
     Write-Dim "In the Ghostty config: theme = silkcircuit-$script:Primary"
-    Write-Dim "Follow the system: theme = dark:silkcircuit-neon,light:silkcircuit-dawn"
+    # Only worth suggesting when both halves of the pair actually landed.
+    if ($Variant -eq "all") {
+        Write-Dim "Follow the system: theme = dark:silkcircuit-neon,light:silkcircuit-dawn"
+    }
 }
 
 function Install-Alacritty {
     Write-Host "$script:Purple$script:Bold  >> Alacritty$script:Reset"
 
-    $themeDir = Join-PathParts $script:AppData "alacritty" "themes"
+    $themeDir = Join-Path (Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "alacritty"),
+        (Join-PathParts $script:HomeConfig "alacritty")
+    ) (Join-PathParts $script:AppData "alacritty")) "themes"
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "alacritty") $themeDir "alacritty" "silkcircuit-@.toml"
 
     $import = "$($themeDir -replace '\\', '/')/silkcircuit-$script:Primary.toml"
@@ -679,7 +752,12 @@ function Install-Alacritty {
 function Install-WezTerm {
     Write-Host "$script:Purple$script:Bold  >> WezTerm$script:Reset"
 
-    $themeDir = Join-PathParts $script:AppData "wezterm" "colors"
+    # WezTerm on Windows reads %USERPROFILE%\.config\wezterm, the same path the
+    # Unix installer uses. It does not consult %APPDATA%.
+    $themeDir = Join-Path (Resolve-ToolDir @(
+        (Join-PathParts $script:HomeConfig "wezterm"),
+        (Join-PathParts $script:AppData "wezterm")
+    ) (Join-PathParts $script:HomeConfig "wezterm")) "colors"
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "wezterm") $themeDir "wezterm" "silkcircuit-@.toml"
 
     Write-Success "Installed $count WezTerm color schemes"
@@ -689,7 +767,10 @@ function Install-WezTerm {
 function Install-Helix {
     Write-Host "$script:Purple$script:Bold  >> Helix$script:Reset"
 
-    $themeDir = Join-PathParts $script:AppData "helix" "themes"
+    $themeDir = Join-Path (Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "helix"),
+        (Join-PathParts $script:HomeConfig "helix")
+    ) (Join-PathParts $script:AppData "helix")) "themes"
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "helix") $themeDir "helix" "silkcircuit-@.toml"
 
     Write-Success "Installed $count Helix themes"
@@ -699,7 +780,10 @@ function Install-Helix {
 function Install-Btop {
     Write-Host "$script:Purple$script:Bold  >> btop$script:Reset"
 
-    $themeDir = Join-PathParts $script:AppData "btop" "themes"
+    $themeDir = Join-Path (Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "btop"),
+        (Join-PathParts $script:HomeConfig "btop")
+    ) (Join-PathParts $script:AppData "btop")) "themes"
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "btop") $themeDir "btop" "silkcircuit-@.theme"
 
     Write-Success "Installed $count btop themes"
@@ -819,7 +903,10 @@ function Install-Bat {
 function Install-Lsd {
     Write-Host "$script:Purple$script:Bold  >> lsd$script:Reset"
 
-    $configDir = Join-Path $script:AppData "lsd"
+    $configDir = Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "lsd"),
+        (Join-PathParts $script:HomeConfig "lsd")
+    ) (Join-PathParts $script:AppData "lsd")
     # lsd reads exactly one file, and it has to be called colors.yaml.
     $source = Join-PathParts $script:ExtrasDir "lsd" "silkcircuit-$script:Primary.yaml"
     if (-not (Copy-SilkFile $source (Join-Path $configDir "colors.yaml") "lsd")) {
@@ -836,7 +923,7 @@ function Install-Lsd {
             Write-Dim "  theme: custom"
         }
     } else {
-        Set-Content -LiteralPath $config -Value "color:`r`n  theme: custom`r`n" -Encoding UTF8
+        Write-PlainText $config "color:`r`n  theme: custom`r`n"
     }
 
     Write-Success "Installed the lsd color file"
@@ -857,7 +944,10 @@ function Install-Procs {
 function Install-Atuin {
     Write-Host "$script:Purple$script:Bold  >> Atuin$script:Reset"
 
-    $themeDir = Join-PathParts $script:HomeConfig "atuin" "themes"
+    $themeDir = Join-Path (Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "atuin"),
+        (Join-PathParts $script:HomeConfig "atuin")
+    ) (Join-PathParts $script:HomeConfig "atuin")) "themes"
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "atuin") $themeDir "atuin" "silkcircuit-@.toml"
 
     Write-Success "Installed $count Atuin themes"
@@ -867,7 +957,10 @@ function Install-Atuin {
 function Install-Lazygit {
     Write-Host "$script:Purple$script:Bold  >> lazygit$script:Reset"
 
-    $configDir = Join-Path $script:AppData "lazygit"
+    $configDir = Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "lazygit"),
+        (Join-PathParts $script:HomeConfig "lazygit")
+    ) (Join-PathParts $script:AppData "lazygit")
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "lazygit") $configDir "lazygit" "silkcircuit-@.yml"
 
     $theme = Join-Path $configDir "silkcircuit-$script:Primary.yml"
@@ -917,8 +1010,10 @@ function Install-VSCode {
 
     $destination = Join-Path $extensionDir "silkcircuit-theme"
     if (Copy-SilkDirectory (Join-Path $script:ExtrasDir "vscode") $destination "vscode") {
-        Write-Success "Installed the VS Code extension with all five themes"
-        Write-Dim "Restart VS Code, then Ctrl+K Ctrl+T -> SilkCircuit Neon"
+        Write-Success "Installed the VS Code extension"
+        Write-Dim "The extension is one package carrying all five themes, so -Variant"
+        Write-Dim "does not narrow it. Pick one in the editor instead:"
+        Write-Dim "Restart VS Code, then Ctrl+K Ctrl+T -> SilkCircuit $(Get-VariantLabel $script:Primary)"
     }
 }
 
@@ -932,14 +1027,19 @@ function Install-Slack {
     Write-Success "Staged $count Slack themes"
     Write-Dim "Preferences -> Themes -> Create a custom theme, then paste this line:"
 
+    # The line to paste is ten hex colours, so it starts with "#" exactly like
+    # the comments above it. Match its shape rather than filtering comments out.
     $source = Join-Path $sourceDir "silkcircuit-$script:Primary.txt"
+    $line = $null
     if (Test-Path -LiteralPath $source) {
         $line = Get-Content -LiteralPath $source |
-            Where-Object { $_ -and -not $_.StartsWith("#") } |
+            Where-Object { $_ -match "^#[0-9a-fA-F]{6}(,#[0-9a-fA-F]{6}){9}$" } |
             Select-Object -Last 1
-        if ($line) {
-            Write-Dim $line
-        }
+    }
+    if ($line) {
+        Write-Dim $line
+    } else {
+        Write-Dim "The line is at the bottom of $(Join-Path $targetDir "silkcircuit-$script:Primary.txt")"
     }
 }
 
@@ -1057,10 +1157,7 @@ function Show-Summary {
 }
 
 function Show-Usage {
-    $scriptName = Split-Path -Leaf $MyInvocation.ScriptName
-    if (-not $scriptName) {
-        $scriptName = "install.ps1"
-    }
+    $scriptName = if ($PSCommandPath) { Split-Path -Leaf $PSCommandPath } else { "install.ps1" }
 
     Write-Host "$script:Purple$script:Bold SilkCircuit Windows Installer$script:Reset"
     Write-Host ""
