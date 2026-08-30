@@ -288,7 +288,7 @@ cd silkcircuit/extras
 
 **💭 Need help?**
 
-- 📬 Check [Issues](../../issues)
+- 📬 Check [Issues](https://github.com/hyperb1iss/silkcircuit/issues)
 - 💜 Include VSCode version and OS details
 - 📸 Screenshots help with visual issues
 
