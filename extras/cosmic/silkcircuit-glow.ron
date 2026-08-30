@@ -73,7 +73,7 @@
     success: Some((red: 0.000000, green: 1.000000, blue: 0.000000)),
     warning: Some((red: 1.000000, green: 1.000000, blue: 0.000000)),
     destructive: Some((red: 1.000000, green: 0.000000, blue: 0.400000)),
-    is_frosted: false,
+    is_frosted: true,
     window_hint: Some((red: 1.000000, green: 0.000000, blue: 1.000000)),
     gaps: (0, 8),
     active_hint: 3,

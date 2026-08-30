@@ -55,6 +55,10 @@ local TINTS = {
   { "destructive", "red" },
 }
 
+-- COSMIC blurs panel backgrounds when a theme asks for it. Only glow does:
+-- its near-black surfaces are the ones the effect reads against.
+local FROSTED = { glow = true }
+
 local SPACING = [[
     spacing: (
         space_none: 0,
@@ -150,7 +154,7 @@ function M.generate(colors)
     SPACING,
     some(colors, SURFACES, "    ", true),
     some(colors, TINTS, "    ", false),
-    "    is_frosted: false,",
+    "    is_frosted: " .. (FROSTED[colors.meta.variant] and "true" or "false") .. ",",
     "    window_hint: Some(" .. triplet(colors, "purple", false) .. "),",
     "    gaps: (0, 8),",
     "    active_hint: 3,",
