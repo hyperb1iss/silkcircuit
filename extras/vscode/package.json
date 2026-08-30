@@ -43,27 +43,27 @@
       {
         "label": "SilkCircuit Neon",
         "uiTheme": "vs-dark",
-        "path": "./silkcircuit-neon.json"
+        "path": "./themes/silkcircuit-neon.json"
       },
       {
         "label": "SilkCircuit Vibrant",
         "uiTheme": "vs-dark",
-        "path": "./silkcircuit-vibrant.json"
+        "path": "./themes/silkcircuit-vibrant.json"
       },
       {
         "label": "SilkCircuit Soft",
         "uiTheme": "vs-dark",
-        "path": "./silkcircuit-soft.json"
+        "path": "./themes/silkcircuit-soft.json"
       },
       {
         "label": "SilkCircuit Glow",
         "uiTheme": "vs-dark",
-        "path": "./silkcircuit-glow.json"
+        "path": "./themes/silkcircuit-glow.json"
       },
       {
         "label": "SilkCircuit Dawn",
         "uiTheme": "vs",
-        "path": "./silkcircuit-dawn.json"
+        "path": "./themes/silkcircuit-dawn.json"
       }
     ]
   },

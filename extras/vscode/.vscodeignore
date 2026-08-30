@@ -23,4 +23,4 @@ assets/**
 !README.md
 !package.json
 !icon.png
-!silkcircuit-*.json
+!themes/silkcircuit-*.json

@@ -102,11 +102,11 @@ Dawn is not pictured. Install it and switch with "Preferences: Color Theme" to s
 
 ## 📁 Files
 
-- `silkcircuit-neon.json` - Main theme file
-- `silkcircuit-vibrant.json` - 85% intensity variant
-- `silkcircuit-soft.json` - 70% intensity variant
-- `silkcircuit-glow.json` - Brightened variant
-- `silkcircuit-dawn.json` - Light variant
+- `themes/silkcircuit-neon.json` - Main theme file
+- `themes/silkcircuit-vibrant.json` - 85% intensity variant
+- `themes/silkcircuit-soft.json` - 70% intensity variant
+- `themes/silkcircuit-glow.json` - Brightened variant
+- `themes/silkcircuit-dawn.json` - Light variant
 - `package.json` - VSCode extension manifest
 - `README.md` - This file
 
@@ -254,7 +254,7 @@ SilkCircuit is a full ecosystem: editor, terminal, system tools, and even your b
   - **macchina**: `extras/macchina/silkcircuit.toml`
 - **Browsers & Apps**
   - **Chrome DevTools + Chrome pages**: `extras/chrome-theme/` (see `extras/chrome-theme/README.md`)
-  - **Slack**: `extras/slack-theme.txt`
+  - **Slack**: `extras/slack/silkcircuit-{neon,vibrant,soft,glow,dawn}.txt`
 - **Astronvim**
   - Turn-key setup in `extras/astronvim/` with `community.lua` and tailored plugins
 - **Avante.nvim**
