@@ -1,7 +1,8 @@
 -- fzf takes its whole theme through one option, so both the shell and the
 -- PowerShell target render the same --color groups and only differ in how the
--- environment variable gets set. The names are the ones fzf 0.42 and later
--- accept; older builds reject the whole spec on the first unknown name.
+-- environment variable gets set. Needs fzf 0.52, where selected-fg, selected-bg
+-- and selected-hl arrived; fzf rejects the whole spec on the first name it does
+-- not know, so the newest name in the list sets the floor.
 
 local M = {}
 
