@@ -37,6 +37,7 @@ export default defineConfig({
             { text: 'Installation', link: '/guide/installation' },
             { text: 'Configuration', link: '/guide/configuration' },
             { text: 'Theme Variants', link: '/guide/variants' },
+            { text: "How It's Built", link: '/guide/architecture' },
           ]
         }
       ],
