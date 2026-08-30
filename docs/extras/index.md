@@ -25,6 +25,7 @@ Generated from the palette by `make build`, five variants each. See the
 | Target                          | Format                                                                                             | Generated files                                                          |
 | ------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | Alacritty                       | [reference](https://alacritty.org/config-alacritty.html#colors)                                    | `extras/alacritty/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`        |
+| foot                            | [reference](https://codeberg.org/dnkl/foot/src/branch/master/doc/foot.ini.5.scd)                   | `extras/foot/silkcircuit-{neon,vibrant,soft,glow,dawn}.ini`              |
 | fzf                             | [reference](https://github.com/junegunn/fzf/blob/master/man/man1/fzf.1)                            | `extras/fzf/silkcircuit-{neon,vibrant,soft,glow,dawn}.sh`                |
 | fzf (PowerShell)                | [reference](https://github.com/junegunn/fzf/blob/master/man/man1/fzf.1)                            | `extras/fzf/silkcircuit-{neon,vibrant,soft,glow,dawn}.ps1`               |
 | Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                       | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`               |

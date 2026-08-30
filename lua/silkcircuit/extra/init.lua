@@ -38,6 +38,11 @@ M.targets = {
     ext = "toml",
     url = "https://alacritty.org/config-alacritty.html#colors",
   },
+  foot = {
+    label = "foot",
+    ext = "ini",
+    url = "https://codeberg.org/dnkl/foot/src/branch/master/doc/foot.ini.5.scd",
+  },
   fzf = {
     label = "fzf",
     ext = "sh",
