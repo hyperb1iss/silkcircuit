@@ -48,28 +48,6 @@ function M.check()
     ok("Transparent background enabled")
   end
 
-  -- Check performance
-  start("Performance")
-  local cache_dir = vim.fn.stdpath("cache")
-  local compiled_file = cache_dir .. "/silkcircuit_compiled.lua"
-  local bytecode_file = cache_dir .. "/silkcircuit_compiled.luac"
-
-  if vim.fn.filereadable(compiled_file) == 1 then
-    ok("Compiled cache found")
-    if vim.fn.filereadable(bytecode_file) == 1 then
-      ok("Bytecode cache also available for maximum performance")
-    end
-    local cache_stat = vim.loop.fs_stat(compiled_file)
-    if cache_stat then
-      local age_days = (os.time() - cache_stat.mtime.sec) / 86400
-      if age_days > 7 then
-        warn(string.format("Cache is %.1f days old. Run :SilkCircuitCompile to refresh", age_days))
-      end
-    end
-  else
-    warn("No compiled cache found. Run :SilkCircuitCompile for faster loading")
-  end
-
   -- Check integrations
   start("Plugin Integrations")
   local integrations = require("silkcircuit.integrations")
@@ -139,7 +117,6 @@ function M.check()
   ok(":SilkCircuit [variant] - Switch theme variant (neon/vibrant/soft/glow/dawn)")
   ok(":SilkCircuitGlow - Toggle glow mode")
   ok(":SilkCircuitContrast - Check WCAG contrast compliance")
-  ok(":SilkCircuitCompile - Compile theme for faster loading")
   ok(":SilkCircuitIntegrations - Show detected plugin integrations")
   ok(":help silkcircuit - View documentation")
 end

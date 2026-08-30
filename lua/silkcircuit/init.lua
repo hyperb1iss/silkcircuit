@@ -3,7 +3,6 @@ local M = {}
 -- Load modules
 local config = require("silkcircuit.config")
 local theme = require("silkcircuit.theme")
-local util = require("silkcircuit.util")
 local preferences = require("silkcircuit.preferences")
 
 -- Setup function
@@ -21,37 +20,13 @@ function M.load()
 
   local start_time = vim.loop.hrtime()
 
-  -- Try to load compiled version first
-  local loaded = util.load_compiled()
-
-  if not loaded then
-    -- Fall back to regular loading
-    vim.cmd("hi clear")
-    if vim.fn.exists("syntax_on") then
-      vim.cmd("syntax reset")
-    end
-
-    -- Set theme name
-    vim.g.colors_name = "silkcircuit"
-
-    -- Apply theme
-    theme.apply()
-
-    -- Auto-compile for next time
-    vim.defer_fn(function()
-      util.compile()
-    end, 100)
-  else
-    -- Compiled theme loaded successfully, but we still need to load integrations!
-    local palette = require("silkcircuit.palette")
-    local opts = config.get()
-    local colors = palette.get_colors()
-
-    -- Load plugin integrations (this was missing!)
-    if opts.integrations then
-      require("silkcircuit.integrations").load(colors, opts)
-    end
+  vim.cmd("hi clear")
+  if vim.fn.exists("syntax_on") then
+    vim.cmd("syntax reset")
   end
+
+  vim.g.colors_name = "silkcircuit"
+  theme.apply()
 
   local load_time = (vim.loop.hrtime() - start_time) / 1e6
   if load_time < 10 then -- Only show for fast loads
@@ -85,9 +60,12 @@ function M.get_colors()
   return require("silkcircuit.palette").colors
 end
 
--- Compile theme for better performance
+-- Removed in v2. Kept as a no-op so existing configs do not error.
 function M.compile()
-  util.compile()
+  vim.notify(
+    "silkcircuit: the compiled cache was removed in v2, loading is fast without it",
+    vim.log.levels.WARN
+  )
 end
 
 -- Apply colorscheme
