@@ -33,6 +33,8 @@ local REQUIRED_GROUPS = {
   "@variable",
   "@comment",
   "LspReferenceText",
+  "LspReferenceTarget",
+  "PmenuMatch",
   "TelescopeSelection",
   "NeoTreeNormal",
   "GitSignsAdd",
@@ -40,6 +42,18 @@ local REQUIRED_GROUPS = {
   "FlashLabel",
   "HarpoonWindow",
   "NeogitBranch",
+  "BlinkCmpMenu",
+  "FzfLuaNormal",
+  "OilDir",
+  "TroubleNormal",
+  "LazyNormal",
+  "GrugFarHelpHeader",
+  "TreesitterContext",
+  "FidgetTitle",
+  "NeotestPassed",
+  "DropBarMenuNormalFloat",
+  "SnacksPickerDir",
+  "WhichKeyNormal",
 }
 
 describe("highlights", function()
