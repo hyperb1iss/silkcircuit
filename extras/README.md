@@ -92,23 +92,24 @@ make chrome
 # Select: extras/chrome-theme/silkcircuit-{neon,vibrant,soft,glow,dawn}/
 ```
 
-### 💬 Slack Theme (`slack-theme.txt`)
+### 💬 Slack Theme (`slack/`)
 
-Transform your Slack workspace with SilkCircuit's 4-color themes:
+All five variants, each as the ten-color line Slack's importer reads:
 
-- **Deep purple** navigation (#2E1B7A)
-- **Electric purple** for selected items (#E135FF)
-- **Neon green** presence indicators (#50FA7B)
-- **Hot pink** notifications (#FF79C6)
+- **Sidebar surfaces** that follow the variant's own backgrounds
+- **Electric purple** for the active channel
+- **Neon green** presence indicators
+- **Hot pink** mention badges
 
 **Setup:**
 
 ```bash
-# Open Slack → Preferences → Themes
-# Copy hex values from extras/slack-theme.txt
-# Click each color circle and paste the corresponding hex value
-# Enable "Window gradient" for best effect
+# Open Slack → Preferences → Themes → Create a custom theme
+# Paste the last line of extras/slack/silkcircuit-neon.txt into the color box
 ```
+
+Every file also lists the ten slots by name, so you can set them one at a
+time instead of pasting.
 
 ### 📊 btop Theme (`btop/`)
 
