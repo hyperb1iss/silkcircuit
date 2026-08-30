@@ -22,4 +22,4 @@ NVIM="${NVIM:-nvim}"
 run prettier --write --log-level warn \
     README.md \
     extras/README.md \
-    docs/extras/index.md
+    docs/extras/*.md
