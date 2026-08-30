@@ -26,6 +26,10 @@ function M.load()
   end
 
   vim.g.colors_name = "silkcircuit"
+
+  -- Before theme.apply, so a saved variant lands on this load, not the next
+  preferences.apply()
+
   theme.apply()
 
   local load_time = (vim.loop.hrtime() - start_time) / 1e6
@@ -44,8 +48,8 @@ function M.load()
   -- Setup glow mode
   require("silkcircuit.glow").setup()
 
-  -- Apply saved preferences
-  preferences.apply()
+  -- Glow sits on top of the applied theme, so it restores last
+  preferences.restore()
 
   -- Generate help tags for documentation
   local doc_path =
