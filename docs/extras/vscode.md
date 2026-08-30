@@ -22,9 +22,10 @@ cd silkcircuit/extras/vscode
 # Install vsce if needed
 npm install -g @vscode/vsce
 
-# Package and install
-vsce package
-code --install-extension silkcircuit-*.vsix
+# Package and install. The theme has no runtime dependencies, and without
+# this flag vsce fails looking for a lockfile.
+vsce package --no-dependencies
+code --install-extension silkcircuit-theme-*.vsix
 ```
 
 ## Available Themes
@@ -121,5 +122,5 @@ To modify the VS Code theme:
 
 1. Edit the appropriate JSON file
 2. Test locally with `F5` in VS Code
-3. Package with `vsce package`
+3. Package with `make vscode-package` (or `vsce package --no-dependencies`)
 4. Submit a pull request
