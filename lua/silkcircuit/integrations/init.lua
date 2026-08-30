@@ -206,11 +206,6 @@ local all_integrations = {
   "window_picker",
 }
 
--- Get list of all available integrations
-local function get_available_integrations()
-  return all_integrations
-end
-
 -- Load all enabled integrations
 function M.load(colors, opts)
   -- Core integrations that should always be loaded
@@ -219,13 +214,7 @@ function M.load(colors, opts)
     "native_lsp",
   }
 
-  -- Get all available integrations
-  local available = get_available_integrations()
-
-  -- Debug: print available integrations
-  if vim.g.silkcircuit_debug then
-    print("Available integrations:", vim.inspect(available))
-  end
+  local available = all_integrations
 
   -- Process core integrations first
   for _, integration in ipairs(core_integrations) do
@@ -249,11 +238,6 @@ function M.load(colors, opts)
     if not is_core then
       -- Auto-detect and load if enabled
       if config.is_enabled(integration) then
-        -- Debug
-        if integration == "neotree" and vim.g.silkcircuit_debug then
-          print("Processing neotree integration...")
-        end
-        -- Check if plugin is actually installed
         if opts.integrations.auto_detect and is_plugin_installed(integration) then
           local ok, module = pcall(require, "silkcircuit.integrations." .. integration)
           if ok then
