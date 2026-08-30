@@ -38,6 +38,17 @@ M.targets = {
     ext = "toml",
     url = "https://alacritty.org/config-alacritty.html#colors",
   },
+  fzf = {
+    label = "fzf",
+    ext = "sh",
+    url = "https://github.com/junegunn/fzf/blob/master/man/man1/fzf.1",
+  },
+  ["fzf-ps1"] = {
+    label = "fzf (PowerShell)",
+    dir = "fzf",
+    ext = "ps1",
+    url = "https://github.com/junegunn/fzf/blob/master/man/man1/fzf.1",
+  },
   ghostty = {
     label = "Ghostty",
     ext = "",
