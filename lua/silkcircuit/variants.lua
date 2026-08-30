@@ -30,8 +30,9 @@ local function derive_keys(colors)
   -- so 0.97 is a hairline step away and 0.7 is a firm one.
   local light = color_utils.is_bright(colors.bg)
 
-  -- Floats share the core theme's popup background so NormalFloat and every
-  -- integration's float body agree.
+  -- Every variant spells these out, so the fallbacks only cover a palette
+  -- that forgets one rather than describing the design. See the elevation
+  -- ladder each variant's background block documents.
   colors.bg_float = colors.bg_float or colors.bg_highlight
   colors.bg_statusline = colors.bg_statusline or colors.bg_highlight
   colors.bg_darker = colors.bg_darker or color_utils.darken(colors.bg_dark, light and 0.97 or 0.7)
@@ -64,31 +65,42 @@ end
 
 -- Build one of the three VSCode-derived dark variants
 local function create_variant(variant_name)
-  -- Set base colors based on variant
+  -- Backgrounds are an elevation ladder, quiet enough that no step draws
+  -- attention and distinct enough that no two collapse:
+  --
+  --   bg_darker < bg_dark < bg < bg_highlight < bg_statusline < bg_float
+  --
+  -- The panels sit under the page, then the cursorline, the statusline and
+  -- floats each rise one step above it. Every step is between 1.01x and
+  -- 1.07x in relative luminance, and bg_float stays low enough that every
+  -- text color still clears AA against it.
   local backgrounds = {}
   if variant_name == "neon" then
-    -- Use VSCode neon theme backgrounds
     backgrounds = {
-      bg = "#12101a", -- VSCode editor.background
-      bg_dark = "#0a0812", -- VSCode sideBar.background
-      bg_highlight = "#1a162a", -- VSCode popup backgrounds
-      bg_visual = "#44475a", -- VSCode selection
+      bg = "#12101a", -- editor background
+      bg_dark = "#0a0812", -- sidebar, panels
+      bg_highlight = "#1a162a", -- cursorline
+      bg_statusline = "#1d1a2d", -- statusline, tab bar
+      bg_float = "#221e32", -- popups, menus, dividers
+      bg_visual = "#44475a", -- selection
     }
   elseif variant_name == "soft" then
-    -- Use VSCode soft theme backgrounds
     backgrounds = {
-      bg = "#1a1626", -- VSCode editor.background
-      bg_dark = "#141220", -- VSCode sideBar.background
-      bg_highlight = "#3e3456", -- VSCode popup backgrounds
-      bg_visual = "#44475a", -- VSCode selection
+      bg = "#1a1626", -- editor background
+      bg_dark = "#141220", -- sidebar, panels
+      bg_highlight = "#201b30", -- cursorline
+      bg_statusline = "#252036", -- statusline, tab bar
+      bg_float = "#2b253d", -- popups, menus, dividers
+      bg_visual = "#44475a", -- selection
     }
   else
-    -- Vibrant variant - Use VSCode vibrant theme backgrounds
     backgrounds = {
-      bg = "#0f0c1a", -- VSCode editor background
-      bg_dark = "#08060f", -- VSCode sidebar background
-      bg_highlight = "#0a0614", -- VSCode popup background (ultra-dark)
-      bg_visual = "#3a2e5a", -- VSCode selection
+      bg = "#0f0c1a", -- editor background
+      bg_dark = "#08060f", -- sidebar, panels
+      bg_highlight = "#151026", -- cursorline
+      bg_statusline = "#1a142d", -- statusline, tab bar
+      bg_float = "#1e1834", -- popups, menus, dividers
+      bg_visual = "#3a2e5a", -- selection
     }
   end
 
@@ -326,20 +338,33 @@ end
 local function create_dawn_variant()
   -- Dawn-specific light palette (inspired by K9s dawn theme)
   local colors = {
-    -- Light backgrounds with subtle purple tint
+    -- The same elevation ladder as the dark variants, mirrored. The page is
+    -- already near the top of the range, so elevation reads as tint depth
+    -- rather than lightness and every surface off the page deepens its
+    -- lavender by one quiet step:
+    --
+    --   bg > bg_highlight > bg_dark > bg_float > bg_statusline > bg_visual
+    --
+    -- bg_float doubles as the divider colour in the VS Code theme, where it
+    -- draws editorGroup.border, sideBar.border and tab.border, so it has to
+    -- be visible against both the page and the sidebar. It reads 1.22:1 on
+    -- the page and 1.14:1 on the sidebar, and it is the darkest surface any
+    -- syntax colour is painted on, which is what sets dawn's ink floor.
     bg = "#faf8ff", -- Main editor background (off-white)
-    bg_dark = "#f1ecff", -- Sidebar/panel background (slightly purple)
-    bg_highlight = "#e8e0ff", -- Popup/highlight background
+    bg_highlight = "#f7f4ff", -- Cursorline
+    bg_dark = "#f4f0ff", -- Sidebar/panel background (slightly purple)
+    bg_float = "#e8dffd", -- Popups, menus, dividers
+    bg_statusline = "#ded3f8", -- Statusline, tab bar
     bg_visual = "#d4c8f0", -- Selection background
 
     -- Dark foregrounds for contrast on light
     fg = "#2b2540", -- Main text (dark purple-gray)
     fg_dark = "#5a4d6e", -- Muted text
     fg_light = "#1a1318", -- Emphasized text (near black)
-    fg_gutter = "#8b7ea9", -- Separators, whitespace, indent guides
+    fg_gutter = "#877aa6", -- Separators, whitespace, indent guides
 
     -- Core grays (inverted for light theme)
-    gray = "#6e677e", -- Line numbers, non-text glyphs
+    gray = "#686177", -- Line numbers, non-text glyphs
     gray_light = "#c4bbd6", -- Light gray (shadows only)
     gray_dark = "#6b5f80", -- Dark gray
 
@@ -347,25 +372,25 @@ local function create_dawn_variant()
     -- families separate by hue and chroma rather than by lightness, and the
     -- "bright" siblings are more emphatic rather than lighter.
     purple = "#7e2bd5", -- Keywords (deeper purple for contrast)
-    purple_dark = "#8644d0", -- Muted accents
-    purple_muted = "#795bae", -- Comments
+    purple_dark = "#823ecf", -- Muted accents
+    purple_muted = "#7353a9", -- Comments
 
-    cyan = "#007276", -- Functions (teal)
+    cyan = "#006e72", -- Functions (teal)
     cyan_bright = "#006388", -- Properties, float borders (bluer teal)
     cyan_light = "#0b848d", -- Light teal accent
 
     green = "#1d6e46", -- Git added (forest green)
     green_light = "#278670", -- Mint green accent
-    green_bright = "#26774c", -- Decorators
+    green_bright = "#247148", -- Decorators
 
     blue = "#1454dc", -- Blue accent
     blue_bright = "#2572ef", -- Brighter blue
     blue_light = "#1276e1", -- Light blue
-    blue_gray = "#586690", -- Blue-gray
+    blue_gray = "#546189", -- Blue-gray
 
     pink = "#b40077", -- Tags/emphasis (deep magenta)
-    pink_bright = "#b93181", -- Brighter pink
-    pink_soft = "#9c4a88", -- Strings (softer magenta)
+    pink_bright = "#b02f7a", -- Brighter pink
+    pink_soft = "#9e4087", -- Strings (softer magenta)
 
     coral = "#b42a74", -- Numbers/constants
     red = "#c1272d", -- Errors, terminal.ansiRed
@@ -374,7 +399,7 @@ local function create_dawn_variant()
     red_error = "#c1272d", -- Error color
     orange = "#a64718", -- Orange accent
     yellow = "#796100", -- Classes/types (golden)
-    yellow_bright = "#987200", -- Brighter yellow
+    yellow_bright = "#7f5f00", -- Brighter yellow
     yellow_light = "#a26d04", -- Light yellow
 
     -- Selection and highlights for light theme
@@ -393,7 +418,7 @@ local function create_dawn_variant()
     -- Glow effects (subtle on light theme)
     glow_pink = "#b40077",
     glow_purple = "#7e2bd5",
-    glow_cyan = "#007276",
+    glow_cyan = "#006e72",
 
     -- Terminal colors. The normal slots are the ink tier so coloured program
     -- output stays readable on the page; the bright slots are the lighter
@@ -404,12 +429,12 @@ local function create_dawn_variant()
     terminal_yellow = "#796100",
     terminal_blue = "#1454dc",
     terminal_magenta = "#b40077",
-    terminal_cyan = "#007276",
+    terminal_cyan = "#006e72",
     terminal_white = "#faf8ff",
     terminal_bright_black = "#5a4d6e",
     terminal_bright_red = "#dc2626",
     terminal_bright_green = "#288855",
-    terminal_bright_yellow = "#987200",
+    terminal_bright_yellow = "#7f5f00",
     terminal_bright_blue = "#2572ef",
     terminal_bright_magenta = "#d92a99",
     terminal_bright_cyan = "#048397",
@@ -419,7 +444,7 @@ local function create_dawn_variant()
     error = "#c1272d",
     warning = "#796100",
     info = "#1454dc",
-    hint = "#007276",
+    hint = "#006e72",
 
     -- Git colors
     git_add = "#1d6e46",
@@ -437,10 +462,15 @@ end
 local function create_glow_variant()
   -- Exact colors from VSCode glow theme
   local colors = {
-    -- Ultra-dark backgrounds from VSCode
+    -- Ultra-dark backgrounds. The same elevation ladder as the other dark
+    -- variants, walked in glow's purple-black rather than its blue-black:
+    --
+    --   bg_dark < bg < bg_highlight < bg_statusline < bg_float
     bg = "#0a0816", -- editor.background
     bg_dark = "#000000", -- sideBar.background
-    bg_highlight = "#1a0033", -- popup backgrounds
+    bg_highlight = "#1a0033", -- cursorline
+    bg_statusline = "#20003d", -- statusline, tab bar
+    bg_float = "#250047", -- popups, menus, dividers
     bg_visual = "#ff00ff44", -- selection
 
     -- Pure white text for maximum contrast
