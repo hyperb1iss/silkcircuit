@@ -1,6 +1,10 @@
 -- A theme, not a config. Everything here is a colour or a status format, so
 -- the file can be sourced from any tmux.conf without arguing about bindings.
--- Needs tmux 3.2 for the copy-mode, popup, and menu style options.
+-- Needs tmux 3.4, which is where menu-style and menu-border-style landed.
+--
+-- Every foreground here clears 4.5:1 against the surface behind it in all five
+-- variants, which is what rules cyan and yellow out of the status bar: dawn's
+-- near-white bg_dark leaves them at 4.1 and 3.0.
 
 local M = {}
 
@@ -15,32 +19,33 @@ set -g status-style "bg=${bg_dark},fg=${fg_dark}"
 # Left: the session name in an electric purple segment
 set -g status-left "#[fg=${bg},bg=${purple},bold] #S #[fg=${purple},bg=${bg_dark},nobold] "
 
-# Right: host, clock, date
-set -g status-right "#[fg=${cyan}]#h #[fg=${bg_visual}]|#[fg=${yellow}] %H:%M #[fg=${bg_visual}]|#[fg=${comment}] %d %b "
+# Right: host, clock, date. The separator is the one deliberately faint part.
+set -g status-right "#[fg=${pink}]#h #[fg=${comment}]|#[fg=${purple}] %H:%M #[fg=${comment}]|#[fg=${fg_dark}] %d %b "
 
 # Window list
 set -g window-status-separator ""
-set -g window-status-style "bg=${bg_dark},fg=${comment}"
-set -g window-status-format "#[fg=${comment},bg=${bg_dark}] #I:#W#F "
+set -g window-status-style "bg=${bg_dark},fg=${fg_dark}"
+set -g window-status-format "#[fg=${fg_dark},bg=${bg_dark}] #I:#W#F "
 set -g window-status-current-format "#[fg=${pink},bg=${bg_dark}]#[fg=${bg},bg=${pink},bold] #I:#W#{?window_zoomed_flag,+,} #[fg=${pink},bg=${bg_dark},nobold]"
-set -g window-status-activity-style "bg=${bg_dark},fg=${yellow}"
+set -g window-status-activity-style "bg=${bg_dark},fg=${purple}"
 set -g window-status-bell-style "bg=${bg_dark},fg=${red},bold"
-set -g window-status-last-style "bg=${bg_dark},fg=${cyan}"
+set -g window-status-last-style "bg=${bg_dark},fg=${fg}"
 
 # Panes
-set -g pane-border-style "fg=${bg_visual}"
+set -g pane-border-style "fg=${comment}"
 set -g pane-active-border-style "fg=${border}"
-set -g display-panes-colour "${bg_visual}"
+set -g display-panes-colour "${fg_dark}"
 set -g display-panes-active-colour "${purple}"
 
 # Messages and the command prompt
 set -g message-style "bg=${bg_highlight},fg=${pink},bold"
-set -g message-command-style "bg=${bg_highlight},fg=${cyan}"
+set -g message-command-style "bg=${bg_highlight},fg=${fg}"
 
-# Copy mode
+# Copy mode. Search highlights are filled blocks, so they use accents that keep
+# dark text legible on every variant.
 set -g mode-style "bg=${bg_visual},fg=${fg}"
-set -g copy-mode-match-style "bg=${yellow},fg=${bg}"
-set -g copy-mode-current-match-style "bg=${coral},fg=${bg},bold"
+set -g copy-mode-match-style "bg=${purple},fg=${bg}"
+set -g copy-mode-current-match-style "bg=${pink},fg=${bg},bold"
 set -g copy-mode-mark-style "bg=${cyan},fg=${bg}"
 
 # Clock
