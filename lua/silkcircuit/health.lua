@@ -1,124 +1,107 @@
 local M = {}
 
+local health = vim.health
+
 -- Health check for SilkCircuit theme
 function M.check()
-  local health = vim.health or require("health")
-  local start = health.start or health.report_start
-  local ok = health.ok or health.report_ok
-  local warn = health.warn or health.report_warn
-  local error = health.error or health.report_error
+  health.start("SilkCircuit")
 
-  start("SilkCircuit Theme")
-
-  -- Check Neovim version
-  local nvim_version = vim.version()
-  if nvim_version.major >= 0 and nvim_version.minor >= 8 then
-    ok(
-      string.format(
-        "Neovim version %d.%d.%d",
-        nvim_version.major,
-        nvim_version.minor,
-        nvim_version.patch
-      )
-    )
+  local version = vim.version()
+  if vim.fn.has("nvim-0.10") == 1 then
+    health.ok(string.format("Neovim %d.%d.%d", version.major, version.minor, version.patch))
   else
-    error("SilkCircuit requires Neovim 0.8.0 or later")
+    health.error("SilkCircuit requires Neovim 0.10 or later")
   end
 
-  -- Check termguicolors
   if vim.o.termguicolors then
-    ok("termguicolors is enabled")
+    health.ok("termguicolors is enabled")
   else
-    error("termguicolors is not enabled. Add 'vim.opt.termguicolors = true' to your config")
+    health.error("termguicolors is off. Set vim.o.termguicolors = true")
   end
 
-  -- Check if theme is loaded
   if vim.g.colors_name == "silkcircuit" then
-    ok("SilkCircuit theme is active")
+    health.ok("SilkCircuit is the active colorscheme")
   else
-    warn("SilkCircuit theme is not active. Run ':colorscheme silkcircuit'")
+    health.warn("SilkCircuit is not active. Run :colorscheme silkcircuit")
   end
 
-  -- Check configuration
-  start("Configuration")
+  -- Configuration
+  health.start("Configuration")
   local config = require("silkcircuit.config").get()
-  ok(string.format("Variant: %s", config.variant))
+  health.ok(string.format("Variant: %s", config.variant))
+  health.ok(string.format("Transparent: %s", tostring(config.transparent)))
+  health.ok(string.format("Terminal colors: %s", tostring(config.terminal_colors)))
+  health.ok(string.format("Dim inactive: %s", tostring(config.dim_inactive)))
 
-  if config.transparent then
-    ok("Transparent background enabled")
-  end
-
-  -- Check integrations
-  start("Plugin Integrations")
+  -- Integrations
+  health.start("Plugin integrations")
   local integrations = require("silkcircuit.integrations")
+  local all = integrations.list()
   local detected = integrations.get_detected_plugins()
 
+  health.ok(string.format("%d integrations available, %d plugins detected", #all, #detected))
   if #detected > 0 then
-    ok(string.format("Detected %d supported plugins", #detected))
-
-    -- Show which integrations are active
-    local active = {}
-    local inactive = {}
-    for _, plugin in ipairs(detected) do
-      if require("silkcircuit.config").is_enabled(plugin) then
-        table.insert(active, plugin)
-      else
-        table.insert(inactive, plugin)
-      end
-    end
-
-    if #active > 0 then
-      ok("Active integrations: " .. table.concat(active, ", "))
-    end
-
-    if #inactive > 0 then
-      warn("Detected but disabled: " .. table.concat(inactive, ", "))
-    end
-  else
-    warn("No supported plugins detected")
+    health.ok("Detected: " .. table.concat(detected, ", "))
   end
 
-  -- Check preferences
-  start("User Preferences")
+  local disabled = {}
+  for _, name in ipairs(all) do
+    if not require("silkcircuit.config").is_enabled(name) then
+      table.insert(disabled, name)
+    end
+  end
+  if #disabled > 0 then
+    health.warn("Disabled by config: " .. table.concat(disabled, ", "))
+  end
+
+  -- Preferences
+  health.start("User preferences")
   local prefs = require("silkcircuit.preferences").load()
   if next(prefs) then
-    ok("Preferences file found")
     if prefs.variant then
-      ok(string.format("Saved variant: %s", prefs.variant))
+      health.ok(string.format("Saved variant: %s", prefs.variant))
     end
     if prefs.glow_enabled ~= nil then
-      ok(string.format("Glow mode: %s", prefs.glow_enabled and "enabled" or "disabled"))
+      health.ok(string.format("Glow mode: %s", prefs.glow_enabled and "on" or "off"))
     end
   else
-    ok("No saved preferences (using defaults)")
+    health.ok("No saved preferences, using the configured values")
   end
 
-  -- Check contrast compliance
-  start("WCAG Contrast Compliance")
-  local palette = require("silkcircuit.palette")
-  local colors = palette.get_colors()
-  local color_utils = require("silkcircuit.utils.colors")
-  local issues = color_utils.validate_theme_contrast(colors)
+  -- Contrast, measured against this variant's own background
+  health.start("WCAG contrast")
+  local colors = require("silkcircuit.palette").get_colors()
+  local issues, checked = require("silkcircuit.utils.colors").validate_theme_contrast(colors)
+
+  health.ok(
+    string.format(
+      "Checked %d distinct text colors against the '%s' background (%s)",
+      checked,
+      config.variant,
+      colors.bg
+    )
+  )
 
   if #issues == 0 then
-    ok("All colors pass WCAG AA contrast requirements")
+    health.ok(string.format("All %d meet WCAG AA (4.5:1)", checked))
   else
+    health.ok(string.format("%d of %d meet WCAG AA (4.5:1)", checked - #issues, checked))
     for _, issue in ipairs(issues) do
       if issue.severity == "error" then
-        error(issue.message)
+        health.error(issue.message)
       else
-        warn(issue.message)
+        health.warn(issue.message)
       end
     end
   end
 
-  -- Commands available
-  start("Available Commands")
-  ok(":SilkCircuit [variant] - Switch theme variant (neon/vibrant/soft/glow/dawn)")
-  ok(":SilkCircuitGlow - Toggle glow mode")
-  ok(":SilkCircuitContrast - Check WCAG contrast compliance")
-  ok(":SilkCircuitIntegrations - Show detected plugin integrations")
-  ok(":help silkcircuit - View documentation")
+  -- Commands
+  health.start("Commands")
+  health.ok(":SilkCircuit [neon|vibrant|soft|glow|dawn] - switch variant")
+  health.ok(":SilkCircuitGlow [on|off|toggle] - control glow mode")
+  health.ok(":SilkCircuitContrast - check WCAG contrast")
+  health.ok(":SilkCircuitIntegrations - show integration status")
+  health.ok(":help silkcircuit - documentation")
 end
 
 return M
