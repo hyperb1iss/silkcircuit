@@ -17,6 +17,9 @@
     },
     {
       "pattern": "^https://www\\.w3\\.org"
+    },
+    {
+      "pattern": "^https://codeberg\\.org"
     }
   ],
   "httpHeaders": [
