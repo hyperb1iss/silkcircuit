@@ -80,7 +80,10 @@ function M.get(colors, opts)
   local highlights = {
     -- The crumb the cursor is inside
     DropBarCurrentContext = { bg = colors.bg_visual },
-    DropBarCurrentContextIcon = { fg = colors.pink, bg = colors.bg_visual },
+    -- The visual background is light enough in three variants that an accent
+    -- colour on it lands under 4.5:1, so the icon takes the muted foreground
+    -- and the name carries the emphasis instead.
+    DropBarCurrentContextIcon = { fg = colors.fg_dark, bg = colors.bg_visual },
     DropBarCurrentContextName = { fg = colors.fg_light, bg = colors.bg_visual, bold = true },
     DropBarHover = { bg = colors.bg_visual },
     DropBarPreview = { bg = colors.bg_visual },
