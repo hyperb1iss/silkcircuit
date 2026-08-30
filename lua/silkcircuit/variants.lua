@@ -329,43 +329,45 @@ local function create_dawn_variant()
     fg = "#2b2540", -- Main text (dark purple-gray)
     fg_dark = "#5a4d6e", -- Muted text
     fg_light = "#1a1318", -- Emphasized text (near black)
-    fg_gutter = "#8e84a8", -- Line numbers
+    fg_gutter = "#8b7ea9", -- Separators, whitespace, indent guides
 
     -- Core grays (inverted for light theme)
-    gray = "#8e84a8", -- Mid gray
-    gray_light = "#c4bbd6", -- Light gray
+    gray = "#6e677e", -- Line numbers, non-text glyphs
+    gray_light = "#c4bbd6", -- Light gray (shadows only)
     gray_dark = "#6b5f80", -- Dark gray
 
-    -- Dawn neon colors - deeper/more saturated for light backgrounds
+    -- Dawn ink. On a near-white page every syntax colour is dark, so the
+    -- families separate by hue and chroma rather than by lightness, and the
+    -- "bright" siblings are more emphatic rather than lighter.
     purple = "#7e2bd5", -- Keywords (deeper purple for contrast)
-    purple_dark = "#9654e0", -- Lighter purple variant
-    purple_muted = "#8e84a8", -- Comments
+    purple_dark = "#8644d0", -- Muted accents
+    purple_muted = "#795bae", -- Comments
 
-    cyan = "#007f8e", -- Functions (teal)
-    cyan_bright = "#009fae", -- Brighter teal
-    cyan_light = "#00b5c5", -- Light teal
+    cyan = "#007276", -- Functions (teal)
+    cyan_bright = "#006388", -- Properties, float borders (bluer teal)
+    cyan_light = "#0b848d", -- Light teal accent
 
-    green = "#2d8659", -- Git added (forest green)
-    green_light = "#7fdbca", -- Mint green accent
-    green_bright = "#38a169", -- Bright green
+    green = "#1d6e46", -- Git added (forest green)
+    green_light = "#278670", -- Mint green accent
+    green_bright = "#26774c", -- Decorators
 
-    blue = "#2563eb", -- Blue accent
-    blue_bright = "#3b82f6", -- Brighter blue
-    blue_light = "#60a5fa", -- Light blue
-    blue_gray = "#8e84a8", -- Blue-gray
+    blue = "#1454dc", -- Blue accent
+    blue_bright = "#2572ef", -- Brighter blue
+    blue_light = "#1276e1", -- Light blue
+    blue_gray = "#586690", -- Blue-gray
 
     pink = "#b40077", -- Tags/emphasis (deep magenta)
-    pink_bright = "#c04a8f", -- Brighter pink
+    pink_bright = "#b93181", -- Brighter pink
     pink_soft = "#9c4a88", -- Strings (softer magenta)
 
-    coral = "#c74a8c", -- Numbers/constants
+    coral = "#b42a74", -- Numbers/constants
     red = "#c1272d", -- Errors
     red_dark = "#9b1c21", -- Darker red
     red_error = "#c1272d", -- Error color
-    orange = "#c05621", -- Orange accent
-    yellow = "#a88600", -- Classes/types (golden)
-    yellow_bright = "#d69e00", -- Brighter yellow
-    yellow_light = "#fbbf24", -- Light yellow
+    orange = "#a64718", -- Orange accent
+    yellow = "#796100", -- Classes/types (golden)
+    yellow_bright = "#987200", -- Brighter yellow
+    yellow_light = "#a26d04", -- Light yellow
 
     -- Selection and highlights for light theme
     selection = "#d4c8f0",
@@ -383,35 +385,37 @@ local function create_dawn_variant()
     -- Glow effects (subtle on light theme)
     glow_pink = "#b40077",
     glow_purple = "#7e2bd5",
-    glow_cyan = "#007f8e",
+    glow_cyan = "#007276",
 
-    -- Terminal colors (light-theme appropriate)
+    -- Terminal colors. The normal slots are the ink tier so coloured program
+    -- output stays readable on the page; the bright slots are the lighter
+    -- emphasis tier, which is the only direction "bright" can mean here.
     terminal_black = "#2b2540",
     terminal_red = "#c1272d",
-    terminal_green = "#2d8659",
-    terminal_yellow = "#a88600",
-    terminal_blue = "#2563eb",
+    terminal_green = "#1d6e46",
+    terminal_yellow = "#796100",
+    terminal_blue = "#1454dc",
     terminal_magenta = "#b40077",
-    terminal_cyan = "#007f8e",
+    terminal_cyan = "#007276",
     terminal_white = "#faf8ff",
     terminal_bright_black = "#5a4d6e",
     terminal_bright_red = "#dc2626",
-    terminal_bright_green = "#38a169",
-    terminal_bright_yellow = "#d69e00",
-    terminal_bright_blue = "#3b82f6",
-    terminal_bright_magenta = "#c04a8f",
-    terminal_bright_cyan = "#009fae",
+    terminal_bright_green = "#288855",
+    terminal_bright_yellow = "#987200",
+    terminal_bright_blue = "#2572ef",
+    terminal_bright_magenta = "#d92a99",
+    terminal_bright_cyan = "#048397",
     terminal_bright_white = "#ffffff",
 
     -- Diagnostic colors (visible on light backgrounds)
     error = "#c1272d",
-    warning = "#a88600",
-    info = "#2563eb",
-    hint = "#007f8e",
+    warning = "#796100",
+    info = "#1454dc",
+    hint = "#007276",
 
     -- Git colors
-    git_add = "#2d8659",
-    git_change = "#2563eb",
+    git_add = "#1d6e46",
+    git_change = "#1454dc",
     git_delete = "#c1272d",
 
     -- Special
