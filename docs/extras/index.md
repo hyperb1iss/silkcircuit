@@ -22,10 +22,12 @@ Generated from the palette by `make build`, five variants each. See the
 
 <!-- extras:start -->
 
-| Target    | Format                                                          | Generated files                                                   |
-| --------- | --------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Alacritty | [reference](https://alacritty.org/config-alacritty.html#colors) | `extras/alacritty/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml` |
-| Kitty     | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme) | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`     |
+| Target             | Format                                                                | Generated files                                                   |
+| ------------------ | --------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Alacritty          | [reference](https://alacritty.org/config-alacritty.html#colors)       | `extras/alacritty/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml` |
+| Ghostty            | [reference](https://ghostty.org/docs/config/reference#theme)          | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`        |
+| Ghostty GTK chrome | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css) | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`    |
+| Kitty              | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)       | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`     |
 
 <!-- extras:end -->
 

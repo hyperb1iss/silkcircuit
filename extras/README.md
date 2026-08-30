@@ -52,10 +52,12 @@ and `palette/` carries the same colors as JSON and base16/base24 schemes.
 
 <!-- extras:start -->
 
-| Target    | Format                                                          | Generated files                                                                                                                                                                                                       |
-| --------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Alacritty | [reference](https://alacritty.org/config-alacritty.html#colors) | [neon](alacritty/silkcircuit-neon.toml) · [vibrant](alacritty/silkcircuit-vibrant.toml) · [soft](alacritty/silkcircuit-soft.toml) · [glow](alacritty/silkcircuit-glow.toml) · [dawn](alacritty/silkcircuit-dawn.toml) |
-| Kitty     | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme) | [neon](kitty/silkcircuit-neon.conf) · [vibrant](kitty/silkcircuit-vibrant.conf) · [soft](kitty/silkcircuit-soft.conf) · [glow](kitty/silkcircuit-glow.conf) · [dawn](kitty/silkcircuit-dawn.conf)                     |
+| Target             | Format                                                                | Generated files                                                                                                                                                                                                       |
+| ------------------ | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Alacritty          | [reference](https://alacritty.org/config-alacritty.html#colors)       | [neon](alacritty/silkcircuit-neon.toml) · [vibrant](alacritty/silkcircuit-vibrant.toml) · [soft](alacritty/silkcircuit-soft.toml) · [glow](alacritty/silkcircuit-glow.toml) · [dawn](alacritty/silkcircuit-dawn.toml) |
+| Ghostty            | [reference](https://ghostty.org/docs/config/reference#theme)          | [neon](ghostty/silkcircuit-neon) · [vibrant](ghostty/silkcircuit-vibrant) · [soft](ghostty/silkcircuit-soft) · [glow](ghostty/silkcircuit-glow) · [dawn](ghostty/silkcircuit-dawn)                                    |
+| Ghostty GTK chrome | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css) | [neon](ghostty/silkcircuit-neon.css) · [vibrant](ghostty/silkcircuit-vibrant.css) · [soft](ghostty/silkcircuit-soft.css) · [glow](ghostty/silkcircuit-glow.css) · [dawn](ghostty/silkcircuit-dawn.css)                |
+| Kitty              | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)       | [neon](kitty/silkcircuit-neon.conf) · [vibrant](kitty/silkcircuit-vibrant.conf) · [soft](kitty/silkcircuit-soft.conf) · [glow](kitty/silkcircuit-glow.conf) · [dawn](kitty/silkcircuit-dawn.conf)                     |
 
 <!-- extras:end -->
 

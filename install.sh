@@ -333,9 +333,11 @@ install_ghostty() {
     local theme_dir="$HOME/.config/ghostty/themes"
     printf "${PURPLE}${BOLD}  >> Ghostty${RESET}\n"
 
-    # Install all variants so they can switch
+    # Install every variant so they can switch. The .css files style the GTK
+    # window chrome on Linux and are not themes, so they stay out of themes/.
     local count=0
     for f in "${EXTRAS_DIR}/ghostty/silkcircuit-"*; do
+        [[ "$f" == *.css ]] && continue
         local name
         name=$(basename "$f")
         if safe_copy "$f" "${theme_dir}/${name}" "ghostty:${name}"; then
@@ -344,6 +346,7 @@ install_ghostty() {
     done
     success "Installed ${count} Ghostty themes"
     diminfo "Activate: theme = silkcircuit-neon (or vibrant/soft/glow/dawn)"
+    diminfo "Linux chrome: gtk-custom-css = extras/ghostty/silkcircuit-neon.css"
 }
 
 install_alacritty() {
