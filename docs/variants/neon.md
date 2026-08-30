@@ -28,12 +28,13 @@ The original SilkCircuit experience. Maximum vibrancy and electric energy.
 
 ### Supporting Colors
 
-| Color | Hex       | Usage                  |
-| ----- | --------- | ---------------------- |
-| Green | `#50fa7b` | Success, git additions |
-| Red   | `#ff6363` | Errors, git deletions  |
-| Blue  | `#82aaff` | Links, info            |
-| Gray  | `#768d8d` | Comments, muted text   |
+| Color   | Hex       | Usage                         |
+| ------- | --------- | ----------------------------- |
+| Green   | `#50fa7b` | Success, git additions        |
+| Red     | `#ff6363` | Errors, git deletions         |
+| Blue    | `#82aaff` | Links, info                   |
+| Gray    | `#768d8d` | Line numbers, non-text glyphs |
+| Comment | `#9580ff` | Comments                      |
 
 ## Terminal Colors
 

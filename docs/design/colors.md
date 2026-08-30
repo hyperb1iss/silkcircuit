@@ -125,30 +125,33 @@ These colors maintain semantic meaning across all variants:
 
 ### Success
 
-| Variant      | Hex       | Usage                   |
-| ------------ | --------- | ----------------------- |
-| Neon/Vibrant | `#50fa7b` | Git add, success states |
-| Soft         | `#66ff99` | Git add, success states |
-| Glow         | `#00ff00` | Git add, success states |
-| Dawn         | `#1d6e46` | Git add, success states |
+| Variant | Hex       | Usage                   |
+| ------- | --------- | ----------------------- |
+| Neon    | `#50fa7b` | Git add, success states |
+| Vibrant | `#00ff66` | Git add, success states |
+| Soft    | `#66ff99` | Git add, success states |
+| Glow    | `#00ff00` | Git add, success states |
+| Dawn    | `#1d6e46` | Git add, success states |
 
 ### Warning
 
-| Variant      | Hex       | Usage             |
-| ------------ | --------- | ----------------- |
-| Neon/Vibrant | `#f1fa8c` | Caution, modified |
-| Soft         | `#ffe699` | Caution, modified |
-| Glow         | `#ffff00` | Caution, modified |
-| Dawn         | `#796100` | Caution, modified |
+| Variant | Hex       | Usage             |
+| ------- | --------- | ----------------- |
+| Neon    | `#f1fa8c` | Caution, modified |
+| Vibrant | `#ffcc00` | Caution, modified |
+| Soft    | `#ffe699` | Caution, modified |
+| Glow    | `#ffff00` | Caution, modified |
+| Dawn    | `#796100` | Caution, modified |
 
 ### Error
 
-| Variant      | Hex       | Usage             |
-| ------------ | --------- | ----------------- |
-| Neon/Vibrant | `#ff6363` | Errors, deletions |
-| Soft         | `#ff6677` | Errors, deletions |
-| Glow         | `#ff2244` | Errors, deletions |
-| Dawn         | `#c1272d` | Errors, deletions |
+| Variant | Hex       | Usage             |
+| ------- | --------- | ----------------- |
+| Neon    | `#ff6363` | Errors, deletions |
+| Vibrant | `#ff3366` | Errors, deletions |
+| Soft    | `#ff6677` | Errors, deletions |
+| Glow    | `#ff2244` | Errors, deletions |
+| Dawn    | `#c1272d` | Errors, deletions |
 
 ## Interactive States
 

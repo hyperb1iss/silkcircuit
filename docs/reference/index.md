@@ -78,7 +78,8 @@ The `colors` table in `on_highlights` includes:
 | `yellow`    | Classes, types         |
 | `green`     | Success, additions     |
 | `red`       | Errors, deletions      |
-| `gray`      | Comments, muted        |
+| `gray`      | Line numbers, glyphs   |
+| `comment`   | Comments (purple)      |
 | `bg`        | Background             |
 | `fg`        | Foreground             |
 

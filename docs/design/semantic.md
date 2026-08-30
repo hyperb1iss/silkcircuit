@@ -142,7 +142,7 @@ require("silkcircuit").setup({
     hl.Number = { fg = colors.coral }
     hl.Boolean = { fg = colors.pink }
     hl.Type = { fg = colors.yellow }
-    hl.Comment = { fg = colors.gray, italic = true }
+    hl.Comment = { fg = colors.comment, italic = true }
   end,
 })
 ```

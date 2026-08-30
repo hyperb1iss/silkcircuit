@@ -14,7 +14,7 @@ Complete reference for SilkCircuit highlight group mappings.
 | `Number`     | Coral      | None         | Numeric values         |
 | `Boolean`    | Pink       | None         | true/false             |
 | `Type`       | Yellow     | None         | Type names             |
-| `Comment`    | Gray       | Italic       | Comments               |
+| `Comment`    | Comment    | Italic       | Comments               |
 | `Operator`   | Foreground | None         | Operators              |
 | `Identifier` | Foreground | None         | Variables              |
 
@@ -39,7 +39,7 @@ Complete reference for SilkCircuit highlight group mappings.
 | `@tag`           | Pink        | HTML/XML tags        |
 | `@attribute`     | Purple      | Attributes           |
 | `@punctuation`   | Foreground  | Punctuation          |
-| `@comment`       | Gray        | Comments             |
+| `@comment`       | Comment     | Comments             |
 
 ## Editor Highlights
 
@@ -157,7 +157,7 @@ Complete reference for SilkCircuit highlight group mappings.
 require("silkcircuit").setup({
   on_highlights = function(hl, colors)
     hl.Function = { fg = colors.cyan, bold = true, italic = true }
-    hl.Comment = { fg = colors.gray, italic = true }
+    hl.Comment = { fg = colors.comment, italic = true }
   end,
 })
 ```
