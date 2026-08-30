@@ -87,10 +87,10 @@ cd silkcircuit
 # Install git colors
 cat extras/gitconfig >> ~/.gitconfig
 
-# Copy terminal theme (choose your terminal)
-cp extras/kitty.conf ~/.config/kitty/themes/silkcircuit.conf
+# Copy terminal theme (choose your terminal and variant)
+cp extras/kitty/silkcircuit-neon.conf ~/.config/kitty/themes/
 # OR
-cp extras/alacritty.yml ~/.config/alacritty/themes/silkcircuit.yml
+cp extras/alacritty/silkcircuit-neon.toml ~/.config/alacritty/themes/
 
 # For AstroNvim users
 cp -r extras/astronvim/community.lua extras/astronvim/plugins ~/.config/nvim/lua/

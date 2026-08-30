@@ -1,215 +1,142 @@
 # Terminal Themes
 
-SilkCircuit themes for popular terminal emulators.
+Every terminal theme is generated from `lua/silkcircuit/variants.lua` by
+`make build`, in all five variants. The colors your terminal draws are the same
+values Neovim draws, down to the hex, and CI fails if a generated file drifts
+from the palette.
 
-## Alacritty
-
-Fast, GPU-accelerated terminal emulator.
-
-### Installation
-
-```bash
-# Dark variant
-cp extras/alacritty.yml ~/.config/alacritty/themes/silkcircuit.yml
-
-# Dawn (light) variant
-cp extras/alacritty-dawn.yml ~/.config/alacritty/themes/silkcircuit-dawn.yml
-```
-
-### Configuration
-
-Add to your `alacritty.yml`:
-
-```yaml
-import:
-  - ~/.config/alacritty/themes/silkcircuit.yml
-
-# Or for dawn:
-import:
-  - ~/.config/alacritty/themes/silkcircuit-dawn.yml
-```
-
-### Colors
-
-| Color      | Dark      | Dawn      |
-| ---------- | --------- | --------- |
-| Background | `#12101a` | `#faf8ff` |
-| Foreground | `#f8f8f2` | `#2b2540` |
-| Cursor     | `#80ffea` | `#7e2bd5` |
-| Selection  | `#44475a` | `#d4c8f0` |
-
----
+Files live under `extras/<terminal>/silkcircuit-<variant>.<ext>`, where
+`<variant>` is one of `neon`, `vibrant`, `soft`, `glow`, or `dawn`. Dawn is the
+light variant; everything else is dark.
 
 ## Kitty
 
-Feature-rich terminal emulator with GPU rendering.
-
-### Installation
-
 ```bash
-# Dark variant
-cp extras/kitty.conf ~/.config/kitty/themes/silkcircuit.conf
-
-# Dawn (light) variant
-cp extras/kitty-dawn.conf ~/.config/kitty/themes/silkcircuit-dawn.conf
+mkdir -p ~/.config/kitty/themes
+cp extras/kitty/silkcircuit-*.conf ~/.config/kitty/themes/
 ```
 
-### Configuration
-
-Add to your `kitty.conf`:
+Then in `~/.config/kitty/kitty.conf`:
 
 ```conf
-include themes/silkcircuit.conf
-
-# Or for dawn:
-include themes/silkcircuit-dawn.conf
+include themes/silkcircuit-neon.conf
 ```
 
-### Switch at Runtime
+## Alacritty
+
+Alacritty 0.13 and newer reads TOML, so these ship as `.toml`.
 
 ```bash
-# Use kitty's built-in theme switcher
-kitty +kitten themes SilkCircuit
+mkdir -p ~/.config/alacritty/themes
+cp extras/alacritty/silkcircuit-*.toml ~/.config/alacritty/themes/
 ```
 
----
+Then in `~/.config/alacritty/alacritty.toml`:
+
+```toml
+[general]
+import = ["~/.config/alacritty/themes/silkcircuit-neon.toml"]
+```
+
+## Ghostty
+
+The theme files carry no extension, which is what Ghostty's theme directory
+expects.
+
+```bash
+mkdir -p ~/.config/ghostty/themes
+cp extras/ghostty/silkcircuit-neon ~/.config/ghostty/themes/
+```
+
+Then in `~/.config/ghostty/config`:
+
+```
+theme = silkcircuit-neon
+```
+
+Ghostty can follow the system appearance, which is what the dawn variant is for:
+
+```
+theme = dark:silkcircuit-neon,light:silkcircuit-dawn
+```
+
+### GTK window chrome (Linux)
+
+Each variant also ships a `.css` file that styles Ghostty's headerbar, tabs,
+split dividers, and overlays. It applies on Linux, where Ghostty renders its
+chrome with GTK.
+
+```bash
+cp extras/ghostty/silkcircuit-neon.css ~/.config/ghostty/silkcircuit.css
+```
+
+```
+gtk-custom-css = ~/.config/ghostty/silkcircuit.css
+```
+
+## WezTerm
+
+```bash
+mkdir -p ~/.config/wezterm/colors
+cp extras/wezterm/silkcircuit-*.toml ~/.config/wezterm/colors/
+```
+
+WezTerm reads every scheme in that directory and refers to them by the name in
+their `[metadata]` block, so in `~/.config/wezterm/wezterm.lua`:
+
+```lua
+config.color_scheme = "SilkCircuit Neon"
+```
 
 ## Warp
 
-Modern terminal with AI features.
-
-### Installation
-
 ```bash
-# Dark variant
-cp extras/warp.yaml ~/.warp/themes/silkcircuit.yaml
-
-# Dawn (light) variant
-cp extras/warp-dawn.yaml ~/.warp/themes/silkcircuit-dawn.yaml
+mkdir -p ~/.warp/themes
+cp extras/warp/silkcircuit-*.yaml ~/.warp/themes/
 ```
 
-### Activation
-
-1. Open Warp Settings
-2. Go to Appearance → Themes
-3. Select "SilkCircuit" or "SilkCircuit Dawn"
-
----
+Then pick the theme in Settings → Appearance → Themes. Each file declares its
+own `details`, so Warp knows dawn is a light theme and the rest are dark.
 
 ## Windows Terminal
 
-Windows integrated terminal.
+Windows Terminal has no include mechanism, so the schemes get pasted into your
+settings. `extras/windows-terminal/silkcircuit.json` holds all five in one
+`schemes` array; the per-variant files hold one scheme each.
 
-### Installation
+1. Open Settings with `Ctrl+,` and click "Open JSON file".
+2. Copy the objects out of `silkcircuit.json` into the top-level `schemes` array.
+3. Set `"colorScheme": "SilkCircuit Neon"` in the profile you want.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\install.ps1 -Yes
-```
+The installer stages the combined file at
+`%APPDATA%\silkcircuit\windows-terminal.json` so you do not have to find it in
+the repository.
 
-The installer stages the scheme at
-`%APPDATA%\silkcircuit\windows-terminal.json`.
+## ANSI colors
 
-### Manual Import
+All six targets carry the same 16 ANSI slots, taken verbatim from the
+`terminal_*` keys of the variant. Nothing is retuned per terminal, so a
+`ls --color` in Kitty and the same command in WezTerm produce identical pixels.
 
-1. Open Windows Terminal Settings (`Ctrl+,`)
-2. Click "Open JSON file"
-3. Add the scheme from `extras/windows-terminal.json`
-4. Set as default scheme
+The authoritative values are in `palette/silkcircuit-<variant>.json` under the
+`terminal` key, alongside every other palette color as hex, RGB, and HSL. The
+same directory carries base16 and base24 scheme files for
+[tinted-theming](https://github.com/tinted-theming/home) builders such as tinty
+and stylix.
 
-### JSON Scheme
+## True color
 
-```json
-{
-  "name": "SilkCircuit",
-  "background": "#12101a",
-  "foreground": "#f8f8f2",
-  "cursorColor": "#80ffea",
-  "selectionBackground": "#44475a",
-  "black": "#12101a",
-  "red": "#ff79c6",
-  "green": "#50fa7b",
-  "yellow": "#f1fa8c",
-  "blue": "#e135ff",
-  "purple": "#ff00ff",
-  "cyan": "#80ffea",
-  "white": "#f8f8f2",
-  "brightBlack": "#637777",
-  "brightRed": "#ff6363",
-  "brightGreen": "#50fa7b",
-  "brightYellow": "#ffffa5",
-  "brightBlue": "#82b1ff",
-  "brightPurple": "#ff69ff",
-  "brightCyan": "#5fffff",
-  "brightWhite": "#ffffff"
-}
-```
-
----
-
-## ANSI Color Reference
-
-All terminal themes use these ANSI mappings:
-
-| ANSI        | Color         | Neon Hex  | Dawn Hex  |
-| ----------- | ------------- | --------- | --------- |
-| 0 (Black)   | Background    | `#12101a` | `#2b2540` |
-| 1 (Red)     | Error/Delete  | `#ff79c6` | `#c1272d` |
-| 2 (Green)   | Success/Add   | `#50fa7b` | `#2d8659` |
-| 3 (Yellow)  | Warning       | `#f1fa8c` | `#a88600` |
-| 4 (Blue)    | Purple accent | `#e135ff` | `#2563eb` |
-| 5 (Magenta) | Pink          | `#ff00ff` | `#b40077` |
-| 6 (Cyan)    | Functions     | `#80ffea` | `#007f8e` |
-| 7 (White)   | Foreground    | `#f8f8f2` | `#faf8ff` |
-
-## True Color Support
-
-For the best experience, enable true color in your terminal:
-
-### Alacritty
-
-True color enabled by default.
-
-### Kitty
-
-True color enabled by default.
-
-### Warp
-
-True color enabled by default.
-
-### tmux
-
-Add to `.tmux.conf`:
+Every terminal here enables true color by default. Inside tmux it needs help:
 
 ```bash
 set -g default-terminal "tmux-256color"
 set -ag terminal-overrides ",xterm-256color:RGB"
 ```
 
-### SSH
-
-Ensure `TERM` is set correctly:
+Over SSH, make sure `TERM` survives the hop:
 
 ```bash
 export TERM=xterm-256color
 ```
 
-## Troubleshooting
-
-### Colors look wrong
-
-1. Verify true color support: `echo $COLORTERM` should show `truecolor`
-2. Check terminal settings for color support
-3. Try a different terminal emulator
-
-### Cursor not visible
-
-Some themes need cursor color adjustment. Override in your config:
-
-```yaml
-# Alacritty example
-colors:
-  cursor:
-    cursor: "#80ffea"
-    text: "#12101a"
-```
+If colors still look flat, check that `$COLORTERM` reads `truecolor`.
