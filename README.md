@@ -180,23 +180,31 @@ cp extras/btop/silkcircuit_*.theme ~/.config/btop/themes/
 # K9s (5 variants)
 cp extras/k9s/silkcircuit*.yaml ~/.config/k9s/skins/
 
-# Git colors with delta integration
-cat extras/gitconfig >> ~/.gitconfig
+# Git colors with delta integration (5 variants)
+mkdir -p ~/.config/git
+cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
+git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
+
+# bat, lsd, procs, fastfetch (5 variants each, see each directory's README)
+cp extras/bat/silkcircuit-neon.tmTheme "$(bat --config-dir)/themes/" && bat cache --build
+cp extras/lsd/silkcircuit-neon.yaml ~/.config/lsd/colors.yaml
+cp extras/procs/silkcircuit-neon.toml ~/.config/procs/config.toml
+cp extras/fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
 
 # fzf
 source extras/fzf.sh  # or add to .zshrc/.bashrc
 
-# Starship prompt
-cp extras/starship/starship.toml ~/.config/starship.toml
+# Starship prompt (5 variants)
+cp extras/starship/silkcircuit-neon.toml ~/.config/starship.toml
 ```
 
 ```powershell
 # fzf
 . .\extras\fzf.ps1
 
-# Starship prompt
+# Starship prompt (5 variants)
 New-Item -ItemType Directory -Force "$HOME\.config"
-Copy-Item extras\starship\starship.toml "$HOME\.config\starship.toml"
+Copy-Item extras\starship\silkcircuit-neon.toml "$HOME\.config\starship.toml"
 ```
 
 </details>
