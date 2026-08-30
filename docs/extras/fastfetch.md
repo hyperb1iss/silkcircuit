@@ -2,8 +2,8 @@
 
 A [fastfetch](https://github.com/fastfetch-cli/fastfetch) config: key and
 separator colors, plus a module list covering OS, host, kernel, uptime,
-packages, shell, terminal, window manager, CPU, GPU, memory, disk, display, and
-battery.
+packages, shell, terminal, window manager, desktop environment, CPU, GPU,
+memory, disk, display, and battery.
 
 ## Install
 

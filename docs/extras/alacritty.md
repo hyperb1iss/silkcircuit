@@ -17,9 +17,10 @@ Then in `~/.config/alacritty/alacritty.toml`:
 import = ["~/.config/alacritty/themes/silkcircuit-neon.toml"]
 ```
 
-Alacritty 0.13 moved the config from YAML to TOML, which is why these ship
-as `.toml`. `import` sits under `[general]` in current releases. If your
-Alacritty rejects the key there, move it to the top level.
+These ship as TOML, which Alacritty has read since 0.13 replaced the YAML
+config. Where `import` lives has moved since: it sits under `[general]` in
+current releases, and if your Alacritty rejects it there, move the key to the
+top level.
 
 The installer does the same thing: `./install.sh`, or
 `./install.sh --variant neon` for just that one.

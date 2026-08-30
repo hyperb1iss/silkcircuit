@@ -11,7 +11,10 @@ UI:
 1. Settings, Profiles, Colors.
 2. Open the Color Presets dropdown and choose Import.
 3. Pick `extras/iterm2/silkcircuit-neon.itermcolors`.
-4. Open the dropdown again and select SilkCircuit Neon.
+4. Open the dropdown again and select `silkcircuit-neon`.
+
+iTerm2 names an imported preset after the file, so the entry in the dropdown is
+`silkcircuit-neon` rather than a prettier label.
 
 The installer stages all five at `~/.config/silkcircuit/iterm2/` so the import
 dialog has somewhere stable to point at: `./install.sh`.

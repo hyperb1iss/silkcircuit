@@ -27,7 +27,8 @@ for:
 theme = dark:silkcircuit-neon,light:silkcircuit-dawn
 ```
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## GTK window chrome (Linux)
 

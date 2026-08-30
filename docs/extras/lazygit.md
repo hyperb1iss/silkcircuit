@@ -21,8 +21,8 @@ load both files at once:
 lazygit --use-config-file ~/.config/lazygit/config.yml,~/.config/lazygit/silkcircuit-neon.yml
 ```
 
-`LG_CONFIG_FILE` takes the same comma-separated list, so it works as an alias
-or an export.
+The environment variable `LG_CONFIG_FILE` takes the same comma-separated list,
+so this works as an alias or an export too.
 
 The installer copies the files and prints that command: `./install.sh`.
 

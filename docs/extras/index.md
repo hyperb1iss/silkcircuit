@@ -1,9 +1,11 @@
 # Extras and Integrations
 
-SilkCircuit is one palette wearing thirty different formats. Every file under
-`extras/` is generated from `lua/silkcircuit/variants.lua` by `make build`, in
+SilkCircuit is one palette wearing thirty different formats. The themes under
+`extras/` are generated from `lua/silkcircuit/variants.lua` by `make build`, in
 all five variants, so the hex your terminal draws is the hex your editor draws
-and CI fails if the two drift apart.
+and CI fails if the two drift apart. The Chrome themes come from `make chrome`,
+which reads the same palette as JSON, and each target's `README.md` is written
+by hand.
 
 Dawn is the light variant. Neon, vibrant, soft, and glow are dark.
 
@@ -86,10 +88,10 @@ for all eight in one table, plus the ANSI contract they share.
 
 ## Apps
 
-| Extra                    | Turn it on                                |
-| ------------------------ | ----------------------------------------- |
-| [Chrome](/extras/chrome) | Load unpacked from `extras/chrome-theme/` |
-| [Slack](/extras/slack)   | Paste the line into a custom theme        |
+| Extra                    | Turn it on                                                 |
+| ------------------------ | ---------------------------------------------------------- |
+| [Chrome](/extras/chrome) | Load unpacked from `extras/chrome-theme/silkcircuit-neon/` |
+| [Slack](/extras/slack)   | Paste the line into a custom theme                         |
 
 ## Every generated file
 
@@ -134,7 +136,8 @@ Regenerate the lot with `make build`, and this table with `make docs`.
 
 ## Color consistency
 
-`palette/silkcircuit-<variant>.json` is the authoritative list: every color as
+The palette files (`palette/silkcircuit-<variant>.json`) are the authoritative
+list: every color as
 hex, RGB, and HSL, with the sixteen ANSI slots under the `terminal` key. The
 same directory carries base16 and base24 scheme files for
 [tinted-theming](https://github.com/tinted-theming/home) builders such as tinty
