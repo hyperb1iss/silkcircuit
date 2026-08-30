@@ -18,7 +18,7 @@ function M.load()
     return
   end
 
-  local start_time = vim.loop.hrtime()
+  local start_time = vim.uv.hrtime()
 
   vim.cmd("hi clear")
   if vim.fn.exists("syntax_on") then
@@ -32,8 +32,8 @@ function M.load()
 
   theme.apply()
 
-  local load_time = (vim.loop.hrtime() - start_time) / 1e6
-  if load_time < 10 then -- Only show for fast loads
+  if vim.g.silkcircuit_debug then
+    local load_time = (vim.uv.hrtime() - start_time) / 1e6
     vim.notify(string.format("» SilkCircuit loaded in %.2fms", load_time), vim.log.levels.INFO)
   end
 
@@ -50,18 +50,11 @@ function M.load()
 
   -- Glow sits on top of the applied theme, so it restores last
   preferences.restore()
-
-  -- Generate help tags for documentation
-  local doc_path =
-    vim.fn.expand(debug.getinfo(1, "S").source:sub(2):match("(.*/)") .. "../../../doc")
-  if vim.fn.isdirectory(doc_path) == 1 then
-    vim.cmd.helptags(doc_path)
-  end
 end
 
--- Get color palette
+-- Get the color palette for the active variant
 function M.get_colors()
-  return require("silkcircuit.palette").colors
+  return require("silkcircuit.palette").get_colors()
 end
 
 -- Removed in v2. Kept as a no-op so existing configs do not error.
