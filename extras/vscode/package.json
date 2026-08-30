@@ -78,8 +78,8 @@
     "version:major": "vsce publish major"
   },
   "devDependencies": {
-    "@vscode/vsce": "^3.0.0",
-    "ovsx": "^0.9.2",
-    "prettier": "^3.3.3"
+    "@vscode/vsce": "^3.9.2",
+    "ovsx": "^1.1.1",
+    "prettier": "^3.9.6"
   }
 }
