@@ -95,6 +95,11 @@ M.targets = {
     ext = "yaml",
     url = "https://k9scli.io/topics/skins/",
   },
+  lazygit = {
+    label = "lazygit",
+    ext = "yml",
+    url = "https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
