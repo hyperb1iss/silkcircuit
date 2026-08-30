@@ -1,125 +1,68 @@
-# FZF Integration
+# fzf
 
-Fuzzy finder with SilkCircuit colors.
+Colors for [fzf](https://github.com/junegunn/fzf), shipped as a shell snippet
+that exports `FZF_DEFAULT_OPTS`, plus a PowerShell equivalent.
 
-## Installation
-
-Source the FZF configuration in your shell:
-
-```bash
-# Add to .bashrc or .zshrc
-source /path/to/silkcircuit/extras/fzf.sh
-```
-
-## Configuration
-
-The `fzf.sh` file sets FZF environment variables:
+## Install
 
 ```bash
-export FZF_DEFAULT_OPTS="
-  --color=bg+:#1a162a,bg:#12101a,spinner:#e135ff,hl:#ff79c6
-  --color=fg:#f8f8f2,header:#ff79c6,info:#f1fa8c,pointer:#e135ff
-  --color=marker:#50fa7b,fg+:#f8f8f2,prompt:#e135ff,hl+:#ff79c6
-  --color=border:#80ffea
-"
+mkdir -p ~/.config/fzf
+cp extras/fzf/silkcircuit-*.sh ~/.config/fzf/
 ```
 
-## Color Mapping
-
-| Element      | Color     | Hex       |
-| ------------ | --------- | --------- |
-| Background   | Dark      | `#12101a` |
-| Foreground   | Light     | `#f8f8f2` |
-| Selection bg | Highlight | `#1a162a` |
-| Spinner      | Purple    | `#e135ff` |
-| Highlight    | Pink      | `#ff79c6` |
-| Info         | Yellow    | `#f1fa8c` |
-| Pointer      | Purple    | `#e135ff` |
-| Marker       | Green     | `#50fa7b` |
-| Prompt       | Purple    | `#e135ff` |
-| Border       | Cyan      | `#80ffea` |
-
-## Neovim Integration
-
-For Telescope with FZF extension:
-
-```lua
-require("telescope").setup({
-  extensions = {
-    fzf = {
-      fuzzy = true,
-      override_generic_sorter = true,
-      override_file_sorter = true,
-      case_mode = "smart_case",
-    },
-  },
-})
-```
-
-SilkCircuit automatically themes Telescope if installed.
-
-## Preview Colors
-
-FZF can use bat for syntax-highlighted previews. Install the SilkCircuit bat theme:
+Then in `.zshrc`, `.bashrc`, or whichever rc file you use:
 
 ```bash
-# bat uses the same theme files as the terminal
-# Just ensure your terminal is using SilkCircuit colors
+source ~/.config/fzf/silkcircuit-neon.sh
 ```
 
-## Usage Examples
+On PowerShell, copy the `.ps1` files instead and dot-source one from your
+profile:
+
+```powershell
+. "$env:APPDATA\silkcircuit\fzf\silkcircuit-neon.ps1"
+```
+
+The installer does either one: `./install.sh --variant neon` or
+`.\install.ps1 -Variant neon`.
+
+## Requires fzf 0.52
+
+The files set `selected-fg`, `selected-bg`, `selected-hl`, and `border`, which
+older releases reject outright rather than ignore.
+
+## Setting your own options
+
+The snippet assigns `FZF_DEFAULT_OPTS` rather than appending to it, so source
+it first and add your own flags after:
 
 ```bash
-# File search
-fzf
-
-# Search with preview
-fzf --preview 'bat --color=always {}'
-
-# Git branches
-git branch | fzf
-
-# Processes
-ps aux | fzf
+source ~/.config/fzf/silkcircuit-neon.sh
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS --height=40% --layout=reverse"
 ```
 
-## Shell Integration
+## Files
 
-### Bash
+<!-- extras:start target=fzf -->
 
-```bash
-# Add to .bashrc
-source /path/to/silkcircuit/extras/fzf.sh
+| Variant | File                                |
+| ------- | ----------------------------------- |
+| neon    | `extras/fzf/silkcircuit-neon.sh`    |
+| vibrant | `extras/fzf/silkcircuit-vibrant.sh` |
+| soft    | `extras/fzf/silkcircuit-soft.sh`    |
+| glow    | `extras/fzf/silkcircuit-glow.sh`    |
+| dawn    | `extras/fzf/silkcircuit-dawn.sh`    |
 
-# Key bindings (if using fzf package)
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-```
+<!-- extras:end -->
 
-### Zsh
+<!-- extras:start target=fzf-ps1 -->
 
-```zsh
-# Add to .zshrc
-source /path/to/silkcircuit/extras/fzf.sh
+| Variant | File                                 |
+| ------- | ------------------------------------ |
+| neon    | `extras/fzf/silkcircuit-neon.ps1`    |
+| vibrant | `extras/fzf/silkcircuit-vibrant.ps1` |
+| soft    | `extras/fzf/silkcircuit-soft.ps1`    |
+| glow    | `extras/fzf/silkcircuit-glow.ps1`    |
+| dawn    | `extras/fzf/silkcircuit-dawn.ps1`    |
 
-# Key bindings (if using fzf package)
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-```
-
-### Fish
-
-```fish
-# Add to config.fish
-set -gx FZF_DEFAULT_OPTS "--color=bg+:#1a162a,bg:#12101a,spinner:#e135ff,hl:#ff79c6 --color=fg:#f8f8f2,header:#ff79c6,info:#f1fa8c,pointer:#e135ff --color=marker:#50fa7b,fg+:#f8f8f2,prompt:#e135ff,hl+:#ff79c6 --color=border:#80ffea"
-```
-
-## Customization
-
-Modify colors by editing the FZF options:
-
-```bash
-# Example: change pointer color
-export FZF_DEFAULT_OPTS="
-  --color=pointer:#00ffff
-  $FZF_DEFAULT_OPTS
-"
-```
+<!-- extras:end -->

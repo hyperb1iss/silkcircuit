@@ -82,6 +82,7 @@ export default defineConfig({
           text: 'Editors',
           items: [
             { text: 'VS Code', link: '/extras/vscode' },
+            { text: 'Helix', link: '/extras/helix' },
             { text: 'AstroNvim', link: '/extras/astronvim' },
             { text: 'Neovim Plugins', link: '/extras/plugins' },
           ]
@@ -89,16 +90,50 @@ export default defineConfig({
         {
           text: 'Terminals',
           items: [
-            { text: 'Terminal Themes', link: '/extras/terminals' },
+            { text: 'Overview', link: '/extras/terminals' },
+            { text: 'Alacritty', link: '/extras/alacritty' },
+            { text: 'foot', link: '/extras/foot' },
+            { text: 'Ghostty', link: '/extras/ghostty' },
+            { text: 'iTerm2', link: '/extras/iterm2' },
+            { text: 'Kitty', link: '/extras/kitty' },
+            { text: 'Warp', link: '/extras/warp' },
+            { text: 'WezTerm', link: '/extras/wezterm' },
+            { text: 'Windows Terminal', link: '/extras/windows-terminal' },
           ]
         },
         {
-          text: 'CLI & Tools',
+          text: 'Multiplexers',
+          items: [
+            { text: 'tmux', link: '/extras/tmux' },
+            { text: 'Zellij', link: '/extras/zellij' },
+          ]
+        },
+        {
+          text: 'Shell & CLI',
+          items: [
+            { text: 'Starship', link: '/extras/starship' },
+            { text: 'fzf', link: '/extras/fzf' },
+            { text: 'bat', link: '/extras/bat' },
+            { text: 'lsd', link: '/extras/lsd' },
+            { text: 'procs', link: '/extras/procs' },
+            { text: 'fastfetch', link: '/extras/fastfetch' },
+            { text: 'Atuin', link: '/extras/atuin' },
+          ]
+        },
+        {
+          text: 'Git',
+          items: [
+            { text: 'Git', link: '/extras/git' },
+            { text: 'lazygit', link: '/extras/lazygit' },
+          ]
+        },
+        {
+          text: 'System & Desktop',
           items: [
             { text: 'btop', link: '/extras/btop' },
-            { text: 'K9s', link: '/extras/k9s' },
-            { text: 'Git', link: '/extras/git' },
-            { text: 'FZF', link: '/extras/fzf' },
+            { text: 'k9s', link: '/extras/k9s' },
+            { text: 'dmesg', link: '/extras/dmesg' },
+            { text: 'COSMIC Desktop', link: '/extras/cosmic' },
           ]
         },
         {
