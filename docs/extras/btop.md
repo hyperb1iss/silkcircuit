@@ -23,7 +23,7 @@ The installer does the same thing: `./install.sh`, or
 
 ## Color mapping
 
-| Box          | Colour                      |
+| Box          | Color                       |
 | ------------ | --------------------------- |
 | CPU          | purple through pink to cyan |
 | Memory       | cyan                        |
