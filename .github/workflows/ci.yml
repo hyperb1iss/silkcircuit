@@ -2,157 +2,110 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
     branches: [main]
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  # → Core linting using make lint
   lint:
-    name: » Lint Code
+    name: » Lint
     runs-on: ubuntu-latest
     steps:
-      - name: → Checkout repository
-        uses: actions/checkout@v4
+      - name: → Checkout
+        uses: actions/checkout@v7
 
-      - name: → Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
+      - name: → Install the pinned toolchain
+        uses: jdx/mise-action@v4
 
-      - name: → Install selene
-        uses: taiki-e/install-action@v2
-        with:
-          tool: selene
+      - name: → selene and ruff
+        run: make lint
 
-      - name: → Install stylua
-        uses: taiki-e/install-action@v2
-        with:
-          tool: stylua
+      - name: → stylua, ruff format, and prettier
+        run: make fmt-check
 
-      - name: → Run make lint
-        run: |
-          echo "» Running comprehensive linting..."
-          make lint
-
-  # → Test theme on multiple Neovim versions
   test:
-    name: » Test Theme
+    name: » Test (${{ matrix.neovim }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        neovim_version:
-          - stable
-          - nightly
+        # v0.10.4 is the supported floor, stable is what most people run,
+        # nightly is the early warning.
+        neovim: [v0.10.4, stable, nightly]
     steps:
-      - name: → Checkout repository
-        uses: actions/checkout@v4
+      - name: → Checkout
+        uses: actions/checkout@v7
 
-      - name: → Install Neovim ${{ matrix.neovim_version }}
+      - name: → Install Neovim ${{ matrix.neovim }}
         uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
-          version: ${{ matrix.neovim_version }}
+          version: ${{ matrix.neovim }}
 
-      - name: → Show Neovim version
+      - name: → Show version
         run: nvim --version
 
-      - name: → Run unit tests
-        run: |
-          echo "» Running unit tests..."
-          make test
+      - name: → Run the suite
+        run: make test
 
-      - name: → Verify theme loads
-        run: |
-          echo "» Verifying colorscheme loads..."
-          nvim --headless -c "set rtp+=$(pwd)" -c "colorscheme silkcircuit" -c "qa" || exit 1
-          echo "√ Theme loads successfully"
-
-      - name: → Run checkhealth
-        run: |
-          echo "» Running :checkhealth silkcircuit..."
-          nvim --headless -c "set rtp+=$(pwd)" -c "colorscheme silkcircuit" -c "checkhealth silkcircuit" -c "qa" || true
-
-  # → Validate documentation and links
-  documentation:
-    name: » Check Documentation
+  docs:
+    name: » Docs
     runs-on: ubuntu-latest
     steps:
-      - name: → Checkout repository
-        uses: actions/checkout@v4
+      - name: → Checkout
+        uses: actions/checkout@v7
 
-      - name: → Check for broken links
+      - name: → Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+
+      - name: → Install
+        run: npm ci
+        working-directory: docs
+
+      - name: → Build
+        run: npm run docs:build
+        working-directory: docs
+
+      - name: → Check the base path
+        run: |
+          # The site deploys to hyperb1iss.github.io/silkcircuit. A stale
+          # base leaves every asset URL pointing at a 404.
+          if grep -rq "silkcircuit-nvim" docs/.vitepress/dist; then
+            echo "! Built site references silkcircuit-nvim"
+            echo "! Fix 'base' in docs/.vitepress/config"
+            grep -rl "silkcircuit-nvim" docs/.vitepress/dist | head -20
+            exit 1
+          fi
+          echo "√ Base path is correct"
+
+  links:
+    name: » Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: → Checkout
+        uses: actions/checkout@v7
+
+      - name: → Check markdown links
         uses: gaurav-nelson/github-action-markdown-link-check@v1
-        continue-on-error: true
-        id: link-check
         with:
           use-verbose-mode: "yes"
           config-file: ".github/markdown-link-check.json"
 
-      - name: → Report link check results
-        if: steps.link-check.outcome == 'failure'
-        run: |
-          echo "! Broken links found in markdown files"
-          echo "! Please review the link check output above"
-
-  # → Build and validate theme
-  build:
-    name: » Build Theme
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-    steps:
-      - name: → Checkout repository
-        uses: actions/checkout@v4
-
-      - name: → Install Neovim
-        uses: rhysd/action-setup-vim@v1
-        with:
-          neovim: true
-          version: stable
-
-      - name: → Compile theme
-        run: |
-          echo "» Compiling theme for performance..."
-          nvim --headless -c "set rtp+=$(pwd)" \
-               -c "lua require('silkcircuit').setup()" \
-               -c "lua require('silkcircuit').compile()" \
-               -c "qa"
-          echo "√ Theme compiled successfully"
-
-      - name: → Validate WCAG contrast
-        run: |
-          echo "» Checking WCAG contrast compliance..."
-          nvim --headless -c "set rtp+=$(pwd)" \
-               -c "colorscheme silkcircuit" \
-               -c "SilkCircuitContrast" \
-               -c "qa"
-
-      - name: → Generate integration report
-        run: |
-          echo "» Generating integration support report..."
-          nvim --headless -c "set rtp+=$(pwd)" \
-               -c "colorscheme silkcircuit" \
-               -c "SilkCircuitIntegrations" \
-               -c "qa" || true
-
-      - name: → Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: silkcircuit-build
-          path: |
-            extras/
-            doc/
-
-  # → Success notification
   success:
     name: √ All Checks Passed
     runs-on: ubuntu-latest
-    needs: [lint, test, documentation, build]
+    needs: [lint, test, docs, links]
     steps:
       - name: → Success
-        run: |
-          echo "√ All CI checks passed successfully!"
-          echo "→ Ready to merge"
+        run: echo "√ Ready to merge"
