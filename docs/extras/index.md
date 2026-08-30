@@ -30,6 +30,7 @@ Generated from the palette by `make build`, five variants each. See the
 | fzf (PowerShell)                | [reference](https://github.com/junegunn/fzf/blob/master/man/man1/fzf.1)                            | `extras/fzf/silkcircuit-{neon,vibrant,soft,glow,dawn}.ps1`               |
 | Ghostty                         | [reference](https://ghostty.org/docs/config/reference#theme)                                       | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}`               |
 | Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
+| Helix                           | [reference](https://docs.helix-editor.com/themes.html)                                             | `extras/helix/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`            |
 | iTerm2                          | [reference](https://iterm2.com/documentation-preferences-profiles-colors.html)                     | `extras/iterm2/silkcircuit-{neon,vibrant,soft,glow,dawn}.itermcolors`    |
 | Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`            |
 | tmux                            | [reference](https://man.openbsd.org/tmux#STYLES)                                                   | `extras/tmux/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`             |
