@@ -2,74 +2,85 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
-  release:
-    name: Create Release
+  # Opens and maintains a release PR. Merging it tags the release.
+  release-please:
+    name: » Release PR
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install tools
-        run: |
-          # Install selene
-          wget -qO- https://github.com/Kampfkarren/selene/releases/latest/download/selene-linux.zip | busybox unzip -
-          chmod +x ./selene
-          sudo mv ./selene /usr/local/bin/
-
-          # Install stylua
-          wget -qO- https://github.com/JohnnyMorganz/StyLua/releases/latest/download/stylua-linux.zip | busybox unzip -
-          chmod +x ./stylua
-          sudo mv ./stylua /usr/local/bin/
-
-      - name: Verify code quality
-        run: |
-          selene lua/
-          stylua --check lua/ colors/
-
-      - name: Install Neovim
-        uses: rhysd/action-setup-vim@v1
+      - name: → Run release-please
+        id: release
+        uses: googleapis/release-please-action@v5
         with:
-          neovim: true
-          version: stable
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
 
-      - name: Build release artifacts
-        run: |
-          # Create release directory
-          mkdir -p release
+  # Only runs on the push that release-please tagged.
+  publish:
+    name: » Publish
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VSCE_PAT: ${{ secrets.VSCE_PAT }}
+      OVSX_PAT: ${{ secrets.OVSX_PAT }}
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ needs.release-please.outputs.tag_name }}
+    steps:
+      - name: → Checkout
+        uses: actions/checkout@v7
 
-          # Generate compiled theme
-          nvim --headless -u scripts/compile.lua +qa
-          cp cache/silkcircuit_compiled.lua release/
-
-          # Package extras
-          tar -czf release/silkcircuit-extras.tar.gz extras/
-
-          # Create source archive
-          git archive --format=tar.gz --prefix=silkcircuit/ -o release/silkcircuit-${{ github.ref_name }}.tar.gz HEAD
-
-      - name: Generate changelog
-        id: changelog
-        run: |
-          echo "# Changelog" > CHANGELOG_RELEASE.md
-          echo "" >> CHANGELOG_RELEASE.md
-          git log --pretty=format:"- %s (%h)" $(git describe --tags --abbrev=0 HEAD^)..HEAD >> CHANGELOG_RELEASE.md
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
+      - name: → Setup Node
+        uses: actions/setup-node@v7
         with:
-          body_path: CHANGELOG_RELEASE.md
-          files: |
-            release/silkcircuit-${{ github.ref_name }}.tar.gz
-            release/silkcircuit-extras.tar.gz
-            release/silkcircuit_compiled.lua
-          draft: false
-          prerelease: false
+          node-version: 24
+
+      - name: → Package the extension
+        run: make vscode-package
+
+      - name: → Package the Chrome themes
+        run: make chrome-package
+
+      - name: → Publish to the VS Code Marketplace
+        if: env.VSCE_PAT != ''
+        run: make vscode-publish-vsce
+
+      - name: → Publish to Open VSX
+        if: env.OVSX_PAT != ''
+        continue-on-error: true
+        run: make vscode-publish-ovsx
+
+      - name: → Note any skipped publish
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "! VSCE_PAT is not set, skipped the VS Code Marketplace"
+          fi
+          if [ -z "$OVSX_PAT" ]; then
+            echo "! OVSX_PAT is not set, skipped Open VSX"
+          fi
+
+      - name: → Attach artifacts to the release
+        run: |
+          gh release upload "$TAG" \
+            extras/vscode/*.vsix \
+            silkcircuit-chrome-*.zip \
+            --clobber
