@@ -25,7 +25,7 @@
 "string.special" = { fg = "coral" }
 "string.special.path" = { fg = "cyan" }
 "string.special.symbol" = { fg = "cyan" }
-"string.special.url" = { fg = "cyan", modifiers = ["underlined"] }
+"string.special.url" = { fg = "cyan", underline = { style = "line" } }
 
 "comment" = { fg = "purple_muted", modifiers = ["italic"] }
 "comment.line" = { fg = "purple_muted", modifiers = ["italic"] }
@@ -87,7 +87,7 @@
 "markup.bold" = { modifiers = ["bold"] }
 "markup.italic" = { modifiers = ["italic"] }
 "markup.strikethrough" = { modifiers = ["crossed_out"] }
-"markup.link.url" = { fg = "cyan", modifiers = ["underlined"] }
+"markup.link.url" = { fg = "cyan", underline = { style = "line" } }
 "markup.link.label" = { fg = "cyan_bright" }
 "markup.link.text" = { fg = "pink_soft" }
 "markup.quote" = { fg = "purple_muted", modifiers = ["italic"] }
