@@ -716,7 +716,7 @@ set_k9s_skin() {
         }
 
         function emit_all(   i) {
-            for (i = 1; i <= NR; i++) print line[i]
+            for (i = 1; i <= NR; i++) print out_line(i)
         }
 
         # A key, bare or quoted either way, followed by its colon.
@@ -761,7 +761,25 @@ set_k9s_skin() {
 
         { line[NR] = $0 }
 
+        # A byte order mark sits ahead of the first key and would hide it from
+        # every pattern here. Strip it for matching, put it back on output.
+        function out_line(i) {
+            return (i == 1 ? bom line[i] : line[i])
+        }
+
         END {
+            # awk splits on the newline only, so a CRLF file keeps its carriage
+            # returns at the end of each stored line. Inserted lines have to
+            # carry one too, or the file comes back with mixed endings and a
+            # noisy diff.
+            cr = (NR > 0 && line[1] ~ /\r$/) ? "\r" : ""
+
+            bom = ""
+            if (NR > 0 && substr(line[1], 1, 3) == "\357\273\277") {
+                bom = substr(line[1], 1, 3)
+                line[1] = substr(line[1], 4)
+            }
+
             root_pattern = key_pattern("k9s")
             root_at = 0
             for (i = 1; i <= NR; i++) {
@@ -771,10 +789,10 @@ set_k9s_skin() {
             # No k9s mapping yet, so a fresh one cannot be a duplicate.
             if (root_at == 0) {
                 emit_all()
-                if (NR > 0) print ""
-                print "k9s:"
-                print "  ui:"
-                print "    skin: " skin
+                if (NR > 0) print cr
+                print "k9s:" cr
+                print "  ui:" cr
+                print "    skin: " skin cr
                 exit 0
             }
 
@@ -791,7 +809,20 @@ set_k9s_skin() {
             root_inner = child_indent(root_at, 0, NR)
             block_end = block_extent(root_at, root_inner, NR)
 
-            ui_at = find_child(root_at, block_end, root_inner, key_pattern("ui") "[[:space:]]*(#.*)?$")
+            ui_pattern = key_pattern("ui")
+            ui_at = find_child(root_at, block_end, root_inner, ui_pattern)
+
+            # Same rule as the root: anything but a comment after the colon is a
+            # flow mapping or a scalar, and block-style children cannot be
+            # spliced under either.
+            if (ui_at) {
+                rest = line[ui_at]
+                sub(ui_pattern, "", rest)
+                if (rest !~ /^[[:space:]]*(#.*)?$/) {
+                    emit_all()
+                    exit 3
+                }
+            }
 
             if (ui_at) {
                 ui_inner = child_indent(ui_at, root_inner, block_end)
@@ -799,20 +830,20 @@ set_k9s_skin() {
                 skin_at = find_child(ui_at, ui_end, ui_inner, key_pattern("skin"))
 
                 if (skin_at) {
-                    line[skin_at] = pad(ui_inner) "skin: " skin
+                    line[skin_at] = pad(ui_inner) "skin: " skin cr
                     emit_all()
                 } else {
                     for (i = 1; i <= NR; i++) {
-                        print line[i]
-                        if (i == ui_at) print pad(ui_inner) "skin: " skin
+                        print out_line(i)
+                        if (i == ui_at) print pad(ui_inner) "skin: " skin cr
                     }
                 }
             } else {
                 for (i = 1; i <= NR; i++) {
-                    print line[i]
+                    print out_line(i)
                     if (i == root_at) {
-                        print pad(root_inner) "ui:"
-                        print pad(2 * root_inner) "skin: " skin
+                        print pad(root_inner) "ui:" cr
+                        print pad(2 * root_inner) "skin: " skin cr
                     }
                 }
             }
@@ -820,6 +851,9 @@ set_k9s_skin() {
     ' "$config" > "${config}.silkcircuit.new" || rc=$?
 
     if [[ $rc -eq 0 ]]; then
+        # Back up only once we know we are actually going to write, so a
+        # declined config is left with no stray .bak beside it.
+        cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
         mv "${config}.silkcircuit.new" "$config"
         return 0
     fi
@@ -855,7 +889,6 @@ install_k9s() {
     if [[ "$DRY_RUN" == true ]]; then
         diminfo "dry-run: would set the skin to ${skin} in ${config}"
     elif [[ -f "$config" ]]; then
-        cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
         if ! set_k9s_skin "$config" "$skin"; then
             warn "k9s: ${config} uses a shape this installer will not edit blind"
             diminfo "Set k9s.ui.skin to ${skin} yourself"
