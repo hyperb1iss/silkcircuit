@@ -55,6 +55,40 @@ jobs:
       - name: → Run the suite
         run: make test
 
+  extras:
+    name: » Extras
+    runs-on: ubuntu-latest
+    steps:
+      - name: → Checkout
+        uses: actions/checkout@v7
+
+      - name: → Install Neovim stable
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: → Install the pinned toolchain
+        uses: jdx/mise-action@v4
+
+      - name: → Regenerate extras and docs tables
+        run: make build && make docs
+
+      - name: → Check for drift
+        run: |
+          # Every file under extras/ and palette/ is rendered from
+          # lua/silkcircuit/variants.lua. A diff here means someone edited a
+          # generated file by hand, or changed the palette without rebuilding.
+          # Staging first so a brand new generated file counts as drift too;
+          # git diff on its own cannot see an untracked path.
+          git add -A
+          if ! git diff --cached --exit-code; then
+            echo "! Generated files are stale"
+            echo "! Run 'make build && make docs' and commit the result"
+            exit 1
+          fi
+          echo "√ Generated files match the palette"
+
   docs:
     name: » Docs
     runs-on: ubuntu-latest
@@ -105,7 +139,7 @@ jobs:
   success:
     name: √ All Checks Passed
     runs-on: ubuntu-latest
-    needs: [lint, test, docs, links]
+    needs: [lint, test, extras, docs, links]
     steps:
       - name: → Success
         run: echo "√ Ready to merge"
