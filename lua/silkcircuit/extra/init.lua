@@ -165,6 +165,11 @@ M.targets = {
     comment = "none",
     url = "https://code.visualstudio.com/api/extension-guides/color-theme",
   },
+  git = {
+    label = "Git",
+    ext = "gitconfig",
+    url = "https://git-scm.com/docs/git-config#Documentation/git-config.txt-color",
+  },
   lsd = {
     label = "lsd",
     ext = "yaml",
