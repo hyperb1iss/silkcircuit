@@ -83,9 +83,24 @@ M.defaults = {
 -- Current configuration
 M.options = {}
 
+-- What setup() was handed, so a persisted preference knows when to yield
+local user_options = {}
+
 -- Setup function
 function M.setup(options)
-  M.options = vim.tbl_deep_extend("force", M.defaults, options or {})
+  user_options = options or {}
+  M.options = vim.tbl_deep_extend("force", M.defaults, user_options)
+end
+
+-- Did the caller pass this option to setup() explicitly?
+function M.is_explicit(key)
+  return user_options[key] ~= nil
+end
+
+-- Set one option on the live configuration
+function M.set(key, value)
+  M.get()
+  M.options[key] = value
 end
 
 -- Get the current configuration

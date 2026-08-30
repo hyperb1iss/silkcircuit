@@ -42,35 +42,41 @@ function M.save(prefs)
   return true
 end
 
--- Get a preference value
+-- Get a preference value. A stored false is a value, not an absence.
 function M.get(key, default)
-  local prefs = M.load()
-  return prefs[key] or default
+  local value = M.load()[key]
+  if value == nil then
+    return default
+  end
+  return value
 end
 
--- Set a preference value
+-- Set a preference value, touching the disk only when it actually changed
 function M.set(key, value)
   local prefs = M.load()
+  if prefs[key] == value then
+    return true
+  end
   prefs[key] = value
   return M.save(prefs)
 end
 
--- Apply saved preferences
+-- Fold saved preferences into the config. Must run before the theme reads
+-- the config, otherwise a saved variant only takes effect on the next load.
 function M.apply()
-  local prefs = M.load()
+  local config = require("silkcircuit.config")
+  local variant = M.get("variant")
 
-  -- Apply variant if saved
-  if prefs.variant then
-    local config = require("silkcircuit.config")
-    config.get().variant = prefs.variant
-    -- Don't reload colorscheme here, let init.lua handle it
+  -- An explicit setup({ variant = ... }) wins; the saved choice fills the gap.
+  if variant and not config.is_explicit("variant") then
+    config.set("variant", variant)
   end
+end
 
-  -- Apply glow mode if saved
-  if prefs.glow_enabled then
-    vim.defer_fn(function()
-      require("silkcircuit.glow").enable()
-    end, 200)
+-- Restore toggles that sit on top of an applied theme
+function M.restore()
+  if M.get("glow_enabled", false) then
+    require("silkcircuit.glow").enable()
   end
 end
 
