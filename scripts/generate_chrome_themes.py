@@ -1,4 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["pillow>=11"]
+# ///
 """Generate SilkCircuit Chrome theme variants.
 
 Creates complete Chrome theme extensions for all 5 SilkCircuit variants:
@@ -9,10 +13,6 @@ DevTools theme CSS, and Chrome pages CSS.
 
 import json
 import math
-import os
-import struct
-import sys
-import zlib
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
@@ -208,9 +208,7 @@ def generate_manifest(variant_key, v):
     # Incognito: subtle purple tint on the frame
     if is_dark:
         incognito_frame = blend(v["bg_dark"], v["purple"], 0.88)
-        incognito_frame_inactive = darken(
-            rgb_to_hex(*blend(v["bg_dark"], v["purple"], 0.88)), 0.15
-        )
+        incognito_frame_inactive = darken(rgb_to_hex(*blend(v["bg_dark"], v["purple"], 0.88)), 0.15)
     else:
         incognito_frame = blend(v["bg_dark"], v["purple"], 0.92)
         incognito_frame_inactive = blend(v["bg_dark"], v["purple"], 0.95)
@@ -235,7 +233,9 @@ def generate_manifest(variant_key, v):
     bg_tab_incognito_inactive = incognito_frame_inactive
 
     # Omnibox — slightly distinct from toolbar
-    omnibox_bg = blend(v["bg"], v["bg_highlight"], 0.5) if is_dark else hex_to_rgb(v["bg_highlight"])
+    omnibox_bg = (
+        blend(v["bg"], v["bg_highlight"], 0.5) if is_dark else hex_to_rgb(v["bg_highlight"])
+    )
 
     # Button — subtle accent with transparency
     button_alpha = 0.15 if is_dark else 0.08
@@ -1066,7 +1066,7 @@ def generate_tab_background_image(v):
 
     is_dark = v["is_dark"]
     bg = tuple(lighten(v["bg_highlight"], 0.06)) if is_dark else tuple(hex_to_rgb(v["bg_dark"]))
-    return Image.new("RGBA", (1, 1), bg + (230,))
+    return Image.new("RGBA", (1, 1), (*bg, 230))
 
 
 # ---------------------------------------------------------------------------
@@ -1090,8 +1090,7 @@ def generate_ntp_background(variant_key, v, width=1920, height=1080):
     # Base opacity for traces
     trace_alpha = 35 if is_dark else 20
 
-    img = Image.new("RGBA", (width, height), bg_rgb + (255,))
-    draw = ImageDraw.Draw(img)
+    img = Image.new("RGBA", (width, height), (*bg_rgb, 255))
 
     # Create trace layer with low opacity
     trace_layer = Image.new("RGBA", (width, height), (0, 0, 0, 0))
@@ -1109,7 +1108,7 @@ def generate_ntp_background(variant_key, v, width=1920, height=1080):
         # Alternate between accent and secondary colors
         color = accent_rgb if i % 3 != 0 else secondary_rgb
         alpha = trace_alpha + random.randint(-6, 15)
-        line_color = color + (max(8, min(55, alpha)),)
+        line_color = (*color, max(8, min(55, alpha)))
 
         # Random start point
         x = random.randint(0, width)
@@ -1131,17 +1130,13 @@ def generate_ntp_background(variant_key, v, width=1920, height=1080):
         # Draw line segments
         line_width = random.choice([1, 1, 1, 2])
         for j in range(len(points) - 1):
-            trace_draw.line(
-                [points[j], points[j + 1]], fill=line_color, width=line_width
-            )
+            trace_draw.line([points[j], points[j + 1]], fill=line_color, width=line_width)
 
         # Draw nodes at intersections
-        node_color = color + (max(12, min(65, alpha + 15)),)
+        node_color = (*color, max(12, min(65, alpha + 15)))
         for px, py in points:
             r = random.choice([2, 3, 3, 4])
-            trace_draw.ellipse(
-                [px - r, py - r, px + r, py + r], fill=node_color
-            )
+            trace_draw.ellipse([px - r, py - r, px + r, py + r], fill=node_color)
 
     # Add a few larger "chip" rectangles
     for _ in range(6):
@@ -1149,17 +1144,15 @@ def generate_ntp_background(variant_key, v, width=1920, height=1080):
         cy = random.randint(100, height - 100)
         cw = random.randint(20, 60)
         ch = random.randint(15, 40)
-        chip_color = accent_rgb + (max(10, trace_alpha + 5),)
+        chip_color = (*accent_rgb, max(10, trace_alpha + 5))
         trace_draw.rectangle(
             [cx - cw // 2, cy - ch // 2, cx + cw // 2, cy + ch // 2],
             outline=chip_color,
             width=1,
         )
         # Inner dot
-        inner_color = secondary_rgb + (max(15, trace_alpha + 8),)
-        trace_draw.ellipse(
-            [cx - 2, cy - 2, cx + 2, cy + 2], fill=inner_color
-        )
+        inner_color = (*secondary_rgb, max(15, trace_alpha + 8))
+        trace_draw.ellipse([cx - 2, cy - 2, cx + 2, cy + 2], fill=inner_color)
 
     # Blur the trace layer slightly for a soft glow feel
     trace_layer = trace_layer.filter(ImageFilter.GaussianBlur(radius=0.8))
@@ -1169,7 +1162,6 @@ def generate_ntp_background(variant_key, v, width=1920, height=1080):
 
     # Add a subtle radial vignette using numpy-free approach
     # Create vignette via radial gradient using Pillow's built-in ops
-    import array
 
     cx, cy = width // 2, height // 2
     max_alpha = 35 if is_dark else 18

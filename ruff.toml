@@ -1,0 +1,18 @@
+# Lint and format config for the helper scripts under scripts/.
+#
+# This is a Neovim colorscheme, not a Python package, so there is no
+# pyproject.toml. A standalone ruff.toml keeps the Python tooling scoped to
+# what it actually covers and stops uv and friends treating the repo root as a
+# Python project.
+
+target-version = "py312"
+line-length = 100
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+ignore = [
+  # The formatter wraps what it can; palette strings and URLs it cannot.
+  "E501",
+  # Box-drawing and block glyphs are load-bearing in the terminal output.
+  "RUF001",
+]
