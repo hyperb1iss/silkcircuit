@@ -143,27 +143,16 @@ make chrome
 <details>
 <summary><b>🖥️ Terminals</b></summary>
 
-```bash
-# Ghostty: copy variant config to ~/.config/ghostty/
-cp extras/ghostty/silkcircuit-neon ~/.config/ghostty/themes/
+Every terminal ships all five variants, rendered from the same palette Neovim
+uses. The [terminal guide](docs/extras/terminals.md) has the install line for
+each one.
 
-# Kitty
-cp extras/kitty.conf ~/.config/kitty/themes/silkcircuit.conf
+<!-- extras:start -->
 
-# Alacritty
-cp extras/alacritty.yml ~/.config/alacritty/themes/silkcircuit.yml
+| Target | Format | Generated files |
+| ------ | ------ | --------------- |
 
-# Warp
-cp extras/warp.yaml ~/.warp/themes/silkcircuit.yaml
-
-# Windows Terminal: import extras/windows-terminal.json in settings
-```
-
-```powershell
-# Windows Terminal: stage the scheme for import
-New-Item -ItemType Directory -Force "$env:APPDATA\silkcircuit"
-Copy-Item extras\windows-terminal.json "$env:APPDATA\silkcircuit\windows-terminal.json"
-```
+<!-- extras:end -->
 
 </details>
 

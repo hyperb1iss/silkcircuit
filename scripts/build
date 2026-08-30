@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Regenerate every palette-driven file under extras/ and palette/.
+#
+# The palette lives in lua/silkcircuit/variants.lua, so the generator runs
+# inside Neovim rather than reimplementing the theme in another language.
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+if command -v mise >/dev/null 2>&1; then
+    run() { mise x -- "$@"; }
+else
+    run() { "$@"; }
+fi
+
+NVIM="${NVIM:-nvim}"
+
+"$NVIM" --headless --clean \
+    --cmd "lua vim.opt.runtimepath:prepend([[$ROOT]])" \
+    -c "lua local ok, err = pcall(function() require('silkcircuit.extra').build({ root = [[$ROOT]] }) end); if not ok then io.stderr:write('build failed: ' .. tostring(err) .. '\n'); vim.cmd('cq') end" \
+    -c "qa!"
+
+# Generated JSON and YAML go through the same formatter as everything else so
+# the drift guard never trips on whitespace.
+run prettier --write --log-level warn --no-error-on-unmatched-pattern \
+    "extras/warp/*.yaml" \
+    "extras/windows-terminal/*.json" \
+    "palette/*.json" \
+    "palette/*.yaml"

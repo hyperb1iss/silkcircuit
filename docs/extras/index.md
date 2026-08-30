@@ -17,13 +17,15 @@ SilkCircuit is a complete visual identity system for your workflow. These extras
 
 ### Terminals
 
-| Extra                                                  | Variants | Description                  |
-| ------------------------------------------------------ | -------- | ---------------------------- |
-| [Alacritty](/extras/terminals#alacritty)               | 2        | GPU-accelerated terminal     |
-| [Kitty](/extras/terminals#kitty)                       | 2        | Feature-rich terminal        |
-| [Warp](/extras/terminals#warp)                         | 2        | Modern AI-powered terminal   |
-| [Windows Terminal](/extras/terminals#windows-terminal) | 1        | Windows integrated terminal  |
-| [Ghostty](/extras/terminals#ghostty)                   | 5        | GPU terminal with shader CSS |
+Generated from the palette by `make build`, five variants each. See the
+[terminal guide](/extras/terminals) for install steps.
+
+<!-- extras:start -->
+
+| Target | Format | Generated files |
+| ------ | ------ | --------------- |
+
+<!-- extras:end -->
 
 ### System Tools
 
