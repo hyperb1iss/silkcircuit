@@ -68,7 +68,7 @@
 	navigate = true
 	line-numbers = true
 	side-by-side = false
-	syntax-theme = "SilkCircuit Vibrant"
+	syntax-theme = "silkcircuit-vibrant"
 	file-style = "#ffcc00 bold"
 	file-decoration-style = "#ffcc00 ul"
 	hunk-header-style = "file line-number syntax"

@@ -68,7 +68,7 @@
 	navigate = true
 	line-numbers = true
 	side-by-side = false
-	syntax-theme = "SilkCircuit Dawn"
+	syntax-theme = "silkcircuit-dawn"
 	file-style = "#a88600 bold"
 	file-decoration-style = "#a88600 ul"
 	hunk-header-style = "file line-number syntax"
