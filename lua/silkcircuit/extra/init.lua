@@ -79,6 +79,11 @@ M.targets = {
     ext = "theme",
     url = "https://github.com/aristocratos/btop#themes",
   },
+  k9s = {
+    label = "k9s",
+    ext = "yaml",
+    url = "https://k9scli.io/topics/skins/",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
