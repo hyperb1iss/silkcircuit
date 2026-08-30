@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress';
 
 export default defineConfig({
   title: 'SilkCircuit',
-  description: 'Electric Dreams for Neovim - A vibrant theme with neon purples, blazing pinks, and glowing cyan accents',
+  description: 'A vibrant cyberpunk color system for Neovim, VS Code, terminals, browsers, and 20+ CLI tools',
 
   base: '/silkcircuit/',
 
@@ -10,8 +10,8 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/silkcircuit/favicon.svg' }],
     ['meta', { name: 'theme-color', content: '#e135ff' }],
     ['meta', { name: 'og:type', content: 'website' }],
-    ['meta', { name: 'og:title', content: 'SilkCircuit - Electric Dreams for Neovim' }],
-    ['meta', { name: 'og:description', content: 'A vibrant Neovim theme with neon purples, blazing pinks, and glowing cyan accents. WCAG AA compliant with 5 variants.' }],
+    ['meta', { name: 'og:title', content: 'SilkCircuit - Electric Meets Elegant' }],
+    ['meta', { name: 'og:description', content: 'A vibrant cyberpunk color system for Neovim, VS Code, terminals, browsers, and 20+ CLI tools. WCAG AA compliant with 5 variants.' }],
     ['meta', { name: 'og:image', content: '/silkcircuit/og-image.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
   ],
