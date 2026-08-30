@@ -554,10 +554,15 @@ function Install-Alacritty {
     Write-Host "$script:Purple$script:Bold  >> Alacritty$script:Reset"
 
     $themeDir = Join-PathParts $script:AppData "alacritty" "themes"
-    Copy-SilkFile (Join-Path $script:ExtrasDir "alacritty.yml") (Join-Path $themeDir "silkcircuit.yml") "alacritty:dark" | Out-Null
-    Copy-SilkFile (Join-Path $script:ExtrasDir "alacritty-dawn.yml") (Join-Path $themeDir "silkcircuit-dawn.yml") "alacritty:dawn" | Out-Null
-    Write-Success "Installed Alacritty themes"
-    Write-Dim "Import in alacritty.toml: import = [`"$($themeDir -replace '\\', '/')/silkcircuit.yml`"]"
+    $count = 0
+    Get-ChildItem -LiteralPath (Join-Path $script:ExtrasDir "alacritty") -File -Filter "silkcircuit-*.toml" | ForEach-Object {
+        $target = Join-Path $themeDir $_.Name
+        if (Copy-SilkFile $_.FullName $target "alacritty:$($_.Name)") {
+            $count++
+        }
+    }
+    Write-Success "Installed $count Alacritty themes"
+    Write-Dim "Import in alacritty.toml: import = [`"$($themeDir -replace '\\', '/')/silkcircuit-neon.toml`"]"
 }
 
 function Install-Btop {

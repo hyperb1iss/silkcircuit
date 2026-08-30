@@ -350,24 +350,32 @@ install_alacritty() {
     local theme_dir="$HOME/.config/alacritty/themes"
     printf "${PURPLE}${BOLD}  >> Alacritty${RESET}\n"
 
-    safe_copy "${EXTRAS_DIR}/alacritty.yml" "${theme_dir}/silkcircuit.yml" "alacritty:dark"
-    if [[ -f "${EXTRAS_DIR}/alacritty-dawn.yml" ]]; then
-        safe_copy "${EXTRAS_DIR}/alacritty-dawn.yml" "${theme_dir}/silkcircuit-dawn.yml" "alacritty:dawn"
-    fi
-    success "Installed Alacritty themes"
-    diminfo "Import in alacritty.toml: [general] import = [\"~/.config/alacritty/themes/silkcircuit.yml\"]"
+    local count=0
+    for f in "${EXTRAS_DIR}/alacritty/silkcircuit-"*.toml; do
+        local name
+        name=$(basename "$f")
+        if safe_copy "$f" "${theme_dir}/${name}" "alacritty:${name}"; then
+            count=$((count + 1))
+        fi
+    done
+    success "Installed ${count} Alacritty themes"
+    diminfo "Import in alacritty.toml: [general] import = [\"~/.config/alacritty/themes/silkcircuit-neon.toml\"]"
 }
 
 install_kitty() {
     local theme_dir="$HOME/.config/kitty/themes"
     printf "${PURPLE}${BOLD}  >> Kitty${RESET}\n"
 
-    safe_copy "${EXTRAS_DIR}/kitty.conf" "${theme_dir}/silkcircuit.conf" "kitty:dark"
-    if [[ -f "${EXTRAS_DIR}/kitty-dawn.conf" ]]; then
-        safe_copy "${EXTRAS_DIR}/kitty-dawn.conf" "${theme_dir}/silkcircuit-dawn.conf" "kitty:dawn"
-    fi
-    success "Installed Kitty themes"
-    diminfo "Activate: include themes/silkcircuit.conf"
+    local count=0
+    for f in "${EXTRAS_DIR}/kitty/silkcircuit-"*.conf; do
+        local name
+        name=$(basename "$f")
+        if safe_copy "$f" "${theme_dir}/${name}" "kitty:${name}"; then
+            count=$((count + 1))
+        fi
+    done
+    success "Installed ${count} Kitty themes"
+    diminfo "Activate: include themes/silkcircuit-neon.conf"
 }
 
 install_warp() {

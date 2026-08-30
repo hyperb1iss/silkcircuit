@@ -149,8 +149,10 @@ each one.
 
 <!-- extras:start -->
 
-| Target | Format | Generated files |
-| ------ | ------ | --------------- |
+| Target    | Format                                                          | Generated files                                                                                                                                                                                                                                          |
+| --------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Alacritty | [reference](https://alacritty.org/config-alacritty.html#colors) | [neon](extras/alacritty/silkcircuit-neon.toml) · [vibrant](extras/alacritty/silkcircuit-vibrant.toml) · [soft](extras/alacritty/silkcircuit-soft.toml) · [glow](extras/alacritty/silkcircuit-glow.toml) · [dawn](extras/alacritty/silkcircuit-dawn.toml) |
+| Kitty     | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme) | [neon](extras/kitty/silkcircuit-neon.conf) · [vibrant](extras/kitty/silkcircuit-vibrant.conf) · [soft](extras/kitty/silkcircuit-soft.conf) · [glow](extras/kitty/silkcircuit-glow.conf) · [dawn](extras/kitty/silkcircuit-dawn.conf)                     |
 
 <!-- extras:end -->
 
