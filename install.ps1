@@ -154,6 +154,19 @@ function Test-Utf8Bytes {
     }
 }
 
+# Copy-Item and WriteAllText both resolve a link and write to its target, so a
+# link sitting at the destination has to go before anything is written there.
+# This is the rule commit 4dbe234 established for config files; a backup path
+# is no different, and .bak is a plausible thing to find symlinked into a repo.
+function Clear-LinkAt {
+    param([string]$Path)
+
+    $item = Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+    if ($item -and $item.LinkType) {
+        Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
+    }
+}
+
 # ErrorActionPreference is Stop, so an unwritable path would throw out of
 # whichever install function touched it and take the whole run with it. Every
 # directory this script creates goes through here instead.
@@ -390,6 +403,7 @@ function Copy-SilkFile {
 
     if ($destinationItem -and -not $inExternalGit) {
         try {
+            Clear-LinkAt "$Destination.silkcircuit.bak"
             Copy-Item -LiteralPath $Destination -Destination "$Destination.silkcircuit.bak" -Force -ErrorAction Stop
         } catch {
             Write-Dim "${Label}: could not back up existing config, replacing it"
@@ -613,15 +627,13 @@ function Save-K9sConfig {
     )
 
     try {
+        Clear-LinkAt "$Path.silkcircuit.bak"
         Copy-Item -LiteralPath $Path -Destination "$Path.silkcircuit.bak" -Force -ErrorAction Stop
 
         # WriteAllText follows a link and rewrites its target, which is how a
         # dotfiles repo gets edited behind the user's back. Drop the link so a
         # real file lands here instead, the same rule Copy-SilkFile follows.
-        $item = Get-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
-        if ($item -and $item.LinkType) {
-            Remove-Item -LiteralPath $Path -Force -ErrorAction SilentlyContinue
-        }
+        Clear-LinkAt $Path
 
         [void](Write-PlainText $Path $Content -Bom:$Bom)
         return $true
@@ -741,7 +753,19 @@ function Set-K9sSkin {
     $out = [System.Collections.Generic.List[string]]::new()
 
     if ($rootAt -lt 0) {
-        # No k9s mapping yet, so a fresh one cannot be a duplicate.
+        # No k9s mapping yet, so a fresh one cannot be a duplicate, unless the
+        # document is a sequence, where appending one is invalid YAML.
+        foreach ($line in $lines) {
+            if ($line -match "^\s*$") { continue }
+            if ($line -match "^\s*#") { continue }
+            if ($line -match "^-\s") {
+                Write-Warn "k9s: $ConfigPath uses a shape this installer will not edit blind"
+                Write-Dim "Set k9s.ui.skin to $Skin yourself"
+                return $false
+            }
+            break
+        }
+
         foreach ($line in $lines) { $out.Add($line) }
         if ($lines.Count -gt 0) { $out.Add("") }
         $out.Add("k9s:")

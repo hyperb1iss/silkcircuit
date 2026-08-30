@@ -312,6 +312,9 @@ safe_copy() {
     if [[ -f "$dst" ]]; then
         # Skip .bak files inside external git repos, git itself is the backup
         if [[ "$in_ext_git" == false ]]; then
+            # cp follows a link at the backup path and writes to its target,
+            # so drop the link first. Same rule the destination already gets.
+            rm -f "${dst}.silkcircuit.bak" 2>/dev/null || true
             cp "$dst" "${dst}.silkcircuit.bak" 2>/dev/null || true
         fi
     fi
@@ -720,6 +723,12 @@ set_k9s_skin() {
         return 5
     fi
 
+    # Reachable only when called directly: install_k9s drops a stale link
+    # before it gets here. Kept so the function is correct on its own.
+    if [[ -L "$config" && ! -e "$config" ]]; then
+        rm -f "$config"
+    fi
+
     local work
     work="$(mktemp "${config}.silkcircuit.XXXXXX" 2>/dev/null)" || return 4
 
@@ -887,6 +896,7 @@ set_k9s_skin() {
 
     # Back up only once we know we are going to write, so a declined config is
     # left with no stray .bak beside it.
+    rm -f "${config}.silkcircuit.bak" 2>/dev/null || true
     cp "$config" "${config}.silkcircuit.bak" 2>/dev/null || true
 
     # Never write through a symlink. It usually points into a dotfiles repo,
