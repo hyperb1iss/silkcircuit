@@ -54,12 +54,15 @@ M.defaults = {
     telescope = true,
     fzf_lua = true,
     snacks = true,
+    dropbar = true,
+    lazy = true,
 
     -- Completion and messages
     cmp = true,
     blink_cmp = true,
     notify = true,
     noice = true,
+    fidget = true,
 
     -- Navigation and motion
     flash = true,
@@ -79,6 +82,7 @@ M.defaults = {
     -- Visual enhancements
     rainbow_delimiters = true,
     ["render-markdown"] = true,
+    treesitter_context = true,
 
     -- Folding and windows
     ufo = true,
