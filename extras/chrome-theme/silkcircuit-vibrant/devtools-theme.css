@@ -74,7 +74,7 @@ body,
   --sys-color-green: #00ff66 !important;
   --sys-color-green-bright: #00ff66 !important;
   --sys-color-orange: #ff00aa !important;
-  --sys-color-orange-bright: #F78C6C !important;
+  --sys-color-orange-bright: #f78c6c !important;
   --sys-color-pink: #ff00cc !important;
   --sys-color-pink-bright: #ff99ff !important;
   --sys-color-purple: #ff00ff !important;
@@ -122,11 +122,11 @@ body,
   --sys-color-token-variable: #f8f8f2 !important;
   --sys-color-token-definition: #00ffcc !important;
   --sys-color-token-property: #00ffff !important;
-  --sys-color-token-property-special: #F78C6C !important;
+  --sys-color-token-property-special: #f78c6c !important;
   --sys-color-token-type: #ffcc00 !important;
-  --sys-color-token-variable-special: #F78C6C !important;
+  --sys-color-token-variable-special: #f78c6c !important;
   --sys-color-token-builtin: #00ffff !important;
-  --sys-color-token-number: #F78C6C !important;
+  --sys-color-token-number: #f78c6c !important;
   --sys-color-token-string: #ff99ff !important;
   --sys-color-token-string-special: #00ffff !important;
   --sys-color-token-atom: #ff00ff !important;
@@ -171,9 +171,9 @@ body,
 .token-definition { color: #00ffcc !important; }
 .token-property { color: #00ffff !important; }
 .token-type { color: #ffcc00 !important; }
-.token-variable-special { color: #F78C6C !important; }
+.token-variable-special { color: #f78c6c !important; }
 .token-builtin { color: #00ffff !important; }
-.token-number { color: #F78C6C !important; }
+.token-number { color: #f78c6c !important; }
 .token-string { color: #ff99ff !important; }
 .token-string-special { color: #00ffff !important; }
 .token-atom { color: #ff00ff !important; }
@@ -189,7 +189,7 @@ body,
 
 .cm-keyword { color: #ff00ff !important; }
 .cm-string { color: #ff99ff !important; }
-.cm-number { color: #F78C6C !important; }
+.cm-number { color: #f78c6c !important; }
 .cm-property { color: #00ffff !important; }
 .cm-variable { color: #f8f8f2 !important; }
 .cm-comment { color: #b366ff !important; font-style: italic; }

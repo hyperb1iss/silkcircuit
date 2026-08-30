@@ -67,8 +67,8 @@ body,
 
   /* ── Named semantic colors ──────────────────────────────────────── */
 
-  --sys-color-blue: #82AAFF !important;
-  --sys-color-blue-bright: #82AAFF !important;
+  --sys-color-blue: #82aaff !important;
+  --sys-color-blue-bright: #82aaff !important;
   --sys-color-cyan: #80ffea !important;
   --sys-color-cyan-bright: #5fffff !important;
   --sys-color-green: #50fa7b !important;
@@ -153,13 +153,13 @@ body,
   --console-color-red: #ff6363 !important;
   --console-color-green: #50fa7b !important;
   --console-color-yellow: #f1fa8c !important;
-  --console-color-blue: #82AAFF !important;
+  --console-color-blue: #82aaff !important;
   --console-color-magenta: #ff00ff !important;
   --console-color-cyan: #80ffea !important;
   --console-color-bright-red: #ff6363 !important;
   --console-color-bright-green: #50fa7b !important;
   --console-color-bright-yellow: #f1fa8c !important;
-  --console-color-bright-blue: #82AAFF !important;
+  --console-color-bright-blue: #82aaff !important;
   --console-color-bright-magenta: #ff99ff !important;
   --console-color-bright-cyan: #5fffff !important;
 }
