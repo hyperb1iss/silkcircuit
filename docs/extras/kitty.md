@@ -19,7 +19,8 @@ include themes/silkcircuit-neon.conf
 Kitty resolves `include` against the directory holding the config file, so the
 path stays relative. `ctrl+shift+f5` reloads without a restart.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Files
 
