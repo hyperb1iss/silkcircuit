@@ -41,14 +41,16 @@ The CSS files style Ghostty's window chrome: headerbar, tabs, split dividers,
 overlays, and command palette. Copy the matching CSS variant:
 
 ```sh
-cp silkcircuit-neon.css ~/.config/ghostty/silkcircuit.css
+cp silkcircuit-neon.css ~/.config/ghostty/
 ```
 
 Then add to your Ghostty config (or a platform-specific config file):
 
 ```
-gtk-custom-css = ~/.config/ghostty/silkcircuit.css
+gtk-custom-css = ~/.config/ghostty/silkcircuit-neon.css
 ```
+
+`gtk-custom-css` needs Ghostty 1.1 or newer.
 
 ### What the CSS Styles
 

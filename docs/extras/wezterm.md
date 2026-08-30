@@ -18,7 +18,8 @@ config.color_scheme = "SilkCircuit Neon"
 
 The other names are `SilkCircuit Vibrant`, `Soft`, `Glow`, and `Dawn`.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Files
 

@@ -19,7 +19,8 @@ source-file ~/.config/tmux/silkcircuit-neon.conf
 
 Reload with `tmux source-file ~/.tmux.conf`, or start a fresh server.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Requires tmux 3.4
 

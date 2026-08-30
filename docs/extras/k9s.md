@@ -22,8 +22,7 @@ k9s:
 the config.
 
 The skins directory moves between platforms and k9s releases. `k9s info`
-prints where yours is, and the installer asks it before copying:
-`./install.sh --variant neon`.
+prints where yours is, and the installer asks it before copying: `./install.sh`.
 
 ## Files
 

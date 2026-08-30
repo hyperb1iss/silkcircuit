@@ -23,8 +23,8 @@ profile:
 . "$env:APPDATA\silkcircuit\fzf\silkcircuit-neon.ps1"
 ```
 
-The installer does either one: `./install.sh --variant neon` or
-`.\install.ps1 -Variant neon`.
+The installer does either one: `./install.sh` or `.\install.ps1`, each with an
+optional `--variant` / `-Variant` to narrow it to one.
 
 ## Requires fzf 0.52
 

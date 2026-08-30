@@ -13,7 +13,8 @@ Then pick the theme in Settings, Appearance, Themes. Each file declares its own
 `details` key, so Warp knows dawn is a light theme and the rest are dark, and
 sorts them into the right list.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Files
 

@@ -21,7 +21,8 @@ Alacritty 0.13 moved the config from YAML to TOML, which is why these ship
 as `.toml`. `import` sits under `[general]` in current releases. If your
 Alacritty rejects the key there, move it to the top level.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Files
 

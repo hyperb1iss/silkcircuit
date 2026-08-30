@@ -13,8 +13,8 @@ UI:
 3. Pick `extras/iterm2/silkcircuit-neon.itermcolors`.
 4. Open the dropdown again and select SilkCircuit Neon.
 
-The installer stages the files at `~/.config/silkcircuit/iterm2/` so the import
-dialog has somewhere stable to point at: `./install.sh --variant neon`.
+The installer stages all five at `~/.config/silkcircuit/iterm2/` so the import
+dialog has somewhere stable to point at: `./install.sh`.
 
 Presets are per profile, so repeat step 4 for any other profile you use.
 

@@ -19,7 +19,8 @@ theme = "silkcircuit-neon"
 Helix reloads a theme with `:config-reload`, and `:theme silkcircuit-dawn`
 switches without editing the config.
 
-The installer does the same thing: `./install.sh --variant neon`.
+The installer does the same thing: `./install.sh`, or
+`./install.sh --variant neon` for just that one.
 
 ## Files
 

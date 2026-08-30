@@ -11,8 +11,7 @@ Sidebar themes for Slack, which takes ten colors as one comma-separated line.
 Each file also lists the ten slots by name, above the line, in case you would
 rather set them one at a time.
 
-The installer stages the files and prints the line to paste:
-`./install.sh --variant neon`.
+The installer stages all five and prints the line to paste: `./install.sh`.
 
 ## What Slack lets you theme
 
