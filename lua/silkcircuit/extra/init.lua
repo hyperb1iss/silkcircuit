@@ -165,6 +165,11 @@ M.targets = {
     comment = "none",
     url = "https://code.visualstudio.com/api/extension-guides/color-theme",
   },
+  lsd = {
+    label = "lsd",
+    ext = "yaml",
+    url = "https://github.com/lsd-rs/lsd/blob/master/doc/colors.md",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
@@ -223,6 +228,48 @@ local function titlecase(word)
   return word:sub(1, 1):upper() .. word:sub(2)
 end
 
+-- The six levels the xterm 6x6x6 colour cube samples each channel at.
+local CUBE_LEVELS = { 0, 95, 135, 175, 215, 255 }
+
+--- Nearest xterm-256 index for one 24-bit colour.
+---
+--- lsd and procs take a palette index rather than a hex value, so the palette
+--- has to be quantised. Only the 6x6x6 cube (16-231) and the 24-step grey ramp
+--- (232-255) are candidates: the first sixteen slots are whatever the user's
+--- terminal decided they are, so picking one would hand the theme back to the
+--- terminal. Ties keep the lower index, which makes the mapping deterministic.
+local function nearest_x256(r, g, b)
+  local function nearest_level(value)
+    local best, best_distance = 1, math.huge
+    for index, level in ipairs(CUBE_LEVELS) do
+      local distance = math.abs(level - value)
+      if distance < best_distance then
+        best, best_distance = index, distance
+      end
+    end
+    return best
+  end
+
+  local function squared(dr, dg, db)
+    return dr * dr + dg * dg + db * db
+  end
+
+  local ri, gi, bi = nearest_level(r), nearest_level(g), nearest_level(b)
+  local cube = 16 + 36 * (ri - 1) + 6 * (gi - 1) + (bi - 1)
+  local cube_distance = squared(CUBE_LEVELS[ri] - r, CUBE_LEVELS[gi] - g, CUBE_LEVELS[bi] - b)
+
+  local step = math.min(23, math.max(0, math.floor(((r + g + b) / 3 - 8) / 10 + 0.5)))
+  local grey_level = 8 + 10 * step
+  local grey_distance = squared(grey_level - r, grey_level - g, grey_level - b)
+
+  if grey_distance < cube_distance then
+    return 232 + step
+  end
+  return cube
+end
+
+M.nearest_x256 = nearest_x256
+
 --- Sorted target names, so build output and docs tables never reshuffle.
 function M.names()
   local names = {}
@@ -277,6 +324,7 @@ function M.colors(variant)
           b = string.format("%.6f", bi / 255),
         }
         nohash[key] = value:sub(2)
+        x256[key] = nearest_x256(r, g, b)
       end
     end
   end
@@ -284,6 +332,7 @@ function M.colors(variant)
   colors.rgb = rgb
   colors.rgbf = rgbf
   colors.hex_nohash = nohash
+  colors.x256 = x256
   colors.meta = {
     variant = variant,
     label = titlecase(variant),
