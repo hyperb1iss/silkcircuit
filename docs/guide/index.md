@@ -10,7 +10,7 @@ SilkCircuit themes 20+ tools with the same palette and semantic mappings. Keywor
 
 ### Performance First
 
-The Neovim theme loads in under 5ms with bytecode compilation. No lag, no delays, just instant electric energy.
+The Neovim theme loads in about 5ms with every integration defined up front. There is no cache to regenerate and nothing to warm: instant electric energy on every start.
 
 ### Accessibility Built-In
 
@@ -29,7 +29,7 @@ All color combinations meet WCAG AA standards (4.5:1 contrast ratio minimum). Co
 ## Features at a Glance
 
 - 🎨 **25+ Plugin Integrations**: Auto-detected and themed
-- 🏎️ **<5ms Load Time**: Bytecode compiled
+- 🏎️ **~5ms Load Time**: No cache, nothing to regenerate
 - 👁️ **WCAG AA Compliant**: Validated contrast ratios
 - 💾 **Persistent Preferences**: Settings survive across sessions
 - 🔮 **Semantic Colors**: Consistent meanings everywhere

@@ -16,8 +16,7 @@ This command verifies your SilkCircuit installation and configuration.
 
 Verifies Neovim version meets requirements:
 
-- **Required:** Neovim 0.8.0+
-- **Recommended:** Neovim 0.9.0+ for best experience
+- **Required:** Neovim 0.10.0+
 
 ```
 ✓ Neovim version: 0.10.0 (OK)
@@ -66,13 +65,12 @@ Validates contrast ratios meet accessibility standards:
 ✓ All highlight groups meet WCAG AA contrast (4.5:1)
 ```
 
-### Cache Status
+### User Preferences
 
-Shows compilation cache status:
+Shows whether a saved variant or glow setting is overriding the configured defaults:
 
 ```
-✓ Theme compiled to bytecode
-✓ Cache location: ~/.cache/nvim/silkcircuit/
+✓ No saved preferences, using the configured values
 ```
 
 ## Common Issues
@@ -133,30 +131,13 @@ echo $COLORTERM
 
 **Symptoms:**
 
-- Theme takes more than 5ms to load
-- Visible delay on startup
+- Visible delay on startup that goes away when the colorscheme is disabled
 
 **Solutions:**
 
-1. Compile the theme:
-
-```vim
-:SilkCircuitCompile
-```
-
-2. Check cache permissions:
-
-```bash
-ls -la ~/.cache/nvim/silkcircuit/
-```
-
-3. Clear and recompile:
-
-```bash
-rm -rf ~/.cache/nvim/silkcircuit/
-```
-
-Then restart Neovim.
+1. Measure it. Set `vim.g.silkcircuit_debug = true` and restart; the theme prints its own load time, which is about 5ms on a laptop.
+2. If the number is far higher, another plugin is probably reloading the colorscheme repeatedly. Check `:autocmd ColorScheme`.
+3. Open an issue with the measured time and your plugin list.
 
 ### Plugin Not Themed
 
@@ -237,33 +218,33 @@ View debug output:
 ```
 silkcircuit: require("silkcircuit.health").check()
 
-SilkCircuit Theme Health Check
-==============================
+SilkCircuit
+- OK Neovim 0.12.5
+- OK termguicolors is enabled
+- OK SilkCircuit is the active colorscheme
 
-Environment
-- OK Neovim version: 0.10.0
-- OK True colors: enabled
-- OK termguicolors: set
-
-Theme Status
-- OK SilkCircuit loaded
+Configuration
 - OK Variant: neon
-- OK Compiled: yes
+- OK Transparent: false
+- OK Terminal colors: true
+- OK Dim inactive: false
 
-Integrations
-- OK telescope.nvim
-- OK neo-tree.nvim
-- OK nvim-cmp
-- OK gitsigns.nvim
-- OK lualine.nvim
+Plugin integrations
+- OK 29 integrations available, 5 plugins detected
+- OK Detected: cmp, gitsigns, lualine, telescope, treesitter
 
-Accessibility
-- OK WCAG AA contrast: all groups pass
+User preferences
+- OK No saved preferences, using the configured values
+
+WCAG contrast
+- OK Checked 18 distinct text colors against the 'neon' background (#12101a)
+- OK 17 of 18 meet WCAG AA (4.5:1)
+- WARNING gray (#637777, line numbers, non-text) on #12101a is 3.98:1, AA needs 4.5:1
 
 Commands
-- OK :SilkCircuit [variant]
-- OK :SilkCircuitGlow
-- OK :SilkCircuitContrast
-- OK :SilkCircuitCompile
-- OK :SilkCircuitIntegrations
+- OK :SilkCircuit [neon|vibrant|soft|glow|dawn] - switch variant
+- OK :SilkCircuitGlow [on|off|toggle] - control glow mode
+- OK :SilkCircuitContrast - check WCAG contrast
+- OK :SilkCircuitIntegrations - show integration status
+- OK :help |silkcircuit| - documentation
 ```
