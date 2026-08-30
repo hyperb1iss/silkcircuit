@@ -1,6 +1,6 @@
 # Installation
 
-SilkCircuit requires **Neovim 0.8.0+** with true color support enabled.
+SilkCircuit requires **Neovim 0.10+** with true color support enabled.
 
 ## Prerequisites
 
@@ -90,7 +90,7 @@ This will verify:
 
 ### Theme not loading?
 
-1. Ensure Neovim 0.8.0+ is installed
+1. Ensure Neovim 0.10 or newer is installed
 2. Add `vim.opt.termguicolors = true` to your config
 3. Verify plugin installation with `:Lazy` or `:PackerStatus`
 
@@ -103,8 +103,8 @@ This will verify:
 ### Performance issues?
 
 1. Run `:checkhealth silkcircuit`
-2. Check cache directory permissions
-3. Try `:SilkCircuitCompile` to regenerate cache
+2. Set `vim.g.silkcircuit_debug = true` and restart to see the measured load time
+3. Open an issue with that number and your plugin list
 
 ## Next Steps
 

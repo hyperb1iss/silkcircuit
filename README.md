@@ -7,7 +7,7 @@
 [![WCAG](https://img.shields.io/badge/WCAG%20AA-Compliant-50fa7b?style=for-the-badge&logo=accessibility&logoColor=white)](https://www.w3.org/WAI/WCAG21/quickref/)
 [![License](https://img.shields.io/badge/License-MIT-ff79c6?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
-[![Neovim](https://img.shields.io/badge/Neovim%200.8+-e135ff.svg?style=for-the-badge&logo=neovim&logoColor=white)](https://neovim.io/)
+[![Neovim](https://img.shields.io/badge/Neovim%200.10+-e135ff.svg?style=for-the-badge&logo=neovim&logoColor=white)](https://neovim.io/)
 [![VSCode](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=hyperb1iss.silkcircuit-theme)
 [![Chrome](https://img.shields.io/badge/Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/)
 
@@ -200,7 +200,7 @@ Copy-Item extras\starship\starship.toml "$HOME\.config\starship.toml"
 
 ## 💜 Neovim
 
-The Neovim theme is the most feature-rich target: bytecode-compiled for <5ms load times, 25+ auto-detected plugin integrations, and persistent preferences.
+The Neovim theme is the most feature-rich target: it loads in about 5ms with every one of its 29 plugin integrations defined up front, and it remembers your variant across sessions.
 
 <div align="center">
   <img src="assets/screenshots/nvim-telescope.png" alt="Telescope integration" width="85%">
@@ -257,7 +257,7 @@ return {
 | -------------------------- | -------------------------------------------- |
 | `:SilkCircuit {variant}`   | Switch variant (neon/vibrant/soft/glow/dawn) |
 | `:SilkCircuitContrast`     | Check WCAG contrast compliance               |
-| `:SilkCircuitCompile`      | Compile theme for performance                |
+| `:SilkCircuitGlow`         | Toggle glow mode (on/off/toggle)             |
 | `:SilkCircuitIntegrations` | Show detected plugin integrations            |
 | `:checkhealth silkcircuit` | Run diagnostics                              |
 
@@ -318,11 +318,11 @@ SilkCircuit extends far beyond your editor. See [extras/README.md](extras/README
 
 ## 🛠️ Troubleshooting
 
-**🤔 Neovim theme not loading?** Requires Neovim 0.8.0+ with `vim.opt.termguicolors = true`. Run `:checkhealth silkcircuit`.
+**🤔 Neovim theme not loading?** Requires Neovim 0.10+ with `vim.opt.termguicolors = true`. Run `:checkhealth silkcircuit`.
 
 **🎭 Colors look wrong?** Your terminal must support true colors (24-bit). Try a different terminal emulator if unsure.
 
-**🏎️ Performance issues?** Run `:SilkCircuitCompile` to regenerate the bytecode cache.
+**🏎️ Performance issues?** Set `vim.g.silkcircuit_debug = true` and restart to print the measured load time. Anything well over 5ms is worth an issue with your plugin list.
 
 **💭 Need help?** [Open an issue](https://github.com/hyperb1iss/silkcircuit/issues) with your config and error output.
 

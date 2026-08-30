@@ -57,18 +57,6 @@ Checks all highlight groups against WCAG AA standards (4.5:1 ratio) and reports 
 
 ---
 
-### :SilkCircuitCompile
-
-Compile theme for faster loading.
-
-```vim
-:SilkCircuitCompile
-```
-
-Generates bytecode cache for <5ms load times.
-
----
-
 ### :SilkCircuitIntegrations
 
 Show detected plugin integrations.
