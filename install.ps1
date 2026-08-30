@@ -670,7 +670,13 @@ function Set-K9sSkin {
         }
     }
 
-    $raw = Get-Content -LiteralPath $ConfigPath -Raw
+    try {
+        $raw = Get-Content -LiteralPath $ConfigPath -Raw -ErrorAction Stop
+    } catch {
+        Write-Warn "k9s: cannot read $ConfigPath"
+        Write-Dim "Set k9s.ui.skin to $Skin yourself"
+        return $false
+    }
     if (-not $raw) { $raw = "" }
     $hadBom = Test-FileBom $ConfigPath
 
@@ -1164,13 +1170,25 @@ function Install-Lsd {
     if ($DryRun) {
         Write-Dim "dry-run: would set color.theme to custom in $config"
     } elseif (Test-Path -LiteralPath $config) {
-        if ((Get-Content -LiteralPath $config -Raw) -notmatch "theme:\s*custom") {
+        $existing = ""
+        try {
+            $existing = Get-Content -LiteralPath $config -Raw -ErrorAction Stop
+        } catch {
+            $existing = ""
+        }
+        if ($existing -notmatch "theme:\s*custom") {
             Write-Dim "Add to ${config}:"
             Write-Dim "color:"
             Write-Dim "  theme: custom"
         }
     } else {
-        Write-PlainText $config "color:`r`n  theme: custom`r`n"
+        try {
+            [void](Write-PlainText $config "color:`r`n  theme: custom`r`n")
+        } catch {
+            Write-Dim "Could not create ${config}. Add to it yourself:"
+            Write-Dim "color:"
+            Write-Dim "  theme: custom"
+        }
     }
 
     Write-Success "Installed the lsd color file"
@@ -1279,9 +1297,13 @@ function Install-Slack {
     $source = Join-Path $sourceDir "silkcircuit-$script:Primary.txt"
     $line = $null
     if (Test-Path -LiteralPath $source) {
-        $line = Get-Content -LiteralPath $source |
-            Where-Object { $_ -match "^#[0-9a-fA-F]{6}(,#[0-9a-fA-F]{6}){9}$" } |
-            Select-Object -Last 1
+        try {
+            $line = Get-Content -LiteralPath $source -ErrorAction Stop |
+                Where-Object { $_ -match "^#[0-9a-fA-F]{6}(,#[0-9a-fA-F]{6}){9}$" } |
+                Select-Object -Last 1
+        } catch {
+            $line = $null
+        }
     }
     if ($line) {
         Write-Dim $line
