@@ -165,6 +165,12 @@ M.targets = {
     comment = "none",
     url = "https://code.visualstudio.com/api/extension-guides/color-theme",
   },
+  fastfetch = {
+    label = "fastfetch",
+    ext = "jsonc",
+    comment = "slash",
+    url = "https://github.com/fastfetch-cli/fastfetch/wiki/Configuration",
+  },
   git = {
     label = "Git",
     ext = "gitconfig",
