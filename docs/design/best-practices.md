@@ -242,10 +242,10 @@ Every interactive element must be keyboard accessible.
 
 ## Performance Tips
 
-1. **Preload critical fonts**:Prevent flash of unstyled text
-2. **Use CSS containment**:Isolate animated elements
-3. **Lazy load heavy assets**:Don't block initial render
-4. **Minimize paint areas**:Use transform/opacity for animations
+1. **Preload critical fonts**: Prevent flash of unstyled text
+2. **Use CSS containment**: Isolate animated elements
+3. **Lazy load heavy assets**: Don't block initial render
+4. **Minimize paint areas**: Use transform/opacity for animations
 
 ## Resources
 

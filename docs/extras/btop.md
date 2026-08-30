@@ -62,11 +62,11 @@ truecolor = True
 
 Each variant offers a unique monitoring experience:
 
-- **Neon**:Maximum vibrancy for dark rooms
-- **Vibrant**:Balanced colors for everyday use
-- **Soft**:Easy on the eyes for extended monitoring
-- **Glow**:Ultra-high contrast on dark backgrounds
-- **Dawn**:Light theme for bright environments
+- **Neon**: Maximum vibrancy for dark rooms
+- **Vibrant**: Balanced colors for everyday use
+- **Soft**: Easy on the eyes for extended monitoring
+- **Glow**: Ultra-high contrast on dark backgrounds
+- **Dawn**: Light theme for bright environments
 
 ## Customization
 

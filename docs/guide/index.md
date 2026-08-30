@@ -1,16 +1,16 @@
 # Introduction
 
-SilkCircuit is a unified color system for your entire development environment. One palette, consistent semantics, WCAG AA compliant:from Neovim to VS Code to your terminal to your browser.
+SilkCircuit is a unified color system for your entire development environment. One palette, consistent semantics, and WCAG AA contrast, from Neovim to VS Code to your terminal to your browser.
 
 ## Why SilkCircuit?
 
 ### Electric Meets Elegant
 
-SilkCircuit themes 20+ tools with the same palette and semantic mappings. Keywords are always purple, functions are always cyan, strings are always pink:whether you're in Neovim, VS Code, or reading a diff in your terminal.
+SilkCircuit themes 20+ tools with the same palette and semantic mappings. Keywords are always purple, functions are always cyan, strings are always pink, whether you're in Neovim, VS Code, or reading a diff in your terminal.
 
 ### Performance First
 
-The Neovim theme loads in under 5ms with bytecode compilation. No lag, no delays:just instant electric energy.
+The Neovim theme loads in under 5ms with bytecode compilation. No lag, no delays, just instant electric energy.
 
 ### Accessibility Built-In
 
@@ -28,11 +28,11 @@ All color combinations meet WCAG AA standards (4.5:1 contrast ratio minimum). Co
 
 ## Features at a Glance
 
-- 🎨 **40+ Plugin Integrations**:Auto-detected and themed
-- 🏎️ **<5ms Load Time**:Bytecode compiled
-- 👁️ **WCAG AA Compliant**:Validated contrast ratios
-- 💾 **Persistent Preferences**:Settings survive across sessions
-- 🔮 **Semantic Colors**:Consistent meanings everywhere
+- 🎨 **40+ Plugin Integrations**: Auto-detected and themed
+- 🏎️ **<5ms Load Time**: Bytecode compiled
+- 👁️ **WCAG AA Compliant**: Validated contrast ratios
+- 💾 **Persistent Preferences**: Settings survive across sessions
+- 🔮 **Semantic Colors**: Consistent meanings everywhere
 
 ## Quick Start
 
@@ -52,7 +52,7 @@ Then switch variants with `:SilkCircuit dawn` or any other variant name.
 
 ## Next Steps
 
-- [Installation Guide](/guide/installation):Get SilkCircuit running
-- [Configuration](/guide/configuration):Customize your experience
-- [Theme Variants](/variants/):Explore all 5 variants
-- [Design System](/design/):Understand the color philosophy
+- [Installation Guide](/guide/installation): Get SilkCircuit running
+- [Configuration](/guide/configuration): Customize your experience
+- [Theme Variants](/variants/): Explore all 5 variants
+- [Design System](/design/): Understand the color philosophy

@@ -40,10 +40,10 @@ Your preference is automatically saved for future sessions.
 
 All dark variants share the same semantic color mappings. Only the intensity and backgrounds differ:
 
-- **Neon**:Pure, saturated colors at maximum intensity
-- **Vibrant**:Slightly reduced saturation, easier on the eyes
-- **Soft**:Gentler colors for marathon coding sessions
-- **Glow**:Ultra-dark backgrounds with pure neon colors for maximum contrast
+- **Neon**: Pure, saturated colors at maximum intensity
+- **Vibrant**: Slightly reduced saturation, easier on the eyes
+- **Soft**: Gentler colors for marathon coding sessions
+- **Glow**: Ultra-dark backgrounds with pure neon colors for maximum contrast
 
 ### Light Variant
 
@@ -57,15 +57,15 @@ All dark variants share the same semantic color mappings. Only the intensity and
 
 ::: tip When to Use Each Variant
 
-**Neon**:When you want maximum visual impact and are working in a dark room.
+**Neon**: When you want maximum visual impact and are working in a dark room.
 
-**Vibrant**:For everyday use with a good balance of energy and comfort.
+**Vibrant**: For everyday use with a good balance of energy and comfort.
 
-**Soft**:For long coding sessions, especially late at night.
+**Soft**: For long coding sessions, especially late at night.
 
-**Glow**:In very dark environments or when using high-contrast monitors.
+**Glow**: In very dark environments or when using high-contrast monitors.
 
-**Dawn**:During daytime, in well-lit rooms, or when working outdoors.
+**Dawn**: During daytime, in well-lit rooms, or when working outdoors.
 :::
 
 ## Learn More

@@ -137,10 +137,10 @@ Bufferline automatically uses SilkCircuit colors when the theme is active.
 
 Telescope gains SilkCircuit styling:
 
-- **Border**:Cyan accents
-- **Selection**:Purple highlight
-- **Prompt**:Pink prefix
-- **Matches**:Yellow highlight
+- **Border**: Cyan accents
+- **Selection**: Purple highlight
+- **Prompt**: Pink prefix
+- **Matches**: Yellow highlight
 
 ## Troubleshooting
 

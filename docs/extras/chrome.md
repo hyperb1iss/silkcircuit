@@ -1,14 +1,14 @@
 # Chrome Theme
 
-SilkCircuit for Google Chrome:all 5 variants with full browser theming.
+SilkCircuit for Google Chrome. All five variants ship with full browser theming.
 
 ## Variants
 
-- **Neon**:The original SilkCircuit experience
-- **Vibrant**:Maximum saturation on ultra-dark canvas
-- **Soft**:Gentle glow for extended sessions
-- **Glow**:Pure neon on void-black, maximum contrast
-- **Dawn**:Light theme with electric accents on lavender
+- **Neon**: The original SilkCircuit experience
+- **Vibrant**: Maximum saturation on ultra-dark canvas
+- **Soft**: Gentle glow for extended sessions
+- **Glow**: Pure neon on void-black, maximum contrast
+- **Dawn**: Light theme with electric accents on lavender
 
 ## Installation
 
@@ -39,7 +39,7 @@ All 24 Chrome theme color keys, including:
 - Frame (active, inactive, incognito, incognito inactive)
 - Toolbar text and button icons
 - Omnibox background and text
-- Tab text (active, inactive, incognito:all window states)
+- Tab text (active, inactive, and incognito, covering every window state)
 - Background tab colors (all states)
 - NTP background, text, links, header
 - Tab group color palette (all 9 slots)

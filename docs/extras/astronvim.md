@@ -107,11 +107,11 @@ The included Lualine config provides an enhanced statusline:
 
 Custom Neo-tree icons and colors:
 
-- **Directories**:Cyan icons
-- **Files**:Type-based coloring
-- **Git status**:SilkCircuit git colors
-- **Modified**:Yellow indicator
-- **Untracked**:Red indicator
+- **Directories**: Cyan icons
+- **Files**: Type-based coloring
+- **Git status**: SilkCircuit git colors
+- **Modified**: Yellow indicator
+- **Untracked**: Red indicator
 
 ## Switching Variants
 

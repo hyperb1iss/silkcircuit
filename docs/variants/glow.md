@@ -96,8 +96,8 @@ Glow is the most extreme dark variant:
 
 The "glow" aesthetic comes from the contrast between:
 
-- **Ultra-dark background** (`#0a0816`):Nearly black
+- **Ultra-dark background** (`#0a0816`): Nearly black
 - **Pure neon accents**:`#ff00ff`, `#00ffff`, `#ffff00`
-- **White foreground**:Maximum readability
+- **White foreground**: Maximum readability
 
 This creates the illusion of code elements glowing against the darkness.

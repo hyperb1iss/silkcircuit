@@ -79,10 +79,10 @@ require("silkcircuit").setup({
 
 Available style options:
 
-- `italic`:Render in italic
-- `bold`:Render in bold
-- `underline`:Add underline
-- `strikethrough`:Add strikethrough
+- `italic`: Render in italic
+- `bold`: Render in bold
+- `underline`: Add underline
+- `strikethrough`: Add strikethrough
 
 ## Plugin Integrations
 

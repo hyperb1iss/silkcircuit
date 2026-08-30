@@ -11,12 +11,12 @@ Complete reference for SilkCircuit highlight group mappings.
 | `Keyword`    | Purple     | Bold         | Control flow, keywords |
 | `Function`   | Cyan       | Bold, Italic | Function names         |
 | `String`     | Pink Soft  | Italic       | String literals        |
-| `Number`     | Coral      | —            | Numeric values         |
-| `Boolean`    | Pink       | —            | true/false             |
-| `Type`       | Yellow     | —            | Type names             |
+| `Number`     | Coral      | None         | Numeric values         |
+| `Boolean`    | Pink       | None         | true/false             |
+| `Type`       | Yellow     | None         | Type names             |
 | `Comment`    | Gray       | Italic       | Comments               |
-| `Operator`   | Foreground | —            | Operators              |
-| `Identifier` | Foreground | —            | Variables              |
+| `Operator`   | Foreground | None         | Operators              |
+| `Identifier` | Foreground | None         | Variables              |
 
 ### Extended Syntax
 
