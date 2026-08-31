@@ -37,7 +37,20 @@ local function derive_keys(colors)
   colors.bg_statusline = colors.bg_statusline or colors.bg_highlight
   colors.bg_darker = colors.bg_darker or color_utils.darken(colors.bg_dark, light and 0.97 or 0.7)
 
+  -- The tone a float or a scrollbar casts underneath itself. A dark variant
+  -- reaches past its own panels for it, so bg_darker is already the value and
+  -- naming it twice would let the two drift. dawn has nothing darker than its
+  -- page to reach for and spells its own out, which this leaves alone.
+  colors.shadow = colors.shadow or colors.bg_darker
+
   colors.border = colors.border or colors.cyan_bright
+
+  -- The ring around whatever has focus. On a dark variant that is the border
+  -- colour, and deriving it rather than repeating cyan_bright keeps the two
+  -- from splitting if a variant ever names its own border. dawn spells its
+  -- own out, because a cyan focus ring on a lavender page reads as a
+  -- different brand.
+  colors.accent_border = colors.accent_border or colors.border
   colors.keyword = colors.keyword or colors.purple
   colors.operator = colors.operator or colors.fg_dark
   colors.string = colors.string or colors.pink_soft
@@ -74,6 +87,10 @@ local function create_variant(variant_name)
   -- floats each rise one step above it. Every step is between 1.01x and
   -- 1.07x in relative luminance, and bg_float stays low enough that every
   -- text color still clears AA against it.
+  --
+  -- divider carries on past the top of the ladder. It is not a surface: it is
+  -- the line drawn between two of them, so it steps far enough off the page to
+  -- be seen at one pixel wide and stops well short of reading as text.
   local backgrounds = {}
   if variant_name == "neon" then
     backgrounds = {
@@ -81,8 +98,9 @@ local function create_variant(variant_name)
       bg_dark = "#0a0812", -- sidebar, panels
       bg_highlight = "#1a162a", -- cursorline
       bg_statusline = "#1d1a2d", -- statusline, tab bar
-      bg_float = "#221e32", -- popups, menus, dividers
+      bg_float = "#221e32", -- popups, menus
       bg_visual = "#44475a", -- selection
+      divider = "#39305c", -- window separators, panel and tab edges
     }
   elseif variant_name == "soft" then
     backgrounds = {
@@ -90,8 +108,9 @@ local function create_variant(variant_name)
       bg_dark = "#141220", -- sidebar, panels
       bg_highlight = "#201b30", -- cursorline
       bg_statusline = "#252036", -- statusline, tab bar
-      bg_float = "#2b253d", -- popups, menus, dividers
+      bg_float = "#2b253d", -- popups, menus
       bg_visual = "#44475a", -- selection
+      divider = "#403660", -- window separators, panel and tab edges
     }
   else
     backgrounds = {
@@ -99,8 +118,9 @@ local function create_variant(variant_name)
       bg_dark = "#08060f", -- sidebar, panels
       bg_highlight = "#151026", -- cursorline
       bg_statusline = "#1a142d", -- statusline, tab bar
-      bg_float = "#1e1834", -- popups, menus, dividers
+      bg_float = "#1e1834", -- popups, menus
       bg_visual = "#3a2e5a", -- selection
+      divider = "#3b2d6a", -- window separators, panel and tab edges
     }
   end
 
@@ -253,6 +273,14 @@ local function create_variant(variant_name)
   -- Merge adjusted colors
   colors = vim.tbl_extend("force", colors, neon_colors)
 
+  -- Accent roles. Chrome outside Neovim needs names for moves a flat list of
+  -- hues cannot express: the step away from the purple under a button, and
+  -- the hue that marks debugging and merge conflicts so they read as neither
+  -- error nor success. accent_border is the third, and derive_keys takes it
+  -- off border.
+  colors.accent_hover = colors.pink_bright
+  colors.accent_warm = colors.coral
+
   -- Add derived colors
   if variant_name == "vibrant" then
     -- Use VSCode vibrant selection colors
@@ -354,17 +382,17 @@ local function create_dawn_variant()
     --
     --   bg > bg_highlight > bg_dark > bg_float > bg_statusline > bg_visual
     --
-    -- bg_float doubles as the divider colour in the VS Code theme, where it
-    -- draws editorGroup.border, sideBar.border and tab.border, so it has to
-    -- be visible against both the page and the sidebar. It reads 1.22:1 on
-    -- the page and 1.14:1 on the sidebar, and it is the darkest surface any
-    -- syntax colour is painted on, which is what sets dawn's ink floor.
+    -- bg_float is the darkest surface any syntax colour is painted on, which
+    -- is what sets dawn's ink floor. divider carries on past the bottom of the
+    -- ladder in the same lavender: deep enough to draw a line the eye catches
+    -- on the page and against the sidebar, quiet enough never to read as text.
     bg = "#faf8ff", -- Main editor background (off-white)
     bg_highlight = "#f7f4ff", -- Cursorline
     bg_dark = "#f4f0ff", -- Sidebar/panel background (slightly purple)
-    bg_float = "#e8dffd", -- Popups, menus, dividers
+    bg_float = "#e8dffd", -- Popups, menus
     bg_statusline = "#ded3f8", -- Statusline, tab bar
     bg_visual = "#d4c8f0", -- Selection background
+    divider = "#cfc2ee", -- Window separators, panel and tab edges
 
     -- Dark foregrounds for contrast on light
     fg = "#2b2540", -- Main text (dark purple-gray)
@@ -376,6 +404,7 @@ local function create_dawn_variant()
     gray = "#686177", -- Line numbers, non-text glyphs
     gray_light = "#c4bbd6", -- Light gray (shadows only)
     gray_dark = "#6b5f80", -- Dark gray
+    shadow = "#c4bbd6", -- == gray_light, laid down at partial opacity
 
     -- Dawn ink. On a near-white page every syntax colour is dark, so the
     -- families separate by hue and chroma rather than by lightness, and the
@@ -410,6 +439,14 @@ local function create_dawn_variant()
     yellow = "#796100", -- Classes/types (golden)
     yellow_bright = "#7f5f00", -- Brighter yellow
     yellow_light = "#a26d04", -- Light yellow
+
+    -- Accent roles. The dark variants answer these in cyan and coral, which
+    -- dawn cannot borrow: a cyan focus ring on a lavender page reads as a
+    -- different brand, and coral and pink collapse into each other once both
+    -- are dark enough for the page. Dawn keeps all three in purple and pink.
+    accent_hover = "#b40077", -- == pink, the step off the button purple
+    accent_border = "#7e2bd5", -- == purple, focus rings and active indicators
+    accent_warm = "#b40077", -- == pink, debugging and merge conflicts
 
     -- Selection and highlights for light theme
     selection = "#d4c8f0",
@@ -475,12 +512,16 @@ local function create_glow_variant()
     -- variants, walked in glow's purple-black rather than its blue-black:
     --
     --   bg_dark < bg < bg_highlight < bg_statusline < bg_float
+    --
+    -- divider continues that ramp one step past bg_float, where the violet is
+    -- finally strong enough to draw a line rather than fill a panel.
     bg = "#0a0816", -- editor.background
     bg_dark = "#000000", -- sideBar.background
     bg_highlight = "#1a0033", -- cursorline
     bg_statusline = "#20003d", -- statusline, tab bar
-    bg_float = "#250047", -- popups, menus, dividers
+    bg_float = "#250047", -- popups, menus
     bg_visual = "#ff00ff44", -- selection
+    divider = "#49008f", -- window separators, panel and tab edges
 
     -- Pure white text for maximum contrast
     fg = "#ffffff", -- editor.foreground
@@ -518,6 +559,8 @@ local function create_glow_variant()
     pink_soft = "#ff99ff", -- Strings (lighter pink)
 
     coral = "#ff66ff", -- Numbers/constants
+    accent_hover = "#ff66ff", -- == pink_bright, the step off the button purple
+    accent_warm = "#ff66ff", -- == coral, debugging and merge conflicts
     red = "#ff2244", -- Errors, terminal.ansiRed
     red_dark = "#ff2244",
     red_bright = "#ff6666", -- terminal.ansiBrightRed
