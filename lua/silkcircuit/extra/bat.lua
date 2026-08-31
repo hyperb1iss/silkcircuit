@@ -35,6 +35,10 @@ local TEMPLATE = [[
 				<string>${fg}</string>
 				<key>invisibles</key>
 				<string>${gray_muted}</string>
+				<key>gutter</key>
+				<string>${bg}</string>
+				<key>gutterForeground</key>
+				<string>${gray}</string>
 				<key>lineHighlight</key>
 				<string>${bg_highlight}</string>
 				<key>selection</key>
