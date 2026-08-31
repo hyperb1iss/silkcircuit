@@ -14,7 +14,8 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | Dark      | `#0a0812` | Sidebar, panels   |
 | Highlight | `#1a162a` | Cursorline        |
 | Statusbar | `#1d1a2d` | Statusline, tabs  |
-| Float     | `#221e32` | Popups, dividers  |
+| Float     | `#221e32` | Popups, menus     |
+| Divider   | `#39305c` | Separators, edges |
 
 **Primary Colors:**
 
@@ -37,7 +38,8 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | Dark      | `#08060f` | Sidebar, panels   |
 | Highlight | `#151026` | Cursorline        |
 | Statusbar | `#1a142d` | Statusline, tabs  |
-| Float     | `#1e1834` | Popups, dividers  |
+| Float     | `#1e1834` | Popups, menus     |
+| Divider   | `#3b2d6a` | Separators, edges |
 
 **Primary Colors:**
 
@@ -60,7 +62,8 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | Dark      | `#141220` | Sidebar, panels   |
 | Highlight | `#201b30` | Cursorline        |
 | Statusbar | `#252036` | Statusline, tabs  |
-| Float     | `#2b253d` | Popups, dividers  |
+| Float     | `#2b253d` | Popups, menus     |
+| Divider   | `#403660` | Separators, edges |
 
 **Primary Colors:**
 
@@ -83,7 +86,8 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | Dark      | `#000000` | Sidebar, panels   |
 | Highlight | `#1a0033` | Cursorline        |
 | Statusbar | `#20003d` | Statusline, tabs  |
-| Float     | `#250047` | Popups, dividers  |
+| Float     | `#250047` | Popups, menus     |
+| Divider   | `#49008f` | Separators, edges |
 
 **Primary Colors:**
 
@@ -105,7 +109,8 @@ SilkCircuit's color system provides consistent, accessible colors across all fiv
 | Base      | `#faf8ff` | Editor background |
 | Dark      | `#f4f0ff` | Sidebar, panels   |
 | Highlight | `#f7f4ff` | Cursorline        |
-| Float     | `#e8dffd` | Popups, dividers  |
+| Float     | `#e8dffd` | Popups, menus     |
+| Divider   | `#cfc2ee` | Separators, edges |
 | Statusbar | `#ded3f8` | Statusline, tabs  |
 
 **Primary Colors:**

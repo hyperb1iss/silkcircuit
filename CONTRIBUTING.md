@@ -66,6 +66,13 @@ fills in. The installers take `--variant`, so an install function copies one
 file per selected variant when the tool holds a directory of themes, and takes
 the primary variant when it reads a single file.
 
+Inside a template, reach for the semantic role rather than the primitive: a
+separator is `${divider}` and a focus ring is `${accent_border}`, and a
+primitive like `${purple}` is for the places where the brand itself is the
+point. If the role a target needs does not exist yet, add it to every variant
+in `variants.lua` rather than deriving it inside one generator, where no other
+target can see it.
+
 ## A change ships all five variants or it does not ship
 
 There are five: `neon`, `vibrant`, `soft`, `glow`, and `dawn`. They are not

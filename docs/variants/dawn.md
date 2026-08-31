@@ -38,14 +38,15 @@ A beautiful light theme for daytime coding with electric accents.
 
 ### Background Spectrum
 
-| Element       | Hex       | Usage                   |
-| ------------- | --------- | ----------------------- |
-| bg            | `#faf8ff` | Main editor background  |
-| bg_highlight  | `#f7f4ff` | Cursorline              |
-| bg_dark       | `#f4f0ff` | Sidebar, panels         |
-| bg_float      | `#e8dffd` | Popups, menus, dividers |
-| bg_statusline | `#ded3f8` | Statusline, tab bar     |
-| bg_visual     | `#d4c8f0` | Selection               |
+| Element       | Hex       | Usage                  |
+| ------------- | --------- | ---------------------- |
+| bg            | `#faf8ff` | Main editor background |
+| bg_highlight  | `#f7f4ff` | Cursorline             |
+| bg_dark       | `#f4f0ff` | Sidebar, panels        |
+| bg_float      | `#e8dffd` | Popups, menus          |
+| divider       | `#cfc2ee` | Separators, edges      |
+| bg_statusline | `#ded3f8` | Statusline, tab bar    |
+| bg_visual     | `#d4c8f0` | Selection              |
 
 ## Terminal Colors
 
