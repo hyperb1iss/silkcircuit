@@ -24,6 +24,10 @@
 				<string>#f8f8f2</string>
 				<key>invisibles</key>
 				<string>#506060</string>
+				<key>gutter</key>
+				<string>#0f0c1a</string>
+				<key>gutterForeground</key>
+				<string>#728989</string>
 				<key>lineHighlight</key>
 				<string>#151026</string>
 				<key>selection</key>
