@@ -13,6 +13,27 @@ named roles: `bg`, `fg`, `purple`, `pink_soft`, the sixteen `terminal_*` ANSI
 slots, the diagnostic and git roles, the surface ladder. The Neovim theme
 reads it directly at load time. Everything else is rendered from it.
 
+## Tokens
+
+Roles are semantic first. A key says what a colour is for rather than what it
+looks like: `divider` is the tone a line between two surfaces is drawn in, and
+`bg_statusline` is the raised surface a statusline sits on. Each target maps
+its own widgets onto whichever roles fit, so one name lands in Neovim's
+`WinSeparator` and in VS Code's `sideBar.border` and means the same thing in
+both. Reach for a primitive like `purple` or `cyan_bright` only
+when the point is the brand: a heading meant to be electric, a cursor meant to
+be magenta. Everything structural takes the role, because a role is the only
+thing that can be retuned in one place and land correctly in thirty formats.
+
+Three accent roles exist for exactly that reason. `accent_hover` is the step
+away from the purple under a button, `accent_border` is the ring around
+whatever has focus, and `accent_warm` marks debugging and merge conflicts. The
+dark variants answer all three with brand primitives and `dawn` answers them in
+its own purple and pink, so a focus ring is a focus ring everywhere without any
+target having to know which variant it is rendering. `shadow`, the tone a float
+casts underneath itself, is a surface rather than an accent and follows the
+same rule.
+
 ## The render
 
 ```
