@@ -57,11 +57,15 @@ function M.get(colors, _)
     -- mini.files
     MiniFilesFile = { fg = colors.fg },
     MiniFilesDirectory = { fg = colors.blue, bold = true },
-    MiniFilesTitle = { fg = colors.fg, bg = colors.bg_highlight, bold = true },
+    -- mini.files draws its title on a border that carries no background of
+    -- its own, so the title composites on the float window, not the cursorline.
+    MiniFilesTitle = { fg = colors.fg, bg = colors.bg_float, bold = true },
     MiniFilesTitleFocused = { fg = colors.fg, bg = colors.purple, bold = true },
     MiniFilesBorder = { fg = colors.border },
     MiniFilesBorderModified = { fg = colors.yellow },
-    MiniFilesCursorLine = { bg = colors.bg_highlight },
+    -- The float body is bg_float, which sits above bg_highlight, so the row
+    -- marker has to rise off it rather than sink into it.
+    MiniFilesCursorLine = { bg = colors.bg_visual },
 
     -- mini.pick
     MiniPickBorder = { fg = colors.border },

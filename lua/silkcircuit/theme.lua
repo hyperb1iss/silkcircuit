@@ -15,7 +15,7 @@ function M.get_highlights(colors, opts)
   -- Editor highlights
   highlights.Normal = { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg }
   highlights.NormalFloat =
-    { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg_highlight }
+    { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg_float }
   highlights.NormalNC = opts.dim_inactive and { fg = colors.fg, bg = colors.bg_dark }
     or { link = "Normal" }
   highlights.Cursor = { fg = colors.bg, bg = colors.fg }
@@ -27,14 +27,17 @@ function M.get_highlights(colors, opts)
   highlights.LineNr = { fg = colors.gray }
   highlights.LineNrAbove = { link = "LineNr" }
   highlights.LineNrBelow = { link = "LineNr" }
-  highlights.VertSplit = { fg = colors.bg_highlight }
-  highlights.WinSeparator = { fg = colors.bg_highlight }
+  highlights.VertSplit = { fg = colors.divider }
+  highlights.WinSeparator = { fg = colors.divider }
+  -- The float surface is bg_float, not the cursorline. The border and the
+  -- title sit on the same body they frame, and most integrations that paint
+  -- their own float already reach for bg_float.
   highlights.FloatBorder =
-    { fg = sem.border, bg = opts.transparent and colors.none or colors.bg_highlight }
+    { fg = sem.border, bg = opts.transparent and colors.none or colors.bg_float }
   highlights.FloatTitle =
-    { fg = colors.pink, bg = opts.transparent and colors.none or colors.bg_highlight, bold = true }
+    { fg = colors.pink, bg = opts.transparent and colors.none or colors.bg_float, bold = true }
   highlights.FloatFooter =
-    { fg = colors.purple, bg = opts.transparent and colors.none or colors.bg_highlight }
+    { fg = colors.purple, bg = opts.transparent and colors.none or colors.bg_float }
   highlights.WinBar = { fg = colors.pink_bright }
   highlights.WinBarNC = { fg = colors.purple_muted }
   highlights.SignColumn = { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg }
@@ -44,9 +47,11 @@ function M.get_highlights(colors, opts)
   highlights.CursorLineFold = { fg = colors.purple, bg = colors.bg_highlight }
   highlights.EndOfBuffer = { fg = colors.bg }
 
-  -- Statusline
-  highlights.StatusLine = { fg = colors.fg_light, bg = colors.bg_highlight }
-  highlights.StatusLineNC = { fg = colors.gray, bg = colors.bg_highlight }
+  -- Statusline. The focused bar rises to bg_statusline and an unfocused one
+  -- drops to the panel surface, so in a split the split is legible from the
+  -- bars alone rather than from how bright their text is.
+  highlights.StatusLine = { fg = colors.fg_light, bg = colors.bg_statusline }
+  highlights.StatusLineNC = { fg = colors.gray, bg = colors.bg_dark }
   highlights.StatusLineTerm = { fg = colors.fg_light, bg = colors.bg_statusline, bold = true }
   highlights.StatusLineTermNC = { fg = colors.fg_dark, bg = colors.bg_statusline }
 
