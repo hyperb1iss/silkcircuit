@@ -1,0 +1,750 @@
+#!/usr/bin/env bash
+# Recapture the terminal screenshots under assets/screenshots/.
+#
+# The palette moves, so the screenshots have to move with it. Running this
+# after `make build` regenerates every image from the themes that are actually
+# checked in, the same way `make build` regenerates the themes themselves.
+#
+# Nothing here touches a real terminal window, a window manager, or a screen
+# recording permission. Each shot is rendered headlessly in four steps:
+#
+#   1. tmux runs the tool in a detached 120x36 pane with truecolor turned on.
+#   2. `tmux capture-pane -ep` dumps the settled pane as an ANSI stream.
+#   3. `freeze --language ansi` turns the stream into an SVG carrying the
+#      window chrome, the padding, and the variant background.
+#   4. resvg rasterizes that SVG to PNG at 2x.
+#
+# The split in the last two steps is not incidental. Freeze's own PNG output
+# resolves only the Powerline range out of a Nerd Font and drops every other
+# icon as tofu, which guts the fastfetch, lsd, lazygit, and Neovim shots.
+# Handing freeze's SVG to resvg with the font directory loaded renders the
+# whole font.
+#
+# Every tool reads its theme out of extras/ through a throwaway HOME and XDG
+# tree, and the files being displayed come from a scratch clone of this repo
+# rather than the working tree. So an image never picks up local config, a
+# dirty worktree, a branch name, or a real username, and it looks the same
+# captured from a worktree as from the main checkout.
+#
+# Usage:
+#   scripts/shots                regenerate every screenshot
+#   scripts/shots bat lsd        regenerate only the named shots
+#   scripts/shots --list         print the shot names
+#   scripts/shots --keep         leave the sandbox in place for debugging
+#
+# Requires: tmux, freeze (brew install charmbracelet/tap/freeze), resvg
+# (brew install resvg), a Nerd Font, and the tools being photographed.
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT"
+
+SHOT_DIR="$ROOT/assets/screenshots"
+VARIANT="${VARIANT:-neon}"
+PALETTE="$ROOT/palette/silkcircuit-$VARIANT.json"
+
+COLS=120
+ROWS=36
+FONT="${SHOTS_FONT:-FiraCode Nerd Font Mono}"
+FONT_SIZE=13
+LINE_HEIGHT=1.2
+PADDING=24
+SCALE=2
+
+# Resolved before setup_sandbox reassigns HOME, so this is the real font dir
+# rather than the empty one inside the sandbox.
+FONT_DIRS=("$HOME/Library/Fonts" "/Library/Fonts")
+SOCKET="silkcircuit-shots"
+
+# Every shot this script knows how to take, in the order the README shows them.
+SHOTS=(
+    nvim-lua
+    nvim-theme-highlights
+    nvim-telescope
+    nvim-neotree
+    lazygit
+    btop
+    bat
+    fzf
+    git-log
+    delta
+    lsd
+    procs
+    fastfetch
+)
+
+# ── Output ──────────────────────────────────────────────────────────────────
+
+PURPLE=$'\033[38;2;225;53;255m'
+PINK=$'\033[38;2;255;0;255m'
+CYAN=$'\033[38;2;128;255;234m'
+GREEN=$'\033[38;2;80;250;123m'
+RED=$'\033[38;2;255;99;99m'
+GRAY=$'\033[38;2;118;141;141m'
+RESET=$'\033[0m'
+
+step() { printf "  %s•%s %s\n" "$CYAN" "$RESET" "$1"; }
+ok() { printf "  %s✓%s %s %s%s%s\n" "$GREEN" "$RESET" "$1" "$GRAY" "${2:-}" "$RESET"; }
+die() {
+    printf "  %s✗%s %s\n" "$RED" "$RESET" "$1" >&2
+    exit 1
+}
+
+# ── Palette ─────────────────────────────────────────────────────────────────
+
+# Pull one role out of the generated palette JSON. Keeping the shots on the
+# same source as the themes is the whole point, so this never hardcodes a hex.
+palette_hex() {
+    local role="$1" hex
+    hex="$(sed -n "s/.*\"$role\": { \"hex\": \"\(#[0-9a-fA-F]\{6\}\)\".*/\1/p" "$PALETTE" | head -1)"
+    [ -n "$hex" ] || die "no '$role' color in $PALETTE"
+    printf '%s' "$hex"
+}
+
+# ── Sandbox ─────────────────────────────────────────────────────────────────
+
+KEEP_SANDBOX=0
+SANDBOX=""
+
+cleanup() {
+    tmux -L "$SOCKET" kill-server 2>/dev/null || true
+    if [ -n "$SANDBOX" ] && [ "$KEEP_SANDBOX" -eq 0 ]; then
+        rm -rf "$SANDBOX"
+    elif [ -n "$SANDBOX" ]; then
+        printf "  %ssandbox kept at %s%s\n" "$GRAY" "$SANDBOX" "$RESET"
+    fi
+}
+trap cleanup EXIT
+
+# Build the throwaway HOME, the XDG tree, and every tool config the shots need.
+setup_sandbox() {
+    SANDBOX="$(mktemp -d "${TMPDIR:-/tmp}/silkcircuit-shots.XXXXXX")"
+
+    export HOME="$SANDBOX/home"
+    export XDG_CONFIG_HOME="$SANDBOX/config"
+    export XDG_DATA_HOME="$SANDBOX/data"
+    export XDG_STATE_HOME="$SANDBOX/state"
+    export XDG_CACHE_HOME="$SANDBOX/cache"
+    mkdir -p "$HOME" "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
+
+    # A neutral identity. The starship prompt prints $USER, and nothing in a
+    # published screenshot should name the machine it was taken on.
+    export USER=silkcircuit
+    export LOGNAME=silkcircuit
+    export TERM=xterm-256color
+    export COLORTERM=truecolor
+    export LANG=en_US.UTF-8
+
+    # The content on display: a scratch clone parked under a directory named
+    # for the project, so the prompt reads `…/silkcircuit` and the branch reads
+    # `main` no matter which worktree this runs from.
+    # --single-branch matters: without it the clone carries a remote ref for
+    # whatever branch this is running from, and git log decorates HEAD with it.
+    WORK="$SANDBOX/silkcircuit"
+    git clone --quiet --local --no-hardlinks --single-branch --branch main "$ROOT" "$WORK" 2>/dev/null ||
+        git clone --quiet --local --no-hardlinks --single-branch "$ROOT" "$WORK"
+    git -C "$WORK" config user.name "SilkCircuit"
+    git -C "$WORK" config user.email "silkcircuit@example.com"
+    date_entries_from_git
+
+    mkdir -p "$XDG_CONFIG_HOME/fastfetch"
+    cp "$ROOT/extras/fastfetch/silkcircuit-$VARIANT.jsonc" \
+        "$XDG_CONFIG_HOME/fastfetch/config.jsonc"
+
+    setup_tmux
+    setup_shell
+    setup_git
+    setup_bat
+    setup_btop
+    setup_lazygit
+    setup_lsd
+    setup_procs
+    setup_nvim
+}
+
+# A fresh clone stamps every path with the moment it was written, which makes
+# the lsd listing a wall of one identical date. Put each top-level entry back
+# on the date its contents last changed.
+date_entries_from_git() {
+    local entry stamp
+    for entry in "$WORK"/*; do
+        [ -e "$entry" ] || continue
+        stamp="$(git -C "$WORK" log -1 --format=%cd \
+            --date=format:%Y%m%d%H%M.%S -- "${entry##*/}" 2>/dev/null)"
+        [ -n "$stamp" ] && touch -h -t "$stamp" "$entry" 2>/dev/null
+    done
+}
+
+setup_tmux() {
+    TMUX_CONF="$SANDBOX/tmux.conf"
+    cat >"$TMUX_CONF" <<'CONF'
+set -g status off
+set -g default-terminal "xterm-256color"
+set -as terminal-overrides ",*:Tc"
+set -g escape-time 0
+set -g history-limit 10000
+set -g mouse off
+CONF
+}
+
+setup_shell() {
+    cp "$ROOT/extras/starship/silkcircuit-$VARIANT.toml" "$SANDBOX/starship.toml"
+    export STARSHIP_CONFIG="$SANDBOX/starship.toml"
+    export STARSHIP_CACHE="$SANDBOX/cache/starship"
+
+    # starship resolves the username from the password database, not from
+    # $USER, so the only way to keep the real account out of the prompt is to
+    # pin it in the copy of the config the shots read. Verified rather than
+    # assumed: a silent miss here would publish the account name.
+    sed -i '' "s/\[ \\\$user\]/[ silkcircuit]/" "$SANDBOX/starship.toml"
+    grep -q '\[ silkcircuit\]' "$SANDBOX/starship.toml" ||
+        die "could not neutralize the starship username module"
+
+    # zsh with nothing but the prompt. ZDOTDIR plus --no-globalrcs in the pane
+    # command keeps /etc/zshrc out of it, which otherwise wins and prints the
+    # real hostname in the default prompt.
+    export ZDOTDIR="$HOME"
+    # zsh repopulates USER and USERNAME from the password database on startup,
+    # so the neutral identity has to be reasserted here or the prompt prints
+    # the account that ran the script.
+    # COLUMNS is a shell-local special in zsh. Exporting it is what stops a
+    # tool behind a pipe from losing the pane width and emitting 1700-column
+    # lines that wrap into mush.
+    cat >"$HOME/.zshrc" <<'ZSHRC'
+export USER=silkcircuit
+export USERNAME=silkcircuit
+export COLUMNS
+export PROMPT_EOL_MARK=""
+setopt no_beep
+unsetopt prompt_sp
+eval "$(starship init zsh)"
+ZSHRC
+}
+
+SHELL_CMD="zsh --no-globalrcs -i"
+
+setup_git() {
+    # The generated gitconfig ships the delta feature switched off, the way a
+    # user receives it, so the opt-in lines from its own comment block go here.
+    cat >"$HOME/.gitconfig" <<CONF
+[include]
+	path = $ROOT/extras/git/silkcircuit-$VARIANT.gitconfig
+[user]
+	name = SilkCircuit
+	email = silkcircuit@example.com
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	features = silkcircuit-$VARIANT
+[init]
+	defaultBranch = main
+CONF
+}
+
+setup_bat() {
+    export BAT_CONFIG_DIR="$XDG_CONFIG_HOME/bat"
+    export BAT_CACHE_PATH="$XDG_CACHE_HOME/bat"
+    export BAT_THEME="silkcircuit-$VARIANT"
+    export BAT_PAGING=never
+    mkdir -p "$BAT_CONFIG_DIR/themes" "$BAT_CACHE_PATH"
+    cp "$ROOT/extras/bat/"silkcircuit-*.tmTheme "$BAT_CONFIG_DIR/themes/"
+    bat cache --build --source "$BAT_CONFIG_DIR" --target "$BAT_CACHE_PATH" >/dev/null 2>&1 ||
+        die "bat cache --build failed"
+}
+
+setup_btop() {
+    mkdir -p "$XDG_CONFIG_HOME/btop/themes"
+    cp "$ROOT/extras/btop/silkcircuit-$VARIANT.theme" "$XDG_CONFIG_HOME/btop/themes/"
+    # No proc box. btop offers no way to hide the owner column, so the process
+    # list would publish both the account name and whatever happened to be
+    # running, which also makes a committed image churn on every regeneration.
+    # cpu, mem, and net carry the palette just as well and stay neutral.
+    #
+    # update_ms is floored at 100 so the graphs accumulate enough history to
+    # actually draw during the settle window instead of photographing empty
+    # panels.
+    cat >"$XDG_CONFIG_HOME/btop/btop.conf" <<CONF
+color_theme = "silkcircuit-$VARIANT"
+theme_background = True
+truecolor = True
+vim_keys = False
+rounded_corners = True
+graph_symbol = "braille"
+shown_boxes = "cpu mem net"
+update_ms = 100
+show_battery = False
+show_uptime = False
+clock_format = ""
+CONF
+}
+
+setup_lazygit() {
+    # The extras file is the theme block on its own, which is exactly what
+    # lazygit's comma-separated config list is for: layout here, colors there.
+    mkdir -p "$XDG_CONFIG_HOME/lazygit"
+    cat >"$XDG_CONFIG_HOME/lazygit/config.yml" <<'CONF'
+gui:
+  nerdFontsVersion: "3"
+  showBottomLine: false
+  showPanelJumps: true
+  border: rounded
+  showCommandLog: false
+  sidePanelWidth: 0.36
+CONF
+    export LG_CONFIG_FILE="$XDG_CONFIG_HOME/lazygit/config.yml,$ROOT/extras/lazygit/silkcircuit-$VARIANT.yml"
+}
+
+setup_lsd() {
+    mkdir -p "$XDG_CONFIG_HOME/lsd"
+    cp "$ROOT/extras/lsd/silkcircuit-$VARIANT.yaml" "$XDG_CONFIG_HOME/lsd/colors.yaml"
+    cat >"$XDG_CONFIG_HOME/lsd/config.yaml" <<'CONF'
+---
+color:
+  when: always
+  theme: custom
+icons:
+  when: always
+  theme: fancy
+date: "+%b %e %Y"
+CONF
+}
+
+setup_procs() {
+    # ~/.procs.toml rather than the XDG tree: on macOS procs resolves its
+    # config through Library/Application Support, so a file under
+    # XDG_CONFIG_HOME is silently ignored and the shot comes out unthemed.
+    local cfg="$HOME/.procs.toml"
+
+    # Drop the User column on the way in. It prints the account that owns each
+    # process, which on a developer machine is the person taking the shot.
+    perl -0777 -ne 'print grep { !/kind\s*=\s*"User"/ } split /(?=\[\[columns\]\])/' \
+        "$ROOT/extras/procs/silkcircuit-$VARIANT.toml" >"$cfg"
+
+    # procs only measures the terminal when it owns it; behind the pipe that
+    # trims the shot to the pane it emits 1700-column rows unless told to cut.
+    sed -i '' 's/^cut_to_pipe = false/cut_to_pipe = true/' "$cfg"
+
+    grep -q 'kind = "User"' "$cfg" && die "the procs User column survived the filter"
+    grep -q '^cut_to_pipe = true' "$cfg" || die "could not enable procs cut_to_pipe"
+    return 0
+}
+
+setup_nvim() {
+    NVIM_CONFIG="$XDG_CONFIG_HOME/nvim"
+    mkdir -p "$NVIM_CONFIG"
+
+    # A lazy.nvim config small enough to read in one screen. silkcircuit comes
+    # from the working tree, so the shots show uncommitted palette work too.
+    cat >"$NVIM_CONFIG/init.lua" <<LUA
+vim.g.mapleader = " "
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.termguicolors = true
+vim.opt.signcolumn = "yes"
+vim.opt.laststatus = 3
+vim.opt.showmode = false
+vim.opt.fillchars = { eob = " " }
+vim.opt.wrap = false
+vim.opt.swapfile = false
+vim.opt.shortmess:append("I")
+
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.uv.fs_stat(lazypath) then
+  vim.fn.system({
+    "git", "clone", "--filter=blob:none", "--branch=stable",
+    "https://github.com/folke/lazy.nvim.git", lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  { dir = "$ROOT", name = "silkcircuit", priority = 1000, lazy = false,
+    opts = { variant = "$VARIANT" } },
+  { "nvim-tree/nvim-web-devicons", lazy = false },
+  { "nvim-lua/plenary.nvim", lazy = false },
+  { "MunifTanjim/nui.nvim", lazy = false },
+  { "folke/snacks.nvim", lazy = false, opts = {} },
+  -- Trimmed sections: lualine's defaults put encoding, fileformat, and
+  -- filetype in the same corner, which collides with the location block at
+  -- 120 columns and renders as overlapping segments.
+  { "nvim-lualine/lualine.nvim", lazy = false,
+    opts = {
+      options = { theme = "silkcircuit", globalstatus = true },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = { "branch", "diff" },
+        lualine_c = { "filename" },
+        lualine_x = { "diagnostics" },
+        lualine_y = { "filetype" },
+        lualine_z = { "location" },
+      },
+    } },
+  { "nvim-telescope/telescope.nvim", lazy = false, opts = {} },
+  -- hide_root_node is not cosmetic: neo-tree labels the root with the full
+  -- cwd, which here is the sandbox path under /private/var/folders.
+  { "nvim-neo-tree/neo-tree.nvim", branch = "v3.x", lazy = false,
+    opts = {
+      close_if_last_window = false,
+      hide_root_node = true,
+      retain_hidden_root_indent = false,
+      window = { width = 34 },
+    } },
+}, {
+  root = vim.fn.stdpath("data") .. "/lazy",
+  lockfile = vim.fn.stdpath("data") .. "/lazy-lock.json",
+  install = { colorscheme = { "silkcircuit" } },
+  change_detection = { enabled = false },
+  ui = { backdrop = 100 },
+})
+
+vim.cmd.colorscheme("silkcircuit")
+
+-- Neovim ships the lua parser, so treesitter highlighting needs no plugin.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "lua", "vim", "markdown" },
+  callback = function(ev) pcall(vim.treesitter.start, ev.buf) end,
+})
+LUA
+}
+
+# Install the Neovim plugins once, before any Neovim shot runs, so the capture
+# never photographs a lazy.nvim progress window.
+bootstrap_nvim_plugins() {
+    [ -n "${NVIM_READY:-}" ] && return 0
+    step "bootstrapping Neovim plugins"
+    nvim --headless -c "lua vim.wait(120000, function() return require('lazy.core.config').plugins['neo-tree.nvim'] ~= nil and not require('lazy.manage.process').running() end)" -c "qa!" >/dev/null 2>&1 || true
+    NVIM_READY=1
+}
+
+# ── Capture ─────────────────────────────────────────────────────────────────
+
+# Start a detached pane running one command. Killing the server first keeps
+# every shot on a pane of exactly the declared size with no leftover state.
+pane_start() {
+    tmux -L "$SOCKET" kill-server 2>/dev/null || true
+    tmux -L "$SOCKET" -f "$TMUX_CONF" new-session -d -s shot \
+        -x "$COLS" -y "$ROWS" -c "$WORK" "$1"
+    tmux -L "$SOCKET" set-option -t shot status off >/dev/null 2>&1 || true
+}
+
+pane_send() {
+    tmux -L "$SOCKET" send-keys -t shot "$@"
+}
+
+pane_dump() {
+    tmux -L "$SOCKET" capture-pane -p -e -t shot
+}
+
+# A TUI that rejects a flag or cannot find its config exits, tmux tears the
+# session down, and the next capture fails with a tmux error rather than
+# anything about the tool. Say what actually happened instead.
+pane_alive() {
+    tmux -L "$SOCKET" has-session -t shot 2>/dev/null
+}
+
+# Poll until two consecutive dumps match, so a shot waits exactly as long as
+# the tool needs rather than however long a fixed sleep guessed.
+pane_settle() {
+    local limit="${1:-10}" prev="" now="" i=0
+    while [ "$i" -lt "$((limit * 4))" ]; do
+        now="$(pane_dump)"
+        if [ -n "$prev" ] && [ "$now" = "$prev" ]; then
+            return 0
+        fi
+        prev="$now"
+        sleep 0.25
+        i=$((i + 1))
+    done
+}
+
+# Trim the run of blank lines a capture leaves below the last output, counting
+# a line carrying nothing but SGR escapes as blank.
+trim_trailing() {
+    perl -0777 -pe 's/(?:[ \t]*(?:\e\[[0-9;]*[A-Za-z])*[ \t]*\n)+\z/\n/'
+}
+
+# ── Render ──────────────────────────────────────────────────────────────────
+
+# ANSI in, SVG out, with the frame styling every shot shares.
+#
+# freeze wedges instead of exiting every so often, and only when this script
+# runs detached from a terminal. Both guards are aimed at that: stdin comes
+# from /dev/null and TERM is blanked, so nothing inside can sit waiting on a
+# terminal that will never answer, and a bounded retry turns a wedge that
+# happens anyway into a one-second delay rather than a failed run. Three
+# strikes is a real failure.
+freeze_svg() {
+    local ans="$1" svg="$2"
+    shift 2
+    local attempt=0
+    until TERM=dumb timeout 45 freeze --language ansi --output "$svg" \
+        --padding "$PADDING" \
+        --margin 0 \
+        --window \
+        --border.radius 8 \
+        --font.family "$FONT" \
+        --font.size "$FONT_SIZE" \
+        --line-height "$LINE_HEIGHT" \
+        "$@" "$ans" </dev/null >/dev/null 2>&1; do
+        pkill -f "freeze --language ansi" 2>/dev/null || true
+        attempt=$((attempt + 1))
+        [ "$attempt" -ge 3 ] && return 1
+        sleep 1
+    done
+    [ -s "$svg" ]
+}
+
+# freeze sizes a frame to its longest line, which would give every shot a
+# different width and make the README grid ragged. Pin the width to a full
+# pane instead, measured from a probe render so the number tracks the font
+# rather than sitting here as a magic constant.
+measure_frame() {
+    # Two columns of slack. Powerline separators are one terminal cell but
+    # carry a wider advance in the font, so a statusline full of them drifts
+    # a little past a frame measured at exactly COLS and loses its last block.
+    local probe="$SANDBOX/probe.ans" svg="$SANDBOX/probe.svg"
+    printf '%*s\n' "$((COLS + 2))" "" | tr ' ' 'M' >"$probe"
+    freeze_svg "$probe" "$svg" || die "freeze probe render failed"
+    FRAME_WIDTH="$(sed -n 's/.*<svg width="\([0-9.]*\)".*/\1/p' "$svg" | head -1)"
+    [ -n "$FRAME_WIDTH" ] || die "could not measure the frame width"
+}
+
+# ANSI stream in, PNG out. freeze lays the frame out as SVG and resvg
+# rasterizes it, because freeze's own rasterizer loses most Nerd Font glyphs.
+render() {
+    local name="$1" ans="$2"
+    local svg="$SANDBOX/$name.svg" out="$SHOT_DIR/$name.png"
+
+    freeze_svg "$ans" "$svg" --background "$BG" --width "$FRAME_WIDTH" ||
+        die "freeze failed on $name"
+
+    local font_args=()
+    for dir in "${FONT_DIRS[@]}"; do
+        [ -d "$dir" ] && font_args+=(--use-fonts-dir "$dir")
+    done
+
+    # freeze names a clip path it never defines; resvg says so on stderr and
+    # carries on, so only a nonzero exit is worth failing over.
+    timeout 90 resvg "${font_args[@]}" --zoom "$SCALE" "$svg" "$out" 2>/dev/null ||
+        die "resvg failed on $name"
+
+    [ -s "$out" ] || die "resvg produced no PNG for $name"
+}
+
+# The common shape: type a command at the prompt, let it finish, photograph
+# the prompt above it and the fresh prompt below.
+shell_shot() {
+    local name="$1" cmd="$2" settle="${3:-10}"
+    pane_start "$SHELL_CMD"
+    sleep 1.2
+    pane_send "$cmd" Enter
+    pane_settle "$settle"
+    pane_dump | trim_trailing >"$SANDBOX/$name.ans"
+    render "$name" "$SANDBOX/$name.ans"
+}
+
+# A full-screen TUI draws into the alternate screen; capture it whole.
+tui_shot() {
+    local name="$1" cmd="$2" wait="${3:-3}"
+    pane_start "$cmd"
+    sleep "$wait"
+    pane_alive || die "$name exited before it could be captured: $cmd"
+    pane_dump >"$SANDBOX/$name.ans"
+    render "$name" "$SANDBOX/$name.ans"
+}
+
+# ── Shots ───────────────────────────────────────────────────────────────────
+
+shot_bat() {
+    # Short enough to sit on one line next to the prompt, which a wrapped
+    # command does not. The range keeps the header on screen; without it the
+    # file runs past the bottom of the pane and the capture starts mid-table.
+    shell_shot bat "bat --theme=silkcircuit-$VARIANT -r :26 lua/silkcircuit/palette.lua"
+}
+
+shot_git_log() {
+    shell_shot git-log "git log --oneline --graph --decorate -18 --color=always"
+}
+
+shot_lsd() {
+    # No user or group column. Those two print whoever owns the sandbox, and a
+    # published screenshot has no business naming the account that took it.
+    shell_shot lsd "lsd -l --blocks permission,size,date,name | sed -n '1,29p'"
+}
+
+shot_procs() {
+    # Busiest first, trimmed to the pane. sed rather than head so the producer
+    # never takes a SIGPIPE and prints a broken-pipe line into the shot.
+    shell_shot procs "procs --color always --pager disable --sortd cpu | sed -n '1,26p'"
+}
+
+shot_fastfetch() {
+    # The config is installed rather than passed on the command line, both
+    # because that is how anyone actually uses it and because an absolute path
+    # would put the capturing machine's home directory in the screenshot.
+    shell_shot fastfetch "fastfetch"
+}
+
+shot_delta() {
+    # A diff rather than a whole commit: `git show` spends the first screen on
+    # the message and never reaches a hunk, and hunks are the thing delta is
+    # being photographed for. git only pages when stdout is a terminal, so
+    # piping into delta by hand also keeps less out of the capture.
+    shell_shot delta "git diff HEAD~1 HEAD | delta --paging=never | sed -n '1,31p'"
+}
+
+shot_btop() {
+    # Config and themes are passed explicitly rather than left to XDG lookup,
+    # so the shot cannot quietly fall back to the default theme. The long
+    # settle is the graphs filling in.
+    tui_shot btop \
+        "btop --force-utf --no-tty -c $XDG_CONFIG_HOME/btop/btop.conf --themes-dir $XDG_CONFIG_HOME/btop/themes" \
+        16
+}
+
+shot_lazygit() {
+    # A pristine clone gives lazygit nothing to show, so put a real edit and a
+    # real untracked file in front of it. Both panels then carry colour: file
+    # status on the left, a syntax-highlighted diff on the right.
+    cat >>"$WORK/lua/silkcircuit/palette.lua" <<'LUA'
+
+-- Surface roles the statusline integrations read
+M.surfaces = { float = "bg_float", divider = "divider" }
+LUA
+    cat >"$WORK/lua/silkcircuit/integrations/preview.lua" <<'LUA'
+local M = {}
+
+function M.get(colors)
+  return { PreviewBorder = { fg = colors.accent_border } }
+end
+
+return M
+LUA
+
+    pane_start "lazygit"
+    sleep 3
+    pane_alive || die "lazygit exited before it could be captured"
+    # Dismiss the first-run notice, then focus Files so the diff panel fills.
+    pane_send Enter
+    sleep 1
+    pane_send "2"
+    pane_settle 6
+    pane_dump >"$SANDBOX/lazygit.ans"
+    render lazygit "$SANDBOX/lazygit.ans"
+}
+
+shot_fzf() {
+    pane_start "$SHELL_CMD"
+    sleep 1.2
+    pane_send "source $ROOT/extras/fzf/silkcircuit-$VARIANT.sh" Enter
+    sleep 0.5
+    pane_send "clear" Enter
+    sleep 0.5
+    pane_send "git ls-files | fzf --height 100% --border --info=inline --prompt='files > ' --header='SilkCircuit $VARIANT' --preview='bat --color=always --style=numbers {}' --preview-window=right:58%" Enter
+    sleep 2
+    pane_send "lua"
+    sleep 2
+    pane_dump >"$SANDBOX/fzf.ans"
+    render fzf "$SANDBOX/fzf.ans"
+}
+
+# The Neovim shots all open the same file so the four images read as one
+# session, with the plugin panes as the only difference between them.
+nvim_shot() {
+    local name="$1" file="$2" post="$3" wait="${4:-4}"
+    bootstrap_nvim_plugins
+    pane_start "nvim $file"
+    sleep "$wait"
+    if [ -n "$post" ]; then
+        pane_send "$post"
+        sleep 2.5
+    fi
+    pane_settle 6
+    pane_dump >"$SANDBOX/$name.ans"
+    render "$name" "$SANDBOX/$name.ans"
+}
+
+shot_nvim_lua() {
+    # Line 8 keeps the top of the file on screen while putting the cursorline
+    # somewhere it can actually be seen.
+    nvim_shot nvim-lua lua/silkcircuit/palette.lua ":8"$'\n'
+}
+
+shot_nvim_theme_highlights() {
+    # Land on the highlight-group block rather than the file header, which is
+    # what makes this shot different from the plain Lua one.
+    nvim_shot nvim-theme-highlights lua/silkcircuit/theme.lua ":120"$'\n'"zz"
+}
+
+shot_nvim_telescope() {
+    nvim_shot nvim-telescope lua/silkcircuit/theme.lua ":Telescope find_files"$'\n'
+}
+
+shot_nvim_neotree() {
+    nvim_shot nvim-neotree lua/silkcircuit/theme.lua ":Neotree show"$'\n'
+}
+
+# ── Driver ──────────────────────────────────────────────────────────────────
+
+run_shot() {
+    local name="$1"
+    local fn="shot_${name//-/_}"
+    declare -f "$fn" >/dev/null || die "unknown shot: $name"
+    step "$name"
+    "$fn"
+    ok "$name" "$(du -h "$SHOT_DIR/$name.png" | cut -f1 | tr -d ' ')"
+}
+
+check_deps() {
+    local missing=()
+    for tool in tmux freeze resvg perl git nvim bat btop lazygit fzf lsd delta fastfetch procs starship; do
+        command -v "$tool" >/dev/null 2>&1 || missing+=("$tool")
+    done
+    [ "${#missing[@]}" -eq 0 ] || die "missing: ${missing[*]}"
+}
+
+main() {
+    local requested=()
+    while [ $# -gt 0 ]; do
+        case "$1" in
+        --list)
+            printf '%s\n' "${SHOTS[@]}"
+            exit 0
+            ;;
+        --keep) KEEP_SANDBOX=1 ;;
+        -h | --help)
+            sed -n '2,/^$/p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+            exit 0
+            ;;
+        -*) die "unknown flag: $1" ;;
+        *) requested+=("$1") ;;
+        esac
+        shift
+    done
+
+    [ "${#requested[@]}" -gt 0 ] || requested=("${SHOTS[@]}")
+
+    check_deps
+    [ -f "$PALETTE" ] || die "no palette for variant '$VARIANT'"
+    BG="$(palette_hex bg)"
+
+    printf "\n  %s▸%s %sScreenshots%s %s· %s · %d shot(s)%s\n\n" \
+        "$PURPLE" "$RESET" "$PINK" "$RESET" "$GRAY" "$VARIANT" "${#requested[@]}" "$RESET"
+
+    setup_sandbox
+    measure_frame
+    mkdir -p "$SHOT_DIR"
+
+    for name in "${requested[@]}"; do
+        run_shot "$name"
+    done
+
+    printf "\n  %s★%s Wrote %d screenshot(s) to %sassets/screenshots/%s\n\n" \
+        "$GREEN" "$RESET" "${#requested[@]}" "$GRAY" "$RESET"
+}
+
+main "$@"

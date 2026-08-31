@@ -1,4 +1,4 @@
-.PHONY: help setup check lint fmt fmt-check test preview build docs \
+.PHONY: help setup check lint fmt fmt-check test preview build docs shots \
         chrome chrome-package vscode-package vscode-publish-vsce \
         vscode-publish-ovsx vscode-publish clean ci
 
@@ -51,6 +51,7 @@ help:
 	@printf "  $(WHITE)$(BOLD)Generate$(RESET)\n"
 	@printf "    $(CYAN)$(STAR) build$(RESET)           $(GRAY)─$(RESET) Regenerate every extras/ target from the palette\n"
 	@printf "    $(CYAN)$(STAR) docs$(RESET)            $(GRAY)─$(RESET) Regenerate the README tables\n"
+	@printf "    $(CYAN)$(STAR) shots$(RESET)           $(GRAY)─$(RESET) Recapture the screenshots $(GRAY)(SHOT=bat)$(RESET)\n"
 	@printf "    $(CYAN)$(STAR) chrome$(RESET)          $(GRAY)─$(RESET) Generate the Chrome theme variants\n"
 	@printf "    $(CYAN)$(STAR) chrome-package$(RESET)  $(GRAY)─$(RESET) Zip the Chrome themes for the Web Store\n\n"
 	@printf "  $(WHITE)$(BOLD)Release$(RESET)\n"
@@ -140,6 +141,12 @@ docs:
 	$(call banner,Building Docs Tables)
 	@scripts/docs
 	@printf "  $(GREEN)$(CHECK)$(RESET) Extras tables refreshed\n\n"
+
+# make shots SHOT=bat
+shots:
+	$(call banner,Capturing Screenshots)
+	@scripts/shots $(SHOT)
+	@printf "  $(GREEN)$(CHECK)$(RESET) Rendered from $(GRAY)extras/ via tmux, freeze, and resvg$(RESET)\n\n"
 
 chrome:
 	$(call banner,Generating Chrome Themes)
