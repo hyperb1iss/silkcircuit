@@ -9,36 +9,6 @@
 
 local M = {}
 
--- Roles no single palette key can serve in both a dark and a light theme.
--- The palette retune brought dawn's cyan and coral above 5.4:1 as ink, so
--- the light fallbacks below are no longer about contrast: they keep dawn's
--- accents in the purple and pink family the light theme is built around,
--- where a cyan focus ring would read as a different brand.
---
---   shadow        has to darken whatever sits under it
---   accent_border focus rings, active indicators, section headers: the cyan
---                 chrome that answers Neovim's FloatBorder
---   accent_hover  the step away from the purple underneath a button
---   accent_warm   debugging and merge conflicts, which want their own hue
-local DERIVED = {
-  dark = function(colors)
-    return {
-      shadow = colors.bg_darker,
-      accent_border = colors.border,
-      accent_hover = colors.pink_bright,
-      accent_warm = colors.coral,
-    }
-  end,
-  light = function(colors)
-    return {
-      shadow = colors.gray_light .. "50",
-      accent_border = colors.purple,
-      accent_hover = colors.pink,
-      accent_warm = colors.pink,
-    }
-  end,
-}
-
 local TEMPLATE = [==[
 {
   "name": "${meta.name}",
@@ -84,11 +54,11 @@ local TEMPLATE = [==[
     "editorCursor.background": "${bg}",
     "editorCursor.foreground": "${pink}",
     "editorError.foreground": "${red}",
-    "editorGroup.border": "${bg_float}",
+    "editorGroup.border": "${divider}",
     "editorGroup.dropBackground": "${purple}22",
     "editorGroupHeader.noTabsBackground": "${bg}",
     "editorGroupHeader.tabsBackground": "${bg_dark}",
-    "editorGroupHeader.tabsBorder": "${bg_float}",
+    "editorGroupHeader.tabsBorder": "${divider}",
     "editorGutter.addedBackground": "${green}",
     "editorGutter.deletedBackground": "${red}",
     "editorGutter.modifiedBackground": "${git_change}",
@@ -231,11 +201,11 @@ local TEMPLATE = [==[
     "settings.textInputBorder": "${purple}",
     "settings.textInputForeground": "${fg}",
     "sideBar.background": "${bg_dark}",
-    "sideBar.border": "${bg_float}",
+    "sideBar.border": "${divider}",
     "sideBar.dropBackground": "${purple}22",
     "sideBar.foreground": "${fg}",
     "sideBarSectionHeader.background": "${bg}",
-    "sideBarSectionHeader.border": "${bg_float}",
+    "sideBarSectionHeader.border": "${divider}",
     "sideBarSectionHeader.foreground": "${accent_border}",
     "sideBarTitle.foreground": "${pink_soft}",
     "statusBar.background": "${bg_dark}",
@@ -255,7 +225,7 @@ local TEMPLATE = [==[
     "tab.activeBorder": "${accent_border}",
     "tab.activeForeground": "${fg}",
     "tab.activeModifiedBorder": "${cyan}",
-    "tab.border": "${bg_float}",
+    "tab.border": "${divider}",
     "tab.hoverBackground": "${purple}22",
     "tab.hoverBorder": "${accent_border}66",
     "tab.inactiveBackground": "${bg_dark}",
@@ -305,7 +275,7 @@ local TEMPLATE = [==[
     "titleBar.inactiveBackground": "${bg_dark}",
     "titleBar.inactiveForeground": "${comment}",
     "tree.indentGuidesStroke": "${purple}33",
-    "tree.tableColumnsBorder": "${bg_float}",
+    "tree.tableColumnsBorder": "${divider}",
     "tree.tableOddRowsBackground": "${bg_dark}",
     "walkThrough.embeddedEditorBackground": "${bg}",
     "welcomePage.background": "${bg}",
@@ -751,8 +721,15 @@ local TEMPLATE = [==[
 
 function M.generate(colors)
   local extra = require("silkcircuit.extra")
-  local derived = vim.tbl_extend("force", colors, DERIVED[colors.meta.appearance](colors))
-  return extra.template(TEMPLATE, derived)
+
+  -- On a light theme the shadow role is a pale lavender grey, which only
+  -- reads as a shadow once it is laid over what sits under it. VS Code takes
+  -- that opacity as a suffix and the palette is six-digit, so the suffix is
+  -- applied here rather than stored as a colour nothing else could render.
+  local alpha = colors.meta.appearance == "light" and "50" or ""
+  local palette = vim.tbl_extend("force", colors, { shadow = colors.shadow .. alpha })
+
+  return extra.template(TEMPLATE, palette)
 end
 
 return M
