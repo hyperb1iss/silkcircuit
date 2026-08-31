@@ -17,6 +17,11 @@
 --           stop. A key earns this tier by having no consumer that renders
 --           it as text, which is checked by grep, not assumed.
 --
+-- divider is not text at all and takes neither bar. A contrast floor would
+-- push a line toward reading as text, so it is gated on being distinct from
+-- the three surfaces it most often has to be seen against instead. The other
+-- surfaces it can border, bg_dark and bg_statusline, are not covered.
+--
 -- gray_muted is the one text colour under neither bar. It marks ignored and
 -- trace-level output in Snacks, lsd and bat, where being hard to read is the
 -- point, and it measures 2.43 to 3.03:1. It is left ungated deliberately
@@ -84,7 +89,19 @@ local CHROME_ROLES = {
   "green_light",
   "blue_light",
   "yellow_light",
+  -- focus rings, active indicators and the hovered button. accent_border also
+  -- reaches six VS Code foregrounds, but it is the same value the ink tier
+  -- already gates under cyan_bright or purple, so 3:1 here is the floor for
+  -- its chrome duty rather than the only bar the colour has to clear.
+  "accent_border",
+  "accent_hover",
 }
+
+-- divider is under neither bar. It is the line between two surfaces, so a
+-- contrast floor would push it toward reading as text and a ceiling is not
+-- something WCAG has an opinion about. What has to hold is that it is not any
+-- of the surfaces it separates, which is what the spec below checks.
+local DIVIDER_NEIGHBOURS = { "bg", "bg_float", "bg_highlight" }
 
 local TERMINAL_NORMALS = {
   "terminal_red",
@@ -221,6 +238,31 @@ describe("contrast", function()
       )
 
       check(colors, CHROME_ROLES, INK_SURFACES, 3.0, variant, "chrome")
+    end)
+
+    it(variant .. " keeps the divider off every surface it separates", function()
+      local colors = colors_for(variant)
+      local collisions = {}
+
+      for _, surface in ipairs(DIVIDER_NEIGHBOURS) do
+        H.note(
+          string.format(
+            "  divider %s on %-13s %-9s %5.2f:1",
+            colors.divider,
+            surface,
+            colors[surface],
+            H.contrast(colors.divider, colors[surface])
+          )
+        )
+        if colors.divider == colors[surface] then
+          collisions[#collisions + 1] = surface .. " (" .. colors[surface] .. ")"
+        end
+      end
+
+      H.empty(
+        collisions,
+        variant .. ": divider is the same colour as a surface, so the line it draws is not there"
+      )
     end)
 
     it(variant .. " keeps the terminal normals at 3:1", function()
