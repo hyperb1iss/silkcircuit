@@ -4,7 +4,7 @@ function M.highlights(colors, opts)
   return {
     NvimTreeNormal = { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg },
     NvimTreeNormalNC = { fg = colors.fg, bg = opts.transparent and colors.none or colors.bg },
-    NvimTreeWinSeparator = { fg = colors.bg_highlight },
+    NvimTreeWinSeparator = { fg = colors.divider },
     NvimTreeEndOfBuffer = { fg = colors.bg },
 
     NvimTreeFolderName = { fg = colors.blue },

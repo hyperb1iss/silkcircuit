@@ -32,12 +32,13 @@ function M.get(colors, opts)
   highlights.DiagnosticUnderlineHint = { undercurl = true, sp = colors.hint }
   highlights.DiagnosticUnderlineOk = { undercurl = true, sp = colors.green_bright }
 
-  -- LSP Diagnostic Floating Windows
-  highlights.DiagnosticFloatingError = { fg = colors.error, bg = colors.bg_highlight }
-  highlights.DiagnosticFloatingWarn = { fg = colors.warning, bg = colors.bg_highlight }
-  highlights.DiagnosticFloatingInfo = { fg = colors.info, bg = colors.bg_highlight }
-  highlights.DiagnosticFloatingHint = { fg = colors.hint, bg = colors.bg_highlight }
-  highlights.DiagnosticFloatingOk = { fg = colors.green_bright, bg = colors.bg_highlight }
+  -- LSP Diagnostic floating windows. The text spans sit inside a window
+  -- Neovim paints from NormalFloat, so they take the float surface too.
+  highlights.DiagnosticFloatingError = { fg = colors.error, bg = colors.bg_float }
+  highlights.DiagnosticFloatingWarn = { fg = colors.warning, bg = colors.bg_float }
+  highlights.DiagnosticFloatingInfo = { fg = colors.info, bg = colors.bg_float }
+  highlights.DiagnosticFloatingHint = { fg = colors.hint, bg = colors.bg_float }
+  highlights.DiagnosticFloatingOk = { fg = colors.green_bright, bg = colors.bg_float }
 
   -- LSP Diagnostic Signs in Sign Column
   highlights.DiagnosticSignError = { fg = colors.error, bg = colors.bg }
@@ -67,7 +68,7 @@ function M.get(colors, opts)
   highlights.LspCodeLensSeparator = { fg = colors.gray }
 
   -- LSP Info Border (for hover/signature help)
-  highlights.LspInfoBorder = { fg = colors.cyan_bright, bg = colors.bg_highlight }
+  highlights.LspInfoBorder = { fg = colors.cyan_bright, bg = colors.bg_float }
 
   -- LSP Semantic Tokens
   -- These provide more granular syntax highlighting
