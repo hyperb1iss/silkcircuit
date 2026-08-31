@@ -13,10 +13,7 @@ return {
       local visual_block_mode = string.char(22)
       local select_block_mode = string.char(19)
       local function get_current_clients()
-        if vim.lsp.get_clients then
-          return vim.lsp.get_clients({ bufnr = 0 })
-        end
-        return vim.lsp.get_active_clients()
+        return vim.lsp.get_clients({ bufnr = 0 })
       end
 
       -- Custom components with enhanced visual features
@@ -109,7 +106,9 @@ return {
             local current = vim.fn.line(".")
             local total = vim.fn.line("$")
             local percent = math.floor(current / total * 100)
-            return string.format("%3d%% %d/%d", percent, current, total)
+            -- statusline-escape the literal percent: lualine only escapes
+            -- built-in components, and a raw "% " is an invalid stl item
+            return string.format("%3d%%%% %d/%d", percent, current, total)
           end,
           icon = "",
           color = { fg = silkcircuit_colors.purple_muted },
