@@ -31,9 +31,14 @@ local REQUIRED_KEYS = {
   "bg_dark",
   "bg_highlight",
   "bg_float",
+  "divider",
+  "shadow",
   "fg",
   "fg_dark",
   "border",
+  "accent_border",
+  "accent_hover",
+  "accent_warm",
   "keyword",
   "operator",
   "string",
@@ -81,6 +86,18 @@ describe("palette", function()
       H.empty(missing, variant .. ": colour keys read by the theme but never defined")
     end)
   end
+
+  -- derive_keys answers accent_border off border for anything that does not
+  -- name its own, which is right for the dark variants and wrong for dawn: a
+  -- deleted literal would quietly hand the light theme the cyan chrome ring
+  -- the dark variants use. Nothing else in the suite can see that happen, so
+  -- dawn's own answers are pinned to the families it is built around.
+  it("keeps dawn's accents in its own purple and pink", function()
+    local colors = colors_for("dawn")
+    H.eq(colors.accent_border, colors.purple, "dawn: accent_border left the purple family")
+    H.eq(colors.accent_hover, colors.pink, "dawn: accent_hover left the pink family")
+    H.eq(colors.accent_warm, colors.pink, "dawn: accent_warm left the pink family")
+  end)
 
   it("gives all five variants the same key set", function()
     local reference = colors_for("neon")
