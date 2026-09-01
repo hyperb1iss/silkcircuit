@@ -64,4 +64,31 @@ describe("extras generator", function()
 
     vim.fn.delete(root, "rf")
   end)
+
+  it("preserves the Starship powerline design", function()
+    H.reset_modules()
+    local root, extra
+    H.quiet(function()
+      root, extra = build_into_tempdir()
+    end)
+
+    local symbols = { "", "", "", "", "", "" }
+    for _, variant in ipairs(extra.variants) do
+      local path = root .. "/extras/starship/silkcircuit-" .. variant .. ".toml"
+      local content = table.concat(H.read_lines(path), "\n")
+      for _, symbol in ipairs(symbols) do
+        H.ok(
+          content:find(symbol, 1, true),
+          string.format("Starship %s is missing symbol %s", variant, symbol)
+        )
+      end
+    end
+
+    local neon = table.concat(H.read_lines(root .. "/extras/starship/silkcircuit-neon.toml"), "\n")
+    for _, color in ipairs({ "#1a1a2e", "#4a1a4a", "#7a2d7a", "#a040a0", "#d060d0", "#ff69b4" }) do
+      H.ok(neon:find(color, 1, true), "Starship neon lost gradient color " .. color)
+    end
+
+    vim.fn.delete(root, "rf")
+  end)
 end)

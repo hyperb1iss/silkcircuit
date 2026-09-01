@@ -5,17 +5,17 @@
 # Do not edit by hand.
 
 format = """
-[](fg:purple_dark)\
+[](bg:#faf8ff fg:#823ecf)\
 $os\
 $username\
 $hostname\
-[ ](bg:purple_dark)\
-[](bg:purple fg:purple_dark)\
+[ ](bold bg:#823ecf)\
+[](bg:#7e2bd5 fg:#823ecf)\
 $directory\
-[](bg:pink_bright fg:purple)\
+[](bg:#b02f7a fg:#7e2bd5)\
 $git_branch\
 $git_status\
-[](bg:pink fg:pink_bright)\
+[](bg:#b40077 fg:#b02f7a)\
 $nodejs\
 $python\
 $rust\
@@ -26,8 +26,8 @@ $gradle\
 $c\
 $lua\
 $kubernetes\
-[](bg:cyan fg:pink)\
-[](fg:cyan)\
+[](bg:#006e72 fg:#b40077)\
+[](bg:#faf8ff fg:#006e72)\
 $character\
 """
 
@@ -35,86 +35,68 @@ $character\
 add_newline = false
 command_timeout = 1000
 
-palette = "silkcircuit"
-
-# Every colour the prompt uses, plus the rest of the accent roles so a local
-# tweak can reach for them by name instead of pasting a hex.
-[palettes.silkcircuit]
-bg = "#faf8ff"
-fg = "#2b2540"
-purple_dark = "#823ecf"
-purple = "#7e2bd5"
-pink_bright = "#b02f7a"
-pink = "#b40077"
-cyan = "#006e72"
-green = "#1d6e46"
-yellow = "#796100"
-orange = "#a64718"
-red = "#c1272d"
-
 [character]
-success_symbol = "[➤](bold fg:cyan) "
-error_symbol = "[➤](bold fg:red) "
+success_symbol = "[➤](bold fg:#006e72) "
+error_symbol = "[➤](bold fg:#c1272d) "
 
 # OS module
 [os]
 format = '[ $symbol]($style)'
-style = "bold fg:bg bg:purple_dark"
+style = "bold fg:#faf8ff bg:#823ecf"
 disabled = false
 
 [os.symbols]
-Alpine = ""
-Amazon = ""
-Android = ""
-Arch = ""
-CachyOS = ""
-CentOS = ""
-Debian = ""
+Alpine = ""
+Amazon = ""
+Android = ""
+Arch = ""
+CachyOS = ""
+CentOS = ""
+Debian = ""
 DragonFly = "🐉"
 Emscripten = "🔗"
-EndeavourOS = ""
-Fedora = ""
-FreeBSD = ""
-Garuda = ""
-Gentoo = ""
-HardenedBSD = "聯"
+EndeavourOS = ""
+Fedora = ""
+FreeBSD = ""
+Garuda = ""
+Gentoo = ""
+HardenedBSD = "聯"
 Illumos = "🐦"
-Linux = ""
-Macos = ""
-Manjaro = ""
-Mariner = ""
+Linux = ""
+Macos = ""
+Manjaro = ""
+Mariner = ""
 MidnightBSD = "🌘"
-Mint = ""
-NetBSD = ""
-NixOS = ""
-OpenBSD = ""
+Mint = ""
+NetBSD = ""
+NixOS = ""
+OpenBSD = ""
 OpenCloudOS = "☁️"
-openEuler = ""
-openSUSE = ""
+openEuler = ""
+openSUSE = ""
 OracleLinux = "⊂⊃"
-Pop = ""
-Raspbian = ""
-Redhat = ""
-RedHatEnterprise = ""
+Pop = ""
+Raspbian = ""
+Redhat = ""
+RedHatEnterprise = ""
 Redox = "🧪"
-Solus = ""
-SUSE = ""
-Ubuntu = ""
-Unknown = ""
-Windows = ""
+Solus = ""
+SUSE = ""
+Ubuntu = ""
+Unknown = ""
+Windows = ""
 
-# Username module. Root turns the whole segment red rather than tinting the
-# text, which is the one state worth breaking the gradient for.
+# Username module
 [username]
-style_user = "bold fg:bg bg:purple_dark"
-style_root = "bold fg:bg bg:red"
+style_user = "bold fg:#faf8ff bg:#823ecf"
+style_root = "bold fg:#c1272d bg:#823ecf"
 format = '[ $user]($style)'
 disabled = false
 show_always = true
 
 # Hostname configuration for SSH awareness
 [hostname]
-style = "bold fg:bg bg:purple_dark"
+style = "bold fg:#faf8ff bg:#823ecf"
 ssh_only = true
 format = '[@$hostname]($style)'
 trim_at = "."
@@ -124,13 +106,13 @@ disabled = false
 [directory]
 truncation_length = 3
 truncation_symbol = "…/"
-style = "bold fg:bg bg:purple"
+style = "bold fg:#faf8ff bg:#7e2bd5"
 format = "[ $path ]($style)"
 
 # Git branch module
 [git_branch]
-symbol = " "
-style = "bold fg:bg bg:pink_bright"
+symbol = " "
+style = "bold fg:#faf8ff bg:#b02f7a"
 format = "[ $symbol$branch ]($style)"
 
 # Git status module
@@ -138,20 +120,20 @@ format = "[ $symbol$branch ]($style)"
 # past command_timeout and drop out of the prompt entirely
 [git_status]
 ignore_submodules = true
-style = "bold fg:bg bg:pink_bright"
+style = "bold fg:#faf8ff bg:#b02f7a"
 format = "[$all_status]($style)"
 
 # Node.js module
 [nodejs]
-symbol = " "
-style = "bold fg:bg bg:pink"
+symbol = " "
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Python module
 [python]
-symbol = " "
-style = "bold fg:bg bg:pink"
+symbol = " "
+style = "bold fg:#faf8ff bg:#b40077"
 format = '([ $symbol(${virtualenv}) ]($style))'
 detect_extensions = ["py"]
 detect_files = [
@@ -166,49 +148,49 @@ disabled = false
 # Rust module
 [rust]
 symbol = "󱘗 "
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Go module
 [golang]
 symbol = "󰟓 "
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Java module
 [java]
 symbol = "󰬷 "
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Kotlin module
 [kotlin]
 symbol = "󱈙 "
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Gradle module
 [gradle]
 symbol = "󱎐 "
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # C module
 [c]
 symbol = "󰙱 "
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Lua module
 [lua]
 symbol = "󰢱 "
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 format = "[ $symbol($version) ]($style)"
 disabled = false
 
@@ -216,14 +198,14 @@ disabled = false
 [kubernetes]
 symbol = "󱃾 "
 format = "[ $symbol$context ]($style)"
-style = "bold fg:bg bg:pink"
+style = "bold fg:#faf8ff bg:#b40077"
 disabled = false
 contexts = [
-  { context_pattern = ".*[Pp][Rr][Oo][Dd].*", context_alias = "PROD", style = "bold fg:bg bg:red", symbol = " " },
+  { context_pattern = ".*[Pp][Rr][Oo][Dd].*", context_alias = "PROD", style = "bold fg:#faf8ff bg:#796100", symbol = " " },
   # EKS contexts — strip region (e.g., eks-us-west-2-int → eks-int)
-  { context_pattern = "eks-[a-z]+-[a-z]+-\\d+-(?P<env>.*)", context_alias = "eks-$env", style = "bold fg:bg bg:pink" },
+  { context_pattern = "eks-[a-z]+-[a-z]+-\\d+-(?P<env>.*)", context_alias = "eks-$env", style = "bold fg:#faf8ff bg:#b40077" },
   # Fallback
-  { context_pattern = ".*", style = "bold fg:bg bg:pink" }
+  { context_pattern = ".*", style = "bold fg:#faf8ff bg:#b40077" }
 ]
 
 # Time
@@ -236,7 +218,7 @@ time_format = "%T"
 [cmd_duration]
 min_time = 500
 format = "took [$duration]($style) "
-style = "bold fg:red"
+style = "bold fg:#c1272d"
 
 # Battery
 [battery]
@@ -249,12 +231,12 @@ disabled = false
 
 [[battery.display]]
 threshold = 10
-style = "bold fg:red"
+style = "bold red"
 
 # Package version
 [package]
 symbol = "󰏗 "
-style = "bold fg:red"
+style = "bold fg:#c1272d"
 disabled = false
 
 # Shell indicator
@@ -264,5 +246,5 @@ powershell_indicator = "󰨊 "
 bash_indicator = "󱆃 "
 zsh_indicator = "󱐋 "
 unknown_indicator = "󰀣 "
-style = "bold fg:cyan"
+style = "cyan bold"
 disabled = true
