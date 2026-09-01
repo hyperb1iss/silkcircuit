@@ -193,6 +193,7 @@ have_iterm2() {
 
 # terminal-colors.d is util-linux territory. macOS ships a dmesg that ignores it.
 have_dmesg() { [[ "$(uname)" == "Linux" ]] && cmd_exists dmesg; }
+have_dircolors() { cmd_exists dircolors; }
 
 have_vscode() {
     cmd_exists code || cmd_exists code-insiders ||
@@ -228,6 +229,7 @@ detect_all() {
     detect_if procs "procs" have_procs
     detect_if atuin "Atuin" have_atuin
     detect_if lazygit "lazygit" have_lazygit
+    detect_if dircolors "dircolors" have_dircolors
     detect_if dmesg "dmesg" have_dmesg
     detect_if cosmic "COSMIC Desktop" have_cosmic
 
@@ -280,24 +282,44 @@ safe_copy() {
         return 1
     fi
 
-    # Resolve the real path to detect symlinks into git repos (e.g. dotfiles)
-    local real_dst real_dir in_ext_git=false
-    real_dst="$(cd "$(dirname "$dst")" 2>/dev/null && pwd -P)/$(basename "$dst")" 2>/dev/null || real_dst="$dst"
+    # Resolve file-level links as well as linked parent directories before
+    # checking whether another repository owns the destination.
+    local real_dst real_dir link_target resolved_dir
+    if real_dst="$(realpath "$dst" 2>/dev/null)"; then
+        :
+    elif real_dst="$(readlink -f "$dst" 2>/dev/null)"; then
+        :
+    elif [[ -L "$dst" ]] && link_target="$(readlink "$dst")"; then
+        if [[ "$link_target" == /* ]]; then
+            real_dst="$link_target"
+        elif resolved_dir="$(cd "$(dirname "$dst")/$(dirname "$link_target")" 2>/dev/null && pwd -P)"; then
+            real_dst="${resolved_dir}/$(basename "$link_target")"
+        else
+            real_dst="$dst"
+        fi
+    elif resolved_dir="$(cd "$(dirname "$dst")" 2>/dev/null && pwd -P)"; then
+        real_dst="${resolved_dir}/$(basename "$dst")"
+    else
+        real_dst="$dst"
+    fi
     real_dir="$(dirname "$real_dst")"
+
+    # A destination can sit below several missing directories inside another
+    # repository. Find the nearest existing directory before mkdir creates them.
+    local parent_dir
+    while [[ ! -d "$real_dir" ]]; do
+        parent_dir="$(dirname "$real_dir")"
+        [[ "$parent_dir" != "$real_dir" ]] || break
+        real_dir="$parent_dir"
+    done
 
     if [[ -d "${real_dir}" ]] && git -C "$real_dir" rev-parse --is-inside-work-tree &>/dev/null; then
         local repo_root
         repo_root="$(git -C "$real_dir" rev-parse --show-toplevel 2>/dev/null)"
-        # Check if target is in a different git repo than the installer
         if [[ "$repo_root" != "$(git -C "$(dirname "$src")" rev-parse --show-toplevel 2>/dev/null)" ]]; then
-            in_ext_git=true
-            # Skip new files, so we never introduce untracked files into
-            # someone's dotfiles repo
-            if [[ ! -f "$dst" ]]; then
-                diminfo "${label}: skipped new file in git repo (${repo_root})"
-                SKIPPED+=("$label")
-                return 1
-            fi
+            diminfo "${label}: skipped (managed in git repo ${repo_root})"
+            SKIPPED+=("$label")
+            return 1
         fi
     fi
 
@@ -310,14 +332,10 @@ safe_copy() {
     mkdir -p "$(dirname "$dst")" 2>/dev/null || true
 
     if [[ -f "$dst" ]]; then
-        # Skip .bak files inside external git repos, git itself is the backup
-        if [[ "$in_ext_git" == false ]]; then
-            # cp follows a link at the backup path and writes to its target,
-            # so drop the link first. The destination itself is left as it is:
-            # see the note on the copy below.
-            rm -f "${dst}.silkcircuit.bak" 2>/dev/null || true
-            cp "$dst" "${dst}.silkcircuit.bak" 2>/dev/null || true
-        fi
+        # cp follows a link at the backup path and writes to its target, so drop
+        # the link first. The destination itself stays intact.
+        rm -f "${dst}.silkcircuit.bak" 2>/dev/null || true
+        cp "$dst" "${dst}.silkcircuit.bak" 2>/dev/null || true
     fi
 
     # Deliberately not dropping a link at $dst. install.ps1 does (4dbe234), so
@@ -682,6 +700,17 @@ install_lazygit() {
 }
 
 # ─── System ──────────────────────────────────────────────────────────────────
+
+install_dircolors() {
+    section "dircolors"
+
+    if safe_copy "${EXTRAS_DIR}/dircolors/silkcircuit-${PRIMARY}.dircolors" \
+        "$HOME/.dircolors" "dircolors"; then
+        success "Installed the dircolors theme"
+        single_slot_note "dircolors"
+        diminfo 'Load it: eval "$(dircolors -b ~/.dircolors)"'
+    fi
+}
 
 install_btop() {
     section "btop"
@@ -1062,6 +1091,7 @@ run_installs() {
             atuin)            install_atuin ;;
             lazygit)          install_lazygit ;;
             git)              install_git ;;
+            dircolors)        install_dircolors ;;
             dmesg)            install_dmesg ;;
             cosmic)           install_cosmic ;;
             vscode)           install_vscode ;;
