@@ -30,8 +30,8 @@ theme where its tool looks for it, and prints the line that turns it on:
 ```
 
 Tools that hold a directory of themes get every selected variant. Tools that
-read a single file (lsd, procs, Starship, fastfetch, dmesg) get neon unless
-`--variant` says otherwise. Anything replaced is copied to
+read a single file (lsd, procs, Starship, fastfetch, dircolors, dmesg) get neon
+unless `--variant` says otherwise. Anything replaced is copied to
 `*.silkcircuit.bak` first.
 
 ## 📁 Generated targets
@@ -107,6 +107,7 @@ cp lsd/silkcircuit-neon.yaml ~/.config/lsd/colors.yaml       # plus color: theme
 cp procs/silkcircuit-neon.toml ~/.config/procs/config.toml
 cp starship/silkcircuit-neon.toml ~/.config/starship.toml
 cp fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
+cp dircolors/silkcircuit-neon.dircolors ~/.dircolors
 cp dmesg/silkcircuit-neon.scheme ~/.config/terminal-colors.d/dmesg.scheme
 
 # Git: copy and include, so your own .gitconfig stays yours

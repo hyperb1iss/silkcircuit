@@ -211,11 +211,12 @@ mkdir -p ~/.config/git
 cp extras/git/silkcircuit-neon.gitconfig ~/.config/git/
 git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
 
-# lsd, procs, Starship, fastfetch, dmesg: one config slot each, so pick a variant
+# lsd, procs, Starship, fastfetch, dircolors, dmesg: one config slot each
 cp extras/lsd/silkcircuit-neon.yaml ~/.config/lsd/colors.yaml
 cp extras/procs/silkcircuit-neon.toml ~/.config/procs/config.toml
 cp extras/starship/silkcircuit-neon.toml ~/.config/starship.toml
 cp extras/fastfetch/silkcircuit-neon.jsonc ~/.config/fastfetch/config.jsonc
+cp extras/dircolors/silkcircuit-neon.dircolors ~/.dircolors
 cp extras/dmesg/silkcircuit-neon.scheme ~/.config/terminal-colors.d/dmesg.scheme
 ```
 
