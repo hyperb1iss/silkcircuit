@@ -130,7 +130,7 @@ M.targets = {
   dircolors = {
     label = "GNU dircolors",
     ext = "dircolors",
-    url = "https://www.gnu.org/software/coreutils/manual/html_node/dircolors-invocation.html",
+    url = "https://man7.org/linux/man-pages/man1/dircolors.1.html",
   },
   k9s = {
     label = "k9s",
