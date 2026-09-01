@@ -72,7 +72,7 @@ local TEMPLATE = [[
 	separator = "${cyan}"
 
 [pretty]
-	silkcircuit = "%C(${purple} bold)commit %H%Creset%C(${yellow})%d%Creset%n%C(${fg})Author: %C(${pink_bright})%an <%ae>%Creset%n%C(${fg})Date:   %C(${cyan})%ad%Creset%n%n%C(${fg})    %s%Creset%n%n%w(0,4,4)%C(${fg})%b%Creset"
+	silkcircuit = "%C(${purple} bold)commit %H%Creset%C(${yellow})%d%Creset%n%C(${fg})Author: %C(${pink_bright})%an <%ae>%Creset%n%C(${fg})Date:   %C(${cyan})%ad%Creset%n%n%C(${green})    %s%Creset%n%n%w(0,4,4)%C(${fg_dark})%b%Creset"
 
 [delta "${meta.slug}"]
 	${meta.appearance} = true
