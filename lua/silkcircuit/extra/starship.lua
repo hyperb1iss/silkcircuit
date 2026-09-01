@@ -33,11 +33,12 @@ $lua\
 $kubernetes\
 [](bg:cyan fg:pink)\
 [](fg:cyan)\
-[➤](bold fg:cyan) \
+$character\
 """
 
 # Disable the blank line at the start of the prompt
 add_newline = false
+command_timeout = 1000
 
 palette = "silkcircuit"
 
@@ -55,6 +56,10 @@ green = "${green}"
 yellow = "${yellow}"
 orange = "${orange}"
 red = "${red}"
+
+[character]
+success_symbol = "[➤](bold fg:cyan) "
+error_symbol = "[➤](bold fg:red) "
 
 # OS module
 [os]
@@ -152,7 +157,7 @@ disabled = false
 [python]
 symbol = " "
 style = "bold fg:bg bg:pink"
-format = "[ $symbol($${virtualenv}) ]($style)"
+format = '([ $symbol($${virtualenv}) ]($style))'
 detect_extensions = ["py"]
 detect_files = [
   "requirements.txt",
