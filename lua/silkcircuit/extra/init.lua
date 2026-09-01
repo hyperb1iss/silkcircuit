@@ -127,6 +127,11 @@ M.targets = {
     ext = "scheme",
     url = "https://www.man7.org/linux/man-pages/man5/terminal-colors.d.5.html",
   },
+  dircolors = {
+    label = "GNU dircolors",
+    ext = "dircolors",
+    url = "https://www.gnu.org/software/coreutils/manual/html_node/dircolors-invocation.html",
+  },
   k9s = {
     label = "k9s",
     ext = "yaml",
