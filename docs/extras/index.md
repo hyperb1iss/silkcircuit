@@ -108,7 +108,7 @@ Regenerate the lot with `make build`, and this table with `make docs`.
 | bat                             | [reference](https://github.com/sharkdp/bat#adding-new-themes)                                      | `extras/bat/silkcircuit-{neon,vibrant,soft,glow,dawn}.tmTheme`           |
 | btop                            | [reference](https://github.com/aristocratos/btop#themes)                                           | `extras/btop/silkcircuit-{neon,vibrant,soft,glow,dawn}.theme`            |
 | COSMIC Desktop                  | [reference](https://github.com/pop-os/cosmic-theme)                                                | `extras/cosmic/silkcircuit-{neon,vibrant,soft,glow,dawn}.ron`            |
-| GNU dircolors                   | [reference](https://www.gnu.org/software/coreutils/manual/html_node/dircolors-invocation.html)     | `extras/dircolors/silkcircuit-{neon,vibrant,soft,glow,dawn}.dircolors`   |
+| GNU dircolors                   | [reference](https://man7.org/linux/man-pages/man1/dircolors.1.html)                                | `extras/dircolors/silkcircuit-{neon,vibrant,soft,glow,dawn}.dircolors`   |
 | dmesg                           | [reference](https://www.man7.org/linux/man-pages/man5/terminal-colors.d.5.html)                    | `extras/dmesg/silkcircuit-{neon,vibrant,soft,glow,dawn}.scheme`          |
 | fastfetch                       | [reference](https://github.com/fastfetch-cli/fastfetch/wiki/Configuration)                         | `extras/fastfetch/silkcircuit-{neon,vibrant,soft,glow,dawn}.jsonc`       |
 | foot                            | [reference](https://codeberg.org/dnkl/foot/src/branch/master/doc/foot.ini.5.scd)                   | `extras/foot/silkcircuit-{neon,vibrant,soft,glow,dawn}.ini`              |
