@@ -1,6 +1,6 @@
 # Extras and Integrations
 
-SilkCircuit is one palette wearing thirty different formats. The themes under
+SilkCircuit is one palette wearing thirty-one different formats. The themes under
 `extras/` are generated from `lua/silkcircuit/variants.lua` by `make build`, in
 all five variants, so the hex your terminal draws is the hex your editor draws
 and CI fails if the two drift apart. The Chrome themes come from `make chrome`,
@@ -31,7 +31,7 @@ cd silkcircuit
 Anything it overwrites is copied to `*.silkcircuit.bak` first, and it refuses
 to add untracked files to a dotfiles repo it does not own. Tools that read a
 single file rather than a directory of themes (lsd, procs, Starship,
-fastfetch, dmesg) take neon unless `--variant` says otherwise.
+fastfetch, dircolors, dmesg) take neon unless `--variant` says otherwise.
 
 ## Editors
 
@@ -61,15 +61,16 @@ for all eight in one table, plus the ANSI contract they share.
 
 ## Shell and CLI
 
-| Extra                          | Turn it on                                           |
-| ------------------------------ | ---------------------------------------------------- |
-| [Starship](/extras/starship)   | Copy to `~/.config/starship.toml`                    |
-| [fzf](/extras/fzf)             | `source ~/.config/fzf/silkcircuit-neon.sh`           |
-| [bat](/extras/bat)             | `--theme=silkcircuit-neon`, then `bat cache --build` |
-| [lsd](/extras/lsd)             | `color: theme: custom`                               |
-| [procs](/extras/procs)         | Copy to `~/.config/procs/config.toml`                |
-| [fastfetch](/extras/fastfetch) | Copy to `~/.config/fastfetch/config.jsonc`           |
-| [Atuin](/extras/atuin)         | `[theme] name = "silkcircuit-neon"`                  |
+| Extra                              | Turn it on                                           |
+| ---------------------------------- | ---------------------------------------------------- |
+| [Starship](/extras/starship)       | Copy to `~/.config/starship.toml`                    |
+| [fzf](/extras/fzf)                 | `source ~/.config/fzf/silkcircuit-neon.sh`           |
+| [bat](/extras/bat)                 | `--theme=silkcircuit-neon`, then `bat cache --build` |
+| [lsd](/extras/lsd)                 | `color: theme: custom`                               |
+| [procs](/extras/procs)             | Copy to `~/.config/procs/config.toml`                |
+| [fastfetch](/extras/fastfetch)     | Copy to `~/.config/fastfetch/config.jsonc`           |
+| [GNU dircolors](/extras/dircolors) | Copy to `~/.dircolors`, then evaluate `dircolors -b` |
+| [Atuin](/extras/atuin)             | `[theme] name = "silkcircuit-neon"`                  |
 
 ## Git
 
