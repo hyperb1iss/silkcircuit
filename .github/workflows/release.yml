@@ -32,7 +32,9 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  # Only runs on the push that release-please tagged.
+  # Only runs on the push that release-please tagged. Artifacts attach
+  # before anything that can fail on a third party, so a marketplace or
+  # LLM hiccup never leaves the release without its downloads.
   publish:
     name: » Publish
     needs: release-please
@@ -52,6 +54,41 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: → Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: → Package the extension
+        run: make vscode-package
+
+      - name: → Package the Chrome themes
+        run: make chrome-package
+
+      - name: → Attach artifacts to the release
+        run: |
+          gh release upload "$TAG" \
+            extras/vscode/*.vsix \
+            silkcircuit-chrome-*.zip \
+            --clobber
+
+      - name: → Publish to the VS Code Marketplace
+        if: env.VSCE_PAT != ''
+        run: make vscode-publish-vsce
+
+      - name: → Publish to Open VSX
+        if: env.OVSX_PAT != ''
+        run: make vscode-publish-ovsx
+
+      - name: → Note any skipped publish
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "! VSCE_PAT is not set, skipped the VS Code Marketplace"
+          fi
+          if [ -z "$OVSX_PAT" ]; then
+            echo "! OVSX_PAT is not set, skipped Open VSX"
+          fi
+
       - name: → Find the previous release tag
         if: env.IRIS_KEY != ''
         id: prev
@@ -70,6 +107,7 @@ jobs:
           to: ${{ env.TAG }}
           version-name: ${{ env.TAG }}
           provider: anthropic
+          model: claude-opus-5
           api-key: ${{ env.IRIS_KEY }}
           output-file: RELEASE_NOTES.md
           custom-instructions: >-
@@ -91,38 +129,3 @@ jobs:
       - name: → Put the styled notes on the release
         if: env.IRIS_KEY != ''
         run: gh release edit "$TAG" --notes-file RELEASE_NOTES.md
-
-      - name: → Setup Node
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
-
-      - name: → Package the extension
-        run: make vscode-package
-
-      - name: → Package the Chrome themes
-        run: make chrome-package
-
-      - name: → Publish to the VS Code Marketplace
-        if: env.VSCE_PAT != ''
-        run: make vscode-publish-vsce
-
-      - name: → Publish to Open VSX
-        if: env.OVSX_PAT != ''
-        run: make vscode-publish-ovsx
-
-      - name: → Note any skipped publish
-        run: |
-          if [ -z "$VSCE_PAT" ]; then
-            echo "! VSCE_PAT is not set, skipped the VS Code Marketplace"
-          fi
-          if [ -z "$OVSX_PAT" ]; then
-            echo "! OVSX_PAT is not set, skipped Open VSX"
-          fi
-
-      - name: → Attach artifacts to the release
-        run: |
-          gh release upload "$TAG" \
-            extras/vscode/*.vsix \
-            silkcircuit-chrome-*.zip \
-            --clobber
