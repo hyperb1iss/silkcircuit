@@ -27,6 +27,8 @@ M.variants = { "neon", "vibrant", "soft", "glow", "dawn" }
 ---   is_full  Render once from every variant instead of once per variant.
 ---   filename Function(variant) returning the file name, for formats whose
 ---            tooling dictates a name the default pattern cannot express.
+---   shebang  Interpreter line written above the header, for scripts.
+---   executable Set the execute bit on the written file.
 M.targets = {
   helix = {
     label = "Helix",
@@ -213,6 +215,13 @@ M.targets = {
     label = "Starship",
     ext = "toml",
     url = "https://starship.rs/config/#color-palettes",
+  },
+  claude = {
+    label = "Claude Code",
+    ext = "sh",
+    shebang = "#!/usr/bin/env bash",
+    executable = true,
+    url = "https://code.claude.com/docs/en/statusline",
   },
 }
 
@@ -499,8 +508,14 @@ function M.build(opts)
     local function emit(variant, body)
       local header = M.header(name, variant)
       local content = header and (header .. "\n\n" .. body) or body
+      if spec.shebang then
+        content = spec.shebang .. "\n" .. content
+      end
       local relative = "extras/" .. dir .. "/" .. M.filename(name, variant)
       write(root .. "/" .. relative, content)
+      if spec.executable then
+        vim.fn.setfperm(root .. "/" .. relative, "rwxr-xr-x")
+      end
       written[#written + 1] = relative
       print("  " .. relative)
     end

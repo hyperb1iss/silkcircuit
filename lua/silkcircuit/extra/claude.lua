@@ -1,0 +1,696 @@
+-- The Claude Code status line: a powerline drawn on the Starship prompt ramp
+-- of the same variant, so the prompt above the input box and the status line
+-- below it read as one instrument.
+--
+-- The script reads the JSON Claude Code pipes to it with bash regex matches,
+-- so it needs no jq and spawns nothing to read a field. The hot path forks
+-- once for git status and, on bash older than 4.2, once for date. The node
+-- and kubectl probes are cached per directory.
+--
+-- The palette block is templated; the body below it is verbatim bash, which
+-- is why it is concatenated rather than run through the template: a shell
+-- script is nothing but ${...} references.
+
+local M = {}
+
+local prompt = require("silkcircuit.extra.prompt")
+
+local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"
+
+-- "#e135ff" as the "225;53;255" a 24-bit SGR sequence takes.
+local function channels(hex)
+  local r, g, b = hex:match(HEX6)
+  return string.format("%d;%d;%d", tonumber(r, 16), tonumber(g, 16), tonumber(b, 16))
+end
+
+-- Glyphs are written as raw UTF-8 byte escapes rather than literal characters
+-- so that editors, patches, and copy-paste cannot silently strip them, and
+-- rather than \u escapes because those need bash 4.2 and macOS ships 3.2,
+-- where they pass through as the literal text.
+local function bytes(codepoint)
+  return (
+    vim.fn.nr2char(codepoint, 1):gsub(".", function(c)
+      return string.format("\\x%02x", c:byte())
+    end)
+  )
+end
+
+-- Name, codepoint, and the Nerd Font glyph name the comment carries.
+local GLYPHS = {
+  { "SEP_RIGHT", 0xE0B0, "pl-left_hard_divider" },
+  { "SEP_LEFT", 0xE0B2, "pl-right_hard_divider" },
+  { "ICON_GIT", 0xE725, "dev-git_branch" },
+  { "ICON_WORKTREE", 0xF0645, "md-file_tree" },
+  { "ICON_PR", 0xF04C2, "md-source_pull" },
+  { "ICON_NODE", 0xF0399, "md-nodejs" },
+  { "ICON_K8S", 0xF10FE, "md-kubernetes" },
+  { "ICON_MODEL", 0xF0B7B, "md-chat_processing" },
+  { "ICON_AGENT", 0xF06A9, "md-robot" },
+  { "ICON_CONTEXT", 0xF035B, "md-memory" },
+  { "ICON_FIVE_HOUR", 0xF051F, "md-timer_sand" },
+  { "ICON_SEVEN_DAY", 0xF00ED, "md-calendar" },
+  { "ICON_FAST", 0xF140B, "md-lightning_bolt" },
+  { "ICON_CLOCK", 0xF144D, "md-clock_time_three_outline" },
+  { "ICON_COLD", 0xF2DC, "fa-snowflake_o" },
+  { "ICON_AHEAD", 0x21E1, "upwards dashed arrow" },
+  { "ICON_BEHIND", 0x21E3, "downwards dashed arrow" },
+  { "ICON_BULLET", 0x2022, "bullet" },
+  { "ICON_ELLIPSIS", 0x2026, "horizontal ellipsis" },
+  { "ICON_MIDDOT", 0x00B7, "middle dot" },
+}
+
+local function glyph_block()
+  local lines = {}
+  for _, entry in ipairs(GLYPHS) do
+    local name, codepoint, label = entry[1], entry[2], entry[3]
+    lines[#lines + 1] =
+      string.format("%s=$'%s' # U+%04X %s", name, bytes(codepoint), codepoint, label)
+  end
+  return table.concat(lines, "\n")
+end
+
+local PALETTE = [==[
+# Wire it up in ~/.claude/settings.json and restart Claude Code:
+#
+#   "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" }
+#
+# Add "refreshInterval": 30 to that block to keep the clock current between
+# messages. The powerline glyphs need a Nerd Font in the terminal.
+
+# Nerd Font glyphs are multi-byte. Without a UTF-8 locale bash measures strings
+# in bytes, which overstates the visible width and drags the right-hand segment
+# out of alignment. Windows shells routinely start with no locale set at all.
+export LC_ALL=C.UTF-8
+shopt -s extglob
+
+# ── SilkCircuit ${meta.label} ───────────────────────────────────────────────
+# The six steps of the Starship prompt ramp, as 24-bit SGR sequences. bg_* and
+# fg_* are the same colour as background and as text, the second being what
+# draws a powerline separator over its neighbour.
+bg_page=$'\033[48;2;${sl.background}m'
+fg_page=$'\033[38;2;${sl.background}m'
+bg_1=$'\033[48;2;${sl.segment_1}m'
+fg_1=$'\033[38;2;${sl.segment_1}m'
+bg_2=$'\033[48;2;${sl.segment_2}m'
+fg_2=$'\033[38;2;${sl.segment_2}m'
+bg_3=$'\033[48;2;${sl.segment_3}m'
+fg_3=$'\033[38;2;${sl.segment_3}m'
+bg_4=$'\033[48;2;${sl.segment_4}m'
+fg_4=$'\033[38;2;${sl.segment_4}m'
+bg_5=$'\033[48;2;${sl.segment_5}m'
+fg_5=$'\033[38;2;${sl.segment_5}m'
+
+# Text on each step.
+tx_1=$'\033[38;2;${sl.foreground_1}m'
+tx_2=$'\033[38;2;${sl.foreground_2}m'
+tx_3=$'\033[38;2;${sl.foreground_3}m'
+tx_4=$'\033[38;2;${sl.foreground_4}m'
+
+# A pill that flips a hot reading onto the warning or danger colour.
+bg_warning=$'\033[48;2;${sl.warning}m'
+bg_danger=$'\033[48;2;${sl.danger}m'
+tx_alert=$'\033[38;2;${sl.foreground_warning}m'
+
+# Lines added and removed, in the palette's git colours.
+tx_add=$'\033[38;2;${sl.git_add}m'
+tx_del=$'\033[38;2;${sl.git_delete}m'
+
+bold=$'\033[1m'
+dim=$'\033[2m'
+undim=$'\033[22;1m'
+reset=$'\033[0m'
+
+# ── Glyphs ─────────────────────────────────────────────────────────────────
+${glyphs}
+]==]
+
+local BODY = [==[
+# Everything above U+FFFF. Bash on Windows stores strings as UTF-16 and so
+# measures each of these as two units, while the terminal draws a single cell.
+ASTRAL_ICONS="@($ICON_WORKTREE|$ICON_PR|$ICON_NODE|$ICON_K8S|$ICON_MODEL|$ICON_AGENT|$ICON_CONTEXT|$ICON_FIVE_HOUR|$ICON_SEVEN_DAY|$ICON_FAST|$ICON_CLOCK)"
+astral_probe="$ICON_NODE"
+astral_units=${#astral_probe}
+
+# Visible cell width of a string, result in $REPLY. Off Windows ${#s} is
+# already correct and the astral discount is a no-op.
+vwidth() {
+    local s="$1" bare
+    REPLY=${#s}
+    [ "$astral_units" -gt 1 ] || return 0
+    bare="${s//$ASTRAL_ICONS/}"
+    REPLY=$(( ${#bare} + (${#s} - ${#bare}) / astral_units ))
+}
+
+# Format the current time, results in now (epoch seconds) and clock. printf's
+# %()T needs bash 4.2, which rules it out on macOS, so the cheap builtin is
+# bound where it exists and date(1) paid for only where it is not.
+if [ "${BASH_VERSINFO[0]:-0}" -gt 4 ] ||
+    { [ "${BASH_VERSINFO[0]:-0}" -eq 4 ] && [ "${BASH_VERSINFO[1]:-0}" -ge 2 ]; }; then
+    printf -v now '%(%s)T' -1
+    printf -v clock '%(%I:%M%p)T' -1
+else
+    read -r now clock <<< "$(date '+%s %I:%M%p')"
+fi
+clock="${clock/AM/am}"
+clock="${clock/PM/pm}"
+clock="${clock#0}"
+
+# ── Input ──────────────────────────────────────────────────────────────────
+# One read pulls the whole payload without a subshell. It returns non-zero at
+# end of input because no NUL delimiter ever arrives, which is expected.
+IFS= read -r -d '' input || true
+
+# The JSON is parsed with regex matches. Each helper leaves its answer in
+# REPLY and returns non-zero when the key is absent or null, so a missing
+# field falls through to its default instead of picking up a stray value from
+# elsewhere in the payload. Regex rather than ${x#*pattern}: bash 3.2 matches
+# a prefix strip quadratically, which on a two kilobyte payload costs more
+# than every fork in this script put together. Claude Code emits compact
+# JSON, so no whitespace is expected around the colons.
+
+# A string with its escapes undone.
+json_str() {
+    local re='"'"$2"'":"(([^"\\]|\\.)*)"'
+    [[ $1 =~ $re ]] || { REPLY=""; return 1; }
+    REPLY="${BASH_REMATCH[1]}"
+    REPLY="${REPLY//\\\"/\"}"
+    REPLY="${REPLY//\\\//\/}"
+    REPLY="${REPLY//\\\\/\\}"
+}
+
+# A bare number or boolean.
+json_raw() {
+    local re='"'"$2"'":(-?[0-9.eE+]+|true|false|null)'
+    [[ $1 =~ $re ]] || { REPLY=""; return 1; }
+    REPLY="${BASH_REMATCH[1]}"
+    [ "$REPLY" != "null" ]
+}
+
+# A number truncated to an integer, 0 when absent.
+json_int() {
+    if json_raw "$1" "$2"; then
+        REPLY="${REPLY%%.*}"
+        REPLY="${REPLY//[^0-9-]/}"
+        [ -n "$REPLY" ] || REPLY=0
+        return 0
+    fi
+    REPLY=0
+    return 1
+}
+
+json_true() {
+    json_raw "$1" "$2" && [ "$REPLY" = "true" ]
+}
+
+# The body of a nested object up to its first closing brace, so a key that
+# recurs across objects (name, used_percentage) is read from the right one.
+# Every object the payload nests keeps its scalars ahead of any object of
+# its own, which is as deep as this needs to look.
+json_obj() {
+    local re='"'"$2"'":\{([^}]*)'
+    [[ $1 =~ $re ]] || { REPLY=""; return 1; }
+    REPLY="${BASH_REMATCH[1]}"
+}
+
+# ── Fields ─────────────────────────────────────────────────────────────────
+model="Claude"
+json_str "$input" display_name && model="$REPLY"
+
+fast=""
+json_true "$input" fast_mode && fast=1
+
+effort=""
+if json_obj "$input" effort; then
+    json_str "$REPLY" level && effort="$REPLY"
+fi
+
+current_dir=""
+json_str "$input" current_dir && current_dir="$REPLY"
+if [ -z "$current_dir" ]; then
+    json_str "$input" cwd && current_dir="$REPLY"
+fi
+
+vim_mode=""
+if json_obj "$input" vim; then
+    json_str "$REPLY" mode && vim_mode="$REPLY"
+fi
+
+agent=""
+if json_obj "$input" agent; then
+    json_str "$REPLY" name && agent="$REPLY"
+fi
+
+session_name=""
+json_str "$input" session_name && session_name="$REPLY"
+
+output_style=""
+if json_obj "$input" output_style; then
+    json_str "$REPLY" name && output_style="$REPLY"
+fi
+[ "$output_style" != "default" ] || output_style=""
+
+# The context percentage counts input tokens only, which is how Claude Code's
+# own used_percentage is defined. The sum over current_usage matches it exactly
+# and is the fallback for versions that do not send the percentage.
+ctx_size=200000
+ctx_tokens=0
+ctx_pct=""
+json_int "$input" context_window_size && [ "$REPLY" -gt 0 ] && ctx_size=$REPLY
+json_int "$input" total_input_tokens && ctx_tokens=$REPLY
+if json_obj "$input" current_usage; then
+    usage="$REPLY"
+    json_int "$usage" input_tokens
+    ctx_tokens=$REPLY
+    json_int "$usage" cache_creation_input_tokens
+    ctx_tokens=$((ctx_tokens + REPLY))
+    json_int "$usage" cache_read_input_tokens
+    ctx_tokens=$((ctx_tokens + REPLY))
+fi
+if json_obj "$input" context_window && json_int "$REPLY" used_percentage; then
+    ctx_pct=$REPLY
+elif [ "$ctx_tokens" -gt 0 ]; then
+    ctx_pct=$((ctx_tokens * 100 / ctx_size))
+fi
+
+ctx_over=""
+json_true "$input" exceeds_200k_tokens && ctx_over=1
+
+# A cold cache means the next request re-reads the whole prefix at full price.
+cache_cold=""
+if json_obj "$input" prompt_cache; then
+    cache="$REPLY"
+    if json_true "$cache" caching_observed && ! json_true "$cache" warm; then
+        cache_cold=1
+    fi
+fi
+
+cost_display=""
+lines_added=0
+lines_removed=0
+if json_obj "$input" cost; then
+    cost="$REPLY"
+    if json_raw "$cost" total_cost_usd; then
+        raw="$REPLY"
+        # JSON switches to exponent notation below a millionth of a dollar.
+        case "$raw" in *[eE]*) raw="0" ;; esac
+        whole="${raw%%.*}"
+        frac="${raw#"$whole"}"
+        frac="${frac#.}00"
+        frac="${frac:0:2}"
+        if [ "$whole" != "0" ] || [ "$frac" != "00" ]; then
+            cost_display="\$${whole}.${frac}"
+        fi
+    fi
+    json_int "$cost" total_lines_added && lines_added=$REPLY
+    json_int "$cost" total_lines_removed && lines_removed=$REPLY
+fi
+
+# Rate limits only arrive on subscription plans, and each window on its own.
+limit_5h=""
+limit_7d=""
+if json_obj "$input" five_hour; then
+    json_int "$REPLY" used_percentage && limit_5h=$REPLY
+fi
+if json_obj "$input" seven_day; then
+    json_int "$REPLY" used_percentage && limit_7d=$REPLY
+fi
+
+pr_number=""
+pr_url=""
+pr_state=""
+if json_obj "$input" pr; then
+    pr="$REPLY"
+    json_int "$pr" number && [ "$REPLY" -gt 0 ] && pr_number=$REPLY
+    json_str "$pr" url && pr_url="$REPLY"
+    json_str "$pr" review_state && pr_state="$REPLY"
+fi
+
+# ── Directory ──────────────────────────────────────────────────────────────
+# Normalized to forward slashes so the path splits below work on Windows,
+# where current_dir arrives as C:\Users\name\project.
+dir_norm="${current_dir//\\//}"
+home_norm="${USERPROFILE:-$HOME}"
+home_norm="${home_norm//\\//}"
+
+# Claude Code invokes the status line from an unrelated directory, so the git
+# lookup below depends on this.
+if [ -n "$dir_norm" ]; then
+    cd -- "$dir_norm" 2>/dev/null || true
+fi
+
+dir_display="~"
+if [ -n "$dir_norm" ]; then
+    dir_display="$dir_norm"
+    if [ -n "$home_norm" ] && [ "${dir_display#"$home_norm"}" != "$dir_display" ]; then
+        dir_display="~${dir_display#"$home_norm"}"
+    fi
+    if [ ${#dir_display} -gt 30 ]; then
+        leaf="${dir_display##*/}"
+        parent="${dir_display%/*}"
+        parent="${parent##*/}"
+        if [ -n "$parent" ]; then
+            dir_display="$ICON_ELLIPSIS/$parent/$leaf"
+        else
+            dir_display="/$leaf"
+        fi
+    fi
+fi
+
+# ── Git ────────────────────────────────────────────────────────────────────
+# One status call carries the branch, the upstream distance, and every flag.
+# --no-optional-locks keeps it from refreshing the index under a running
+# rebase or another agent's commit.
+branch=""
+git_flags=""
+git_extra=""
+git_extra_vis=""
+git_icon="$ICON_GIT"
+[ -f .git ] && git_icon="$ICON_WORKTREE"
+if [ -n "$dir_norm" ] && git_status=$(git --no-optional-locks -c core.quotepath=off status \
+    --porcelain=v2 --branch --untracked-files=normal --ignore-submodules=all 2>/dev/null); then
+    ahead=0
+    behind=0
+    oid=""
+    dirty=""
+    untracked=""
+    conflict=""
+    while IFS= read -r line; do
+        case "$line" in
+            "# branch.head "*) branch="${line#\# branch.head }" ;;
+            "# branch.oid "*) oid="${line#\# branch.oid }" ;;
+            "# branch.ab "*)
+                ab="${line#\# branch.ab }"
+                ahead="${ab%% *}"
+                ahead="${ahead#+}"
+                behind="${ab##* }"
+                behind="${behind#-}"
+                ;;
+            "#"*) ;;
+            "?"*) untracked="?" ;;
+            "u"*) conflict="!" ;;
+            *) dirty="*" ;;
+        esac
+        # Headers come first, so once both flags are set nothing else matters.
+        [ -n "$dirty" ] && [ -n "$untracked" ] && break
+    done <<< "$git_status"
+
+    if [ "$branch" = "(detached)" ]; then
+        branch="@${oid:0:7}"
+    fi
+    git_flags="$conflict$dirty$untracked"
+    [ "$ahead" -gt 0 ] 2>/dev/null && git_extra+=" $ICON_AHEAD$ahead" && git_extra_vis+=" $ICON_AHEAD$ahead"
+    [ "$behind" -gt 0 ] 2>/dev/null && git_extra+=" $ICON_BEHIND$behind" && git_extra_vis+=" $ICON_BEHIND$behind"
+    if [ "$lines_added" -gt 0 ] || [ "$lines_removed" -gt 0 ]; then
+        git_extra+=" ${tx_add}+${lines_added}${tx_3} ${tx_del}-${lines_removed}${tx_3}"
+        git_extra_vis+=" +${lines_added} -${lines_removed}"
+    fi
+    if [ -n "$pr_number" ]; then
+        pr_color="$tx_3"
+        case "$pr_state" in
+            approved) pr_color="$tx_add" ;;
+            changes_requested) pr_color="$tx_del" ;;
+        esac
+        pr_text="$ICON_PR #$pr_number"
+        if [ -n "$pr_url" ]; then
+            pr_text=$'\033]8;;'"$pr_url"$'\033\\'"$pr_text"$'\033]8;;\033\\'
+        fi
+        git_extra+=" ${pr_color}${pr_text}${tx_3}"
+        git_extra_vis+=" $ICON_PR #$pr_number"
+    fi
+fi
+
+# ── Tech ───────────────────────────────────────────────────────────────────
+# Probing node and kubectl costs real time, hundreds of milliseconds where
+# spawning a process is expensive, and the answers change far more slowly than
+# the status line redraws. The rendered segment is cached per directory, since
+# the node version is the one part that varies with location.
+TECH_TTL=60
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/silkcircuit"
+cache_key="${dir_norm//[^a-zA-Z0-9]/_}"
+[ ${#cache_key} -gt 60 ] && cache_key="${cache_key: -60}"
+cache_file="$cache_dir/statusline-tech-${#dir_norm}-$cache_key"
+
+tech=""
+tech_fresh=""
+if [ -r "$cache_file" ]; then
+    IFS=$'\t' read -r cached_at cached_tech < "$cache_file"
+    if [ $(( now - ${cached_at:-0} )) -lt "$TECH_TTL" ] 2>/dev/null; then
+        tech="$cached_tech"
+        tech_fresh=1
+    fi
+fi
+
+if [ -z "$tech_fresh" ]; then
+    if command -v node >/dev/null 2>&1; then
+        node_version=$(node --version 2>/dev/null)
+        [ -n "$node_version" ] && tech+="$ICON_NODE ${node_version#v} "
+    fi
+    if command -v kubectl >/dev/null 2>&1; then
+        k8s_context=$(kubectl config current-context 2>/dev/null)
+        # eks-us-west-2-prod reads as eks-prod, the way the Starship prompt
+        # shortens it.
+        k8s_context="${k8s_context/#eks-+([a-z])-+([a-z])-+([0-9])-/eks-}"
+        [ -n "$k8s_context" ] && tech+="$ICON_K8S $k8s_context "
+    fi
+    [ -d "$cache_dir" ] || mkdir -p "$cache_dir" 2>/dev/null
+    printf '%s\t%s\n' "$now" "$tech" > "$cache_file" 2>/dev/null || true
+fi
+tech="${tech% }"
+
+# ── Right-hand readings ────────────────────────────────────────────────────
+# Each reading carries its rendered text, its visible text, and a priority.
+# When the line overflows, the lowest priority reading goes first; 100 never
+# goes.
+r_count=0
+reading() {
+    r_text[r_count]="$1"
+    r_vis[r_count]="$2"
+    r_pri[r_count]="$3"
+    r_drop[r_count]=""
+    r_count=$((r_count + 1))
+}
+
+# A reading wrapped in a warning or danger pill once it runs hot.
+pill() {
+    local pct="$1" text="$2"
+    if [ "$pct" -ge 90 ]; then
+        REPLY="${bg_danger}${tx_alert} ${text} ${bg_5}${tx_4}"
+    elif [ "$pct" -ge 80 ]; then
+        REPLY="${bg_warning}${tx_alert} ${text} ${bg_5}${tx_4}"
+    else
+        REPLY="$text"
+        return 1
+    fi
+}
+
+model_text="$ICON_MODEL $model"
+model_vis="$model_text"
+if [ -n "$fast" ]; then
+    model_text+=" $ICON_FAST"
+    model_vis+=" $ICON_FAST"
+fi
+if [ -n "$effort" ]; then
+    model_text+=" ${dim}${effort}${undim}"
+    model_vis+=" $effort"
+fi
+reading "$model_text" "$model_vis" 100
+
+if [ -n "$ctx_pct" ]; then
+    if [ "$ctx_tokens" -ge 1000 ]; then
+        whole=$((ctx_tokens / 1000))
+        tenth=$(((ctx_tokens % 1000) / 100))
+        if [ "$whole" -lt 100 ] && [ "$tenth" -gt 0 ]; then
+            ctx_display="${whole}.${tenth}K"
+        else
+            ctx_display="${whole}K"
+        fi
+    else
+        ctx_display="$ctx_tokens"
+    fi
+    ctx_display="$ICON_CONTEXT $ctx_display$ICON_MIDDOT$ctx_pct%"
+    [ -n "$ctx_over" ] && ctx_display+="!"
+    [ -n "$cache_cold" ] && ctx_display+=" $ICON_COLD"
+    if pill "$ctx_pct" "$ctx_display"; then
+        reading "$REPLY" " $ctx_display " 100
+    else
+        reading "$ctx_display" "$ctx_display" 100
+    fi
+fi
+
+[ -n "$cost_display" ] && reading "$cost_display" "$cost_display" 20
+
+limits_text=""
+limits_vis=""
+if [ -n "$limit_5h" ]; then
+    if pill "$limit_5h" "$ICON_FIVE_HOUR $limit_5h%"; then
+        limits_text="$REPLY"
+        limits_vis=" $ICON_FIVE_HOUR $limit_5h% "
+    else
+        limits_text="$REPLY"
+        limits_vis="$REPLY"
+    fi
+fi
+if [ -n "$limit_7d" ]; then
+    [ -n "$limits_text" ] && limits_text+=" " && limits_vis+=" "
+    if pill "$limit_7d" "$ICON_SEVEN_DAY $limit_7d%"; then
+        limits_text+="$REPLY"
+        limits_vis+=" $ICON_SEVEN_DAY $limit_7d% "
+    else
+        limits_text+="$REPLY"
+        limits_vis+="$REPLY"
+    fi
+fi
+[ -n "$limits_text" ] && reading "$limits_text" "$limits_vis" 40
+
+[ -n "$output_style" ] && reading "$output_style" "$output_style" 10
+
+reading "$ICON_CLOCK $clock" "$ICON_CLOCK $clock" 60
+
+# ── Layout ─────────────────────────────────────────────────────────────────
+# Claude Code exports COLUMNS when it invokes the status line, so tput is only
+# a fallback for other callers.
+terminal_width="${COLUMNS:-}"
+if [ -z "$terminal_width" ]; then
+    terminal_width=$(tput cols 2>/dev/null || echo 80)
+fi
+
+# The leftmost step names the session: vim mode, agent, and session name.
+badge=""
+[ -n "$vim_mode" ] && badge="$vim_mode"
+if [ -n "$agent" ]; then
+    [ -n "$badge" ] && badge+=" $ICON_MIDDOT "
+    badge+="$ICON_AGENT $agent"
+fi
+if [ -n "$session_name" ]; then
+    [ -n "$badge" ] && badge+=" $ICON_MIDDOT "
+    badge+="$session_name"
+fi
+[ -n "$badge" ] && badge=" $badge"
+
+# left carries the escape codes, left_vis only the printable characters, so
+# the fill width can be computed without stripping ANSI.
+show_tech=1
+show_git_extra=1
+build_left() {
+    left="${bg_page}${fg_1}${SEP_LEFT}${bg_1}${tx_1}${bold}${badge} "
+    left_vis="${SEP_LEFT}${badge} "
+    left_fg="$fg_1"
+
+    left+="${bg_2}${left_fg}${SEP_RIGHT}${tx_2} ${dir_display} "
+    left_vis+="${SEP_RIGHT} ${dir_display} "
+    left_fg="$fg_2"
+
+    if [ -n "$branch" ]; then
+        local extra="" extra_vis=""
+        if [ -n "$show_git_extra" ]; then
+            extra="$git_extra"
+            extra_vis="$git_extra_vis"
+        fi
+        left+="${bg_3}${left_fg}${SEP_RIGHT}${tx_3} ${git_icon} ${branch}${git_flags}${extra} "
+        left_vis+="${SEP_RIGHT} ${git_icon} ${branch}${git_flags}${extra_vis} "
+        left_fg="$fg_3"
+    fi
+
+    if [ -n "$tech" ] && [ -n "$show_tech" ]; then
+        left+="${bg_4}${left_fg}${SEP_RIGHT}${tx_4} ${tech} "
+        left_vis+="${SEP_RIGHT} ${tech} "
+        left_fg="$fg_4"
+    fi
+
+    # The fill runs in the last step's colour, and the right cap rises from it.
+    left_bg="${left_fg/38;/48;}"
+    left+="${reset}"
+}
+
+build_right() {
+    right=""
+    right_vis=""
+    local i
+    for ((i = 0; i < r_count; i++)); do
+        [ -z "${r_drop[i]}" ] || continue
+        if [ -n "$right" ]; then
+            right+=" $ICON_BULLET "
+            right_vis+=" $ICON_BULLET "
+        fi
+        right+="${r_text[i]}"
+        right_vis+="${r_vis[i]}"
+    done
+    right=" $right "
+    right_vis=" $right_vis "
+}
+
+# The two caps framing the right segment are one cell each.
+fits() {
+    vwidth "$left_vis"
+    local lw=$REPLY
+    vwidth "$right_vis"
+    [ $((lw + REPLY + 2)) -le "$terminal_width" ]
+}
+
+# Drop the lowest-priority reading below a ceiling. Returns non-zero when
+# nothing under that ceiling is left to drop.
+drop_right() {
+    local i lowest=""
+    for ((i = 0; i < r_count; i++)); do
+        [ -z "${r_drop[i]}" ] && [ "${r_pri[i]}" -lt "$1" ] || continue
+        if [ -z "$lowest" ] || [ "${r_pri[i]}" -lt "${r_pri[lowest]}" ]; then
+            lowest=$i
+        fi
+    done
+    [ -n "$lowest" ] || return 1
+    r_drop[lowest]=1
+}
+
+# On overflow, shed in this order: the tech probe, the cost and style and
+# limit readings, the git details, the session badge, and only then the clock.
+build_left
+build_right
+until fits; do
+    if [ -n "$show_tech" ] && [ -n "$tech" ]; then
+        show_tech=""
+        build_left
+    elif drop_right 50; then
+        build_right
+    elif [ -n "$show_git_extra" ] && [ -n "$git_extra" ]; then
+        show_git_extra=""
+        build_left
+    elif [ -n "$badge" ]; then
+        badge=""
+        build_left
+    elif drop_right 100; then
+        build_right
+    else
+        break
+    fi
+done
+
+vwidth "$left_vis"
+left_width=$REPLY
+vwidth "$right_vis"
+right_width=$REPLY
+fill=$((terminal_width - left_width - right_width - 2))
+[ "$fill" -gt 0 ] || fill=0
+
+# ── Output ─────────────────────────────────────────────────────────────────
+printf '%s' "$left"
+printf '%s%*s' "$left_bg" "$fill" ""
+printf '%s%s%s' "$left_bg" "$fg_5" "$SEP_LEFT"
+printf '%s%s%s%s%s' "$bg_5" "$tx_4" "$bold" "$right" "$reset"
+printf '%s%s%s%s' "$bg_5" "$fg_page" "$SEP_LEFT" "$reset"
+]==]
+
+function M.generate(colors)
+  local ramp = prompt.colors(colors)
+  local sl = {}
+  for key, value in pairs(ramp) do
+    sl[key] = channels(value)
+  end
+  sl.git_add = channels(colors.git_add)
+  sl.git_delete = channels(colors.git_delete)
+
+  local extra = require("silkcircuit.extra")
+  local head = extra.template(PALETTE, { sl = sl, meta = colors.meta, glyphs = glyph_block() })
+  return head .. "\n" .. BODY
+end
+
+return M

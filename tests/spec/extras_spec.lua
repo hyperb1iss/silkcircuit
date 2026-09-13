@@ -54,6 +54,7 @@ describe("extras generator", function()
           line:find("${", 1, true)
           and not relative:match("starship")
           and not relative:match("fzf")
+          and not relative:match("claude")
         then
           leaks[#leaks + 1] = relative .. ": " .. line
           break
@@ -61,6 +62,100 @@ describe("extras generator", function()
       end
     end
     H.empty(leaks, "generated files still carrying a ${...} reference")
+
+    vim.fn.delete(root, "rf")
+  end)
+
+  -- The status line is a bash script, so the only proof it works is running
+  -- it. A payload shaped like Claude Code's goes in and a single line with
+  -- the model, the context reading, and the branch has to come out, on every
+  -- variant, with nothing on stderr and a zero exit.
+  it("renders the Claude Code status line from a payload", function()
+    H.reset_modules()
+    local root, extra
+    H.quiet(function()
+      root, extra = build_into_tempdir()
+    end)
+
+    local repo = vim.fn.getcwd()
+    local payload = vim.json.encode({
+      cwd = repo,
+      session_name = "spec",
+      model = { id = "claude-opus-5", display_name = "Opus" },
+      workspace = { current_dir = repo, project_dir = repo },
+      output_style = { name = "default" },
+      cost = { total_cost_usd = 1.5, total_lines_added = 12, total_lines_removed = 3 },
+      context_window = {
+        total_input_tokens = 61500,
+        context_window_size = 200000,
+        used_percentage = 31,
+        current_usage = {
+          input_tokens = 8500,
+          output_tokens = 1200,
+          cache_creation_input_tokens = 5000,
+          cache_read_input_tokens = 48000,
+        },
+      },
+      rate_limits = { five_hour = { used_percentage = 83.5 } },
+      effort = { level = "high" },
+    })
+
+    local failures = {}
+    for _, variant in ipairs(extra.variants) do
+      local script = root .. "/extras/claude/silkcircuit-" .. variant .. ".sh"
+      local stderr = root .. "/claude-" .. variant .. ".stderr"
+      local out = vim.fn.system({
+        "env",
+        "COLUMNS=160",
+        "XDG_CACHE_HOME=" .. root,
+        "bash",
+        "-c",
+        'exec bash "$0" 2>"$1"',
+        script,
+        stderr,
+      }, payload)
+      local err = table.concat(H.read_lines(stderr), "\n")
+      if vim.v.shell_error ~= 0 then
+        failures[#failures + 1] = variant .. ": exit " .. vim.v.shell_error .. " " .. err
+      elseif err ~= "" then
+        failures[#failures + 1] = variant .. ": stderr " .. err
+      elseif out:find("\n", 1, true) then
+        failures[#failures + 1] = variant .. ": printed more than one line"
+      else
+        for _, needle in ipairs({ "Opus", "61.5K", "31%", "$1.50", "83%", "+12", "-3", "spec" }) do
+          if not out:find(needle, 1, true) then
+            failures[#failures + 1] = variant .. ": missing " .. needle
+          end
+        end
+      end
+    end
+    H.empty(failures, "Claude Code status line renders that went wrong")
+
+    vim.fn.delete(root, "rf")
+  end)
+
+  it("keeps the Claude Code status line on the Starship ramp", function()
+    H.reset_modules()
+    local root, extra
+    H.quiet(function()
+      root, extra = build_into_tempdir()
+    end)
+
+    local prompt = require("silkcircuit.extra.prompt")
+    for _, variant in ipairs(extra.variants) do
+      local ramp = prompt.colors(extra.colors(variant))
+      local path = root .. "/extras/claude/silkcircuit-" .. variant .. ".sh"
+      local content = table.concat(H.read_lines(path), "\n")
+      H.ok(content:sub(1, 2) == "#!", "Claude Code " .. variant .. " lost its shebang")
+      for _, key in ipairs({ "segment_1", "segment_3", "segment_5", "warning", "danger" }) do
+        local r, g, b = ramp[key]:match("^#(%x%x)(%x%x)(%x%x)$")
+        local triplet = string.format("%d;%d;%d", tonumber(r, 16), tonumber(g, 16), tonumber(b, 16))
+        H.ok(
+          content:find(triplet, 1, true),
+          string.format("Claude Code %s does not carry the %s of its ramp", variant, key)
+        )
+      end
+    end
 
     vim.fn.delete(root, "rf")
   end)
