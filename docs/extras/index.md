@@ -1,6 +1,6 @@
 # Extras and Integrations
 
-SilkCircuit is one palette wearing thirty-three different formats. The themes under
+SilkCircuit is one palette wearing thirty-four different formats. The themes under
 `extras/` are generated from `lua/silkcircuit/variants.lua` by `make build`, in
 all five variants, so the hex your terminal draws is the hex your editor draws
 and CI fails if the two drift apart. The Chrome themes come from `make chrome`,
@@ -31,7 +31,8 @@ cd silkcircuit
 Anything it overwrites is copied to `*.silkcircuit.bak` first, and it refuses
 to add untracked files to a dotfiles repo it does not own. Tools that read a
 single file rather than a directory of themes (lsd, procs, Starship,
-fastfetch, dircolors, dmesg) take neon unless `--variant` says otherwise.
+Claude Code, fastfetch, dircolors, dmesg) take neon unless `--variant` says
+otherwise.
 
 ## Editors
 
@@ -65,6 +66,7 @@ for all eight in one table, plus the ANSI contract they share.
 | Extra                              | Turn it on                                           |
 | ---------------------------------- | ---------------------------------------------------- |
 | [Starship](/extras/starship)       | Copy to `~/.config/starship.toml`                    |
+| [Claude Code](/extras/claude)      | Copy to `~/.claude/statusline.sh`                    |
 | [fzf](/extras/fzf)                 | `source ~/.config/fzf/silkcircuit-neon.sh`           |
 | [bat](/extras/bat)                 | `--theme=silkcircuit-neon`, then `bat cache --build` |
 | [lsd](/extras/lsd)                 | `color: theme: custom`                               |
@@ -108,6 +110,7 @@ Regenerate the lot with `make build`, and this table with `make docs`.
 | Atuin                           | [reference](https://github.com/atuinsh/atuin/blob/main/crates/atuin-client/src/theme.rs)           | `extras/atuin/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`            |
 | bat                             | [reference](https://github.com/sharkdp/bat#adding-new-themes)                                      | `extras/bat/silkcircuit-{neon,vibrant,soft,glow,dawn}.tmTheme`           |
 | btop                            | [reference](https://github.com/aristocratos/btop#themes)                                           | `extras/btop/silkcircuit-{neon,vibrant,soft,glow,dawn}.theme`            |
+| Claude Code                     | [reference](https://code.claude.com/docs/en/statusline)                                            | `extras/claude/silkcircuit-{neon,vibrant,soft,glow,dawn}.sh`             |
 | COSMIC Desktop                  | [reference](https://github.com/pop-os/cosmic-theme)                                                | `extras/cosmic/silkcircuit-{neon,vibrant,soft,glow,dawn}.ron`            |
 | GNU dircolors                   | [reference](https://man7.org/linux/man-pages/man1/dircolors.1.html)                                | `extras/dircolors/silkcircuit-{neon,vibrant,soft,glow,dawn}.dircolors`   |
 | dmesg                           | [reference](https://www.man7.org/linux/man-pages/man5/terminal-colors.d.5.html)                    | `extras/dmesg/silkcircuit-{neon,vibrant,soft,glow,dawn}.scheme`          |

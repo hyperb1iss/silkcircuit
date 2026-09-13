@@ -114,6 +114,7 @@ export default defineConfig({
           text: 'Shell & CLI',
           items: [
             { text: 'Starship', link: '/extras/starship' },
+            { text: 'Claude Code', link: '/extras/claude' },
             { text: 'fzf', link: '/extras/fzf' },
             { text: 'bat', link: '/extras/bat' },
             { text: 'lsd', link: '/extras/lsd' },

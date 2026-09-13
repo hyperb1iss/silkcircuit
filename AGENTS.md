@@ -5,7 +5,7 @@
 
 ## Project Overview
 
-SilkCircuit is a unified design system featuring neon purples, electric pinks, and glowing cyan accents. It themes your entire dev environment: Neovim is the flagship, with 39 plugin integrations, and 33 generated extras targets cover VS Code, Chrome, terminals, editors, multiplexers, and CLI and system tools. The project prioritizes performance, WCAG AA accessibility, and a consistent visual identity across all targets.
+SilkCircuit is a unified design system featuring neon purples, electric pinks, and glowing cyan accents. It themes your entire dev environment: Neovim is the flagship, with 39 plugin integrations, and 34 generated extras targets cover VS Code, Chrome, terminals, editors, multiplexers, and CLI and system tools. The project prioritizes performance, WCAG AA accessibility, and a consistent visual identity across all targets.
 
 ## Core Principles
 

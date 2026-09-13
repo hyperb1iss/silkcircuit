@@ -30,8 +30,8 @@ theme where its tool looks for it, and prints the line that turns it on:
 ```
 
 Tools that hold a directory of themes get every selected variant. Tools that
-read a single file (lsd, procs, Starship, fastfetch, dircolors, dmesg) get neon
-unless `--variant` says otherwise. Anything replaced is copied to
+read a single file (lsd, procs, Starship, Claude Code, fastfetch, dircolors,
+dmesg) get neon unless `--variant` says otherwise. Anything replaced is copied to
 `*.silkcircuit.bak` first.
 
 ## 📁 Generated targets
@@ -44,6 +44,7 @@ unless `--variant` says otherwise. Anything replaced is copied to
 | Atuin                           | [reference](https://github.com/atuinsh/atuin/blob/main/crates/atuin-client/src/theme.rs)           | [neon](atuin/silkcircuit-neon.toml) · [vibrant](atuin/silkcircuit-vibrant.toml) · [soft](atuin/silkcircuit-soft.toml) · [glow](atuin/silkcircuit-glow.toml) · [dawn](atuin/silkcircuit-dawn.toml)                                                        |
 | bat                             | [reference](https://github.com/sharkdp/bat#adding-new-themes)                                      | [neon](bat/silkcircuit-neon.tmTheme) · [vibrant](bat/silkcircuit-vibrant.tmTheme) · [soft](bat/silkcircuit-soft.tmTheme) · [glow](bat/silkcircuit-glow.tmTheme) · [dawn](bat/silkcircuit-dawn.tmTheme)                                                   |
 | btop                            | [reference](https://github.com/aristocratos/btop#themes)                                           | [neon](btop/silkcircuit-neon.theme) · [vibrant](btop/silkcircuit-vibrant.theme) · [soft](btop/silkcircuit-soft.theme) · [glow](btop/silkcircuit-glow.theme) · [dawn](btop/silkcircuit-dawn.theme)                                                        |
+| Claude Code                     | [reference](https://code.claude.com/docs/en/statusline)                                            | [neon](claude/silkcircuit-neon.sh) · [vibrant](claude/silkcircuit-vibrant.sh) · [soft](claude/silkcircuit-soft.sh) · [glow](claude/silkcircuit-glow.sh) · [dawn](claude/silkcircuit-dawn.sh)                                                             |
 | COSMIC Desktop                  | [reference](https://github.com/pop-os/cosmic-theme)                                                | [neon](cosmic/silkcircuit-neon.ron) · [vibrant](cosmic/silkcircuit-vibrant.ron) · [soft](cosmic/silkcircuit-soft.ron) · [glow](cosmic/silkcircuit-glow.ron) · [dawn](cosmic/silkcircuit-dawn.ron)                                                        |
 | GNU dircolors                   | [reference](https://man7.org/linux/man-pages/man1/dircolors.1.html)                                | [neon](dircolors/silkcircuit-neon.dircolors) · [vibrant](dircolors/silkcircuit-vibrant.dircolors) · [soft](dircolors/silkcircuit-soft.dircolors) · [glow](dircolors/silkcircuit-glow.dircolors) · [dawn](dircolors/silkcircuit-dawn.dircolors)           |
 | dmesg                           | [reference](https://www.man7.org/linux/man-pages/man5/terminal-colors.d.5.html)                    | [neon](dmesg/silkcircuit-neon.scheme) · [vibrant](dmesg/silkcircuit-vibrant.scheme) · [soft](dmesg/silkcircuit-soft.scheme) · [glow](dmesg/silkcircuit-glow.scheme) · [dawn](dmesg/silkcircuit-dawn.scheme)                                              |
