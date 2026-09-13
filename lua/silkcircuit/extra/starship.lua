@@ -55,15 +55,7 @@ $directory\
 $git_branch\
 $git_status\
 [](bg:${starship.segment_4} fg:${starship.segment_3})\
-$nodejs\
 $python\
-$rust\
-$golang\
-$java\
-$kotlin\
-$gradle\
-$c\
-$lua\
 $kubernetes\
 [](bg:${starship.segment_5} fg:${starship.segment_4})\
 [](bg:${starship.background} fg:${starship.segment_5})\
@@ -162,13 +154,6 @@ ignore_submodules = true
 style = "bold fg:${starship.foreground_3} bg:${starship.segment_3}"
 format = "[$all_status]($style)"
 
-# Node.js module
-[nodejs]
-symbol = " "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
 # Python module
 [python]
 symbol = " "
@@ -182,55 +167,6 @@ detect_files = [
   "tox.ini",
   "setup.py",
 ]
-disabled = false
-
-# Rust module
-[rust]
-symbol = "󱘗 "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Go module
-[golang]
-symbol = "󰟓 "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Java module
-[java]
-symbol = "󰬷 "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Kotlin module
-[kotlin]
-symbol = "󱈙 "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Gradle module
-[gradle]
-symbol = "󱎐 "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# C module
-[c]
-symbol = "󰙱 "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Lua module
-[lua]
-symbol = "󰢱 "
-style = "bold fg:${starship.foreground_4} bg:${starship.segment_4}"
-format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Kubernetes context — shouts when on prod

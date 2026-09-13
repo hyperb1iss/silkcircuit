@@ -16,15 +16,7 @@ $directory\
 $git_branch\
 $git_status\
 [](bg:#ff00cc fg:#ff66ff)\
-$nodejs\
 $python\
-$rust\
-$golang\
-$java\
-$kotlin\
-$gradle\
-$c\
-$lua\
 $kubernetes\
 [](bg:#00ffcc fg:#ff00cc)\
 [](bg:#0f0c1a fg:#00ffcc)\
@@ -123,13 +115,6 @@ ignore_submodules = true
 style = "bold fg:#0f0c1a bg:#ff66ff"
 format = "[$all_status]($style)"
 
-# Node.js module
-[nodejs]
-symbol = " "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
 # Python module
 [python]
 symbol = " "
@@ -143,55 +128,6 @@ detect_files = [
   "tox.ini",
   "setup.py",
 ]
-disabled = false
-
-# Rust module
-[rust]
-symbol = "󱘗 "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Go module
-[golang]
-symbol = "󰟓 "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Java module
-[java]
-symbol = "󰬷 "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Kotlin module
-[kotlin]
-symbol = "󱈙 "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Gradle module
-[gradle]
-symbol = "󱎐 "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# C module
-[c]
-symbol = "󰙱 "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
-disabled = false
-
-# Lua module
-[lua]
-symbol = "󰢱 "
-style = "bold fg:#0f0c1a bg:#ff00cc"
-format = "[ $symbol($version) ]($style)"
 disabled = false
 
 # Kubernetes context — shouts when on prod

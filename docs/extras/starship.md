@@ -1,8 +1,8 @@
 # Starship
 
 A full [Starship](https://starship.rs/) prompt: a powerline of segments for OS,
-user, directory, git branch and status, language versions, and Kubernetes
-context, on a named `silkcircuit` palette.
+user, directory, git branch and status, the active Python virtualenv, and
+Kubernetes context, on a named `silkcircuit` palette.
 
 The `format` string names every segment explicitly, so a module stays out of
 the prompt until it appears there, disabled or not. The clock, command

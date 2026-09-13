@@ -72,7 +72,7 @@ describe("extras generator", function()
       root, extra = build_into_tempdir()
     end)
 
-    local symbols = { "", "", "", "", "", "" }
+    local symbols = { "", "", "", "", "" }
     for _, variant in ipairs(extra.variants) do
       local path = root .. "/extras/starship/silkcircuit-" .. variant .. ".toml"
       local content = table.concat(H.read_lines(path), "\n")
