@@ -120,14 +120,20 @@ IFS= read -r -d '' input || true
 # than every fork in this script put together. Claude Code emits compact
 # JSON, so no whitespace is expected around the colons.
 
+ESC_QUOTE='\"'
+ESC_SLASH='\/'
+ESC_BACKSLASH='\\'
+
 # A string with its escapes undone.
 json_str() {
     local re='"'"$2"'":"(([^"\\]|\\.)*)"'
     [[ $1 =~ $re ]] || { REPLY=""; return 1; }
     REPLY="${BASH_REMATCH[1]}"
-    REPLY="${REPLY//\\\"/\"}"
-    REPLY="${REPLY//\\\//\/}"
-    REPLY="${REPLY//\\\\/\\}"
+    # The patterns live in variables and are quoted, because an unquoted
+    # backslash-slash in a pattern is read as the pattern delimiter.
+    REPLY="${REPLY//"$ESC_QUOTE"/\"}"
+    REPLY="${REPLY//"$ESC_SLASH"//}"
+    REPLY="${REPLY//"$ESC_BACKSLASH"/\\}"
 }
 
 # A bare number or boolean.
@@ -229,11 +235,8 @@ json_true "$input" exceeds_200k_tokens && ctx_over=1
 
 # A cold cache means the next request re-reads the whole prefix at full price.
 cache_cold=""
-if json_obj "$input" prompt_cache; then
-    cache="$REPLY"
-    if json_true "$cache" caching_observed && ! json_true "$cache" warm; then
-        cache_cold=1
-    fi
+if json_true "$input" caching_observed && json_raw "$input" warm && [ "$REPLY" = "false" ]; then
+    cache_cold=1
 fi
 
 cost_display=""
@@ -285,16 +288,21 @@ home_norm="${USERPROFILE:-$HOME}"
 home_norm="${home_norm//\\//}"
 
 # Claude Code invokes the status line from an unrelated directory, so the git
-# lookup below depends on this.
-if [ -n "$dir_norm" ]; then
-    cd -- "$dir_norm" 2>/dev/null || true
+# lookup below depends on this. A directory that has gone away (a removed
+# worktree, say) must not hand the git segment whatever repo the caller is in.
+in_dir=""
+if [ -n "$dir_norm" ] && cd -- "$dir_norm" 2>/dev/null; then
+    in_dir=1
 fi
 
 dir_display="~"
 if [ -n "$dir_norm" ]; then
     dir_display="$dir_norm"
-    if [ -n "$home_norm" ] && [ "${dir_display#"$home_norm"}" != "$dir_display" ]; then
-        dir_display="~${dir_display#"$home_norm"}"
+    if [ -n "$home_norm" ]; then
+        case "$dir_display" in
+            "$home_norm") dir_display="~" ;;
+            "$home_norm"/*) dir_display="~${dir_display#"$home_norm"}" ;;
+        esac
     fi
     if [ ${#dir_display} -gt 30 ]; then
         leaf="${dir_display##*/}"
@@ -317,8 +325,19 @@ git_flags=""
 git_extra=""
 git_extra_vis=""
 git_icon="$ICON_GIT"
-[ -f .git ] && git_icon="$ICON_WORKTREE"
-if [ -n "$dir_norm" ] && git_status=$(git --no-optional-locks -c core.quotepath=off status \
+# A linked worktree keeps a .git file where the main checkout keeps a
+# directory. Walking up to it costs no fork.
+probe="$PWD"
+while [ -n "$in_dir" ]; do
+    if [ -f "$probe/.git" ]; then
+        git_icon="$ICON_WORKTREE"
+        break
+    fi
+    [ -d "$probe/.git" ] && break
+    [ "$probe" != "${probe%/*}" ] || break
+    probe="${probe%/*}"
+done
+if [ -n "$in_dir" ] && git_status=$(git --no-optional-locks -c core.quotepath=off status \
     --porcelain=v2 --branch --untracked-files=normal --ignore-submodules=all 2>/dev/null); then
     ahead=0
     behind=0
@@ -448,7 +467,15 @@ fi
 reading "$model_text" "$model_vis" 100
 
 if [ -n "$ctx_pct" ]; then
-    if [ "$ctx_tokens" -ge 1000 ]; then
+    if [ "$ctx_tokens" -ge 1000000 ]; then
+        whole=$((ctx_tokens / 1000000))
+        tenth=$(((ctx_tokens % 1000000) / 100000))
+        if [ "$tenth" -gt 0 ]; then
+            ctx_display="${whole}.${tenth}M"
+        else
+            ctx_display="${whole}M"
+        fi
+    elif [ "$ctx_tokens" -ge 1000 ]; then
         whole=$((ctx_tokens / 1000))
         tenth=$(((ctx_tokens % 1000) / 100))
         if [ "$whole" -lt 100 ] && [ "$tenth" -gt 0 ]; then

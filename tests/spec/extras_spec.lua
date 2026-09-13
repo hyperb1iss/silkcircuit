@@ -77,7 +77,9 @@ describe("extras generator", function()
       root, extra = build_into_tempdir()
     end)
 
-    local repo = vim.fn.getcwd()
+    -- H.root rather than getcwd: an earlier spec may leave the cwd somewhere
+    -- that is not a repository, and the line readings live in the git segment.
+    local repo = H.root
     local payload = vim.json.encode({
       cwd = repo,
       session_name = "spec",
@@ -147,8 +149,24 @@ describe("extras generator", function()
       local path = root .. "/extras/claude/silkcircuit-" .. variant .. ".sh"
       local content = table.concat(H.read_lines(path), "\n")
       H.ok(content:sub(1, 2) == "#!", "Claude Code " .. variant .. " lost its shebang")
-      for _, key in ipairs({ "segment_1", "segment_3", "segment_5", "warning", "danger" }) do
-        local r, g, b = ramp[key]:match("^#(%x%x)(%x%x)(%x%x)$")
+      -- Every ramp step the script paints with, plus the two git colours.
+      local palette = extra.colors(variant)
+      local expected = {
+        background = ramp.background,
+        foreground_warning = ramp.foreground_warning,
+        warning = ramp.warning,
+        danger = ramp.danger,
+        git_add = palette.git_add,
+        git_delete = palette.git_delete,
+      }
+      for i = 1, 5 do
+        expected["segment_" .. i] = ramp["segment_" .. i]
+      end
+      for i = 1, 4 do
+        expected["foreground_" .. i] = ramp["foreground_" .. i]
+      end
+      for key, hex in pairs(expected) do
+        local r, g, b = hex:match("^#(%x%x)(%x%x)(%x%x)$")
         local triplet = string.format("%d;%d;%d", tonumber(r, 16), tonumber(g, 16), tonumber(b, 16))
         H.ok(
           content:find(triplet, 1, true),

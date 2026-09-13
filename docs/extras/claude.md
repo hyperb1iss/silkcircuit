@@ -9,18 +9,18 @@ Left to right, the line carries the session badge (vim mode, agent name, and
 session name, when any of them is set), the directory, and the git branch with
 its dirty flags, upstream distance, the lines added and removed this session,
 and the open pull request as a clickable link coloured by its review state. A
-worktree gets its own glyph. The node version and Kubernetes context follow.
+linked worktree gets its own glyph. The node version and Kubernetes context follow.
 On the right sit the model with its fast mode and effort level, context usage
 as tokens and a percentage, the session cost, the five-hour and seven-day rate
 limit windows, the output style, and the clock.
 
-A reading that passes 80 percent (context or a rate limit window) turns into a
+A reading that reaches 80 percent (context or a rate limit window) turns into a
 warning pill, and at 90 a danger pill, in the variant's own warning and danger
 colours. A snowflake after the context reading means the prompt cache has gone
 cold and the next request re-reads the whole prefix.
 
 When the terminal is narrower than the line, readings drop in order: the tech
-probes, then cost, output style, and rate limits, then the git details, the
+probes, then output style, cost, and rate limits, then the git details, the
 session badge, and last the clock. The model and the context reading never
 drop.
 
