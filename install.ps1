@@ -1150,20 +1150,34 @@ function Install-Git {
     $targetDir = Join-Path $script:ConfigRoot "git"
     $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "git") $targetDir "git" "silkcircuit-@.gitconfig"
 
+    # Git reads every include and the last one wins on shared keys, so a
+    # second variant stacked under the first would silently take over the
+    # colors. Switching variants swaps the include instead.
     $target = Join-Path $targetDir "silkcircuit-$script:Primary.gitconfig"
-    $includes = & git config --global --get-all include.path 2>$null
+    $includePattern = 'silkcircuit-[a-z]+\.gitconfig$'
+    $includes = @(& git config --global --get-all include.path 2>$null)
     $alreadyIncluded = $false
+    $stale = @()
     foreach ($include in $includes) {
         if ((Normalize-Path $include) -eq (Normalize-Path $target)) {
             $alreadyIncluded = $true
-            break
+        } elseif ($include -match $includePattern) {
+            $stale += $include
         }
     }
 
-    if ($alreadyIncluded) {
+    if ($alreadyIncluded -and $stale.Count -eq 0) {
         Write-Success "Installed $count Git color configs, include already in place"
     } elseif ($DryRun) {
-        Write-Success "Installed $count Git color configs (dry-run: would add the include)"
+        if ($stale.Count -gt 0) {
+            Write-Success "Installed $count Git color configs (dry-run: would swap the include to $script:Primary)"
+        } else {
+            Write-Success "Installed $count Git color configs (dry-run: would add the include)"
+        }
+    } elseif ($stale.Count -gt 0) {
+        & git config --global --unset-all include.path $includePattern
+        & git config --global --add include.path $target
+        Write-Success "Installed $count Git color configs and swapped the include to $script:Primary"
     } else {
         & git config --global --add include.path $target
         Write-Success "Installed $count Git color configs and added the include"

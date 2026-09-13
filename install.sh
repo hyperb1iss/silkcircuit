@@ -196,7 +196,9 @@ have_iterm2() {
 
 # terminal-colors.d is util-linux territory. macOS ships a dmesg that ignores it.
 have_dmesg() { [[ "$(uname)" == "Linux" ]] && cmd_exists dmesg; }
-have_dircolors() { cmd_exists dircolors; }
+# Homebrew coreutils prefixes every GNU tool with g, so on macOS the
+# binary is gdircolors. The database is the same file either way.
+have_dircolors() { cmd_exists dircolors || cmd_exists gdircolors; }
 
 have_vscode() {
     cmd_exists code || cmd_exists code-insiders ||
@@ -692,14 +694,31 @@ install_git() {
     local config_dir="${XDG_CONFIG}/git"
     copy_variants "${EXTRAS_DIR}/git" "$config_dir" "git" "silkcircuit-@.gitconfig"
 
+    # Git reads every include and the last one wins on shared keys, so a
+    # second variant stacked under the first would silently take over the
+    # colors. Switching variants swaps the include instead.
     local include="${config_dir}/silkcircuit-${PRIMARY}.gitconfig"
-    if git config --global --get-all include.path 2>/dev/null | grep -qF "silkcircuit-${PRIMARY}.gitconfig"; then
+    local include_pattern='silkcircuit-[a-z]+\.gitconfig$'
+    local includes stale
+    includes="$(git config --global --get-all include.path 2>/dev/null || true)"
+    stale="$(grep -E "$include_pattern" <<<"$includes" | grep -vF "silkcircuit-${PRIMARY}.gitconfig" || true)"
+    if [[ -z "$stale" ]] && grep -qF "silkcircuit-${PRIMARY}.gitconfig" <<<"$includes"; then
         success "Installed ${COPIED} Git color configs, include already in place"
     elif [[ "$DRY_RUN" == true ]]; then
-        success "Installed ${COPIED} Git color configs (dry-run: would add the include)"
+        if [[ -n "$stale" ]]; then
+            success "Installed ${COPIED} Git color configs (dry-run: would swap the include to ${PRIMARY})"
+        else
+            success "Installed ${COPIED} Git color configs (dry-run: would add the include)"
+        fi
     else
-        git config --global --add include.path "$include"
-        success "Installed ${COPIED} Git color configs and added the include"
+        if [[ -n "$stale" ]]; then
+            git config --global --unset-all include.path "$include_pattern"
+            git config --global --add include.path "$include"
+            success "Installed ${COPIED} Git color configs and swapped the include to ${PRIMARY}"
+        else
+            git config --global --add include.path "$include"
+            success "Installed ${COPIED} Git color configs and added the include"
+        fi
     fi
 
     diminfo "Include: git config --global --add include.path ${include}"
@@ -743,7 +762,11 @@ install_dircolors() {
         "$HOME/.dircolors" "dircolors"; then
         success "Installed the dircolors theme"
         single_slot_note "dircolors"
-        diminfo 'Load it: eval "$(dircolors -b ~/.dircolors)"'
+        if cmd_exists dircolors; then
+            diminfo 'Load it: eval "$(dircolors -b ~/.dircolors)"'
+        else
+            diminfo 'Load it: eval "$(gdircolors -b ~/.dircolors)"'
+        fi
     fi
 }
 

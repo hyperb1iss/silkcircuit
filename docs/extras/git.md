@@ -14,7 +14,10 @@ git config --global --add include.path ~/.config/git/silkcircuit-neon.gitconfig
 ```
 
 The installer does the same thing, include and all: `./install.sh`, or
-`./install.sh --variant neon` for just that one.
+`./install.sh --variant neon` for just that one. Switching variants later
+swaps the include rather than stacking a second one: git reads every
+include and the last one wins on shared keys, so two variants at once
+would leave the colors on whichever loaded last.
 
 ## What it sets
 

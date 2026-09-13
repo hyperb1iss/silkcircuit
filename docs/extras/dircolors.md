@@ -23,8 +23,17 @@ line: `./install.sh --variant neon`.
 
 ## GNU coreutils
 
-The database targets GNU `dircolors`. The installer activates this extra only
-when the `dircolors` command is available on `PATH`.
+The database targets GNU `dircolors`. The installer activates this extra when
+either `dircolors` or `gdircolors` is on `PATH`. The second name is what
+Homebrew's coreutils installs on macOS, so the load line there is:
+
+```bash
+eval "$(gdircolors -b ~/.dircolors)"
+```
+
+Tools that read `LS_COLORS` directly, such as `lsd`, `fd`, and zsh's
+completion listings, pick the colors up from the same `eval`, so the
+dircolors extra is what themes their file and extension colors.
 
 ## Files
 
