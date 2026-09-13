@@ -40,7 +40,7 @@ local TEMPLATE = [[
 	context = "${fg_dark}"
 	old = "${git_delete}"
 	new = "${git_add}"
-	commit = "${yellow}"
+	commit = "${purple} bold"
 	whitespace = "${red} reverse"
 
 [color "status"]
@@ -72,7 +72,7 @@ local TEMPLATE = [[
 	separator = "${cyan}"
 
 [pretty]
-	silkcircuit = "%C(${purple} bold)commit %H%Creset%C(${yellow})%d%Creset%n%C(${fg})Author: %C(${pink_bright})%an <%ae>%Creset%n%C(${fg})Date:   %C(${cyan})%ad%Creset%n%n%C(${green})    %s%Creset%n%n%w(0,4,4)%C(${fg_dark})%b%Creset"
+	silkcircuit = "%C(${purple} bold)commit %H%Creset%C(auto)%d%n%C(${fg})Author: %C(${pink_bright})%an <%ae>%Creset%n%C(${fg})Date:   %C(${cyan})%ad%Creset%n%n%C(${fg} bold)    %s%Creset%n%n%w(0,4,4)%C(${fg_dark})%b%Creset"
 
 [delta "${meta.slug}"]
 	${meta.appearance} = true

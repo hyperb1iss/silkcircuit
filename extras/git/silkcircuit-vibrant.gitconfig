@@ -29,7 +29,7 @@
 	context = "#e9d5ff"
 	old = "#ff5874"
 	new = "#addb67"
-	commit = "#ffcc00"
+	commit = "#ff00ff bold"
 	whitespace = "#ff3366 reverse"
 
 [color "status"]
@@ -61,7 +61,7 @@
 	separator = "#00ffcc"
 
 [pretty]
-	silkcircuit = "%C(#ff00ff bold)commit %H%Creset%C(#ffcc00)%d%Creset%n%C(#f8f8f2)Author: %C(#ff66ff)%an <%ae>%Creset%n%C(#f8f8f2)Date:   %C(#00ffcc)%ad%Creset%n%n%C(#00ff66)    %s%Creset%n%n%w(0,4,4)%C(#e9d5ff)%b%Creset"
+	silkcircuit = "%C(#ff00ff bold)commit %H%Creset%C(auto)%d%n%C(#f8f8f2)Author: %C(#ff66ff)%an <%ae>%Creset%n%C(#f8f8f2)Date:   %C(#00ffcc)%ad%Creset%n%n%C(#f8f8f2 bold)    %s%Creset%n%n%w(0,4,4)%C(#e9d5ff)%b%Creset"
 
 [delta "silkcircuit-vibrant"]
 	dark = true
