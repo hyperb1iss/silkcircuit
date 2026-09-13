@@ -156,6 +156,18 @@ M.targets = {
     is_full = true,
     url = "https://zellij.dev/documentation/themes",
   },
+  herdr = {
+    label = "Herdr",
+    ext = "toml",
+    url = "https://herdr.dev/docs/configuration/#theme",
+  },
+  ["herdr-auto"] = {
+    label = "Herdr (auto light/dark)",
+    dir = "herdr",
+    ext = "toml",
+    is_full = true,
+    url = "https://herdr.dev/docs/configuration/#theme",
+  },
   slack = {
     label = "Slack",
     ext = "txt",

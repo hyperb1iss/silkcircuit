@@ -107,6 +107,7 @@ export default defineConfig({
           items: [
             { text: 'tmux', link: '/extras/tmux' },
             { text: 'Zellij', link: '/extras/zellij' },
+            { text: 'Herdr', link: '/extras/herdr' },
           ]
         },
         {

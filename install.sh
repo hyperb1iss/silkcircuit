@@ -164,6 +164,7 @@ have_warp() { cmd_exists warp-terminal || dir_exists "$HOME/.warp"; }
 have_wezterm() { cmd_exists wezterm || dir_exists "${XDG_CONFIG}/wezterm"; }
 have_foot() { cmd_exists foot || dir_exists "${XDG_CONFIG}/foot"; }
 have_zellij() { cmd_exists zellij || dir_exists "${XDG_CONFIG}/zellij"; }
+have_herdr() { cmd_exists herdr || dir_exists "${XDG_CONFIG}/herdr"; }
 have_helix() { cmd_exists hx || cmd_exists helix || dir_exists "${XDG_CONFIG}/helix"; }
 have_btop() { cmd_exists btop || dir_exists "${XDG_CONFIG}/btop"; }
 have_fzf() { cmd_exists fzf || dir_exists "${XDG_CONFIG}/fzf"; }
@@ -218,6 +219,7 @@ detect_all() {
     detect_if iterm2 "iTerm2" have_iterm2
     detect_if tmux "tmux" have_tmux
     detect_if zellij "Zellij" have_zellij
+    detect_if herdr "Herdr" have_herdr
     detect_if helix "Helix" have_helix
     detect_if btop "btop" have_btop
     detect_if k9s "k9s" have_k9s
@@ -688,6 +690,21 @@ install_git() {
     fi
 }
 
+install_herdr() {
+    section "Herdr"
+
+    # Herdr reads one config.toml and nothing else, so the theme tables land
+    # beside it for the user to merge in.
+    local config_dir="${XDG_CONFIG}/herdr"
+    copy_variants "${EXTRAS_DIR}/herdr" "$config_dir" "herdr" "silkcircuit-@.toml"
+    safe_copy "${EXTRAS_DIR}/herdr/silkcircuit.toml" \
+        "${config_dir}/silkcircuit.toml" "herdr:auto" || true
+
+    success "Installed ${COPIED} Herdr themes"
+    diminfo "Merge the [theme] tables from ${config_dir}/silkcircuit-${PRIMARY}.toml into ~/.config/herdr/config.toml"
+    diminfo "then: herdr server reload-config"
+}
+
 install_lazygit() {
     section "lazygit"
 
@@ -1079,6 +1096,7 @@ run_installs() {
             iterm2)           install_iterm2 ;;
             tmux)             install_tmux ;;
             zellij)           install_zellij ;;
+            herdr)            install_herdr ;;
             helix)            install_helix ;;
             btop)             install_btop ;;
             k9s)              install_k9s ;;

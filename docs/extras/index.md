@@ -1,6 +1,6 @@
 # Extras and Integrations
 
-SilkCircuit is one palette wearing thirty-one different formats. The themes under
+SilkCircuit is one palette wearing thirty-three different formats. The themes under
 `extras/` are generated from `lua/silkcircuit/variants.lua` by `make build`, in
 all five variants, so the hex your terminal draws is the hex your editor draws
 and CI fails if the two drift apart. The Chrome themes come from `make chrome`,
@@ -58,6 +58,7 @@ for all eight in one table, plus the ANSI contract they share.
 | ------------------------ | -------------------------------------------------- |
 | [tmux](/extras/tmux)     | `source-file ~/.config/tmux/silkcircuit-neon.conf` |
 | [Zellij](/extras/zellij) | `theme "silkcircuit-neon"`                         |
+| [Herdr](/extras/herdr)   | Merge the `[theme]` tables into `config.toml`      |
 
 ## Shell and CLI
 
@@ -118,6 +119,8 @@ Regenerate the lot with `make build`, and this table with `make docs`.
 | Ghostty GTK chrome              | [reference](https://ghostty.org/docs/config/reference#gtk-custom-css)                              | `extras/ghostty/silkcircuit-{neon,vibrant,soft,glow,dawn}.css`           |
 | Git                             | [reference](https://git-scm.com/docs/git-config#Documentation/git-config.txt-color)                | `extras/git/silkcircuit-{neon,vibrant,soft,glow,dawn}.gitconfig`         |
 | Helix                           | [reference](https://docs.helix-editor.com/themes.html)                                             | `extras/helix/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`            |
+| Herdr                           | [reference](https://herdr.dev/docs/configuration/#theme)                                           | `extras/herdr/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`            |
+| Herdr (auto light/dark)         | [reference](https://herdr.dev/docs/configuration/#theme)                                           | `extras/herdr/silkcircuit.toml`                                          |
 | iTerm2                          | [reference](https://iterm2.com/documentation-preferences-profiles-colors.html)                     | `extras/iterm2/silkcircuit-{neon,vibrant,soft,glow,dawn}.itermcolors`    |
 | k9s                             | [reference](https://k9scli.io/topics/skins/)                                                       | `extras/k9s/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`              |
 | Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`            |

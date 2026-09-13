@@ -957,6 +957,14 @@ function Detect-All {
         ))
     )
 
+    Add-Detection "herdr" "Herdr" (
+        (Test-Command "herdr") -or
+        (Test-AnyPath @(
+            (Join-PathParts $script:AppData "herdr"),
+            (Join-PathParts $script:HomeConfig "herdr")
+        ))
+    )
+
     Add-Detection "git" "Git" (Test-Command "git")
     if (Test-Command "delta") {
         Write-Host "$script:Green$script:Bold  [+]$script:Reset $script:White  delta (git pager)$script:Reset"
@@ -1280,6 +1288,24 @@ function Install-Atuin {
     Write-Dim "In the atuin config.toml, under [theme]: name = `"silkcircuit-$script:Primary`""
 }
 
+function Install-Herdr {
+    Write-Host "$script:Purple$script:Bold  >> Herdr$script:Reset"
+
+    # Herdr reads one config.toml and nothing else, so the theme tables land
+    # beside it for the user to merge in.
+    $configDir = Resolve-ToolDir @(
+        (Join-PathParts $script:AppData "herdr"),
+        (Join-PathParts $script:HomeConfig "herdr")
+    ) (Join-PathParts $script:AppData "herdr")
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "herdr") $configDir "herdr" "silkcircuit-@.toml"
+    $null = Copy-SilkFile (Join-PathParts $script:ExtrasDir "herdr" "silkcircuit.toml") (Join-Path $configDir "silkcircuit.toml") "herdr:auto"
+
+    $theme = Join-Path $configDir "silkcircuit-$script:Primary.toml"
+    Write-Success "Installed $count Herdr themes"
+    Write-Dim "Merge the [theme] tables from $theme into $(Join-Path $configDir 'config.toml')"
+    Write-Dim "then: herdr server reload-config"
+}
+
 function Install-Lazygit {
     Write-Host "$script:Purple$script:Bold  >> lazygit$script:Reset"
 
@@ -1441,6 +1467,7 @@ function Run-Installs {
             "procs" { Install-Procs }
             "atuin" { Install-Atuin }
             "lazygit" { Install-Lazygit }
+            "herdr" { Install-Herdr }
             "git" { Install-Git }
             "vscode" { Install-VSCode }
             "slack" { Install-Slack }
