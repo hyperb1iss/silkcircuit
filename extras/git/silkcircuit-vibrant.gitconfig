@@ -61,7 +61,7 @@
 	separator = "#00ffcc"
 
 [pretty]
-	silkcircuit = "%C(#ff00ff bold)commit %H%Creset%C(auto)%d%n%C(#f8f8f2)Author: %C(#ff66ff)%an <%ae>%Creset%n%C(#f8f8f2)Date:   %C(#00ffcc)%ad%Creset%n%n%C(#f8f8f2 bold)    %s%Creset%n%n%w(0,4,4)%C(#e9d5ff)%b%Creset"
+	silkcircuit = "%C(#ff00ff bold)commit %H%Creset%C(auto)%d%n%C(#f8f8f2)Author: %C(#ff66ff)%an <%ae>%Creset%n%C(#f8f8f2)Date:   %C(#00ffcc)%ad%Creset%n%n%C(#ff99ff bold)    %s%Creset%n%n%w(0,4,4)%b"
 
 [delta "silkcircuit-vibrant"]
 	dark = true

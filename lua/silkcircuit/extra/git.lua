@@ -4,6 +4,10 @@ local M = {}
 -- unquoted "#e135ff bold" parses as an empty value and the slot silently falls
 -- back to the git default.
 --
+-- The body in the pretty format carries no color. A pager resets attributes
+-- at every newline, so one color code at the start of %b only survives its
+-- first line; git recolors its own output per line for the same reason.
+--
 -- syntax-theme names the bat theme by its file stem, not by the name inside the
 -- plist: that is what bat matches on, so extras/bat/silkcircuit-neon.tmTheme is
 -- "silkcircuit-neon" no matter what the plist calls itself.
@@ -72,7 +76,7 @@ local TEMPLATE = [[
 	separator = "${cyan}"
 
 [pretty]
-	silkcircuit = "%C(${purple} bold)commit %H%Creset%C(auto)%d%n%C(${fg})Author: %C(${pink_bright})%an <%ae>%Creset%n%C(${fg})Date:   %C(${cyan})%ad%Creset%n%n%C(${fg} bold)    %s%Creset%n%n%w(0,4,4)%C(${fg_dark})%b%Creset"
+	silkcircuit = "%C(${purple} bold)commit %H%Creset%C(auto)%d%n%C(${fg})Author: %C(${pink_bright})%an <%ae>%Creset%n%C(${fg})Date:   %C(${cyan})%ad%Creset%n%n%C(${pink_soft} bold)    %s%Creset%n%n%w(0,4,4)%b"
 
 [delta "${meta.slug}"]
 	${meta.appearance} = true
