@@ -181,6 +181,8 @@ have_starship() {
     cmd_exists starship || [[ -f "${STARSHIP_CONFIG:-${XDG_CONFIG}/starship.toml}" ]]
 }
 
+have_claude() { cmd_exists claude || dir_exists "$HOME/.claude"; }
+
 have_k9s() {
     cmd_exists k9s || dir_exists "${XDG_CONFIG}/k9s" ||
         dir_exists "$HOME/Library/Application Support/k9s"
@@ -226,6 +228,7 @@ detect_all() {
     detect_if fzf "fzf" have_fzf
     detect_if fastfetch "fastfetch" have_fastfetch
     detect_if starship "Starship" have_starship
+    detect_if claude "Claude Code" have_claude
     detect_if bat "bat" have_bat
     detect_if lsd "lsd" have_lsd
     detect_if procs "procs" have_procs
@@ -591,6 +594,21 @@ install_starship() {
         success "Installed the Starship prompt"
         diminfo "Config: ${target}"
         single_slot_note "Starship"
+    fi
+}
+
+install_claude() {
+    section "Claude Code"
+
+    # cp onto an existing file keeps that file's mode, so the execute bit the
+    # generated script carries has to be put back after the copy.
+    local target="$HOME/.claude/statusline.sh"
+    if safe_copy "${EXTRAS_DIR}/claude/silkcircuit-${PRIMARY}.sh" "$target" "claude"; then
+        [[ -f "$target" ]] && chmod +x "$target" 2>/dev/null || true
+        success "Installed the Claude Code status line"
+        diminfo "Point Claude Code at it in ~/.claude/settings.json:"
+        diminfo '  "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" }'
+        single_slot_note "Claude Code"
     fi
 }
 
@@ -1103,6 +1121,7 @@ run_installs() {
             fzf)              install_fzf ;;
             fastfetch)        install_fastfetch ;;
             starship)         install_starship ;;
+            claude)           install_claude ;;
             bat)              install_bat ;;
             lsd)              install_lsd ;;
             procs)            install_procs ;;

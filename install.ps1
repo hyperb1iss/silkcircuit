@@ -912,6 +912,13 @@ function Detect-All {
         ))
     )
 
+    Add-Detection "claude" "Claude Code" (
+        (Test-Command "claude") -or
+        (Test-AnyPath @(
+            (Join-Path ([Environment]::GetFolderPath('UserProfile')) ".claude")
+        ))
+    )
+
     Add-Detection "tmux" "tmux" (
         (Test-Command "tmux") -or
         (Test-AnyPath @((Join-PathParts $script:HomeConfig "tmux")))
@@ -1182,6 +1189,21 @@ function Install-Starship {
         Write-Success "Installed the Starship prompt"
         Write-Dim "Config: $target"
         Write-SingleSlotNote "Starship"
+    }
+}
+
+function Install-Claude {
+    Write-Host "$script:Purple$script:Bold  >> Claude Code$script:Reset"
+
+    # Claude Code runs the status line through Git Bash on Windows, so the
+    # command path in settings.json stays in forward-slash form.
+    $target = Join-PathParts ([Environment]::GetFolderPath('UserProfile')) ".claude" "statusline.sh"
+    $source = Join-PathParts $script:ExtrasDir "claude" "silkcircuit-$script:Primary.sh"
+    if (Copy-SilkFile $source $target "claude") {
+        Write-Success "Installed the Claude Code status line"
+        Write-Dim "Point Claude Code at it in ~/.claude/settings.json:"
+        Write-Dim '  "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" }'
+        Write-SingleSlotNote "Claude Code"
     }
 }
 
@@ -1461,6 +1483,7 @@ function Run-Installs {
             "fzf" { Install-Fzf }
             "fastfetch" { Install-Fastfetch }
             "starship" { Install-Starship }
+            "claude" { Install-Claude }
             "tmux" { Install-Tmux }
             "bat" { Install-Bat }
             "lsd" { Install-Lsd }
