@@ -70,14 +70,18 @@ function M.status_colors(_)
     buffer_path_fg = c.purple_muted,
     buffer_close_fg = c.gray,
 
-    buffer_active_fg = c.bg,
-    buffer_active_bg = c.glow_purple,
-    buffer_active_path_fg = c.bg,
-    buffer_active_close_fg = c.bg,
+    -- The active buffer sits on the editor background so the tab reads as
+    -- part of the page, with the accent carried by bold text rather than a
+    -- filled block: file icons keep their own colors, and those only clear
+    -- AA against a dark surface.
+    buffer_active_fg = c.glow_purple,
+    buffer_active_bg = c.bg,
+    buffer_active_path_fg = c.purple_muted,
+    buffer_active_close_fg = c.glow_pink,
 
-    buffer_visible_fg = c.fg,
-    buffer_visible_bg = c.purple_muted,
-    buffer_visible_path_fg = c.fg_light,
+    buffer_visible_fg = c.fg_light,
+    buffer_visible_bg = c.bg_highlight,
+    buffer_visible_path_fg = c.fg_dark,
     buffer_visible_close_fg = c.fg_dark,
 
     buffer_overflow_fg = c.bg,
