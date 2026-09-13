@@ -1,5 +1,10 @@
 local M = {}
 
+local color_utils = require("silkcircuit.utils.colors")
+
+-- The hand-tuned neon prompt. A magenta ramp at roughly sixty percent
+-- saturation, climbing from near the page to a hot pink cap, with light pink
+-- text on every step. Every other variant is derived to match its shape.
 local NEON_PROMPT = {
   background = "#1a1a2e",
   segment_1 = "#4a1a4a",
@@ -18,28 +23,76 @@ local NEON_PROMPT = {
   danger = "#ff6666",
 }
 
-local function prompt_colors(colors)
-  if colors.meta.variant == "neon" then
-    return NEON_PROMPT
+-- Blend tone toward bg until the result sits at the luminance of target, so
+-- a variant's ramp climbs the same ladder neon does in its own hue.
+local function match_luminance(tone, bg, target)
+  local goal = color_utils.get_luminance(target)
+  local lo, hi = 0, 1
+  for _ = 1, 24 do
+    local mid = (lo + hi) / 2
+    if color_utils.get_luminance(color_utils.blend(tone, bg, mid)) < goal then
+      lo = mid
+    else
+      hi = mid
+    end
   end
+  return color_utils.blend(tone, bg, (lo + hi) / 2)
+end
 
+-- Dark variants ramp pink_bright, which already carries neon's saturation,
+-- up the neon luminance ladder and cap with coral, the variant's hot pink.
+local function dark_prompt(colors)
+  local tone = colors.pink_bright
   return {
     background = colors.bg,
-    segment_1 = colors.purple_dark,
-    segment_2 = colors.purple,
-    segment_3 = colors.pink_bright,
-    segment_4 = colors.pink,
-    segment_5 = colors.cyan,
-    foreground_1 = colors.bg,
+    segment_1 = match_luminance(tone, colors.bg, NEON_PROMPT.segment_1),
+    segment_2 = match_luminance(tone, colors.bg, NEON_PROMPT.segment_2),
+    segment_3 = match_luminance(tone, colors.bg, NEON_PROMPT.segment_3),
+    segment_4 = match_luminance(tone, colors.bg, NEON_PROMPT.segment_4),
+    segment_5 = colors.coral,
+    foreground_1 = colors.pink_soft,
     foreground_root = colors.red,
-    foreground_host = colors.bg,
-    foreground_2 = colors.bg,
-    foreground_3 = colors.bg,
-    foreground_4 = colors.bg,
+    foreground_host = colors.pink_bright,
+    foreground_2 = colors.pink_soft,
+    foreground_3 = colors.pink_soft,
+    foreground_4 = colors.fg,
     foreground_warning = colors.bg,
     warning = colors.yellow,
     danger = colors.red,
   }
+end
+
+-- A light page mirrors the ladder: pink tints deepen step by step under dark
+-- text, and the cap is the full pink.
+local function light_prompt(colors)
+  local tone = colors.pink
+  return {
+    background = colors.bg,
+    segment_1 = color_utils.blend(tone, colors.bg, 0.15),
+    segment_2 = color_utils.blend(tone, colors.bg, 0.3),
+    segment_3 = color_utils.blend(tone, colors.bg, 0.45),
+    segment_4 = color_utils.blend(tone, colors.bg, 0.65),
+    segment_5 = tone,
+    foreground_1 = colors.fg,
+    foreground_root = colors.red,
+    foreground_host = colors.purple,
+    foreground_2 = colors.fg,
+    foreground_3 = colors.fg,
+    foreground_4 = colors.fg,
+    foreground_warning = colors.bg,
+    warning = colors.yellow,
+    danger = colors.red,
+  }
+end
+
+local function prompt_colors(colors)
+  if colors.meta.variant == "neon" then
+    return NEON_PROMPT
+  end
+  if color_utils.is_bright(colors.bg) then
+    return light_prompt(colors)
+  end
+  return dark_prompt(colors)
 end
 
 local TEMPLATE = [==[
