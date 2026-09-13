@@ -38,7 +38,7 @@ Complete guide for integrating the SilkCircuit theme with AstroNvim for a neon-e
 - **Synthwave colors** throughout the interface
 - **Custom dashboard** with purple/pink ASCII art
 - **Enhanced Neo-tree** with neon file icons
-- **Glowing Telescope** borders and selections
+- **Glowing pickers** (Snacks and Telescope) with neon borders and selections
 - **Rainbow brackets** with theme colors
 - **LSP diagnostics** with neon highlights
 
@@ -47,7 +47,7 @@ Complete guide for integrating the SilkCircuit theme with AstroNvim for a neon-e
 - 🎨 **AstroUI** integration with custom highlights
 - 🌈 **StatusLine** with SilkCircuit color scheme and neon mode indicators
 - 📁 **Neo-tree** with modern, colorful styling
-- 🔍 **Telescope** with neon borders
+- 🔍 **Snacks picker and Telescope** with neon borders
 - ⌨️ **Which-Key** popup styling
 - 📊 **Dashboard/Alpha** custom colors
 - 🌟 **LSP** and diagnostic styling
@@ -83,7 +83,10 @@ This gives you:
 - 🌈 **Animated separators**
 - 💜 **Maximum neon glow** effects
 
-**Note**: This replaces AstroNvim's default statusline entirely.
+**Note**: This replaces AstroNvim's default statusline entirely, and with it
+the heirline buffer tabline. Sections a, b, y and z are painted by the lualine
+theme, so components placed there inherit the section colors; keep neon
+foregrounds in section c where the background is dark.
 
 ## 🛠️ Customization
 
@@ -125,11 +128,11 @@ require("silkcircuit").setup({
 
 ## 🎯 Plugin Integration
 
-### Telescope Enhancement
+### Picker Enhancement
 
 ```lua
--- Custom Telescope styling is automatically applied
--- Includes neon borders and selection highlights
+-- Snacks picker and Telescope styling is applied automatically
+-- Includes neon borders, prompt and selection highlights
 ```
 
 ### Neo-tree Visual Enhancement
@@ -192,8 +195,8 @@ The [terminal guide](../../docs/extras/terminals.md) covers the rest, and
 
 AstroNvim's default keybindings work perfectly with SilkCircuit:
 
-- `<leader>ft` - Telescope file finder (with neon borders)
+- `<leader>ff` - Snacks file finder (with neon borders)
 - `<leader>e` - Neo-tree toggle (colorful file tree)
-- `<leader>fh` - Telescope help (glowing interface)
+- `<leader>fh` - Help picker (glowing interface)
 
 Enjoy your new neon-lit AstroNvim setup with SilkCircuit! 💜

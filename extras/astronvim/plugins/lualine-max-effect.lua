@@ -1,6 +1,11 @@
 -- Enhanced Lualine configuration for AstroNvim + SilkCircuit
 -- This replaces AstroNvim's default statusline with our custom implementation
 -- Use this for a fully-featured, visually rich statusline experience
+--
+-- Sections a, b, y and z take their colors from the lualine theme, which
+-- paints them with a bright background per mode. Components that sit there
+-- must not set their own fg, or they vanish into the section color. Neon
+-- foregrounds belong in section c, on the dark statusline background.
 
 return {
   { "rebelot/heirline.nvim", enabled = false },
@@ -45,7 +50,6 @@ return {
         branch = {
           "branch",
           icon = "",
-          color = { fg = silkcircuit_colors.glow_purple, gui = "bold" },
           padding = { left = 1, right = 1 },
         },
 
@@ -111,7 +115,6 @@ return {
             return string.format("%3d%%%% %d/%d", percent, current, total)
           end,
           icon = "",
-          color = { fg = silkcircuit_colors.purple_muted },
         },
 
         -- Clock for productivity tracking
@@ -120,7 +123,7 @@ return {
             return os.date("%H:%M")
           end,
           icon = "",
-          color = { fg = silkcircuit_colors.yellow_bright, gui = "bold" },
+          color = { gui = "bold" },
         },
 
         -- Macro recording indicator
@@ -157,12 +160,10 @@ return {
 
         sections = {
           lualine_a = { components.mode },
-          lualine_b = {
-            components.branch,
-            components.diagnostics,
-          },
+          lualine_b = { components.branch },
           lualine_c = {
             components.filename,
+            components.diagnostics,
             components.macro,
             components.searchcount,
           },
@@ -215,7 +216,6 @@ return {
               function()
                 return "▁▂▃▄▅▆▇█▇▆▅▄▃▂▁"
               end,
-              color = { fg = silkcircuit_colors.purple_muted },
             },
           },
         },
