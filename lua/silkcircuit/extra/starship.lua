@@ -39,10 +39,20 @@ local function match_luminance(tone, bg, target)
   return color_utils.blend(tone, bg, (lo + hi) / 2)
 end
 
--- Dark variants ramp pink_bright, which already carries neon's saturation,
--- up the neon luminance ladder and cap with coral, the variant's hot pink.
+-- The hue each dark variant climbs. Neon owns magenta, so the others take
+-- their purple: glow's is a true electric violet, while vibrant and soft
+-- name a magenta there and keep the violet in purple_dark.
+local PROMPT_TONE = {
+  glow = "purple",
+  vibrant = "purple_dark",
+  soft = "purple_dark",
+}
+
+-- Dark variants ramp their tone up the neon luminance ladder, so every step
+-- lands at the brightness of its neon twin, and cap with the variant's
+-- hottest pink.
 local function dark_prompt(colors)
-  local tone = colors.pink_bright
+  local tone = colors[PROMPT_TONE[colors.meta.variant] or "purple_dark"]
   return {
     background = colors.bg,
     segment_1 = match_luminance(tone, colors.bg, NEON_PROMPT.segment_1),

@@ -5,20 +5,20 @@
 # Do not edit by hand.
 
 format = """
-[](bg:#0f0c1a fg:#431f4c)\
+[](bg:#0f0c1a fg:#392354)\
 $os\
 $username\
 $hostname\
-[ ](bold bg:#431f4c)\
-[](bg:#74327a fg:#431f4c)\
+[ ](bold bg:#392354)\
+[](bg:#62398d fg:#392354)\
 $directory\
-[](bg:#9e41a2 fg:#74327a)\
+[](bg:#844cbd fg:#62398d)\
 $git_branch\
 $git_status\
-[](bg:#d757d9 fg:#9e41a2)\
+[](bg:#b366ff fg:#844cbd)\
 $python\
 $kubernetes\
-[](bg:#ff5fa8 fg:#d757d9)\
+[](bg:#ff5fa8 fg:#b366ff)\
 [](bg:#0f0c1a fg:#ff5fa8)\
 $character\
 """
@@ -34,7 +34,7 @@ error_symbol = "[➤](bold fg:#ff3366) "
 # OS module
 [os]
 format = '[ $symbol]($style)'
-style = "bold fg:#ff99ff bg:#431f4c"
+style = "bold fg:#ff99ff bg:#392354"
 disabled = false
 
 [os.symbols]
@@ -80,15 +80,15 @@ Windows = ""
 
 # Username module
 [username]
-style_user = "bold fg:#ff99ff bg:#431f4c"
-style_root = "bold fg:#ff3366 bg:#431f4c"
+style_user = "bold fg:#ff99ff bg:#392354"
+style_root = "bold fg:#ff3366 bg:#392354"
 format = '[ $user]($style)'
 disabled = false
 show_always = true
 
 # Hostname configuration for SSH awareness
 [hostname]
-style = "bold fg:#ff66ff bg:#431f4c"
+style = "bold fg:#ff66ff bg:#392354"
 ssh_only = true
 format = '[@$hostname]($style)'
 trim_at = "."
@@ -98,13 +98,13 @@ disabled = false
 [directory]
 truncation_length = 3
 truncation_symbol = "…/"
-style = "bold fg:#ff99ff bg:#74327a"
+style = "bold fg:#ff99ff bg:#62398d"
 format = "[ $path ]($style)"
 
 # Git branch module
 [git_branch]
 symbol = " "
-style = "bold fg:#ff99ff bg:#9e41a2"
+style = "bold fg:#ff99ff bg:#844cbd"
 format = "[ $symbol$branch ]($style)"
 
 # Git status module
@@ -112,13 +112,13 @@ format = "[ $symbol$branch ]($style)"
 # past command_timeout and drop out of the prompt entirely
 [git_status]
 ignore_submodules = true
-style = "bold fg:#ff99ff bg:#9e41a2"
+style = "bold fg:#ff99ff bg:#844cbd"
 format = "[$all_status]($style)"
 
 # Python module
 [python]
 symbol = " "
-style = "bold fg:#f8f8f2 bg:#d757d9"
+style = "bold fg:#f8f8f2 bg:#b366ff"
 format = '([ $symbol(${virtualenv}) ]($style))'
 detect_extensions = ["py"]
 detect_files = [
@@ -134,14 +134,14 @@ disabled = false
 [kubernetes]
 symbol = "󱃾 "
 format = "[ $symbol$context ]($style)"
-style = "bold fg:#f8f8f2 bg:#d757d9"
+style = "bold fg:#f8f8f2 bg:#b366ff"
 disabled = false
 contexts = [
   { context_pattern = ".*[Pp][Rr][Oo][Dd].*", context_alias = "PROD", style = "bold fg:#0f0c1a bg:#ffcc00", symbol = " " },
   # EKS contexts — strip region (e.g., eks-us-west-2-int → eks-int)
-  { context_pattern = "eks-[a-z]+-[a-z]+-\\d+-(?P<env>.*)", context_alias = "eks-$env", style = "bold fg:#f8f8f2 bg:#d757d9" },
+  { context_pattern = "eks-[a-z]+-[a-z]+-\\d+-(?P<env>.*)", context_alias = "eks-$env", style = "bold fg:#f8f8f2 bg:#b366ff" },
   # Fallback
-  { context_pattern = ".*", style = "bold fg:#f8f8f2 bg:#d757d9" }
+  { context_pattern = ".*", style = "bold fg:#f8f8f2 bg:#b366ff" }
 ]
 
 # Time
