@@ -153,9 +153,10 @@ describe("extras generator", function()
       local palette = extra.colors(variant)
       local expected = {
         background = ramp.background,
-        foreground_warning = ramp.foreground_warning,
-        warning = ramp.warning,
-        danger = ramp.danger,
+        warning_surface = ramp.warning_surface,
+        warning_text = ramp.warning_text,
+        danger_surface = ramp.danger_surface,
+        danger_text = ramp.danger_text,
         git_add = palette.git_add,
         git_delete = palette.git_delete,
       }

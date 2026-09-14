@@ -106,10 +106,12 @@ tx_2=$'\033[38;2;${sl.foreground_2}m'
 tx_3=$'\033[38;2;${sl.foreground_3}m'
 tx_4=$'\033[38;2;${sl.foreground_4}m'
 
-# A pill that flips a hot reading onto the warning or danger colour.
-bg_warning=$'\033[48;2;${sl.warning}m'
-bg_danger=$'\033[48;2;${sl.danger}m'
-tx_alert=$'\033[38;2;${sl.foreground_warning}m'
+# Dark pills for hot readings, the alert hue sunk into the page with the
+# alert colour as text, so the line stays dark when a reading runs hot.
+bg_warning=$'\033[48;2;${sl.warning_surface}m'
+tx_warning=$'\033[38;2;${sl.warning_text}m'
+bg_danger=$'\033[48;2;${sl.danger_surface}m'
+tx_danger=$'\033[38;2;${sl.danger_text}m'
 
 # Lines added and removed, in the palette's git colours.
 tx_add=$'\033[38;2;${sl.git_add}m'
@@ -498,9 +500,9 @@ reading() {
 pill() {
     local pct="$1" text="$2"
     if [ "$pct" -ge 90 ]; then
-        REPLY="${bg_danger}${tx_alert} ${text} ${bg_5}${tx_4}"
+        REPLY="${bg_danger}${tx_danger} ${text} ${bg_5}${tx_4}"
     elif [ "$pct" -ge 80 ]; then
-        REPLY="${bg_warning}${tx_alert} ${text} ${bg_5}${tx_4}"
+        REPLY="${bg_warning}${tx_warning} ${text} ${bg_5}${tx_4}"
     else
         REPLY="$text"
         return 1

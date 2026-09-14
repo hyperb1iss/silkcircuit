@@ -100,15 +100,48 @@ local function light(colors)
   }
 end
 
+-- Lift text away from surface, toward the ramp's brightest text, until the
+-- pair clears WCAG AA. The alert colours are mid-luminance reds and golds
+-- that do not all read on their own dark surface unlit.
+local function readable(text, surface, toward)
+  if color_utils.get_contrast_ratio(text, surface) >= 4.5 then
+    return text
+  end
+  local lo, hi = 0, 1
+  for _ = 1, 24 do
+    local mid = (lo + hi) / 2
+    if color_utils.get_contrast_ratio(color_utils.blend(toward, text, mid), surface) < 4.5 then
+      lo = mid
+    else
+      hi = mid
+    end
+  end
+  return color_utils.blend(toward, text, hi)
+end
+
+-- A hot reading sits on a dark pill, the alert hue sunk a quarter of the way
+-- into the page, with the alert colour itself as text. The status line stays
+-- in the dark even when every reading is red.
+local function with_alerts(ramp)
+  for _, alert in ipairs({ "warning", "danger" }) do
+    local surface = color_utils.blend(ramp[alert], ramp.background, 0.25)
+    ramp[alert .. "_surface"] = surface
+    ramp[alert .. "_text"] = readable(ramp[alert], surface, ramp.foreground_4)
+  end
+  return ramp
+end
+
 --- The ramp for one variant's palette, as `#rrggbb` strings.
 function M.colors(colors)
   if colors.meta.variant == "neon" then
     return M.NEON
   end
   if color_utils.is_bright(colors.bg) then
-    return light(colors)
+    return with_alerts(light(colors))
   end
-  return dark(colors)
+  return with_alerts(dark(colors))
 end
+
+with_alerts(M.NEON)
 
 return M
