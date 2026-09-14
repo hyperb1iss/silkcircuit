@@ -179,6 +179,38 @@ describe("extras generator", function()
     vim.fn.delete(root, "rf")
   end)
 
+  it("keeps the Claude Code status line pills readable and dark", function()
+    H.reset_modules()
+    local extra = require("silkcircuit.extra")
+    local prompt = require("silkcircuit.extra.prompt")
+    local color_utils = require("silkcircuit.utils.colors")
+    for _, variant in ipairs(extra.variants) do
+      local ramp = prompt.colors(extra.colors(variant))
+      for _, alert in ipairs({ "warning", "danger" }) do
+        local surface = ramp[alert .. "_surface"]
+        local text = ramp[alert .. "_text"]
+        local ratio = color_utils.get_contrast_ratio(text, surface)
+        H.ok(
+          ratio >= 4.5,
+          string.format(
+            "Claude Code %s %s pill reads at %.2f:1, under WCAG AA",
+            variant,
+            alert,
+            ratio
+          )
+        )
+        H.ok(
+          color_utils.is_bright(surface) == color_utils.is_bright(ramp.background),
+          string.format(
+            "Claude Code %s %s pill left the page's side of the palette",
+            variant,
+            alert
+          )
+        )
+      end
+    end
+  end)
+
   it("preserves the Starship powerline design", function()
     H.reset_modules()
     local root, extra
