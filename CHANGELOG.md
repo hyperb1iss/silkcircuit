@@ -1,5 +1,39 @@
 # Changelog
 
+## [2.1.0](https://github.com/hyperb1iss/silkcircuit/compare/v2.0.0...v2.1.0) (2026-09-14)
+
+
+### Features
+
+* **extra:** generate Herdr themes ([efc46d0](https://github.com/hyperb1iss/silkcircuit/commit/efc46d07f0383269855c73af43da0fa041538aad))
+* **extras:** add the Claude Code status line target ([a09e39c](https://github.com/hyperb1iss/silkcircuit/commit/a09e39c0973af150868a9712390f07f2cd258908))
+* **install:** install the Claude Code status line ([cad4be5](https://github.com/hyperb1iss/silkcircuit/commit/cad4be5123b700e1416cc7fd9b278ecdd99468fb))
+* **starship:** drop language version segments from the prompt ([35bc36b](https://github.com/hyperb1iss/silkcircuit/commit/35bc36bbe01baead5b282321c5b81ed78b7e43cf))
+
+
+### Bug Fixes
+
+* **astronvim:** give the heirline tabline a dark active surface ([ff7a658](https://github.com/hyperb1iss/silkcircuit/commit/ff7a6586d0b8cf71ba671acff2de25d8ede46d52))
+* **astronvim:** keep MAX EFFECT statusline text readable on section colors ([bbc6a2e](https://github.com/hyperb1iss/silkcircuit/commit/bbc6a2e32765008f7eb07a3044e3b60304f2dd43))
+* **claude:** keep hot status line readings on a dark pill ([#25](https://github.com/hyperb1iss/silkcircuit/issues/25)) ([6c97d71](https://github.com/hyperb1iss/silkcircuit/commit/6c97d71d801bd7224fd0054f0016c14cc3c094d6))
+* **claude:** read nested JSON objects regardless of key order ([#24](https://github.com/hyperb1iss/silkcircuit/issues/24)) ([f0be29b](https://github.com/hyperb1iss/silkcircuit/commit/f0be29bc7212acc9e45429f1514316b97324da1f))
+* **extras:** harden the status line against the verifier's findings ([6806761](https://github.com/hyperb1iss/silkcircuit/commit/68067614fa6a3e511c525f4415601655bd1afbcb))
+* **git:** color the log subject, not the body ([03be4a3](https://github.com/hyperb1iss/silkcircuit/commit/03be4a3ff82baa0454e5f2d74b8a420050881700))
+* **git:** paint the log hash line purple and keep decorate colors ([70482d6](https://github.com/hyperb1iss/silkcircuit/commit/70482d646b83db4b7ba90a14f349e018b8cff1e0))
+* **install:** detect gdircolors and swap stale git includes ([#23](https://github.com/hyperb1iss/silkcircuit/issues/23)) ([5abbfab](https://github.com/hyperb1iss/silkcircuit/commit/5abbfabf246a9ba95a632eca5b24dab6807e40b8))
+* **starship:** derive every variant's prompt from the neon ramp ([cd54295](https://github.com/hyperb1iss/silkcircuit/commit/cd542958423bfbc5798f1822c326d50687651eed))
+* **starship:** give each dark variant its own purple ramp ([029596a](https://github.com/hyperb1iss/silkcircuit/commit/029596a4fc65af9fcf25c29f8a5e9233d82c3daa))
+
+
+### Refactors
+
+* **extras:** share the Starship prompt ramp through a prompt module ([3b16e0d](https://github.com/hyperb1iss/silkcircuit/commit/3b16e0d9b224d391173ce06ef3a99d63225dc678))
+
+
+### Documentation
+
+* add the Claude Code status line page ([ca0c75c](https://github.com/hyperb1iss/silkcircuit/commit/ca0c75c20df358efafcac2cf18336b20d684395c))
+
 ## [2.0.0](https://github.com/hyperb1iss/silkcircuit/compare/v1.0.2...v2.0.0) (2026-09-02)
 
 
