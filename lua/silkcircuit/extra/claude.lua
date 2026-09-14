@@ -208,14 +208,19 @@ json_true() {
     json_raw "$1" "$2" && [ "$REPLY" = "true" ]
 }
 
-# The body of a nested object up to its first closing brace, so a key that
-# recurs across objects (name, used_percentage) is read from the right one.
-# Every object the payload nests keeps its scalars ahead of any object of
-# its own, which is as deep as this needs to look.
+# The scalars of a nested object, so a key that recurs across objects (name,
+# used_percentage) is read from the right one. The match spans one level of
+# nesting, because key order is not guaranteed and context_window may list
+# current_usage ahead of used_percentage; the inner objects are then cut out
+# so their keys cannot shadow the parent's.
 json_obj() {
-    local re='"'"$2"'":\{([^}]*)'
+    local re='"'"$2"'":\{(([^{}]|\{[^{}]*\})*)'
     [[ $1 =~ $re ]] || { REPLY=""; return 1; }
-    REPLY="${BASH_REMATCH[1]}"
+    local body="${BASH_REMATCH[1]}" inner='\{[^{}]*\}'
+    while [[ $body =~ $inner ]]; do
+        body="${body/"${BASH_REMATCH[0]}"/}"
+    done
+    REPLY="$body"
 }
 
 # ── Fields ─────────────────────────────────────────────────────────────────
