@@ -163,15 +163,21 @@ local TEMPLATE = [==[
 "ui.gutter" = { bg = "bg" }
 "ui.gutter.selected" = { bg = "bg_highlight" }
 
-"ui.statusline" = { fg = "fg_dark", bg = "bg_dark" }
+# The statusline mirrors the AstroNvim heirline contract: sections sit on
+# bg_highlight, the mode block takes the mode colour (pink for insert, cyan
+# for select, purple for normal) with the page colour as text, and the
+# unfocused bar drops to bg_dark.
+"ui.statusline" = { fg = "fg", bg = "bg_highlight" }
 "ui.statusline.inactive" = { fg = "purple_muted", bg = "bg_dark" }
 "ui.statusline.normal" = { fg = "bg", bg = "purple", modifiers = ["bold"] }
-"ui.statusline.insert" = { fg = "bg", bg = "green", modifiers = ["bold"] }
-"ui.statusline.select" = { fg = "bg", bg = "pink", modifiers = ["bold"] }
+"ui.statusline.insert" = { fg = "bg", bg = "pink", modifiers = ["bold"] }
+"ui.statusline.select" = { fg = "bg", bg = "cyan", modifiers = ["bold"] }
 "ui.statusline.separator" = { fg = "border" }
 
-"ui.bufferline" = { fg = "purple_muted", bg = "bg_dark" }
-"ui.bufferline.active" = { fg = "fg_light", bg = "bg_highlight", modifiers = ["bold"] }
+# Like the heirline tabline: the active buffer sits on the editor background
+# with the accent in bold text, inactive buffers on the section surface.
+"ui.bufferline" = { fg = "purple_muted", bg = "bg_highlight" }
+"ui.bufferline.active" = { fg = "purple", bg = "bg", modifiers = ["bold"] }
 "ui.bufferline.background" = { bg = "bg_dark" }
 
 "ui.popup" = { fg = "fg", bg = "bg_float" }
