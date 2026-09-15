@@ -331,6 +331,16 @@ The neon variant's core roles. The other four remap the same roles to their own 
 </details>
 
 <details open>
+<summary><b>Helix</b></summary>
+<br>
+
+|                                            Neon                                             |                                            Dawn                                             |
+| :-----------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: |
+| <img src="assets/screenshots/helix-neon.png" alt="Helix with SilkCircuit Neon" width="400"> | <img src="assets/screenshots/helix-dawn.png" alt="Helix with SilkCircuit Dawn" width="400"> |
+
+</details>
+
+<details open>
 <summary><b>Terminal & CLI Tools</b></summary>
 <br>
 

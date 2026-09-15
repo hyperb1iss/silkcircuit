@@ -3,6 +3,8 @@
 Themes for [Helix](https://helix-editor.com/): syntax, markup, diffs,
 diagnostics, and the interface chrome.
 
+<img src="../../assets/screenshots/helix-neon.png" alt="Helix with SilkCircuit Neon" width="90%">
+
 ## Install
 
 ```bash
