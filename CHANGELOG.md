@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/hyperb1iss/silkcircuit/compare/v2.1.0...v2.2.0) (2026-09-16)
+
+
+### Features
+
+* **helix:** paint the statusline and bufferline like heirline ([#27](https://github.com/hyperb1iss/silkcircuit/issues/27)) ([f22148a](https://github.com/hyperb1iss/silkcircuit/commit/f22148a16eb2a62bb6e30b5747a97f7ac3a2745a))
+
+
+### Documentation
+
+* add Helix screenshots to the gallery and the Helix page ([#26](https://github.com/hyperb1iss/silkcircuit/issues/26)) ([4f5ae00](https://github.com/hyperb1iss/silkcircuit/commit/4f5ae00334a8961e4e9a2f3748af95a34f484bbf))
+
 ## [2.1.0](https://github.com/hyperb1iss/silkcircuit/compare/v2.0.0...v2.1.0) (2026-09-14)
 
 
