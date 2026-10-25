@@ -39,12 +39,21 @@ local VARS = {
   "error",
 }
 
--- Surfaces mixed from an accent over the page, as { var, accent, alpha }.
+-- Colors mixed from a palette key over the page, as { var, key, alpha }.
+--
+-- Secondary text is the foreground faded toward the page rather than a
+-- palette neutral. omp paints most of its chrome (hints, labels, card
+-- bodies) with `muted`, and Glow maps its neutrals (comment, fg_dark,
+-- gray_light) to magenta, so borrowing one turned the whole transcript pink.
+-- A fade stays grey in every variant and leaves color to the accents.
+--
 -- A finished tool sits on the plain cursorline step: a green wash under every
 -- successful call turns the transcript swampy, so only a running call (a
 -- breath of purple) and a failed one (red) are tinted.
 local function mixed(light)
   return {
+    { "text_soft", "fg", light and 0.80 or 0.82 },
+    { "text_muted", "fg", light and 0.72 or 0.58 },
     { "user_bg", "purple", light and 0.10 or 0.09 },
     { "custom_bg", "cyan", light and 0.10 or 0.08 },
     { "pending_bg", "purple", 0.06 },
@@ -63,7 +72,7 @@ local TOKENS = {
   { "success", "green" },
   { "error", "error" },
   { "warning", "yellow" },
-  { "muted", "comment" },
+  { "muted", "text_muted" },
   { "dim", "blue_gray" },
   { "text", "" },
   { "thinkingText", "blue_gray" },
@@ -82,7 +91,7 @@ local TOKENS = {
   { "userMessageText", "" },
   { "customMessageText", "" },
   { "customMessageLabel", "cyan" },
-  { "toolTitle", "fg_dark" },
+  { "toolTitle", "text_soft" },
   { "toolOutput", "gray" },
 
   -- Markdown
@@ -92,10 +101,10 @@ local TOKENS = {
   { "mdCode", "coral" },
   { "mdCodeBlock", "fg" },
   { "mdCodeBlockBorder", "divider" },
-  { "mdQuote", "fg_dark" },
+  { "mdQuote", "text_soft" },
   { "mdQuoteBorder", "purple" },
   { "mdHr", "divider" },
-  { "mdListBullet", "pink_bright" },
+  { "mdListBullet", "cyan" },
 
   -- Diffs and syntax, per the semantic map in STYLE_GUIDE.md
   { "toolDiffAdded", "green" },
@@ -129,12 +138,12 @@ local TOKENS = {
   { "statusLineGitClean", "green" },
   { "statusLineGitDirty", "yellow" },
   { "statusLineContext", "pink_bright" },
-  { "statusLineSpend", "fg_dark" },
+  { "statusLineSpend", "text_soft" },
   { "statusLineStaged", "green" },
   { "statusLineDirty", "yellow" },
   { "statusLineUntracked", "red" },
-  { "statusLineOutput", "fg_dark" },
-  { "statusLineCost", "coral" },
+  { "statusLineOutput", "text_soft" },
+  { "statusLineCost", "green" },
   { "statusLineSubagents", "blue" },
 }
 

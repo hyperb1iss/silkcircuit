@@ -48,14 +48,21 @@ All 68 color tokens omp defines, including the optional `thinkingMax` and
 your own messages keep the terminal's foreground.
 
 Purple is the accent: headings, the composer frame, the model segment, and
-keywords. Cyan carries links, functions, the path segment, and the focused
-border. Code follows the semantic map in the style guide: pink-soft strings,
-coral numbers and inline code, yellow types, and comments in purple muted.
+keywords. Cyan carries links, list bullets, functions, the path segment, and
+the focused border. Code follows the semantic map in the style guide: pink-soft
+strings, coral numbers and inline code, yellow types, and comments in purple
+muted.
+
+Secondary text (hints, labels, and tool titles) is the foreground faded
+toward the page, so it stays grey in every variant. Glow
+maps its own neutrals to magenta, and omp paints most of its chrome with that
+secondary color, so borrowing a palette neutral would turn a Glow transcript
+pink.
 
 User messages sit on a faint purple wash. A running tool gets a lighter one, a
 finished tool sits on the cursorline step with no tint, and a failed tool gets
 red. The status line uses the statusline background from the Neovim theme,
-with green and yellow for clean and dirty git state, coral for cost, and pink
+with green and yellow for clean and dirty git state, green for cost, and pink
 for context.
 
 The thinking level climbs from the divider color at off through blue, cyan,
