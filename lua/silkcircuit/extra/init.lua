@@ -223,6 +223,12 @@ M.targets = {
     executable = true,
     url = "https://code.claude.com/docs/en/statusline",
   },
+  omp = {
+    label = "omp (oh-my-pi)",
+    ext = "json",
+    comment = "none",
+    url = "https://github.com/can1357/oh-my-pi/blob/main/docs/theme.md",
+  },
 }
 
 local HEX6 = "^#(%x%x)(%x%x)(%x%x)$"

@@ -33,15 +33,15 @@ One palette, one semantic system, five intensity variants, every tool in your wo
 
 ### 🌐 Platforms
 
-| Category            | Targets                                                                  |
-| ------------------- | ------------------------------------------------------------------------ |
-| 💻 **Editors**      | Neovim (39 plugin integrations), VS Code (Marketplace), AstroNvim, Helix |
-| 🖥️ **Terminals**    | Ghostty, Kitty, Alacritty, WezTerm, foot, iTerm2, Warp, Windows Terminal |
-| 🪟 **Multiplexers** | tmux, Zellij, Herdr                                                      |
-| 🌐 **Browsers**     | Chrome (Web Store, 5 variants + DevTools CSS)                            |
-| 🔧 **CLI Tools**    | btop, K9s, lazygit, bat, fzf, lsd, procs, atuin, Starship, Claude Code   |
-| ⚙️ **System**       | COSMIC Desktop, fastfetch, dmesg                                         |
-| 🎯 **Other**        | Git (delta integration), Slack, Lualine                                  |
+| Category            | Targets                                                                     |
+| ------------------- | --------------------------------------------------------------------------- |
+| 💻 **Editors**      | Neovim (39 plugin integrations), VS Code (Marketplace), AstroNvim, Helix    |
+| 🖥️ **Terminals**    | Ghostty, Kitty, Alacritty, WezTerm, foot, iTerm2, Warp, Windows Terminal    |
+| 🪟 **Multiplexers** | tmux, Zellij, Herdr                                                         |
+| 🌐 **Browsers**     | Chrome (Web Store, 5 variants + DevTools CSS)                               |
+| 🔧 **CLI Tools**    | btop, K9s, lazygit, bat, fzf, lsd, procs, atuin, Starship, Claude Code, omp |
+| ⚙️ **System**       | COSMIC Desktop, fastfetch, dmesg                                            |
+| 🎯 **Other**        | Git (delta integration), Slack, Lualine                                     |
 
 ### 🎛️ Variants
 
@@ -177,6 +177,7 @@ each one.
 | Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | [neon](extras/kitty/silkcircuit-neon.conf) · [vibrant](extras/kitty/silkcircuit-vibrant.conf) · [soft](extras/kitty/silkcircuit-soft.conf) · [glow](extras/kitty/silkcircuit-glow.conf) · [dawn](extras/kitty/silkcircuit-dawn.conf)                                                        |
 | lazygit                         | [reference](https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes)  | [neon](extras/lazygit/silkcircuit-neon.yml) · [vibrant](extras/lazygit/silkcircuit-vibrant.yml) · [soft](extras/lazygit/silkcircuit-soft.yml) · [glow](extras/lazygit/silkcircuit-glow.yml) · [dawn](extras/lazygit/silkcircuit-dawn.yml)                                                   |
 | lsd                             | [reference](https://github.com/lsd-rs/lsd/blob/master/doc/colors.md)                               | [neon](extras/lsd/silkcircuit-neon.yaml) · [vibrant](extras/lsd/silkcircuit-vibrant.yaml) · [soft](extras/lsd/silkcircuit-soft.yaml) · [glow](extras/lsd/silkcircuit-glow.yaml) · [dawn](extras/lsd/silkcircuit-dawn.yaml)                                                                  |
+| omp (oh-my-pi)                  | [reference](https://github.com/can1357/oh-my-pi/blob/main/docs/theme.md)                           | [neon](extras/omp/silkcircuit-neon.json) · [vibrant](extras/omp/silkcircuit-vibrant.json) · [soft](extras/omp/silkcircuit-soft.json) · [glow](extras/omp/silkcircuit-glow.json) · [dawn](extras/omp/silkcircuit-dawn.json)                                                                  |
 | procs                           | [reference](https://github.com/dalance/procs#configuration)                                        | [neon](extras/procs/silkcircuit-neon.toml) · [vibrant](extras/procs/silkcircuit-vibrant.toml) · [soft](extras/procs/silkcircuit-soft.toml) · [glow](extras/procs/silkcircuit-glow.toml) · [dawn](extras/procs/silkcircuit-dawn.toml)                                                        |
 | Slack                           | [reference](https://slack.com/help/articles/205166337-Change-your-Slack-theme)                     | [neon](extras/slack/silkcircuit-neon.txt) · [vibrant](extras/slack/silkcircuit-vibrant.txt) · [soft](extras/slack/silkcircuit-soft.txt) · [glow](extras/slack/silkcircuit-glow.txt) · [dawn](extras/slack/silkcircuit-dawn.txt)                                                             |
 | Starship                        | [reference](https://starship.rs/config/#color-palettes)                                            | [neon](extras/starship/silkcircuit-neon.toml) · [vibrant](extras/starship/silkcircuit-vibrant.toml) · [soft](extras/starship/silkcircuit-soft.toml) · [glow](extras/starship/silkcircuit-glow.toml) · [dawn](extras/starship/silkcircuit-dawn.toml)                                         |

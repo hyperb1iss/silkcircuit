@@ -26,6 +26,7 @@ NVIM="${NVIM:-nvim}"
 # the drift guard never trips on whitespace.
 run prettier --write --log-level warn --no-error-on-unmatched-pattern \
     "extras/warp/*.yaml" \
+    "extras/omp/*.json" \
     "extras/windows-terminal/*.json" \
     "extras/vscode/themes/*.json" \
     "palette/*.json" \

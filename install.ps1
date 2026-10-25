@@ -919,6 +919,13 @@ function Detect-All {
         ))
     )
 
+    Add-Detection "omp" "omp" (
+        (Test-Command "omp") -or
+        (Test-AnyPath @(
+            (Join-Path ([Environment]::GetFolderPath('UserProfile')) ".omp")
+        ))
+    )
+
     Add-Detection "tmux" "tmux" (
         (Test-Command "tmux") -or
         (Test-AnyPath @((Join-PathParts $script:HomeConfig "tmux")))
@@ -1221,6 +1228,24 @@ function Install-Claude {
     }
 }
 
+function Install-Omp {
+    Write-Host "$script:Purple$script:Bold  >> omp$script:Reset"
+
+    # omp reads custom themes from the agent directory, which
+    # PI_CODING_AGENT_DIR relocates for the default profile.
+    $agentDir = if ($env:PI_CODING_AGENT_DIR) {
+        $env:PI_CODING_AGENT_DIR
+    } else {
+        Join-PathParts ([Environment]::GetFolderPath('UserProfile')) ".omp" "agent"
+    }
+    $count = Copy-SilkVariants (Join-Path $script:ExtrasDir "omp") (Join-Path $agentDir "themes") "omp" "silkcircuit-@.json"
+
+    Write-Success "Installed $count omp themes"
+    Write-Dim "Pick one in /settings, Appearance, or set it in ~/.omp/agent/config.yml:"
+    Write-Dim "  theme: { dark: silkcircuit-$script:Primary, light: silkcircuit-dawn }"
+    Write-Dim "statusLine.sessionAccent: false keeps the editor border on the palette"
+}
+
 function Install-Tmux {
     Write-Host "$script:Purple$script:Bold  >> tmux$script:Reset"
 
@@ -1498,6 +1523,7 @@ function Run-Installs {
             "fastfetch" { Install-Fastfetch }
             "starship" { Install-Starship }
             "claude" { Install-Claude }
+            "omp" { Install-Omp }
             "tmux" { Install-Tmux }
             "bat" { Install-Bat }
             "lsd" { Install-Lsd }

@@ -67,6 +67,7 @@ for all eight in one table, plus the ANSI contract they share.
 | ---------------------------------- | ---------------------------------------------------- |
 | [Starship](/extras/starship)       | Copy to `~/.config/starship.toml`                    |
 | [Claude Code](/extras/claude)      | Copy to `~/.claude/statusline.sh`                    |
+| [omp](/extras/omp)                 | `theme: dark: silkcircuit-neon`                      |
 | [fzf](/extras/fzf)                 | `source ~/.config/fzf/silkcircuit-neon.sh`           |
 | [bat](/extras/bat)                 | `--theme=silkcircuit-neon`, then `bat cache --build` |
 | [lsd](/extras/lsd)                 | `color: theme: custom`                               |
@@ -129,6 +130,7 @@ Regenerate the lot with `make build`, and this table with `make docs`.
 | Kitty                           | [reference](https://sw.kovidgoyal.net/kitty/conf/#color-scheme)                                    | `extras/kitty/silkcircuit-{neon,vibrant,soft,glow,dawn}.conf`            |
 | lazygit                         | [reference](https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#color-attributes)  | `extras/lazygit/silkcircuit-{neon,vibrant,soft,glow,dawn}.yml`           |
 | lsd                             | [reference](https://github.com/lsd-rs/lsd/blob/master/doc/colors.md)                               | `extras/lsd/silkcircuit-{neon,vibrant,soft,glow,dawn}.yaml`              |
+| omp (oh-my-pi)                  | [reference](https://github.com/can1357/oh-my-pi/blob/main/docs/theme.md)                           | `extras/omp/silkcircuit-{neon,vibrant,soft,glow,dawn}.json`              |
 | procs                           | [reference](https://github.com/dalance/procs#configuration)                                        | `extras/procs/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`            |
 | Slack                           | [reference](https://slack.com/help/articles/205166337-Change-your-Slack-theme)                     | `extras/slack/silkcircuit-{neon,vibrant,soft,glow,dawn}.txt`             |
 | Starship                        | [reference](https://starship.rs/config/#color-palettes)                                            | `extras/starship/silkcircuit-{neon,vibrant,soft,glow,dawn}.toml`         |

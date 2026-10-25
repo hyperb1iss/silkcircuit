@@ -115,6 +115,7 @@ export default defineConfig({
           items: [
             { text: 'Starship', link: '/extras/starship' },
             { text: 'Claude Code', link: '/extras/claude' },
+            { text: 'omp', link: '/extras/omp' },
             { text: 'fzf', link: '/extras/fzf' },
             { text: 'bat', link: '/extras/bat' },
             { text: 'lsd', link: '/extras/lsd' },

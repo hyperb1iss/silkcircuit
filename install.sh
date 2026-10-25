@@ -182,6 +182,7 @@ have_starship() {
 }
 
 have_claude() { cmd_exists claude || dir_exists "$HOME/.claude"; }
+have_omp() { cmd_exists omp || dir_exists "$HOME/.omp"; }
 
 have_k9s() {
     cmd_exists k9s || dir_exists "${XDG_CONFIG}/k9s" ||
@@ -231,6 +232,7 @@ detect_all() {
     detect_if fastfetch "fastfetch" have_fastfetch
     detect_if starship "Starship" have_starship
     detect_if claude "Claude Code" have_claude
+    detect_if omp "omp" have_omp
     detect_if bat "bat" have_bat
     detect_if lsd "lsd" have_lsd
     detect_if procs "procs" have_procs
@@ -612,6 +614,20 @@ install_claude() {
         diminfo '  "statusLine": { "type": "command", "command": "~/.claude/statusline.sh" }'
         single_slot_note "Claude Code"
     fi
+}
+
+install_omp() {
+    section "omp"
+
+    # omp reads custom themes from the agent directory, which
+    # PI_CODING_AGENT_DIR relocates for the default profile.
+    local themes_dir="${PI_CODING_AGENT_DIR:-$HOME/.omp/agent}/themes"
+    copy_variants "${EXTRAS_DIR}/omp" "$themes_dir" "omp" "silkcircuit-@.json"
+
+    success "Installed ${COPIED} omp themes"
+    diminfo "Pick one in /settings, Appearance, or set it in ~/.omp/agent/config.yml:"
+    diminfo "  theme: { dark: silkcircuit-${PRIMARY}, light: silkcircuit-dawn }"
+    diminfo "statusLine.sessionAccent: false keeps the editor border on the palette"
 }
 
 install_bat() {
@@ -1145,6 +1161,7 @@ run_installs() {
             fastfetch)        install_fastfetch ;;
             starship)         install_starship ;;
             claude)           install_claude ;;
+            omp)              install_omp ;;
             bat)              install_bat ;;
             lsd)              install_lsd ;;
             procs)            install_procs ;;
